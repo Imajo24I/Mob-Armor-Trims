@@ -2,6 +2,7 @@ package net.majo24.mob_armor_trims;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.majo24.mob_armor_trims.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
