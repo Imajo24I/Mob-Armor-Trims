@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class MobArmorTrims implements ModInitializer {
 	public static final String MOD_ID = "mob_armor_trims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static ConfigManager configManager = new ConfigManager(ConfigManager.getConfigFromFile());
+	public static final ConfigManager configManager = new ConfigManager(ConfigManager.getConfigFromFile());
 
 	@Override
 	public void onInitialize() {
