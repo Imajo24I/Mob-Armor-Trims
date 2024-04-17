@@ -23,6 +23,7 @@ public class ConfigManager {
     public static Config getConfigFromFile() {
         if (!Files.exists(configPath)) {
             try {
+                MobArmorTrims.LOGGER.info("Creating config file for Mob Armor Trims");
                 Files.createFile(configPath);
                 String jsonConfig = GSON.toJson(new Config(50));
                 Files.writeString(configPath, jsonConfig);
@@ -33,6 +34,7 @@ public class ConfigManager {
         } else {
             String jsonConfig;
             try {
+                MobArmorTrims.LOGGER.info("Reading config file for Mob Armor Trims");
                 jsonConfig = new String(Files.readAllBytes(configPath));
                 return GSON.fromJson(jsonConfig, Config.class);
             } catch (IOException e) {
