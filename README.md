@@ -12,7 +12,7 @@ Now you should be ready to launch the game and play with this game!
 
 ## Compatibility
 This mod isn't integrated into the [Mod Menu](https://modrinth.com/mod/modmenu) mod yet. It is planned tho.<br/>
-Currently there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new)
+Currently there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new?assignees=&labels=&projects=&template=incompatibility.md&title=Incompatibility)
 
 ## Issues
-If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new)
+If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=BUG)
