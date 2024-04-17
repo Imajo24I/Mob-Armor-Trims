@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "mob_armor_trims",
+	"version": "${version}",
+	"name": "Mob Armor Trims",
+	"description": "Makes mobs be able to wear armor trims",
+	"authors": [
+		"majo24"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/mob_armor_trims/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.majo24.mob_armor_trims.MobArmorTrims"
+		],
+		"fabric-datagen": [
+			"net.majo24.mob_armor_trims.MobArmorTrimsDataGenerator"
+		]
+	},
+	"mixins": [
+		"mob_armor_trims.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.10",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
