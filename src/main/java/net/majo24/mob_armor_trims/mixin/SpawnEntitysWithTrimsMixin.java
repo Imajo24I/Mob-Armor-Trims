@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.majo24.mob_armor_trims.MobArmorTrims;
 
 @Mixin(MobEntity.class)
 public abstract class SpawnEntitysWithTrimsMixin extends LivingEntity {
@@ -40,13 +41,12 @@ public abstract class SpawnEntitysWithTrimsMixin extends LivingEntity {
         Registry<ArmorTrimPattern> patternRegistry = registryManager.get(patternKey);
 
         for (ItemStack armor : equippedArmor) {
-            if (random.nextBoolean()) {continue;}
+            if (MobArmorTrims.TRIM_CHANCE < random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
                 RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
                 RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
 
                 ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
-                System.out.println("Succesfully created armor trim");
                 ArmorTrim.apply(registryManager, armor, armorTrim);
             }
         }
