@@ -8,11 +8,10 @@ import org.slf4j.LoggerFactory;
 public class MobArmorTrims implements ModInitializer {
 	public static final String MOD_ID = "mobarmortrims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final int TRIM_CHANCE = 50;
+	public static ConfigManager configManager = new ConfigManager(ConfigManager.getConfigFromFile());
 
 	@Override
 	public void onInitialize() {
 	}
-
 
 }

@@ -41,7 +41,7 @@ public abstract class SpawnEntitysWithTrimsMixin extends LivingEntity {
         Registry<ArmorTrimPattern> patternRegistry = registryManager.get(patternKey);
 
         for (ItemStack armor : equippedArmor) {
-            if (MobArmorTrims.TRIM_CHANCE < random.nextInt(100)) {continue;}
+            if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
                 RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
                 RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
