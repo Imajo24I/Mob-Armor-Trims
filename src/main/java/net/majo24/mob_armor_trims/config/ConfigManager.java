@@ -26,7 +26,7 @@ public class ConfigManager {
         if (!Files.exists(configPath)) {
             Config newConfig = new Config(DEFAULT_TRIM_CHANCE);
             try {
-                MobArmorTrims.LOGGER.info("Creating config file for Mob Armor Trims");
+                MobArmorTrims.LOGGER.info("Creating config file");
                 Files.createFile(configPath);
                 String jsonConfig = GSON.toJson(newConfig);
                 Files.writeString(configPath, jsonConfig);
@@ -37,7 +37,7 @@ public class ConfigManager {
         } else {
             String jsonConfig;
             try {
-                MobArmorTrims.LOGGER.info("Reading config file for Mob Armor Trims");
+                MobArmorTrims.LOGGER.info("Reading config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
                 return GSON.fromJson(jsonConfig, Config.class);
             } catch (IOException e) {
@@ -51,6 +51,7 @@ public class ConfigManager {
 
 
     public void saveConfig() {
+        MobArmorTrims.LOGGER.info("Saving config file");
         String jsonConfig = GSON.toJson(config);
         try {
             Files.writeString(configPath, jsonConfig);
