@@ -11,7 +11,7 @@ Support for the forge/neoforge/quilt modloaders may be added later
 ## Configure
 You can configure this mod currently only through the config file and only in not yet released versions. This file is located in 
 
-> .minecraft/config/mob-armor-trims.json  
+> .minecraft/config/mob_armor_trims.json  
  
 Integration into the [Mod Menu](https://modrinth.com/mod/modmenu) mod is currently in development.
 
