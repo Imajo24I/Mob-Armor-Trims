@@ -35,15 +35,16 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"another-mod": "*",
+		"cloth-config-api": "11.1.118",
+		"modmenu": "7.2.2"
 	},
 	"custom": {
 		"modmenu": {
 			"parent": {
-
 				"id": "mob_armor_trims",
 				"name": "Mob Armor Trims",
-				"description": "Makes mobs be able to spawn with armor trims",
+				"description": "Makes mobs be able to spawn with armor trims on their armor pieces",
 				"icon": "assets/mob_armor_trims/icon.png"
 			},
 			"update_checker": true

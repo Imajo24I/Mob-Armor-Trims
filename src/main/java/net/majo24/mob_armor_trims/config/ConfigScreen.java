@@ -1,32 +1,29 @@
 package net.majo24.mob_armor_trims.config;
 
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.majo24.mob_armor_trims.MobArmorTrims;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
 
-public class ConfigScreen extends Screen {
-  protected ConfigScreen() {
-    // The parameter is the title of the screen,
-    // which will be narrated when you enter the screen.
-    super(Text.literal("My tutorial screen"));
-  }
+public class ConfigScreen {
+    private ConfigScreen() {}
 
+    public static Screen getConfigScreen(Screen parent) {
+           ConfigBuilder builder = ConfigBuilder.create()
+        .setParentScreen(parent)
+        .setTitle(Text.literal(MobArmorTrims.MOD_ID));
+        builder.setSavingRunnable(MobArmorTrims.configManager::saveConfig);
 
-  public ButtonWidget button1;
-  public SliderWidget trimChancesSlider;
+        ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
+        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-  @Override
-  protected void init() {
-    button1 = ButtonWidget.builder(Text.literal("Button 1"), button -> {
-      System.out.println("You clicked button1!");
-    })
-        .dimensions(width / 2 - 205, 20, 200, 20)
-        .tooltip(Tooltip.of(Text.literal("Tooltip of button1")))
-        .build();
-
-
-    addDrawableChild(button1);
-  }
+        general.addEntry(entryBuilder.startIntSlider(Text.literal("Trim Chance"), MobArmorTrims.configManager.getTrimChance(), 0, 100)
+                .setDefaultValue(ConfigManager.DEFAULT_TRIM_CHANCE)
+                .setTooltip(Text.literal("Chance of each armor piece of a mob having an armor trim"))
+                        .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
+                .build());
+        return builder.build();
+    }
 }
