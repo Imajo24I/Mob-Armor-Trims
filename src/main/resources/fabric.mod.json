@@ -30,14 +30,14 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.10",
-		"minecraft": "~1.20.1",
+		"minecraft": "~1.20.4",
 		"java": ">=17",
 		"fabric-api": "*"
 	},
 	"suggests": {
 		"another-mod": "*",
-		"cloth-config-api": "11.1.118",
-		"modmenu": "7.2.2"
+		"cloth-config-api": "13.0.121",
+		"modmenu": "9.0.0"
 	},
 	"custom": {
 		"modmenu": {
