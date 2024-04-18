@@ -8,8 +8,8 @@
 		"majo24"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1",
+		"sources": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1"
 	},
 	"license": "MIT",
 	"icon": "assets/mob_armor_trims/icon.png",
@@ -20,6 +20,9 @@
 		],
 		"fabric-datagen": [
 			"net.majo24.mob_armor_trims.MobArmorTrimsDataGenerator"
+		],
+		"modmenu": [
+			"net.majo24.mob_armor_trims.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -33,5 +36,17 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"parent": {
+
+				"id": "mob_armor_trims",
+				"name": "Mob Armor Trims",
+				"description": "Makes mobs be able to spawn with armor trims",
+				"icon": "assets/mob_armor_trims/icon.png"
+			},
+			"update_checker": true
+		}
 	}
 }
