@@ -18,7 +18,7 @@ are required.
 
 You can configure this mod either through
 
-- [Mod Menu](https://modrinth.com/mod/modmenu) -  Dependencies for this can be found under ```Required``` > ```Optional``` in this file
+- [Mod Menu](https://modrinth.com/mod/modmenu) -  Dependencies for this can be found under ```Dependencies``` > ```Optional``` in this file
 - Config file - The config file is located in ```.minecraft/config/mob_armor_trims.json```
  
 
