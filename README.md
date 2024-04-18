@@ -9,7 +9,7 @@ This mod depends on the Modloader Fabric and the mod Fabric API.
 Support for the forge/neoforge/quilt modloaders may be added later
 
 ## Configure
-You can configure this mod currently only through the config file in not yet released versions. This file is located in 
+You can configure this mod currently only through the config file and only in not yet released versions. This file is located in 
 
 > .minecraft/config/mob-armor-trims.json  
  
