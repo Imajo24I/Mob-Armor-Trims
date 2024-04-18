@@ -23,15 +23,16 @@ public class ConfigManager {
 
     public static Config getConfigFromFile() {
         if (!Files.exists(configPath)) {
+            Config config = new Config(50);
             try {
                 MobArmorTrims.LOGGER.info("Creating config file for Mob Armor Trims");
                 Files.createFile(configPath);
-                String jsonConfig = GSON.toJson(new Config(50));
+                String jsonConfig = GSON.toJson(config);
                 Files.writeString(configPath, jsonConfig);
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not create config file", e);
             }
-            return new Config(50);
+            return config;
         } else {
             String jsonConfig;
             try {
