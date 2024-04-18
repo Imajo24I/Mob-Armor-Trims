@@ -13,7 +13,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,24 +26,22 @@ public abstract class SpawnEntitysWithTrimsMixin extends LivingEntity {
         super(entityType, world);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Inject(at = @At("TAIL"), method = "initEquipment")
     protected void initEquipment(CallbackInfo ci) {
-        Random random = Random.create();
-        World world = this.getWorld();
-        DynamicRegistryManager registryManager = world.getRegistryManager();
-        Iterable<ItemStack> equippedArmor = this.getArmorItems();
-
+        DynamicRegistryManager registryManager = this.getWorld().getRegistryManager();
         RegistryKey<Registry<ArmorTrimMaterial>> materialKey = RegistryKeys.TRIM_MATERIAL;
         Registry<ArmorTrimMaterial> materialRegistry = registryManager.get(materialKey);
-
         RegistryKey<Registry<ArmorTrimPattern>> patternKey = RegistryKeys.TRIM_PATTERN;
         Registry<ArmorTrimPattern> patternRegistry = registryManager.get(patternKey);
 
+        Iterable<ItemStack> equippedArmor = this.getArmorItems();
+
         for (ItemStack armor : equippedArmor) {
-            if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {continue;}
+            if (MobArmorTrims.configManager.getTrimChance() < super.random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
-                RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
-                RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
+                RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(super.random).get();
+                RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(super.random).get();
 
                 ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
                 ArmorTrim.apply(registryManager, armor, armorTrim);
