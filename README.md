@@ -5,15 +5,22 @@ This mod makes mobs be able to spawn with armor trims.
 If a mob has an armor piece, it has a 50/50 chance of also having a completely random armor trim on its armor piece. This integrates minecrafts armor trims, which were added in 1.20, even further into the game.
 
 ##  Dependencies
-This mod depends on the Modloader Fabric and the mod Fabric API.  
+
+### Required
+This mod depends on the modloader Fabric and the mod Fabric API.  
 Support for the forge/neoforge/quilt modloaders may be added later
 
-## Configure
-You can configure this mod currently only through the config file and only in not yet released versions. This file is located in 
+### Optional
+For Mod Menu integration, [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config API](https://modrinth.com/mod/cloth-config)
+are required.
 
-> .minecraft/config/mob_armor_trims.json  
+## Configure
+
+You can configure this mod either through
+
+- [Mod Menu](https://modrinth.com/mod/modmenu) - Dependencies for this can be found under ```Required``` > ```Optional``` in this file
+- Config file - The config file is located in ```.minecraft/config/mob_armor_trims.json```
  
-Integration into the [Mod Menu](https://modrinth.com/mod/modmenu) mod is currently in development.
 
 ## Compatibility
 Currently there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new?assignees=&labels=&projects=&template=incompatibility.md&title=Incompatibility)
