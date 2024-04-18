@@ -53,7 +53,7 @@ public class ConfigManager {
         try {
             Files.writeString(configPath, jsonConfig);
         } catch (IOException e) {
-            MobArmorTrims.LOGGER.error("Could not write config file", e);
+            MobArmorTrims.LOGGER.error("Could not save config file", e);
         }
     }
 
