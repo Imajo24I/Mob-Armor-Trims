@@ -8,3 +8,24 @@ body:
       description: List the mod that is incompatible with the Mob Armor Trims mod
     validations:
       required: true
+
+- type: textarea
+  attributes:
+    label: Issue
+    description: Please describe the issue you are having with the incompatible mod
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Mod Setup
+    description: Add additional information about the modloader and version, mod version and additional mods
+  validations:
+    required: true
+
+-type: textarea
+  attributes:
+    label: Additional Information
+    description: Add any other context about the problem here. This might include logs, screenshots, etc.
+  validations:
+    required: false
