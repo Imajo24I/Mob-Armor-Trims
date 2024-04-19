@@ -4,7 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"ExampleMixin",
-      	"SpawnEntitiesWithTrimsMixin"
+		"spawn_entities_with_trims.OnNaturalSpawnMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

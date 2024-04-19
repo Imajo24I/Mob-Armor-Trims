@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.mixin;
+package net.majo24.mob_armor_trims.mixin.spawn_entities_with_trims;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.majo24.mob_armor_trims.MobArmorTrims;
 
 @Mixin(MobEntity.class)
-public abstract class SpawnEntitiesWithTrimsMixin extends LivingEntity {
+public abstract class OnNaturalSpawnMixin extends LivingEntity {
     @Shadow public abstract Iterable<ItemStack> getArmorItems();
 
-    protected SpawnEntitiesWithTrimsMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected OnNaturalSpawnMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
