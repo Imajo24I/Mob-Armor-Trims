@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.mixin;
+package net.majo24.mob_armor_trims.mixin.spawn_entities_with_trims;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
