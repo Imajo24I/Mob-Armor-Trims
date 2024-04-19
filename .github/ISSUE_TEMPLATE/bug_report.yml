@@ -32,6 +32,6 @@ body:
   - type: textarea
     attributes:
       label: Additional context
-      description: Add any other context about the problem here. This might include logs, screenshots, etc.
+      description: Add additional other context about the problem here. This might include logs, screenshots, etc.
     validations:
       required: true
