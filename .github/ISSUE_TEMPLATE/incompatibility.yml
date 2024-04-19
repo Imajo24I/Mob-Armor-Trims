@@ -23,9 +23,4 @@ body:
   validations:
     required: true
 
--type: textarea
-  attributes:
-    label: Additional Information
-    description: Add any other context about the problem here. This might include logs, screenshots, etc.
-  validations:
-    required: false
+
