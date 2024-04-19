@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1",
-		"sources": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1"
+		"sources": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1",
+		"issues": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new/choose"
 	},
 	"license": "MIT",
 	"icon": "assets/mob_armor_trims/icon.png",
