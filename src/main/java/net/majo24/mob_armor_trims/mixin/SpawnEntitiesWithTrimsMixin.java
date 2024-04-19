@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.majo24.mob_armor_trims.MobArmorTrims;
 
 @Mixin(MobEntity.class)
-public abstract class SpawnEntitysWithTrimsMixin extends LivingEntity {
+public abstract class SpawnEntitiesWithTrimsMixin extends LivingEntity {
     @Shadow public abstract Iterable<ItemStack> getArmorItems();
 
-    protected SpawnEntitysWithTrimsMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected SpawnEntitiesWithTrimsMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
