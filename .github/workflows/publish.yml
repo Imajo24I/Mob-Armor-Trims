@@ -7,9 +7,6 @@ env:
   JAVA_VERSION: 17
   MOD_VERSION: 1.0.2
   RELEASE_NAME: Mob Armor Trims
-  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-  CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-  GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
 
 permissions:
   contents: write
@@ -44,13 +41,13 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 1005441
-          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           modrinth-id: hHVaPgFK
-          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           github-tag: "v${{env.VERSION}}"
-          github-token: "${{env.TOKEN_GITHUB}}"
+          github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
 
           name: "${{env.RELEASE_NAME}}"
           version: "${{env.VERSION}}"
