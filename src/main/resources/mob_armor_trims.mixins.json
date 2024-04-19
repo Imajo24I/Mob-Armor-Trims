@@ -4,7 +4,8 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"ExampleMixin",
-		"SpawnEntitysWithTrimsMixin"
+		"SpawnEntitysWithTrimsMixin",
+		"compatibility.ImprovedMobsCompatibilityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

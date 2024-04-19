@@ -26,7 +26,10 @@
 		]
 	},
 	"mixins": [
-		"mob_armor_trims.mixins.json"
+		{
+			"config": "mob_armor_trims.mixins.json",
+			"plugin": "net.majo24.mob_armor_trims.mixin.ConditionalMixinPlugin"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.15.10",
