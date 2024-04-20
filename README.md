@@ -1,3 +1,5 @@
+[<img src="https://github.com/sn0wfrog/modding-badges/blob/main/Available%20on%20Modrinth.png" alt="Available on Modrinth" width="200"/>](https://modrinth.com/mod/mob-armor-trims)
+
 # Mob Armor Trims
 This mod makes mobs be able to spawn with armor trims.
 
