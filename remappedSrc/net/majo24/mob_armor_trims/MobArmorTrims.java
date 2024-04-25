@@ -39,7 +39,7 @@ public class MobArmorTrims implements ModInitializer {
                 RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
 
                 ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
-                // ArmorTrim.apply(registryManager, armor, armorTrim);
+                ArmorTrim.apply(registryManager, armor, armorTrim);
             }
         }
 	}
