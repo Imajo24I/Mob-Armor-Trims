@@ -8,9 +8,9 @@
 		"majo24"
 	],
 	"contact": {
-		"homepage": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1",
-		"sources": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1",
-		"issues": "https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new/choose"
+		"homepage": "https://github.com/Imajo24I/Mob-Armor-Trims",
+		"sources": "https://github.com/Imajo24I/Mob-Armor-Trims",
+		"issues": "https://github.com/Imajo24I/Mob-Armor-Trims/issues/new/choose"
 	},
 	"license": "MIT",
 	"icon": "assets/mob_armor_trims/icon.png",
@@ -18,9 +18,6 @@
 	"entrypoints": {
 		"main": [
 			"net.majo24.mob_armor_trims.MobArmorTrims"
-		],
-		"fabric-datagen": [
-			"net.majo24.mob_armor_trims.MobArmorTrimsDataGenerator"
 		],
 		"modmenu": [
 			"net.majo24.mob_armor_trims.config.ModMenuIntegration"
