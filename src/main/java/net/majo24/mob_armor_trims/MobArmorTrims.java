@@ -3,6 +3,9 @@ package net.majo24.mob_armor_trims;
 import net.fabricmc.api.ModInitializer;
 
 import net.majo24.mob_armor_trims.config.ConfigManager;
+import net.minecraft.component.ComponentChanges;
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.trim.ArmorTrim;
@@ -32,14 +35,16 @@ public class MobArmorTrims implements ModInitializer {
         RegistryKey<Registry<ArmorTrimPattern>> patternKey = RegistryKeys.TRIM_PATTERN;
         Registry<ArmorTrimPattern> patternRegistry = registryManager.get(patternKey);
 
+        DataComponentType<ArmorTrim> trimComponentType = DataComponentTypes.TRIM;
+
         for (ItemStack armor : equippedArmor) {
             if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
                 RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
                 RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
-
                 ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
-                // ArmorTrim.apply(registryManager, armor, armorTrim);
+
+                armor.applyChanges(ComponentChanges.builder().add(trimComponentType, armorTrim).build());
             }
         }
 	}
