@@ -18,8 +18,8 @@ public class ConfigManager {
                 .setPrettyPrinting()
                 .create();
 
-    public ConfigManager(Config configToSet) {
-        config = configToSet;
+    public ConfigManager(Config config) {
+        this.config = config;
     }
 
     public static Config getConfigFromFile() {
@@ -61,10 +61,10 @@ public class ConfigManager {
     }
 
     public int getTrimChance() {
-        return this.config.trimChance;
+        return this.config.getTrimChance();
     }
 
-    public void setTrimChance(int trimChanceToSet) {
-        this.config.trimChance = trimChanceToSet;
+    public void setTrimChance(int trimChance) {
+        this.config.setTrimChance(trimChance);
     }
 }
