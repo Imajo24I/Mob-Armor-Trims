@@ -22,7 +22,7 @@ public class ConfigScreen {
 
         general.addEntry(entryBuilder.startIntSlider(Text.literal("Trim Chance"), MobArmorTrims.configManager.getTrimChance(), 0, 100)
                         .setDefaultValue(ConfigManager.DEFAULT_TRIM_CHANCE)
-                        .setTooltip(Text.literal("Chance of each armor piece of a mob having an armor trim"))
+                        .setTooltip(Text.literal("Chance of each armor piece\nof a mob having an armor trim"))
                         .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
                         .build());
 
