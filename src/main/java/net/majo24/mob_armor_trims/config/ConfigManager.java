@@ -12,6 +12,9 @@ import java.nio.file.Path;
 
 public class ConfigManager {
     public static final int DEFAULT_TRIM_CHANCE = 50;
+    public static final int DEFAULT_STACKED_TRIM_CHANCE = 25;
+    public static final int DEFAULT_MAX_STACKED_TRIMS = 10;
+
     private final Config config;
     public static final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MobArmorTrims.MOD_ID + ".json");
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
@@ -24,7 +27,7 @@ public class ConfigManager {
 
     public static Config getConfigFromFile() {
         if (!Files.exists(configPath)) {
-            Config newConfig = new Config(DEFAULT_TRIM_CHANCE);
+            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             try {
                 MobArmorTrims.LOGGER.info("Creating config file");
                 Files.createFile(configPath);
@@ -42,7 +45,7 @@ public class ConfigManager {
                 return GSON.fromJson(jsonConfig, Config.class);
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read config file", e);
-                return new Config(DEFAULT_TRIM_CHANCE);
+                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             }
         }
     }
@@ -67,4 +70,13 @@ public class ConfigManager {
     public void setTrimChance(int trimChance) {
         this.config.setTrimChance(trimChance);
     }
+
+    public int getStackedTrimChance() {
+        return this.config.getStackedTrimChance();
+    }
+
+    public void setStackedTrimChance(int stackedTrimChance) {this.config.setStackedTrimChance(stackedTrimChance);}
+
+    public int getMaxStackedTrims() {return this.config.getMaxStackedTrims();}
+    public void setMaxStackedTrims(int maxStackedTrims) {this.config.setMaxStackedTrims(maxStackedTrims);}
 }
