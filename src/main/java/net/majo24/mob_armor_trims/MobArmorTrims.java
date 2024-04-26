@@ -2,6 +2,7 @@ package net.majo24.mob_armor_trims;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.majo24.mob_armor_trims.config.ConfigManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,20 +28,35 @@ public class MobArmorTrims implements ModInitializer {
 	}
 
     public static void randomlyApplyRandomTrims(DynamicRegistryManager registryManager, Random random, Iterable<ItemStack> equippedArmor) {
+        boolean stackedArmorTrimsIsLoaded = FabricLoader.getInstance().isModLoaded("stacked_trims");
+
         RegistryKey<Registry<ArmorTrimMaterial>> materialKey = RegistryKeys.TRIM_MATERIAL;
         Registry<ArmorTrimMaterial> materialRegistry = registryManager.get(materialKey);
         RegistryKey<Registry<ArmorTrimPattern>> patternKey = RegistryKeys.TRIM_PATTERN;
         Registry<ArmorTrimPattern> patternRegistry = registryManager.get(patternKey);
 
         for (ItemStack armor : equippedArmor) {
-            if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {continue;}
+            if (configManager.getTrimChance() < random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
+                applyRandomTrim(registryManager, materialRegistry, patternRegistry, random, armor);
+
+                // Stacked Armor Trims Compatibility
+                if (stackedArmorTrimsIsLoaded) {
+                    int appliedArmorTrims = 0;
+                    while ((configManager.getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < configManager.getMaxStackedTrims())) {
+                        applyRandomTrim(registryManager, materialRegistry, patternRegistry, random, armor);
+                        appliedArmorTrims++;
+                    }
+                }
+            }
+        }
+	}
+
+    private static void applyRandomTrim(DynamicRegistryManager registryManager, Registry<ArmorTrimMaterial> materialRegistry, Registry<ArmorTrimPattern> patternRegistry, Random random, ItemStack armor) {
                 RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
                 RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
 
                 ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
                 ArmorTrim.apply(registryManager, armor, armorTrim);
-            }
-        }
-	}
+    }
 }
