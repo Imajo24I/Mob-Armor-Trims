@@ -14,7 +14,7 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parent) {
            ConfigBuilder builder = ConfigBuilder.create()
         .setParentScreen(parent)
-        .setTitle(Text.literal(MobArmorTrims.MOD_ID));
+        .setTitle(Text.literal("Mob Armor Trims"));
         builder.setSavingRunnable(MobArmorTrims.configManager::saveConfig);
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
