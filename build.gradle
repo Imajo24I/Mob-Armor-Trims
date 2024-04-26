@@ -22,6 +22,18 @@ repositories {
 		name = "Flemmli97"
 		url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
 	}
+
+	exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
