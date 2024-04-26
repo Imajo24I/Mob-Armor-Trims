@@ -22,6 +22,6 @@ public abstract class SpawnEntitiesWithTrimsMixin extends LivingEntity {
 
     @Inject(at = @At("TAIL"), method = "initEquipment")
     protected void initEquipment(CallbackInfo ci) {
-        MobArmorTrims.applyRandomTrim(this.getWorld().getRegistryManager(), super.random, this.getArmorItems());
+        MobArmorTrims.randomlyApplyRandomTrims(this.getWorld().getRegistryManager(), super.random, this.getArmorItems());
     }
 }

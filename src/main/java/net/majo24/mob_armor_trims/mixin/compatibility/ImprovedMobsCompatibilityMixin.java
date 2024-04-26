@@ -14,6 +14,6 @@ public class ImprovedMobsCompatibilityMixin {
     }
     @Inject(at = @At("TAIL"), method = "equipArmor")
     private static void equipArmor(MobEntity living, float difficulty, CallbackInfo ci) {
-        MobArmorTrims.applyRandomTrim(living.getWorld().getRegistryManager(), living.getRandom(), living.getArmorItems());
+        MobArmorTrims.randomlyApplyRandomTrims(living.getWorld().getRegistryManager(), living.getRandom(), living.getArmorItems());
     }
 }
