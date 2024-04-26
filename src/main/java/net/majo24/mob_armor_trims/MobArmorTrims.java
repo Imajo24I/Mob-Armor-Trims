@@ -29,7 +29,7 @@ public class MobArmorTrims implements ModInitializer {
 	public void onInitialize() {
 	}
 
-    public static void applyRandomTrim(DynamicRegistryManager registryManager, Random random, Iterable<ItemStack> equippedArmor) {
+    public static void randomlyApplyRandomTrims(DynamicRegistryManager registryManager, Random random, Iterable<ItemStack> equippedArmor) {
         RegistryKey<Registry<ArmorTrimMaterial>> materialKey = RegistryKeys.TRIM_MATERIAL;
         Registry<ArmorTrimMaterial> materialRegistry = registryManager.get(materialKey);
         RegistryKey<Registry<ArmorTrimPattern>> patternKey = RegistryKeys.TRIM_PATTERN;
