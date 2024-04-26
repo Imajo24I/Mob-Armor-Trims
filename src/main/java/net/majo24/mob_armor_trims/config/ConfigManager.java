@@ -50,9 +50,6 @@ public class ConfigManager {
         }
     }
 
-
-
-
     public void saveConfig() {
         MobArmorTrims.LOGGER.info("Saving config file");
         String jsonConfig = GSON.toJson(config);
