@@ -13,17 +13,17 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parent) {
            ConfigBuilder builder = ConfigBuilder.create()
         .setParentScreen(parent)
-        .setTitle(Text.literal(MobArmorTrims.MOD_ID));
+        .setTitle(Text.literal("Mob Armor Trims"));
         builder.setSavingRunnable(MobArmorTrims.configManager::saveConfig);
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         general.addEntry(entryBuilder.startIntSlider(Text.literal("Trim Chance"), MobArmorTrims.configManager.getTrimChance(), 0, 100)
-                .setDefaultValue(ConfigManager.DEFAULT_TRIM_CHANCE)
-                .setTooltip(Text.literal("Chance of each armor piece of a mob having an armor trim"))
+                        .setDefaultValue(ConfigManager.DEFAULT_TRIM_CHANCE)
+                        .setTooltip(Text.literal("Chance of each armor piece of a mob having an armor trim"))
                         .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
-                .build());
+                        .build());
         return builder.build();
     }
 }
