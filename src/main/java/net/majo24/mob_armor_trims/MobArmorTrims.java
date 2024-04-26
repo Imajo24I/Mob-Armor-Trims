@@ -40,12 +40,16 @@ public class MobArmorTrims implements ModInitializer {
         for (ItemStack armor : equippedArmor) {
             if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {continue;}
             if (armor.getItem() != Items.AIR) {
-                RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
-                RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
-                ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
-
-                armor.applyChanges(ComponentChanges.builder().add(trimComponentType, armorTrim).build());
+                applyRandomTrim(trimComponentType, registryManager, materialRegistry, patternRegistry, random, armor);
             }
         }
 	}
+
+    private static void applyRandomTrim(DataComponentType<ArmorTrim> trimComponentType, DynamicRegistryManager registryManager, Registry<ArmorTrimMaterial> materialRegistry, Registry<ArmorTrimPattern> patternRegistry, Random random, ItemStack armor) {
+        RegistryEntry.Reference<ArmorTrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
+        RegistryEntry.Reference<ArmorTrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
+        ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
+
+        armor.applyChanges(ComponentChanges.builder().add(trimComponentType, armorTrim).build());
+    }
 }
