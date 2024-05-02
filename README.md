@@ -28,7 +28,7 @@ You can configure this mod either through
  
 
 ## Compatibility
-Currently there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new?assignees=&labels=&projects=&template=incompatibility.md&title=Incompatibility)
+Currently there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
 
 ## Issues
-If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims-1.20.1/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=BUG)
+If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
