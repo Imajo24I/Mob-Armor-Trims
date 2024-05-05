@@ -3,7 +3,7 @@
 	"id": "mob_armor_trims",
 	"version": "${version}",
 	"name": "Mob Armor Trims",
-	"description": "Makes mobs be able to spawn with armor trims",
+	"description": "Makes mobs be able to spawn naturally with trimmed armor",
 	"authors": [
 		"majo24"
 	],
