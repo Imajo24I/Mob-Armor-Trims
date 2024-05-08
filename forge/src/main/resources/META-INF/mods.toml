@@ -11,8 +11,7 @@ authors = "majo24"
 description = '''
 Makes mobs be able to spawn with naturally trimmed armor
 '''
-#fixme: add logo
-#logoFile = ""
+logoFile = "assets/mob_armor_trims/icon.png"
 
 [[dependencies.mob_armor_trims]]
 modId = "forge"
