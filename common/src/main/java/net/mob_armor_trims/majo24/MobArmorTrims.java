@@ -39,7 +39,14 @@ public final class MobArmorTrims {
                 applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor);
             }
 
-            // TODO: add code for compat with stacked armor trims
+            // Stacked Armor Trims compatibility
+            if (isStackedArmorTrimsLoaded) {
+                int appliedArmorTrims = 0;
+                while ((configManager.getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < configManager.getMaxStackedTrims())) {
+                    applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor);
+                    appliedArmorTrims++;
+                }
+            }
         }
     }
 
