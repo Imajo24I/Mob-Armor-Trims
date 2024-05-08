@@ -12,8 +12,8 @@ import java.nio.file.Path;
 
 public class ConfigManager {
     public static final int DEFAULT_TRIM_CHANCE = 50;
-    public static final int DEFAULT_STACKED_TRIM_CHANCE = 25;
-    public static final int DEFAULT_MAX_STACKED_TRIMS = 10;
+    public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
+    public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
 
     private final Config config;
     public final Path configPath;
