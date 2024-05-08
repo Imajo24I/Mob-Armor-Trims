@@ -38,6 +38,9 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
+
+    // Cloth Config API
+    modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
 }
 
 processResources {
