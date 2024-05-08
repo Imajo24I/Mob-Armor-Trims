@@ -12,6 +12,7 @@ import java.nio.file.Path;
 public class ConfigManager {
     public static final int DEFAULT_TRIM_CHANCE = 50;
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 50;
+    public static final int DEFAULT_NO_TRIMS_CHANCE = 50;
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
 
@@ -28,7 +29,7 @@ public class ConfigManager {
 
     public static Config getConfigFromFile(Path configPath) {
         if (!Files.exists(configPath)) {
-            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             try {
                 MobArmorTrims.LOGGER.info("Creating config file");
                 Files.createFile(configPath);
@@ -46,7 +47,7 @@ public class ConfigManager {
                 return GSON.fromJson(jsonConfig, Config.class);
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read config file", e);
-                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             }
         }
     }
@@ -72,6 +73,10 @@ public class ConfigManager {
     public int getSimilarTrimChance() { return this.config.getSimilarTrimChance(); }
 
     public void setSimilarTrimChance(int sameTrimChance) { this.config.setSimilarTrimChance(sameTrimChance); }
+
+    public int getNoTrimsChance() { return this.config.getNoTrimsChance(); }
+
+    public void setNoTrimsChance(int noTrimsChance) { this.config.setNoTrimsChance(noTrimsChance); }
 
     public int getStackedTrimChance() {
         return this.config.getStackedTrimChance();
