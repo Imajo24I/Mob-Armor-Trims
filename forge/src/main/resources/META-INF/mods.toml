@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/Imajo24I/Mob-Armor-Trims/issues/new/choose"
+license = "MIT"
+
+[[mods]]
+modId = "mob_armor_trims"
+version = "${version}"
+displayName = "Mob Armor Trims"
+authors = "majo24"
+description = '''
+Makes mobs be able to spawn with naturally trimmed armor
+'''
+#fixme: add logo
+#logoFile = ""
+
+[[dependencies.mob_armor_trims]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mob_armor_trims]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mob_armor_trims]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"
