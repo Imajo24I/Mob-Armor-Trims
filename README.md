@@ -12,18 +12,25 @@ This mod is server-side.
 ##  Dependencies
 
 ### Required
-This mod depends on the modloader [Fabric](https://fabricmc.net/) and the mod [Fabric API](https://modrinth.com/mod/fabric-api).  
-Support for the forge/neoforge/quilt modloaders may be added later
+For 1.20.1, you can either use
+- [Fabric](https://fabricmc.net/) - When using Fabric, this mod also requires [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/) - When using Forge, this mod also requires [Architectury API](https://modrinth.com/mod/architectury-api)
+
+When done updating the newest release to newer minecraft versions, you will also be able to use 
+- [Neoforge](https://neoforged.net/)
 
 ### Optional
-For Mod Menu support, [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config API](https://modrinth.com/mod/cloth-config)
-are required.
+- For Mod Menu support,
+  [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config API](https://modrinth.com/mod/cloth-config)
+are required
+- For a Config Screen inside Forge, [Cloth Config API](https://modrinth.com/mod/cloth-config) is required
 
 ## Configure
 
 You can configure this mod either through
 
 - [Mod Menu](https://modrinth.com/mod/modmenu) -  Dependencies for this can be found under ```Dependencies``` > ```Optional``` in this file
+- Forge Config Screen - Dependencies for this can be found under ```Dependencies``` > ```Optional```
 - Config file - The config file is located in ```.minecraft/config/mob_armor_trims.json```
  
 
