@@ -21,6 +21,9 @@
     ],
     "client": [
       "net.mob_armor_trims.majo24.fabric.client.MobArmorTrimsFabricClient"
+    ],
+    "modmenu": [
+      "net.mob_armor_trims.majo24.fabric.config.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -30,10 +33,14 @@
     "fabricloader": ">=0.15.11",
     "minecraft": "~1.20.1",
     "java": ">=17",
-
     "fabric-api": "*"
   },
   "suggests": {
     "another-mod": "*"
-  }
+  },
+  "custom": {
+		"modmenu": {
+			"update_checker": true
+		}
+	}
 }

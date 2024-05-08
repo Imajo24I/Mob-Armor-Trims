@@ -17,6 +17,15 @@ allprojects {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
         }
+
+        // Cloth Config API
+        maven { url "https://maven.shedaniel.me/" }
+
+        // Mod Menu
+        maven {
+            name = "Terraformers"
+            url = "https://maven.terraformersmc.com/"
+        }
     }
 }
 
