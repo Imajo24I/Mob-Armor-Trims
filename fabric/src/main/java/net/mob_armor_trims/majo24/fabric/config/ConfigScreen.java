@@ -26,6 +26,12 @@ public class ConfigScreen {
                         .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
                         .build());
 
+        general.addEntry(entryBuilder.startIntSlider(Component.literal("Similar Trim Chance"), MobArmorTrims.configManager.getSimilarTrimChance(), 0, 100)
+                .setDefaultValue(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE)
+                .setTooltip(Component.literal("Chance of each armor piece having\na similar armor trim as the previous armor piece"))
+                .setSaveConsumer(MobArmorTrims.configManager::setSimilarTrimChance)
+                .build());
+
         if (MobArmorTrims.isStackedArmorTrimsLoaded) {
             general.addEntry(entryBuilder.startIntSlider(Component.literal("Stacked Trim Chance"), MobArmorTrims.configManager.getStackedTrimChance(), 0, 100)
                             .setDefaultValue(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE)

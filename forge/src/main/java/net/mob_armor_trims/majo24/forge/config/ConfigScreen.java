@@ -5,7 +5,6 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.IExtensionPoint;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.ConfigManager;
 
@@ -27,6 +26,12 @@ public class ConfigScreen {
                         .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
                         .build());
 
+        general.addEntry(entryBuilder.startIntSlider(Component.literal("Similar Trim Chance"), MobArmorTrims.configManager.getSimilarTrimChance(), 0, 100)
+                        .setDefaultValue(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE)
+                        .setTooltip(Component.literal("Chance of each armor piece having\na similar armor trim as the previous armor piece"))
+                        .setSaveConsumer(MobArmorTrims.configManager::setSimilarTrimChance)
+                        .build());
+
         if (MobArmorTrims.isStackedArmorTrimsLoaded) {
             general.addEntry(entryBuilder.startIntSlider(Component.literal("Stacked Trim Chance"), MobArmorTrims.configManager.getStackedTrimChance(), 0, 100)
                             .setDefaultValue(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE)
@@ -34,7 +39,7 @@ public class ConfigScreen {
                             .setSaveConsumer(MobArmorTrims.configManager::setStackedTrimChance)
                             .build());
 
-            general.addEntry(entryBuilder.startIntSlider(Component.literal("Max Stacked Trims"), MobArmorTrims.configManager.getMaxStackedTrims(), 0, 100)
+            general.addEntry(entryBuilder.startIntSlider(Component.literal("Max Stacked Trims"), MobArmorTrims.configManager.getMaxStackedTrims(), 0, 5)
                             .setDefaultValue(ConfigManager.DEFAULT_MAX_STACKED_TRIMS)
                             .setTooltip(Component.literal("The maximum amount of armor trims that can be stacked on each other\nwhen the Stacked Armor Trims mod is enabled"))
                             .setSaveConsumer(MobArmorTrims.configManager::setMaxStackedTrims)

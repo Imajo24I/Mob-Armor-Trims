@@ -3,7 +3,6 @@ package net.mob_armor_trims.majo24.config;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.nio.file.Path;
 
 public class ConfigManager {
     public static final int DEFAULT_TRIM_CHANCE = 50;
+    public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 50;
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
 
@@ -28,7 +28,7 @@ public class ConfigManager {
 
     public static Config getConfigFromFile(Path configPath) {
         if (!Files.exists(configPath)) {
-            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             try {
                 MobArmorTrims.LOGGER.info("Creating config file");
                 Files.createFile(configPath);
@@ -46,7 +46,7 @@ public class ConfigManager {
                 return GSON.fromJson(jsonConfig, Config.class);
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read config file", e);
-                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
             }
         }
     }
@@ -69,13 +69,17 @@ public class ConfigManager {
         this.config.setTrimChance(trimChance);
     }
 
+    public int getSimilarTrimChance() { return this.config.getSimilarTrimChance(); }
+
+    public void setSimilarTrimChance(int sameTrimChance) { this.config.setSimilarTrimChance(sameTrimChance); }
+
     public int getStackedTrimChance() {
         return this.config.getStackedTrimChance();
     }
 
-    public void setStackedTrimChance(int stackedTrimChance) {this.config.setStackedTrimChance(stackedTrimChance);}
+    public void setStackedTrimChance(int stackedTrimChance) { this.config.setStackedTrimChance(stackedTrimChance); }
 
     public int getMaxStackedTrims() {return this.config.getMaxStackedTrims();}
 
-    public void setMaxStackedTrims(int maxStackedTrims) {this.config.setMaxStackedTrims(maxStackedTrims);}
+    public void setMaxStackedTrims(int maxStackedTrims) { this.config.setMaxStackedTrims(maxStackedTrims); }
 }
