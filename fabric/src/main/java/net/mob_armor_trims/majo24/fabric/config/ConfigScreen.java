@@ -46,7 +46,7 @@ public class ConfigScreen {
                             .setSaveConsumer(MobArmorTrims.configManager::setStackedTrimChance)
                             .build());
 
-            stackedArmorTrimsCategory.addEntry(entryBuilder.startIntSlider(Component.literal("Max Stacked Trims"), MobArmorTrims.configManager.getMaxStackedTrims(), 0, 100)
+            stackedArmorTrimsCategory.addEntry(entryBuilder.startIntSlider(Component.literal("Max Stacked Trims"), MobArmorTrims.configManager.getMaxStackedTrims(), 0, 5)
                             .setDefaultValue(ConfigManager.DEFAULT_MAX_STACKED_TRIMS)
                             .setTooltip(Component.literal("The maximum amount of armor trims that can be stacked on\neach other when the Stacked Armor Trims mod is enabled"))
                             .setSaveConsumer(MobArmorTrims.configManager::setMaxStackedTrims)
