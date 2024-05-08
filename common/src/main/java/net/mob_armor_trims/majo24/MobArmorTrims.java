@@ -28,6 +28,8 @@ public final class MobArmorTrims {
     }
 
     public static void randomlyApplyRandomTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
+        if (configManager.getNoTrimsChance() < random.nextInt(100)) {return;}
+
         ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
         Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
         ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
