@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.mob_armor_trims.majo24.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+    "spawn_entities_trimmed.OnNaturalSpawnMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

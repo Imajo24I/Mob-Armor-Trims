@@ -1,0 +1,21 @@
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
+
+/Merged/
+run/
+
+# java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr

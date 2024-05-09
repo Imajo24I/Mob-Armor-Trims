@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "mob_armor_trims",
+  "version": "${version}",
+  "name": "Mob Armor Trims",
+  "description": "Makes mobs be able to spawn with naturally trimmed armor",
+  "authors": [
+    "majo24"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Imajo24I/Mob-Armor-Trims",
+    "sources": "https://github.com/Imajo24I/Mob-Armor-Trims",
+    "issues": "https://github.com/Imajo24I/Mob-Armor-Trims/issues/new/choose"
+  },
+  "license": "MIT",
+  "icon": "assets/mob_armor_trims/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.mob_armor_trims.majo24.fabric.MobArmorTrimsFabric"
+    ],
+    "client": [
+      "net.mob_armor_trims.majo24.fabric.client.MobArmorTrimsFabricClient"
+    ],
+    "modmenu": [
+      "net.mob_armor_trims.majo24.fabric.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "mob_armor_trims.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "custom": {
+		"modmenu": {
+			"update_checker": true
+		}
+	}
+}
