@@ -26,49 +26,4 @@ public final class MobArmorTrims {
     public static void init(Path configPath) {
         configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
     }
-
-    public static void randomlyApplyRandomTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
-        if (configManager.getNoTrimsChance() > random.nextInt(100)) {return;}
-
-        ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
-        Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
-        ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
-        Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(patternKey);
-
-        ArmorTrim lastTrim = null;
-
-        for (ItemStack armor : equippedArmor) {
-            if (configManager.getTrimChance() < random.nextInt(100)) {continue;}
-            if (armor.getItem() != Items.AIR) {
-                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor, lastTrim);
-            }
-
-            // Stacked Armor Trims compatibility
-            if (isStackedArmorTrimsLoaded) {
-                int appliedArmorTrims = 0;
-                while ((configManager.getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < configManager.getMaxStackedTrims())) {
-                    applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor, null);
-                    appliedArmorTrims++;
-                }
-            }
-        }
-    }
-
-    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armor, ArmorTrim lastTrim) {
-        Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
-        Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
-        ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
-
-        if (lastTrim != null) {
-            if (configManager.getSimilarTrimChance() >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(lastTrim.material(), armorTrim.pattern());
-            }
-            if (configManager.getSimilarTrimChance() >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(armorTrim.material(), lastTrim.pattern());
-            }
-        }
-
-        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-        return armorTrim;
-    }
 }
