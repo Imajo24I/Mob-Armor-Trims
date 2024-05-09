@@ -11,7 +11,7 @@ classes/
 *.iws
 
 
-.Merged/
+/Merged/
 run/
 
 # java
