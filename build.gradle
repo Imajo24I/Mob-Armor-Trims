@@ -14,6 +14,7 @@ allprojects {
     version = rootProject.mod_version
 
     repositories {
+        // Parchment mappings
         maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
@@ -90,19 +91,21 @@ subprojects {
             // retrieving dependencies.
         }
     }
+}
 
-    forgix {
-        group = "net.mob_armor_trims.majo24"
-        mergedJarName = "mob_armor_trims-${project.mod_version}.jar"
+forgix {
+    group = "net.mob_armor_trims.majo24"
+    mergedJarName = "mob_armor_trims-${project.mod_version}.jar"
 
-        // TODO: figure out why jarLocation won't find the jars
-        if (findProject(":fabric"))
-            fabric {
-                // jarLocation = "fabric/build/libs/mob_armor_trims-fabric-1.1.0.jar"
-            }
-        if (findProject(":forge"))
-            forge {
-                // jarLocation = "forge/build/libs/mob_armor_trims-forge-${project.mod_version}.jar"
-            }
+    //TODO: figure out why jarLocation won't find the jars
+    // potentially due to -fabric- in file name, even though it isn't in mergedJarName above
+    // Will fix later
+    if (findProject(":fabric"))
+        fabric {
+            // jarLocation = "fabric/build/libs/mob_armor_trims-fabric-1.1.0.jar"
+        }
+    if (findProject(":forge"))
+        forge {
+            // jarLocation = "forge/build/libs/mob_armor_trims-forge-${project.mod_version}.jar"
     }
 }
