@@ -98,11 +98,9 @@ forgix {
     mergedJarName = "mob_armor_trims-${project.mod_version}.jar"
 
     //TODO: figure out why jarLocation won't find the jars
-    // potentially due to -fabric- in file name, even though it isn't in mergedJarName above
-    // Will fix latery
     if (findProject(":fabric"))
         fabric {
-            // jarLocation = "fabric/build/libs/mob_armor_trims-fabric-1.1.0.jar"
+            // jarLocation = "fabric/build/libs/mob_armor_trims-fabric-${project.mod_version}.jar"
         }
     if (findProject(":forge"))
         forge {
