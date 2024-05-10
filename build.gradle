@@ -90,6 +90,48 @@ subprojects {
             // The repositories here will be used for publishing your artifact, not for
             // retrieving dependencies.
         }
+
+        // Put stuff from gradle.properties into the mod info
+        processResources {
+            def resourceTargets = [
+                // Location of where to inject the properties
+
+                // Properties for each of the loaders
+                "fabric.mod.json",
+                "quilt.mod.json",
+                "META-INF/mods.toml"
+            ]
+
+            def intoTargets = ["$buildDir/resources/main/"] // Location of the built resources folder
+
+            // The left side is what gets replaced in the mod info and the right side is where to get it from in the gradle.properties
+            def replaceProperties = [
+                    version: mod_version,
+                    github_link: github_link,
+                    issues_link: issues_link,
+                    mod_description: mod_description,
+            ]
+
+            // replace any properties in the sub-projects with the values defined here
+            inputs.properties replaceProperties
+            replaceProperties.put "project", project
+            filesMatching(resourceTargets) {
+                expand replaceProperties
+            }
+
+            intoTargets.each {
+                target ->
+                    if (file(target).exists()) {
+                        copy {
+                            from(sourceSets.main.resources) {
+                                include resourceTargets
+                                expand replaceProperties
+                            }
+                            into target
+                        }
+                    }
+            }
+        }
     }
 }
 

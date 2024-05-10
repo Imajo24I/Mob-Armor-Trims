@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[49,)"
-issueTrackerURL = "https://github.com/Imajo24I/Mob-Armor-Trims/issues/new/choose"
+issueTrackerURL = "${issues_link}"
 license = "MIT"
 
 [[mods]]
@@ -8,9 +8,7 @@ modId = "mob_armor_trims"
 version = "${version}"
 displayName = "Mob Armor Trims"
 authors = "majo24"
-description = '''
-Makes mobs be able to spawn with naturally trimmed armor
-'''
+description = "${mod_description}"
 logoFile = "assets/mob_armor_trims/icon.png"
 
 [[dependencies.mob_armor_trims]]
