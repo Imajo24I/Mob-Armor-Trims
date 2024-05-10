@@ -20,7 +20,7 @@ public final class MobArmorTrimsForge {
         MobArmorTrims.isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
-        if (ModList.get().isLoaded("cloth-config")) {
+        if (ModList.get().isLoaded("cloth_config")) {
             ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                     () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreen.getConfigScreen(parent)));
         }
