@@ -16,14 +16,25 @@ For 1.20.1, you can either use
 - [Fabric](https://fabricmc.net/) - When using Fabric, this mod also requires [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/) - When using Forge, this mod also requires [Architectury API](https://modrinth.com/mod/architectury-api)
 
-When done updating the newest release to newer minecraft versions, you will also be able to use 
-- [Neoforge](https://neoforged.net/)
+For 1.20.4, you can either use
+- [Fabric](https://fabricmc.net/) - When using Fabric, this mod also requires [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Neoforge](https://neoforged.net/)- When using Neoforge, this mod also requires [Architectury API](https://modrinth.com/mod/architectury-api)
+
+For 1.20.6, you can either use 
+- [Fabric](https://fabricmc.net/) - When using Fabric, this mod also requires [Fabric API](https://modrinth.com/mod/fabric-api)
 
 ### Optional
 - For Mod Menu support,
   [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config API](https://modrinth.com/mod/cloth-config)
 are required
-- For a Config Screen inside Forge, [Cloth Config API](https://modrinth.com/mod/cloth-config) is required
+- For a Config Screen inside Forge or Neoforge, [Cloth Config API](https://modrinth.com/mod/cloth-config) is required
+
+### Support for other versions
+- Support for Forge 1.20.4 is in development, although there are some hard to solve bugs.  
+- Support for Forge 1.20.6 is in development,
+although I will only be able to continue working on this when the dependencies also have updated.  
+- Support for Neoforge 1.20.6 is in development, although there are some hard to solve bugs similar to Forge 1.20.4. 
+
 
 ## Configure
 
