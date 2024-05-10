@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[49,)"
+loaderVersion = "[50,)"
 issueTrackerURL = "${issues_link}"
 license = "MIT"
 
@@ -14,20 +14,20 @@ logoFile = "assets/mob_armor_trims/icon.png"
 [[dependencies.mob_armor_trims]]
 modId = "forge"
 mandatory = true
-versionRange = "[49,)"
+versionRange = "[50,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.4,)"
+versionRange = "[1.20.6,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
 modId = "architectury"
 mandatory = true
-versionRange = "[11.1.17,)"
+versionRange = "[12.0.27,)"
 ordering = "AFTER"
 side = "BOTH"
