@@ -19,8 +19,10 @@ public final class MobArmorTrimsForge {
         MobArmorTrims.isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreen.getConfigScreen(parent)));
+        if (ModList.get().isLoaded("cloth-config")) {
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreen.getConfigScreen(parent)));
+        }
 
         // Run our common setup.
         MobArmorTrims.init(Platform.getConfigFolder().resolve("mob_armor_trims.json"));
