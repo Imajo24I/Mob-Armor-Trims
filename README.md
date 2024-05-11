@@ -4,7 +4,7 @@
 This mod makes mobs be able to spawn with naturally trimmed armor.
 
 ## What does the mod exactly do?
-If a mob has an armor piece, it has a configurable chance (default is 50/50) of also having a completely random armor trim on its armor piece. This integrates minecrafts armor trims, which were added in 1.20, even further into the game.
+If a mob has armor, it also has a configurable chance of having armor trims on its armor piece. The armor trims are randomly choosen, while also taking the previous applied trims into account, creating good looking trim combinations.
 
 ## Clientside/Serverside
 This mod is server-side.
