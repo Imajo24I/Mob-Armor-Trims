@@ -1,0 +1,1 @@
+- add dependencies to modinfo (fabric.mod.json, etc.)
