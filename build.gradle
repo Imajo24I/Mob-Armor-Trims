@@ -134,14 +134,6 @@ subprojects {
                     }
                 }
         }
-        def target = file(".github/workflows/publish.yml")
-        copy {
-            from (sourceSets.main.resources) {
-                include resourceTargets
-                expand replaceProperties
-            }
-            into target
-        }
     }
 }
 
