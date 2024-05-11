@@ -35,6 +35,6 @@ side = "BOTH"
 [[dependencies.mob_armor_trims]]
 modId = "cloth_config"
 mandatory = false
-versionRange = "[${cloth_config_api_version},)"
+versionRange = "[${cloth_config_version},)"
 ordering = "AFTER"
 side = "CLIENT"
