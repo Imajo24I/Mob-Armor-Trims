@@ -3,9 +3,9 @@ name: Publish on GitHub, CurseForge & Modrinth
 on: [workflow_dispatch]
 
 env:
-  MINECRAFT_VERSION: ${{project.minecraft_version}}
+  MINECRAFT_VERSION: ${{minecraft_version}}
   JAVA_VERSION: 17
-  MOD_VERSION: ${{project.mod_version}}
+  MOD_VERSION: ${{mod_version}}
   RELEASE_NAME: Mob Armor Trims
   modrinth_id: hHVaPgFK
   curseforge_id: 1005441
