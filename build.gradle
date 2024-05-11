@@ -101,7 +101,7 @@ subprojects {
             "fabric.mod.json",
             "quilt.mod.json",
             "META-INF/mods.toml",
-            "META-INF/neoforge.mod.toml"
+            "META-INF/neoforge.mods.toml"
         ]
 
         def intoTargets = ["$buildDir/resources/main/"] // Location of the built resources folder
