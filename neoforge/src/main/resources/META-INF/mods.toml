@@ -35,7 +35,7 @@ side = "BOTH"
 [[dependencies.mob_armor_trims]]
 modId = "cloth_config"
 type = "optional"
-reason = "Cloth Config API is highly recomennded, as it is required to configure this mod through the Config Menu of Neoforge."
+reason = "Cloth Config API is highly recommended, as it is required to configure this mod through the Config Menu of Neoforge."
 versionRange = "[${cloth_config_version},)"
 ordering = "AFTER"
 side = "CLIENT"
