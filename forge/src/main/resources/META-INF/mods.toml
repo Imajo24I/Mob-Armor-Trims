@@ -31,3 +31,10 @@ mandatory = true
 versionRange = "[11.1.17,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.mob_armor_trims]]
+modId = "cloth_config"
+mandatory = false
+versionRange = "[${cloth_config_version},)"
+ordering = "AFTER"
+side = "CLIENT"
