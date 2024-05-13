@@ -16,7 +16,7 @@ import java.util.Random;
 public class ConfigManager {
     public static final String DEFAULT_ENABLED_SYSTEM = "random Trims";
     public static final int DEFAULT_TRIM_CHANCE = 50;
-    public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 50;
+    public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
     public static final List<ArrayList<String>> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
