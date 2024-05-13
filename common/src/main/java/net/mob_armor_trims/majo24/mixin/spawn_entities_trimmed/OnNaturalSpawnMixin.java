@@ -21,7 +21,7 @@ public abstract class OnNaturalSpawnMixin extends LivingEntity {
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots")
     private void populateDefaultEquipmentSlots(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
         
-        RandomTrims.randomlyApplyRandomTrims(this.level().registryAccess(), super.random, this.getArmorSlots());
+        RandomTrims.applyTrims(this.level().registryAccess(), super.random, this.getArmorSlots());
     }
 
     protected OnNaturalSpawnMixin(EntityType<? extends LivingEntity> entityType, Level world) {

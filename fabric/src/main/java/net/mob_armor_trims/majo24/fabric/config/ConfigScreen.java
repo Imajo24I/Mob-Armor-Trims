@@ -3,10 +3,15 @@ package net.mob_armor_trims.majo24.fabric.config;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Mob;
 import net.mob_armor_trims.majo24.MobArmorTrims;
+import net.mob_armor_trims.majo24.RandomTrims;
 import net.mob_armor_trims.majo24.config.ConfigManager;
+
+import java.util.ArrayList;
 
 public class ConfigScreen {
     private ConfigScreen() {}
@@ -18,25 +23,51 @@ public class ConfigScreen {
         builder.setSavingRunnable(MobArmorTrims.configManager::saveConfig);
 
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+
+        // Default System
         ConfigCategory general = builder.getOrCreateCategory(Component.literal("General"));
 
-        general.addEntry(entryBuilder.startIntSlider(Component.literal("Trim Chance"), MobArmorTrims.configManager.getTrimChance(), 0, 100)
+        ArrayList<String> systemSuggestions = new ArrayList<>();
+        systemSuggestions.add("random Trims");
+        systemSuggestions.add("custom Trims");
+        general.addEntry(entryBuilder.startStringDropdownMenu(Component.literal("Mob Type"), MobArmorTrims.configManager.getEnabledSystem())
+                        .setDefaultValue(ConfigManager.DEFAULT_ENABLED_SYSTEM)
+                        .setTooltip(Component.literal("""
+                                Select the system used to
+                                determine what trims to apply
+                                - random Trims: Apply random trims
+                                  to the mob, while also highly taking
+                                  previously applied trims into account
+                                - custom Trims: Choose a random trim
+                                  out of a list of pre-defined trims
+                                  and apply it to the mobs armor.
+                                  You can yourself edit this list"""))
+                        .setSaveConsumer(MobArmorTrims.configManager::setEnabledSystem)
+                        .setSelections(systemSuggestions)
+                        .build());
+
+        ConfigCategory defaultSystem = builder.getOrCreateCategory(Component.literal("Random Trims"));
+
+        defaultSystem.addEntry(entryBuilder.startIntSlider(Component.literal("Trim Chance"), MobArmorTrims.configManager.getTrimChance(), 0, 100)
                         .setDefaultValue(ConfigManager.DEFAULT_TRIM_CHANCE)
                         .setTooltip(Component.literal("Chance of each armor piece of\na mob having an armor trim"))
                         .setSaveConsumer(MobArmorTrims.configManager::setTrimChance)
                         .build());
 
-        general.addEntry(entryBuilder.startIntSlider(Component.literal("Similar Trim Chance"), MobArmorTrims.configManager.getSimilarTrimChance(), 0, 100)
+        defaultSystem.addEntry(entryBuilder.startIntSlider(Component.literal("Similar Trim Chance"), MobArmorTrims.configManager.getSimilarTrimChance(), 0, 100)
                 .setDefaultValue(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE)
                 .setTooltip(Component.literal("Chance of each armor piece having a similar armor\ntrim as the previous armor piece"))
                 .setSaveConsumer(MobArmorTrims.configManager::setSimilarTrimChance)
                 .build());
 
-        general.addEntry(entryBuilder.startIntSlider(Component.literal("No Trims Chance"), MobArmorTrims.configManager.getNoTrimsChance(), 0, 100)
+        defaultSystem.addEntry(entryBuilder.startIntSlider(Component.literal("No Trims Chance"), MobArmorTrims.configManager.getNoTrimsChance(), 0, 100)
                 .setDefaultValue(ConfigManager.DEFAULT_NO_TRIMS_CHANCE)
                 .setTooltip(Component.literal("Chance of the mob having no trims at all"))
                 .setSaveConsumer(MobArmorTrims.configManager::setNoTrimsChance)
                 .build());
+
+        // Custom Trims system
+        ConfigCategory customTrims = builder.getOrCreateCategory(Component.literal("Custom Trims"));
 
         if (MobArmorTrims.isStackedArmorTrimsLoaded) {
             ConfigCategory stackedArmorTrimsCategory = builder.getOrCreateCategory(Component.literal("Stacked Armor Trims"));
