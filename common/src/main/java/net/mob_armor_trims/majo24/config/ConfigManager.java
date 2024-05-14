@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class ConfigManager {
     public static final String DEFAULT_ENABLED_SYSTEM = "random Trims";
@@ -53,6 +52,7 @@ public class ConfigManager {
         } else {
             String jsonConfig;
             try {
+                // Get config from file
                 MobArmorTrims.LOGGER.info("Reading config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
                 return GSON.fromJson(jsonConfig, Config.class);
