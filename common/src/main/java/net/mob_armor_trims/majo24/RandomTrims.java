@@ -55,7 +55,10 @@ public class RandomTrims {
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
         for (ItemStack armor : equippedArmor) {
             if (armor.getItem() == Items.AIR) {continue;}
-            applyCustomTrim(MobArmorTrims.configManager.getCustomTrim(random), registryAccess, armor);
+            List<String> customTrim = MobArmorTrims.configManager.getCustomTrim(random);
+            if (!customTrim.isEmpty()) {
+                applyCustomTrim(MobArmorTrims.configManager.getCustomTrim(random), registryAccess, armor);
+            }
         }
     }
 

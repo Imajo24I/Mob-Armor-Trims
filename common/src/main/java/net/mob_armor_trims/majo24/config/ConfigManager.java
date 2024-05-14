@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,8 @@ public class ConfigManager {
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
     public static final List<ArrayList<String>> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
+    public static final String DEFAULT_SELECTED_MATERIAL = "";
+    public static final String DEFAULT_SELECTED_PATTERN = "";
 
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
@@ -61,7 +64,8 @@ public class ConfigManager {
     }
 
     public static Config getDefaultConfig() {
-        return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE, DEFAULT_CUSTOM_TRIMS_LIST,
+        return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
+                DEFAULT_CUSTOM_TRIMS_LIST, DEFAULT_SELECTED_MATERIAL, DEFAULT_SELECTED_PATTERN,
             DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
@@ -104,10 +108,28 @@ public class ConfigManager {
     */
     public List<String> getCustomTrim(RandomSource random) {
         List<ArrayList<String>> customTrimsList = this.config.getCustomTrimsList();
-        int randomIndex = random.nextInt(customTrimsList.size());
-        return customTrimsList.get(randomIndex);
+        if (customTrimsList.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return customTrimsList.get(random.nextInt(customTrimsList.size()));
+        }
     }
 
+    public String getSelectedMaterial() {
+        return this.config.getSelectedMaterial();
+    }
+
+    public void setSelectedMaterial(String selectedMaterial) {
+        this.config.setSelectedMaterial(selectedMaterial);
+    }
+
+    public String getSelectedPattern() {
+        return this.config.getSelectedPattern();
+    }
+
+    public void setSelectedPattern(String selectedPattern) {
+        this.config.setSelectedPattern(selectedPattern);
+    }
 
     public int getStackedTrimChance() {
         return this.config.getStackedTrimChance();
