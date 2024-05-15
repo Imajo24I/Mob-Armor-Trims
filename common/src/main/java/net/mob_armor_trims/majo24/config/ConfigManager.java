@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigManager {
-    public static final String DEFAULT_ENABLED_SYSTEM = "random Trims";
+    public static final TrimSystem DEFAULT_ENABLED_SYSTEM = TrimSystem.RANDOM_TRIMS;
     public static final int DEFAULT_TRIM_CHANCE = 50;
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
@@ -55,11 +55,34 @@ public class ConfigManager {
                 // Get config from file
                 MobArmorTrims.LOGGER.info("Reading config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
-                return GSON.fromJson(jsonConfig, Config.class);
+                Config config = GSON.fromJson(jsonConfig, Config.class);
+                validateConfig(config);
+                return config;
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read config file", e);
                 return getDefaultConfig();
             }
+        }
+    }
+
+    public static void validateConfig(Config config) {
+        if (config.getEnabledSystem() == null) {
+            config.setEnabledSystem(TrimSystem.RANDOM_TRIMS);
+        }
+        if (config.getCustomTrimsList() == null) {
+            config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
+        }
+        List<ArrayList<String>> customTrimsList = config.getCustomTrimsList();
+        for (List<String> customTrim : customTrimsList) {
+            if (customTrim.get(0) == null || customTrim.get(1) == null) {
+                customTrimsList.remove(customTrim);
+            }
+        }
+        if (config.getSelectedMaterial() == null) {
+            config.setSelectedMaterial(DEFAULT_SELECTED_MATERIAL);
+        }
+        if (config.getSelectedPattern() == null) {
+            config.setSelectedPattern(DEFAULT_SELECTED_PATTERN);
         }
     }
 
@@ -79,11 +102,11 @@ public class ConfigManager {
         }
     }
 
-    public String getEnabledSystem() {
+    public TrimSystem getEnabledSystem() {
         return this.config.getEnabledSystem();
     }
 
-    public void setEnabledSystem(String enabledSystem) {
+    public void setEnabledSystem(TrimSystem enabledSystem) {
         this.config.setEnabledSystem(enabledSystem);
     }
 

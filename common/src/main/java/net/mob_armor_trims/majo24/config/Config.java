@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Config {
     // General
-    private String enabledSystem;
+    private TrimSystem enabledSystem;
 
     // Random Trims System
     private int trimChance;
@@ -21,7 +21,7 @@ public class Config {
     private int stackedTrimChance;
     private int maxStackedTrims;
 
-    public Config(String enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<ArrayList<String>> customTrimsList, String selectedMaterial, String selectedPattern, int stackedTrimChance, int maxStackedTrims) {
+    public Config(TrimSystem enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<ArrayList<String>> customTrimsList, String selectedMaterial, String selectedPattern, int stackedTrimChance, int maxStackedTrims) {
         this.enabledSystem = enabledSystem;
 
         this.trimChance = trimChance;
@@ -36,11 +36,11 @@ public class Config {
         this.maxStackedTrims = maxStackedTrims;
     }
 
-    public String getEnabledSystem() {
+    public TrimSystem getEnabledSystem() {
         return enabledSystem;
     }
 
-    public void setEnabledSystem(String enabledSystem) {
+    public void setEnabledSystem(TrimSystem enabledSystem) {
         this.enabledSystem = enabledSystem;
     }
 
