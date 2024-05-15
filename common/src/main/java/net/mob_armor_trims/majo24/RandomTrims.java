@@ -57,7 +57,7 @@ public class RandomTrims {
             if (armor.getItem() == Items.AIR) {continue;}
             List<String> customTrim = MobArmorTrims.configManager.getCustomTrim(random);
             if (!customTrim.isEmpty()) {
-                applyCustomTrim(MobArmorTrims.configManager.getCustomTrim(random), registryAccess, armor);
+                applyCustomTrim(customTrim, registryAccess, armor);
             }
         }
     }

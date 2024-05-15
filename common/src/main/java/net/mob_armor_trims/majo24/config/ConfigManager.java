@@ -115,12 +115,18 @@ public class ConfigManager {
         }
     }
 
+
+    public void handleCustomTrimChange() {
+
+    }
+
     public String getSelectedMaterial() {
         return this.config.getSelectedMaterial();
     }
 
     public void setSelectedMaterial(String selectedMaterial) {
         this.config.setSelectedMaterial(selectedMaterial);
+        handleCustomTrimChange();
     }
 
     public String getSelectedPattern() {
@@ -129,6 +135,7 @@ public class ConfigManager {
 
     public void setSelectedPattern(String selectedPattern) {
         this.config.setSelectedPattern(selectedPattern);
+        handleCustomTrimChange();
     }
 
     public int getStackedTrimChance() {
