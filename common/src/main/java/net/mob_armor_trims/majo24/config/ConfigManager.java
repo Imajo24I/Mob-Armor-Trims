@@ -136,8 +136,11 @@ public class ConfigManager {
 
     public void setCustomTrimsList(List<String> customTrimsListStringified) {
         List<CustomTrim> customTrimsList = new ArrayList<>();
-        for (String customTrim : customTrimsListStringified) {
-            customTrimsList.add(CustomTrim.fromStringified(customTrim));
+        for (String stringifiedCustomTrims : customTrimsListStringified) {
+            CustomTrim customTrim = CustomTrim.fromStringified(stringifiedCustomTrims);
+            if (customTrim != null) {
+                customTrimsList.add(CustomTrim.fromStringified(stringifiedCustomTrims));
+            }
         }
         this.config.setCustomTrimsList(customTrimsList);
     }
