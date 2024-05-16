@@ -1,21 +1,29 @@
 package net.mob_armor_trims.majo24;
 
+import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.armortrim.*;
+import net.mob_armor_trims.majo24.config.CustomTrim;
+import net.mob_armor_trims.majo24.config.TrimSystem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RandomTrims {
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
-        if (MobArmorTrims.configManager.getEnabledSystem().equals("random Trims")) {
+        if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, equippedArmor);
         }
         else {
@@ -53,11 +61,18 @@ public class RandomTrims {
     }
 
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
+        CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
+        if (customTrim == null) {
+            return;
+        }
+        Holder.Reference<TrimMaterial> trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.getMaterialSNBT())).getDefaultInstance()).get();
+        Holder.Reference<TrimPattern> trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.getPatternSNBT())).getDefaultInstance()).get();
+        ArmorTrim armorTrim = new ArmorTrim(trimMaterial, trimPattern);
+
+
         for (ItemStack armor : equippedArmor) {
-            if (armor.getItem() == Items.AIR) {continue;}
-            List<String> customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-            if (!customTrim.isEmpty()) {
-                applyCustomTrim(customTrim, registryAccess, armor);
+            if (armor.getItem() != Items.AIR) {
+                ArmorTrim.setTrim(registryAccess, armor, armorTrim);
             }
         }
     }
@@ -78,21 +93,5 @@ public class RandomTrims {
 
         ArmorTrim.setTrim(registryAccess, armor, armorTrim);
         return armorTrim;
-    }
-
-    private static void applyCustomTrim(List<String> trimSNBT, RegistryAccess registryAccess, ItemStack armor) {
-        ArmorTrim armorTrim;
-
-        try {
-            armorTrim = new ArmorTrim(
-                TrimMaterials.getFromIngredient(registryAccess, ItemStack.of(NbtUtils.snbtToStructure(trimSNBT.get(0)))).get(),
-                TrimPatterns.getFromTemplate(registryAccess, ItemStack.of(NbtUtils.snbtToStructure(trimSNBT.get(1)))).get()
-            );
-        } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Invalid SNBT: {} {} {}", trimSNBT.get(0), trimSNBT.get(1), e);
-            return;
-        }
-
-        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
     }
 }

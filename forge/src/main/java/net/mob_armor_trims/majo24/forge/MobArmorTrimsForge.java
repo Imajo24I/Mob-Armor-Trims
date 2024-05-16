@@ -8,6 +8,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.forge.config.ConfigScreen;
 

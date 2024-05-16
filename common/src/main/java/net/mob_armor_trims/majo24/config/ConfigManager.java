@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ConfigManager {
@@ -19,9 +18,7 @@ public class ConfigManager {
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
-    public static final List<ArrayList<String>> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
-    public static final String DEFAULT_SELECTED_MATERIAL = "";
-    public static final String DEFAULT_SELECTED_PATTERN = "";
+    public static final List<CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
 
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
@@ -72,23 +69,13 @@ public class ConfigManager {
         if (config.getCustomTrimsList() == null) {
             config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
         }
-        List<ArrayList<String>> customTrimsList = config.getCustomTrimsList();
-        for (List<String> customTrim : customTrimsList) {
-            if (customTrim.get(0) == null || customTrim.get(1) == null) {
-                customTrimsList.remove(customTrim);
-            }
-        }
-        if (config.getSelectedMaterial() == null) {
-            config.setSelectedMaterial(DEFAULT_SELECTED_MATERIAL);
-        }
-        if (config.getSelectedPattern() == null) {
-            config.setSelectedPattern(DEFAULT_SELECTED_PATTERN);
-        }
+        List<CustomTrim> customTrimsList = config.getCustomTrimsList();
+        customTrimsList.removeIf(customTrim -> (customTrim.getMaterialSNBT() == null) || (customTrim.getPatternSNBT() == null));
     }
 
     public static Config getDefaultConfig() {
         return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
-                DEFAULT_CUSTOM_TRIMS_LIST, DEFAULT_SELECTED_MATERIAL, DEFAULT_SELECTED_PATTERN,
+                DEFAULT_CUSTOM_TRIMS_LIST,
             DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
@@ -129,36 +116,30 @@ public class ConfigManager {
     /**
      * @return Returns random Arraylist with SNBTs of trim material and pattern out of the custom trims list
     */
-    public List<String> getCustomTrim(RandomSource random) {
-        List<ArrayList<String>> customTrimsList = this.config.getCustomTrimsList();
+    public CustomTrim getCustomTrim(RandomSource random) {
+        List<CustomTrim> customTrimsList = this.config.getCustomTrimsList();
         if (customTrimsList.isEmpty()) {
-            return Collections.emptyList();
+            return null;
         } else {
             return customTrimsList.get(random.nextInt(customTrimsList.size()));
         }
     }
 
-
-    public void handleCustomTrimChange() {
-
+    public List<String> getCustomTrimsList() {
+        List<CustomTrim> customTrimsList = config.getCustomTrimsList();
+        List<String> customTrimsListStringified = new ArrayList<>();
+        for (CustomTrim customTrim : customTrimsList) {
+            customTrimsListStringified.add(customTrim.getMaterialSNBT() + " " + customTrim.getPatternSNBT());
+        }
+        return customTrimsListStringified;
     }
 
-    public String getSelectedMaterial() {
-        return this.config.getSelectedMaterial();
-    }
-
-    public void setSelectedMaterial(String selectedMaterial) {
-        this.config.setSelectedMaterial(selectedMaterial);
-        handleCustomTrimChange();
-    }
-
-    public String getSelectedPattern() {
-        return this.config.getSelectedPattern();
-    }
-
-    public void setSelectedPattern(String selectedPattern) {
-        this.config.setSelectedPattern(selectedPattern);
-        handleCustomTrimChange();
+    public void setCustomTrimsList(List<String> customTrimsListStringified) {
+        List<CustomTrim> customTrimsList = new ArrayList<>();
+        for (String customTrim : customTrimsListStringified) {
+            customTrimsList.add(CustomTrim.fromStringified(customTrim));
+        }
+        this.config.setCustomTrimsList(customTrimsList);
     }
 
     public int getStackedTrimChance() {

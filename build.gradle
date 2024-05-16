@@ -23,6 +23,14 @@ allprojects {
         // Cloth Config API
         maven { url "https://maven.shedaniel.me/" }
 
+        // YACL
+        repositories {
+            maven {
+                name 'Xander Maven'
+                url 'https://maven.isxander.dev/releases'
+            }
+        }
+
         // Mod Menu
         maven {
             name = "Terraformers"
@@ -112,7 +120,8 @@ subprojects {
                 issues_link: issues_link,
                 mod_description: mod_description,
                 modmenu_version: modmenu_version,
-                cloth_config_version: cloth_config_version
+                yacl_version: yacl_version,
+                cloth_config_version: cloth_config_version,
         ]
 
         // replace any properties in the sub-projects with the values defined here
