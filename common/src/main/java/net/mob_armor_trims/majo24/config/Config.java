@@ -1,6 +1,5 @@
 package net.mob_armor_trims.majo24.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Config {

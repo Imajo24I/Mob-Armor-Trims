@@ -1,13 +1,10 @@
 package net.mob_armor_trims.majo24;
 
-import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -16,10 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.armortrim.*;
 import net.mob_armor_trims.majo24.config.CustomTrim;
 import net.mob_armor_trims.majo24.config.TrimSystem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class RandomTrims {
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
