@@ -21,6 +21,13 @@ public class ConfigScreen {
 
     public static final OptionDescription customTrimsListOptionDescription = OptionDescription.of(literal("""
             Manage the list of custom trims here. You can add, edit and remove custom trims.
+            
+            A valid trim combination should be in the following format:
+            "[Trim Material]; [Trim Pattern]"
+            So as an example, this is a valid trim combination:
+            "quartz; silence"
+            
+            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the trim pattern, as it is the same for every trim.
             """));
 
     public static Screen getConfigScreen(Screen parent) {

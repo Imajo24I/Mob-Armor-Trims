@@ -129,7 +129,7 @@ public class ConfigManager {
         List<CustomTrim> customTrimsList = config.getCustomTrimsList();
         List<String> customTrimsListStringified = new ArrayList<>();
         for (CustomTrim customTrim : customTrimsList) {
-            customTrimsListStringified.add(customTrim.getMaterialSNBT() + " " + customTrim.getPatternSNBT());
+            customTrimsListStringified.add(customTrim.getMaterialSNBT() + "; " + customTrim.getPatternSNBT());
         }
         return customTrimsListStringified;
     }

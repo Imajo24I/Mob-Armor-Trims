@@ -10,7 +10,8 @@ public class CustomTrim {
     }
 
     public static CustomTrim fromStringified(String stringifiedCustomTrim) {
-        return new CustomTrim(stringifiedCustomTrim.split(" ")[0], stringifiedCustomTrim.split(" ")[1]);
+        stringifiedCustomTrim = stringifiedCustomTrim.replace(" ", "");
+        return new CustomTrim(stringifiedCustomTrim.split(";")[0], stringifiedCustomTrim.split(";")[1]);
     }
 
     public String getMaterialSNBT() {
