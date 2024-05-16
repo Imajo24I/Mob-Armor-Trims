@@ -24,7 +24,7 @@ public class ConfigScreen {
             """));
 
     public static Screen getConfigScreen(Screen parent) {
-        return YetAnotherConfigLib.createBuilder()
+        YetAnotherConfigLib.Builder configScreen =  YetAnotherConfigLib.createBuilder()
                 .title(literal("Mob Armor Trims"))
                 .save(MobArmorTrims.configManager::saveConfig)
                 .category(ConfigCategory.createBuilder()
@@ -107,9 +107,37 @@ public class ConfigScreen {
                                 .controller(StringControllerBuilder::create)
                                 .initial("")
                                 .build())
-                        .build())
+                        .build());
 
-                .build()
-                .generateScreen(parent);
+        if (MobArmorTrims.isStackedArmorTrimsLoaded) {
+            configScreen.category(ConfigCategory.createBuilder()
+                            .name(literal("Stacked Trims"))
+                            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility."))
+                            .option(Option.<Integer>createBuilder()
+                                    .name(literal("Stacked Trim Chance"))
+                                    .description(OptionDescription.of(literal("Chance of each armor piece having an additional armor trim on it when the Stacked Armor Trims mod is enabled")))
+                                    .binding(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE,
+                                            () -> MobArmorTrims.configManager.getStackedTrimChance(),
+                                            stackedTrimChance -> MobArmorTrims.configManager.setStackedTrimChance(stackedTrimChance))
+                                    .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 100)
+                                        .step(1)
+                                        .valueFormatter(v -> literal(v.toString() + "%")))
+                                    .build())
+                            .option(Option.<Integer>createBuilder()
+                                    .name(literal("Max Stacked Trims"))
+                                    .description(OptionDescription.of(literal("The maximum amount of armor trims that can be stacked on each other when the Stacked Armor Trims mod is enabled")))
+                                    .binding(ConfigManager.DEFAULT_MAX_STACKED_TRIMS,
+                                            () -> MobArmorTrims.configManager.getMaxStackedTrims(),
+                                            maxStackedTrims -> MobArmorTrims.configManager.setMaxStackedTrims(maxStackedTrims))
+                                    .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 5)
+                                        .step(1)
+                                        .valueFormatter(v -> literal(v.toString())))
+                                    .build())
+                            .build());
+        }
+
+        return configScreen.build().generateScreen(parent);
     }
 }
