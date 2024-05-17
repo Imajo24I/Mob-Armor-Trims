@@ -30,7 +30,13 @@ public class ConfigScreen {
             To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the trim pattern, as it is the same for every trim.
             """));
 
+    public static final Formatters.IntegerToPercentage integerToPercentageFormatter = new Formatters.IntegerToPercentage();
+    public static final Formatters.TrimSystem trimSystemFormatter = new Formatters.TrimSystem();
+
     public static Screen getConfigScreen(Screen parent) {
+
+
+
         YetAnotherConfigLib.Builder configScreen =  YetAnotherConfigLib.createBuilder()
                 .title(literal("Mob Armor Trims"))
                 .save(MobArmorTrims.configManager::saveConfig)
@@ -45,19 +51,7 @@ public class ConfigScreen {
                                         enabledSystem -> MobArmorTrims.configManager.setEnabledSystem(enabledSystem))
                                 .controller(opt -> EnumControllerBuilder.create(opt)
                                         .enumClass(TrimSystem.class)
-                                        .valueFormatter(v -> {
-                                            switch (v) {
-                                                case RANDOM_TRIMS -> {
-                                                    return literal("Random Trims");
-                                                }
-                                                case CUSTOM_TRIMS -> {
-                                                    return literal("Custom Trims");
-                                                }
-                                                default -> {
-                                                    return literal("Error: Unknown Trim System");
-                                                }
-                                            }
-                                        }))
+                                        .formatValue(trimSystemFormatter))
                                 .build())
                         .build())
 
@@ -73,7 +67,7 @@ public class ConfigScreen {
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .valueFormatter(v -> literal(v.toString() + "%")))
+                                        .formatValue(integerToPercentageFormatter))
                                 .build())
 
                         .option(Option.<Integer>createBuilder()
@@ -85,7 +79,7 @@ public class ConfigScreen {
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .valueFormatter(v -> literal(v.toString() + "%")))
+                                        .formatValue(integerToPercentageFormatter))
                                 .build())
 
                         .option(Option.<Integer>createBuilder()
@@ -97,7 +91,7 @@ public class ConfigScreen {
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .valueFormatter(v -> literal(v.toString() + "%")))
+                                        .formatValue(integerToPercentageFormatter))
                                 .build())
 
                         .build())
@@ -129,7 +123,7 @@ public class ConfigScreen {
                                     .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .valueFormatter(v -> literal(v.toString() + "%")))
+                                        .formatValue(integerToPercentageFormatter))
                                     .build())
                             .option(Option.<Integer>createBuilder()
                                     .name(literal("Max Stacked Trims"))
@@ -140,7 +134,7 @@ public class ConfigScreen {
                                     .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 5)
                                         .step(1)
-                                        .valueFormatter(v -> literal(v.toString())))
+                                        .formatValue(integerToPercentageFormatter))
                                     .build())
                             .build());
         }
