@@ -99,7 +99,7 @@ public class ConfigScreen {
                 .category(ConfigCategory.createBuilder()
                         .name(literal("Custom Trims"))
                         .tooltip(literal("Settings for the Custom Trims System."))
-                        .option(ListOption.<String>createBuilder()
+                        .group(ListOption.<String>createBuilder()
                                 .name(literal("Custom Trims List"))
                                 .description(customTrimsListOptionDescription)
                                 .binding(MobArmorTrims.configManager.getCustomTrimsList(),
