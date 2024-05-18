@@ -70,7 +70,7 @@ public class RandomTrims {
             trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.getMaterialSNBT())).getDefaultInstance()).get();
             trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternStringified)).getDefaultInstance()).get();
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please correct this custom trim: {}; {} - {}", customTrim.getMaterialSNBT(), customTrim.getPatternSNBT(), e);
+            MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please ensure this is a valid custom trim: {}; {} - {}", customTrim.getMaterialSNBT(), customTrim.getPatternSNBT(), e);
             return;
         }
         ArmorTrim armorTrim = new ArmorTrim(trimMaterial, trimPattern);
