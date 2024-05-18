@@ -65,9 +65,11 @@ public class ConfigManager {
     public static void validateConfig(Config config) {
         if (config.getEnabledSystem() == null) {
             config.setEnabledSystem(TrimSystem.RANDOM_TRIMS);
+            MobArmorTrims.LOGGER.warn("Enabled System Config is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_ENABLED_SYSTEM);
         }
         if (config.getCustomTrimsList() == null) {
             config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
+            MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
         }
         List<CustomTrim> customTrimsList = config.getCustomTrimsList();
         customTrimsList.removeIf(customTrim -> (customTrim.getMaterialSNBT() == null) || (customTrim.getPatternSNBT() == null));
