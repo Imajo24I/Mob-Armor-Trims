@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 
 public final class MobArmorTrims {
+    private MobArmorTrims() {}
+
     public static final String MOD_ID = "mob_armor_trims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static boolean isStackedArmorTrimsLoaded = false;
