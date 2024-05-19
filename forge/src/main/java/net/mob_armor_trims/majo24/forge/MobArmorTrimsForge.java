@@ -25,6 +25,8 @@ public final class MobArmorTrimsForge {
                     () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreen.getConfigScreen(parent)));
         }
 
+        //fixme: currently architecutry api is still a dependency. Test when working, if its possible to remove, because of line 18
+
         // Run our common setup.
         MobArmorTrims.init(FMLPaths.CONFIGDIR.get().resolve("mob_armor_trims.json"));
     }
