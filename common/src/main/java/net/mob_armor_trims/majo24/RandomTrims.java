@@ -15,6 +15,8 @@ import net.mob_armor_trims.majo24.config.CustomTrim;
 import net.mob_armor_trims.majo24.config.TrimSystem;
 
 public class RandomTrims {
+    private RandomTrims() {}
+    
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
         if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, equippedArmor);
@@ -58,7 +60,7 @@ public class RandomTrims {
         if (customTrim == null) {
             return;
         }
-        String trimPatternStringified = customTrim.getPatternSNBT();
+        String trimPatternStringified = customTrim.patternSNBT();
         if (!trimPatternStringified.contains("_armor_trim_smithing_template")) {
             trimPatternStringified += "_armor_trim_smithing_template";
         }
@@ -67,10 +69,10 @@ public class RandomTrims {
         Holder.Reference<TrimPattern> trimPattern;
 
         try {
-            trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.getMaterialSNBT())).getDefaultInstance()).get();
+            trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.materialSNBT())).getDefaultInstance()).get();
             trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternStringified)).getDefaultInstance()).get();
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please ensure this is a valid custom trim: {}; {} - {}", customTrim.getMaterialSNBT(), customTrim.getPatternSNBT(), e);
+            MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please ensure this is a valid custom trim: {}; {} - {}", customTrim.materialSNBT(), customTrim.patternSNBT(), e);
             return;
         }
         ArmorTrim armorTrim = new ArmorTrim(trimMaterial, trimPattern);

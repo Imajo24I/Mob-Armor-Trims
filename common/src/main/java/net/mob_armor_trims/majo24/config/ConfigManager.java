@@ -73,7 +73,7 @@ public class ConfigManager {
             MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
         }
         List<CustomTrim> customTrimsList = config.getCustomTrimsList();
-        customTrimsList.removeIf(customTrim -> (customTrim.getMaterialSNBT() == null) || (customTrim.getPatternSNBT() == null));
+        customTrimsList.removeIf(customTrim -> (customTrim.materialSNBT() == null) || (customTrim.patternSNBT() == null));
     }
 
     public static Config getDefaultConfig() {
@@ -131,7 +131,7 @@ public class ConfigManager {
     public List<List<String>> getCustomTrimsList() {
         List<List<String>> customTrimsListStringified = new ArrayList<>();
         for (CustomTrim customTrim : config.getCustomTrimsList()) {
-            customTrimsListStringified.add(Arrays.asList(customTrim.getMaterialSNBT(), customTrim.getPatternSNBT()));
+            customTrimsListStringified.add(Arrays.asList(customTrim.materialSNBT(), customTrim.patternSNBT()));
         }
         return customTrimsListStringified;
     }
