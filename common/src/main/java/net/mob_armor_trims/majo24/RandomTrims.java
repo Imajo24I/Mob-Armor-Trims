@@ -16,7 +16,7 @@ import net.mob_armor_trims.majo24.config.TrimSystem;
 
 public class RandomTrims {
     private RandomTrims() {}
-    
+
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
         if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, equippedArmor);
@@ -69,8 +69,8 @@ public class RandomTrims {
         Holder.Reference<TrimPattern> trimPattern;
 
         try {
-            trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.materialSNBT())).getDefaultInstance()).get();
-            trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternStringified)).getDefaultInstance()).get();
+            trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.materialSNBT())).getDefaultInstance()).orElseThrow();
+            trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternStringified)).getDefaultInstance()).orElseThrow();
         } catch (Exception e) {
             MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please ensure this is a valid custom trim: {}; {} - {}", customTrim.materialSNBT(), customTrim.patternSNBT(), e);
             return;
@@ -86,8 +86,8 @@ public class RandomTrims {
     }
 
     private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armor, ArmorTrim lastTrim) {
-        Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).get();
-        Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).get();
+        Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).orElseThrow();
+        Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).orElseThrow();
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
 
         if (lastTrim != null) {
