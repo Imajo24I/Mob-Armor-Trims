@@ -9,6 +9,9 @@ import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.ConfigManager;
 import net.mob_armor_trims.majo24.config.TrimSystem;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static net.minecraft.network.chat.Component.literal;
 
 public class ConfigScreen {
@@ -22,12 +25,14 @@ public class ConfigScreen {
     public static final OptionDescription customTrimsListOptionDescription = OptionDescription.of(literal("""
             Manage the list of custom trims here. You can add, edit and remove custom trims.
             
-            A valid trim combination should be in the following format:
-            "[Trim Material]; [Trim Pattern]"
-            So as an example, this is a valid trim combination:
-            "quartz; silence"
+            In the left option, enter a valid trim material.
+            As an example: "quartz".
             
-            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the trim pattern, as it is the same for every trim.
+            In the right option, enter a valid trim pattern.
+            As an example: "silence"
+            
+            
+            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
             """));
 
     public static final Formatters.IntegerToPercentage integerToPercentageFormatter = new Formatters.IntegerToPercentage();
@@ -99,14 +104,16 @@ public class ConfigScreen {
                 .category(ConfigCategory.createBuilder()
                         .name(literal("Custom Trims"))
                         .tooltip(literal("Settings for the Custom Trims System."))
-                        .group(ListOption.<String>createBuilder()
+                        .group(ListOption.<List<String>>createBuilder()
                                 .name(literal("Custom Trims List"))
                                 .description(customTrimsListOptionDescription)
                                 .binding(MobArmorTrims.configManager.getCustomTrimsList(),
                                         () -> MobArmorTrims.configManager.getCustomTrimsList(),
                                         customTrimsList -> MobArmorTrims.configManager.setCustomTrimsList(customTrimsList))
-                                .controller(StringControllerBuilder::create)
-                                .initial("")
+                                .controller(opt -> CustomTrimsListController.Builder.create(opt)
+                                        .patternController(StringControllerBuilder::create)
+                                        .materialController(StringControllerBuilder::create))
+                                .initial(Arrays.asList("", ""))
                                 .build())
                         .build());
 

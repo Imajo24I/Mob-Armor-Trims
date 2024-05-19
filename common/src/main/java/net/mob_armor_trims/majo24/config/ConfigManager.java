@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConfigManager {
@@ -127,22 +128,18 @@ public class ConfigManager {
         }
     }
 
-    public List<String> getCustomTrimsList() {
-        List<CustomTrim> customTrimsList = config.getCustomTrimsList();
-        List<String> customTrimsListStringified = new ArrayList<>();
-        for (CustomTrim customTrim : customTrimsList) {
-            customTrimsListStringified.add(customTrim.getMaterialSNBT() + "; " + customTrim.getPatternSNBT());
+    public List<List<String>> getCustomTrimsList() {
+        List<List<String>> customTrimsListStringified = new ArrayList<>();
+        for (CustomTrim customTrim : config.getCustomTrimsList()) {
+            customTrimsListStringified.add(Arrays.asList(customTrim.getMaterialSNBT(), customTrim.getPatternSNBT()));
         }
         return customTrimsListStringified;
     }
 
-    public void setCustomTrimsList(List<String> customTrimsListStringified) {
+    public void setCustomTrimsList(List<List<String>> customTrimsListStringified) {
         List<CustomTrim> customTrimsList = new ArrayList<>();
-        for (String stringifiedCustomTrims : customTrimsListStringified) {
-            CustomTrim customTrim = CustomTrim.fromStringified(stringifiedCustomTrims);
-            if (customTrim != null) {
-                customTrimsList.add(CustomTrim.fromStringified(stringifiedCustomTrims));
-            }
+        for (List<String> stringifiedCustomTrims : customTrimsListStringified) {
+            customTrimsList.add(CustomTrim.fromStringified(stringifiedCustomTrims));
         }
         this.config.setCustomTrimsList(customTrimsList);
     }

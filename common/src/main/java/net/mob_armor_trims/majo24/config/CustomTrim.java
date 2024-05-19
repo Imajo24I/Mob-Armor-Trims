@@ -2,6 +2,8 @@ package net.mob_armor_trims.majo24.config;
 
 import net.mob_armor_trims.majo24.MobArmorTrims;
 
+import java.util.List;
+
 public class CustomTrim {
     private final String materialSNBT;
     private final String patternSNBT;
@@ -11,14 +13,8 @@ public class CustomTrim {
         this.patternSNBT = patternSNBT;
     }
 
-    public static CustomTrim fromStringified(String stringifiedCustomTrim) {
-        String[] customTrim = stringifiedCustomTrim.replace(" ", "").split(";");
-        try {
-            return new CustomTrim(customTrim[0], customTrim[1]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            MobArmorTrims.LOGGER.warn("Could not parse custom trim: {}. Please ensure its a valid Trim Combination.", stringifiedCustomTrim);
-            return null;
-        }
+    public static CustomTrim fromStringified(List<String> stringifiedCustomTrim) {
+        return new CustomTrim(stringifiedCustomTrim.get(0), stringifiedCustomTrim.get(1));
     }
 
     public String getMaterialSNBT() {
