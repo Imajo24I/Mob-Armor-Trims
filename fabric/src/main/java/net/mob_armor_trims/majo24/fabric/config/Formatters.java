@@ -4,6 +4,8 @@ import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.minecraft.network.chat.Component;
 
 public class Formatters {
+    private Formatters() {}
+
     public static class IntegerToPercentage implements ValueFormatter<Integer> {
         @Override
         public Component format(Integer value) {
