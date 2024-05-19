@@ -1,6 +1,5 @@
 package net.mob_armor_trims.majo24.forge;
 
-import dev.architectury.platform.Platform;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -27,6 +26,6 @@ public final class MobArmorTrimsForge {
         }
 
         // Run our common setup.
-        MobArmorTrims.init(Platform.getConfigFolder().resolve("mob_armor_trims.json"));
+        MobArmorTrims.init(FMLPaths.CONFIGDIR.get().resolve("mob_armor_trims.json"));
     }
 }

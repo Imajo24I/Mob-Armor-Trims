@@ -20,9 +20,6 @@ allprojects {
             url = 'https://maven.parchmentmc.org'
         }
 
-        // Cloth Config API
-        maven { url "https://maven.shedaniel.me/" }
-
         // YACL
         repositories {
             maven {
@@ -121,7 +118,6 @@ subprojects {
                 mod_description: mod_description,
                 modmenu_version: modmenu_version,
                 yacl_version: yacl_version,
-                cloth_config_version: cloth_config_version,
         ]
 
         // replace any properties in the sub-projects with the values defined here
