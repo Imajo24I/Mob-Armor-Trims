@@ -123,7 +123,6 @@ subprojects {
                 issues_link: issues_link,
                 mod_description: mod_description,
                 modmenu_version: modmenu_version,
-                architectury_api_version: architectury_api_version,
                 yacl_version: yacl_version,
         ]
 

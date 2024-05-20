@@ -26,13 +26,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
-modId = "architectury"
-mandatory = true
-versionRange = "[${architectury_api_version},)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.mob_armor_trims]]
 modId = "yet_another_config_lib_v3"
 mandatory = false
 versionRange = "[${yacl_version},)"
