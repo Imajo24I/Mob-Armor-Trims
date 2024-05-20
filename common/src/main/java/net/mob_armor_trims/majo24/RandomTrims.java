@@ -18,6 +18,8 @@ public class RandomTrims {
     private RandomTrims() {}
 
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
+        if (MobArmorTrims.configManager.getNoTrimsChance() > random.nextInt(100)) {return;}
+
         if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, equippedArmor);
         }
@@ -27,8 +29,6 @@ public class RandomTrims {
     }
 
     public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
-        if (MobArmorTrims.configManager.getNoTrimsChance() > random.nextInt(100)) {return;}
-
         ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
         Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
         ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
