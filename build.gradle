@@ -28,6 +28,12 @@ allprojects {
             }
         }
 
+        // Kotlin for Forge - required by YACL
+        maven {
+            name = 'kotlinforforge'
+            url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        }
+
         // Mod Menu
         maven {
             name = "Terraformers"
@@ -117,6 +123,7 @@ subprojects {
                 issues_link: issues_link,
                 mod_description: mod_description,
                 modmenu_version: modmenu_version,
+                architectury_api_version: architectury_api_version,
                 yacl_version: yacl_version,
         ]
 

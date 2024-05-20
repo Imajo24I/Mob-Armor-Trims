@@ -23,6 +23,9 @@ public class Formatters {
                 case CUSTOM_TRIMS -> {
                     return Component.literal("Custom Trims");
                 }
+                case NONE -> {
+                    return Component.literal("Disabled");
+                }
                 default -> {
                     return Component.literal("Error: Unknown Trim System");
                 }
