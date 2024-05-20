@@ -9,6 +9,7 @@ import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.ConfigManager;
 import net.mob_armor_trims.majo24.config.TrimSystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -122,7 +123,7 @@ public class ConfigScreen {
             .group(ListOption.<List<String>>createBuilder()
                     .name(literal("Custom Trims List"))
                     .description(customTrimsListOptionDescription)
-                    .binding(MobArmorTrims.configManager.getCustomTrimsList(),
+                    .binding(new ArrayList<>(),
                             () -> MobArmorTrims.configManager.getCustomTrimsList(),
                             customTrimsList -> MobArmorTrims.configManager.setCustomTrimsList(customTrimsList))
                     .controller(opt -> CustomTrimsListController.Builder.create(opt)
