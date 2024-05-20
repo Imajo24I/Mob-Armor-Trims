@@ -21,7 +21,7 @@ public class RandomTrims {
         if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, equippedArmor);
         }
-        else {
+        else if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystem.CUSTOM_TRIMS) {
             runCustomTrimsSystem(equippedArmor, random, registryAccess);
         }
     }
