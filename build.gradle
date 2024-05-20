@@ -21,11 +21,9 @@ allprojects {
         }
 
         // YACL
-        repositories {
-            maven {
-                name 'Xander Maven'
-                url 'https://maven.isxander.dev/releases'
-            }
+        maven {
+            name 'Xander Maven'
+            url 'https://maven.isxander.dev/releases'
         }
 
         // Kotlin for Forge - required by YACL
