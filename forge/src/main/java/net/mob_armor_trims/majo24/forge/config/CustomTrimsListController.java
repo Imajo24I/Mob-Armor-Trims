@@ -8,6 +8,7 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
@@ -174,6 +175,19 @@ public class CustomTrimsListController implements Controller<List<String>> {
         }
 
         @Override
+        public void setFocused(boolean focused) {
+            materialElement.setFocused(focused);
+            patternElement.setFocused(focused);
+        }
+
+        @Override
+        public boolean isFocused() {
+            boolean material = materialElement.isFocused();
+            boolean pattern = patternElement.isFocused();
+            return material ||pattern;
+        }
+
+        @Override
         protected int getHoveredControlWidth() {
             return getUnhoveredControlWidth();
         }
@@ -198,6 +212,17 @@ public class CustomTrimsListController implements Controller<List<String>> {
         public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             materialElement.render(graphics, mouseX, mouseY, delta);
             patternElement.render(graphics, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public NarrationPriority narrationPriority() {
+            return materialElement.narrationPriority();
+        }
+
+        @Override
+        public void updateNarration(NarrationElementOutput narrationElementOutput) {
+            materialElement.updateNarration(narrationElementOutput);
+            patternElement.updateNarration(narrationElementOutput);
         }
     }
 }
