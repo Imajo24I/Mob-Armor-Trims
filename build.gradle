@@ -146,10 +146,6 @@ forgix {
         fabric {
             // jarLocation = "fabric/build/libs/mob_armor_trims-fabric-${project.mod_version}.jar"
         }
-    if (findProject(":forge"))
-        forge {
-            // jarLocation = "forge/build/libs/mob_armor_trims-forge-${project.mod_version}.jar"
-    }
     if (findProject":neoforge")
         neoforge {
             // jarLocation = "neoforge/build/libs/mob_armor_trims-neoforge-${project.mod_version}.jar"
