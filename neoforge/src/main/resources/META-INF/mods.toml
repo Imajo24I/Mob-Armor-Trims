@@ -26,19 +26,12 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
-modId = "architectury"
-type = "required"
-versionRange = "[11.1.17,)"
+modId = "yet_another_config_lib_v3"
+type = "optional"
+reason = "Yet Another Config Lib is highly recommended, as it is required to configure this mod through the Config Menu of Neoforge."
+versionRange = "[${yacl_version},)"
 ordering = "AFTER"
 side = "BOTH"
-
-[[dependencies.mob_armor_trims]]
-modId = "cloth_config"
-type = "optional"
-reason = "Cloth Config API is highly recommended, as it is required to configure this mod through the Config Menu of Neoforge."
-versionRange = "[${cloth_config_version},)"
-ordering = "AFTER"
-side = "CLIENT"
 
 [[mixins]]
 config = "mob_armor_trims.mixins.json"
