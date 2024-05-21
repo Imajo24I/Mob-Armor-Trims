@@ -40,7 +40,11 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
     // YACL
-    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
+    modApi "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
+    /*
+    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
+    localRuntime "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
+    */
 }
 
 processResources {
