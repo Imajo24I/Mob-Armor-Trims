@@ -3,16 +3,24 @@ package net.mob_armor_trims.majo24.config;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.util.RandomSource;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ConfigManager {
-    public static final int DEFAULT_TRIM_CHANCE = 75;
+    public static final TrimSystem DEFAULT_ENABLED_SYSTEM = TrimSystem.RANDOM_TRIMS;
+    public static final int DEFAULT_TRIM_CHANCE = 50;
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
+
+    public static final List<CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
+
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
 
@@ -29,7 +37,7 @@ public class ConfigManager {
 
     public static Config getConfigFromFile(Path configPath) {
         if (!Files.exists(configPath)) {
-            Config newConfig = new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+            Config newConfig = getDefaultConfig();
             try {
                 MobArmorTrims.LOGGER.info("Creating config file");
                 Files.createFile(configPath);
@@ -42,14 +50,36 @@ public class ConfigManager {
         } else {
             String jsonConfig;
             try {
+                // Get config from file
                 MobArmorTrims.LOGGER.info("Reading config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
-                return GSON.fromJson(jsonConfig, Config.class);
+                Config config = GSON.fromJson(jsonConfig, Config.class);
+                validateConfig(config);
+                return config;
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read config file", e);
-                return new Config(DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE, DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+                return getDefaultConfig();
             }
         }
+    }
+
+    public static void validateConfig(Config config) {
+        if (config.getEnabledSystem() == null) {
+            config.setEnabledSystem(TrimSystem.RANDOM_TRIMS);
+            MobArmorTrims.LOGGER.warn("Enabled System Config is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_ENABLED_SYSTEM);
+        }
+        if (config.getCustomTrimsList() == null) {
+            config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
+            MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
+        }
+        List<CustomTrim> customTrimsList = config.getCustomTrimsList();
+        customTrimsList.removeIf(customTrim -> (customTrim.materialSNBT() == null) || (customTrim.patternSNBT() == null));
+    }
+
+    public static Config getDefaultConfig() {
+        return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
+                DEFAULT_CUSTOM_TRIMS_LIST,
+            DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
     public void saveConfig() {
@@ -60,6 +90,14 @@ public class ConfigManager {
         } catch (IOException e) {
             MobArmorTrims.LOGGER.error("Could not save config file", e);
         }
+    }
+
+    public TrimSystem getEnabledSystem() {
+        return this.config.getEnabledSystem();
+    }
+
+    public void setEnabledSystem(TrimSystem enabledSystem) {
+        this.config.setEnabledSystem(enabledSystem);
     }
 
     public int getTrimChance() {
@@ -77,6 +115,34 @@ public class ConfigManager {
     public int getNoTrimsChance() { return this.config.getNoTrimsChance(); }
 
     public void setNoTrimsChance(int noTrimsChance) { this.config.setNoTrimsChance(noTrimsChance); }
+
+    /**
+     * @return Returns random Arraylist with SNBTs of trim material and pattern out of the custom trims list
+    */
+    public CustomTrim getCustomTrim(RandomSource random) {
+        List<CustomTrim> customTrimsList = this.config.getCustomTrimsList();
+        if (customTrimsList.isEmpty()) {
+            return null;
+        } else {
+            return customTrimsList.get(random.nextInt(customTrimsList.size()));
+        }
+    }
+
+    public List<List<String>> getCustomTrimsList() {
+        List<List<String>> customTrimsListStringified = new ArrayList<>();
+        for (CustomTrim customTrim : config.getCustomTrimsList()) {
+            customTrimsListStringified.add(Arrays.asList(customTrim.materialSNBT(), customTrim.patternSNBT()));
+        }
+        return customTrimsListStringified;
+    }
+
+    public void setCustomTrimsList(List<List<String>> customTrimsListStringified) {
+        List<CustomTrim> customTrimsList = new ArrayList<>();
+        for (List<String> stringifiedCustomTrims : customTrimsListStringified) {
+            customTrimsList.add(CustomTrim.fromStringified(stringifiedCustomTrims));
+        }
+        this.config.setCustomTrimsList(customTrimsList);
+    }
 
     public int getStackedTrimChance() {
         return this.config.getStackedTrimChance();

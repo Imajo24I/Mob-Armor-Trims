@@ -26,10 +26,10 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
-modId = "cloth_config"
+modId = "yet_another_config_lib_v3"
 type = "optional"
-reason = "Cloth Config API is highly recomennded, as it is required to configure this mod through the Config Menu of Neoforge."
-versionRange = "[${cloth_config_version},)"
+reason = "Yet Another Config Lib is highly recomennded, as it is required to configure this mod through the Config Menu of Neoforge."
+versionRange = "[${yacl_version},)"
 ordering = "AFTER"
 side = "CLIENT"
 

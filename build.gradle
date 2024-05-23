@@ -21,8 +21,17 @@ allprojects {
             url = 'https://maven.parchmentmc.org'
         }
 
-        // Cloth Config API
-        maven { url "https://maven.shedaniel.me/" }
+        // YACL
+        maven {
+            name 'Xander Maven'
+            url 'https://maven.isxander.dev/releases'
+        }
+
+        // Kotlin for Forge - required by YACL
+        maven {
+            name = 'kotlinforforge'
+            url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        }
 
         // Mod Menu
         maven {
@@ -112,7 +121,7 @@ subprojects {
                 issues_link: issues_link,
                 mod_description: mod_description,
                 modmenu_version: modmenu_version,
-                cloth_config_version: cloth_config_version
+                yacl_version: yacl_version,
         ]
 
         // replace any properties in the sub-projects with the values defined here

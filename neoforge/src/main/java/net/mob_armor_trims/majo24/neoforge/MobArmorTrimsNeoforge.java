@@ -14,7 +14,7 @@ public final class MobArmorTrimsNeoforge {
         MobArmorTrims.isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
-        if (ModList.get().isLoaded("cloth_config")) {
+        if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
             ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
                     () -> (client, parent) -> ConfigScreen.getConfigScreen(parent));
         }
