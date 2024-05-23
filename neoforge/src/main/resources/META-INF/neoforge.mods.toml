@@ -26,13 +26,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
-modId = "architectury"
-type = "required"
-versionRange = "[12.0.27,)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.mob_armor_trims]]
 modId = "cloth_config"
 type = "optional"
 reason = "Cloth Config API is highly recomennded, as it is required to configure this mod through the Config Menu of Neoforge."
