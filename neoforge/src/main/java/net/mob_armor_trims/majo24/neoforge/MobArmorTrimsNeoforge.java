@@ -1,7 +1,7 @@
 package net.mob_armor_trims.majo24.neoforge;
 
 import net.mob_armor_trims.majo24.MobArmorTrims;
-import net.mob_armor_trims.majo24.config.ConfigScreen.ConfigScreen;
+import net.mob_armor_trims.majo24.config.configscreen.ConfigScreen;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;

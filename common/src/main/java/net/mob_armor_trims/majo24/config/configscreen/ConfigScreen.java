@@ -1,4 +1,4 @@
-package net.mob_armor_trims.majo24.config.ConfigScreen;
+package net.mob_armor_trims.majo24.config.configscreen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
