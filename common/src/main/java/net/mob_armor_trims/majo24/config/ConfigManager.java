@@ -10,16 +10,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ConfigManager {
-    public static final TrimSystem DEFAULT_ENABLED_SYSTEM = TrimSystem.RANDOM_TRIMS;
+    public static final Config.TrimSystem DEFAULT_ENABLED_SYSTEM = Config.TrimSystem.RANDOM_TRIMS;
     public static final int DEFAULT_TRIM_CHANCE = 50;
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
-    public static final List<CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
+    public static final List<Config.CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
 
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
@@ -39,25 +38,25 @@ public class ConfigManager {
         if (!Files.exists(configPath)) {
             Config newConfig = getDefaultConfig();
             try {
-                MobArmorTrims.LOGGER.info("Creating config file");
+                MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
                 Files.createFile(configPath);
                 String jsonConfig = GSON.toJson(newConfig);
                 Files.writeString(configPath, jsonConfig);
             } catch (IOException e) {
-                MobArmorTrims.LOGGER.error("Could not create config file", e);
+                MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file", e);
             }
             return newConfig;
         } else {
             String jsonConfig;
             try {
                 // Get config from file
-                MobArmorTrims.LOGGER.info("Reading config file");
+                MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
                 Config config = GSON.fromJson(jsonConfig, Config.class);
                 validateConfig(config);
                 return config;
             } catch (IOException e) {
-                MobArmorTrims.LOGGER.error("Could not read config file", e);
+                MobArmorTrims.LOGGER.error("Could not read Mob Armor Trims config file. Using default config", e);
                 return getDefaultConfig();
             }
         }
@@ -65,15 +64,15 @@ public class ConfigManager {
 
     public static void validateConfig(Config config) {
         if (config.getEnabledSystem() == null) {
-            config.setEnabledSystem(TrimSystem.RANDOM_TRIMS);
+            config.setEnabledSystem(Config.TrimSystem.RANDOM_TRIMS);
             MobArmorTrims.LOGGER.warn("Enabled System Config is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_ENABLED_SYSTEM);
         }
         if (config.getCustomTrimsList() == null) {
             config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
             MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
         }
-        List<CustomTrim> customTrimsList = config.getCustomTrimsList();
-        customTrimsList.removeIf(customTrim -> (customTrim.materialSNBT() == null) || (customTrim.patternSNBT() == null));
+        List<Config.CustomTrim> customTrimsList = config.getCustomTrimsList();
+        customTrimsList.removeIf(customTrim -> (customTrim.material() == null) || (customTrim.pattern() == null));
     }
 
     public static Config getDefaultConfig() {
@@ -83,20 +82,20 @@ public class ConfigManager {
     }
 
     public void saveConfig() {
-        MobArmorTrims.LOGGER.info("Saving config file");
+        MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
         String jsonConfig = GSON.toJson(config);
         try {
             Files.writeString(configPath, jsonConfig);
         } catch (IOException e) {
-            MobArmorTrims.LOGGER.error("Could not save config file", e);
+            MobArmorTrims.LOGGER.error("Could not save Mob Armor Trims config to file - ", e);
         }
     }
 
-    public TrimSystem getEnabledSystem() {
+    public Config.TrimSystem getEnabledSystem() {
         return this.config.getEnabledSystem();
     }
 
-    public void setEnabledSystem(TrimSystem enabledSystem) {
+    public void setEnabledSystem(Config.TrimSystem enabledSystem) {
         this.config.setEnabledSystem(enabledSystem);
     }
 
@@ -117,10 +116,10 @@ public class ConfigManager {
     public void setNoTrimsChance(int noTrimsChance) { this.config.setNoTrimsChance(noTrimsChance); }
 
     /**
-     * @return Returns random Arraylist with SNBTs of trim material and pattern out of the custom trims list
+     * @return Returns random Custom Trim out of the Custom Trims List
     */
-    public CustomTrim getCustomTrim(RandomSource random) {
-        List<CustomTrim> customTrimsList = this.config.getCustomTrimsList();
+    public Config.CustomTrim getCustomTrim(RandomSource random) {
+        List<Config.CustomTrim> customTrimsList = this.config.getCustomTrimsList();
         if (customTrimsList.isEmpty()) {
             return null;
         } else {
@@ -128,19 +127,11 @@ public class ConfigManager {
         }
     }
 
-    public List<List<String>> getCustomTrimsList() {
-        List<List<String>> customTrimsListStringified = new ArrayList<>();
-        for (CustomTrim customTrim : config.getCustomTrimsList()) {
-            customTrimsListStringified.add(Arrays.asList(customTrim.materialSNBT(), customTrim.patternSNBT()));
-        }
-        return customTrimsListStringified;
+    public List<Config.CustomTrim> getCustomTrimsList() {
+        return config.getCustomTrimsList();
     }
 
-    public void setCustomTrimsList(List<List<String>> customTrimsListStringified) {
-        List<CustomTrim> customTrimsList = new ArrayList<>();
-        for (List<String> stringifiedCustomTrims : customTrimsListStringified) {
-            customTrimsList.add(CustomTrim.fromStringified(stringifiedCustomTrims));
-        }
+    public void setCustomTrimsList(List<Config.CustomTrim> customTrimsList) {
         this.config.setCustomTrimsList(customTrimsList);
     }
 

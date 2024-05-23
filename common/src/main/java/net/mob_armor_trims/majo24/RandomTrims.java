@@ -11,8 +11,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.armortrim.*;
-import net.mob_armor_trims.majo24.config.CustomTrim;
-import net.mob_armor_trims.majo24.config.TrimSystem;
+import net.mob_armor_trims.majo24.config.Config.CustomTrim;
+import net.mob_armor_trims.majo24.config.Config.TrimSystem;
 
 public class RandomTrims {
     private RandomTrims() {}
@@ -60,23 +60,9 @@ public class RandomTrims {
         if (customTrim == null) {
             return;
         }
-        String trimPatternStringified = customTrim.patternSNBT();
-        if (!trimPatternStringified.contains("_armor_trim_smithing_template")) {
-            trimPatternStringified += "_armor_trim_smithing_template";
-        }
 
-        Holder.Reference<TrimMaterial> trimMaterial;
-        Holder.Reference<TrimPattern> trimPattern;
-
-        try {
-            trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(customTrim.materialSNBT())).getDefaultInstance()).orElseThrow();
-            trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternStringified)).getDefaultInstance()).orElseThrow();
-        } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to apply custom trim. Please ensure this is a valid custom trim: {}; {} - {}", customTrim.materialSNBT(), customTrim.patternSNBT(), e);
-            return;
-        }
-        ArmorTrim armorTrim = new ArmorTrim(trimMaterial, trimPattern);
-
+        ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
+        if (armorTrim == null) {return;}
 
         for (ItemStack armor : equippedArmor) {
             if (armor.getItem() != Items.AIR) {

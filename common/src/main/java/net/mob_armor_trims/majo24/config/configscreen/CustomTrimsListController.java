@@ -1,4 +1,4 @@
-package net.mob_armor_trims.majo24.fabric.config;
+package net.mob_armor_trims.majo24.config.configscreen;
 
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
@@ -8,30 +8,30 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.mob_armor_trims.majo24.config.Config;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class CustomTrimsListController implements Controller<List<String>> {
-    private final Option<List<String>> option;
+public class CustomTrimsListController implements Controller<Config.CustomTrim> {
+    private final Option<Config.CustomTrim> option;
     private final Controller<String> materialController;
     private final Controller<String> patternController;
 
-    public CustomTrimsListController(Option<List<String>> option, Function<Option<String>, ControllerBuilder<String>> materialController, Function<Option<String>, ControllerBuilder<String>> patternController) {
+    public CustomTrimsListController(Option<Config.CustomTrim> option, Function<Option<String>, ControllerBuilder<String>> materialController, Function<Option<String>, ControllerBuilder<String>> patternController) {
         this.option = option;
 
         this.materialController = dummyOption("Material:", materialController,
-                () -> option.pendingValue().get(0),
-                newMaterial -> option.requestSet(Arrays.asList(newMaterial, option.pendingValue().get(1)))
+                () -> option.pendingValue().material(),
+                newMaterial -> option.requestSet(new Config.CustomTrim(newMaterial, option.pendingValue().pattern()))
         ).controller();
 
         this.patternController = dummyOption("Pattern:", materialController,
-                () -> option.pendingValue().get(1),
-                newPattern -> option.requestSet(Arrays.asList(option.pendingValue().get(0), newPattern))
+                () -> option.pendingValue().pattern(),
+                newPattern -> option.requestSet(new Config.CustomTrim(option.pendingValue().material(), newPattern))
         ).controller();
     }
 
@@ -52,7 +52,7 @@ public class CustomTrimsListController implements Controller<List<String>> {
      * Gets the dedicated {@link Option} for this controller
      */
     @Override
-    public Option<List<String>> option() {
+    public Option<Config.CustomTrim> option() {
         return option;
     }
 
@@ -79,16 +79,16 @@ public class CustomTrimsListController implements Controller<List<String>> {
         return new TwoFieldListControllerElement(this, screen, widgetDimension, materialWidget, patternWidget);
     }
 
-    public static class Builder implements ControllerBuilder<List<String>> {
-        protected final Option<List<String>> option;
+    public static class Builder implements ControllerBuilder<Config.CustomTrim> {
+        protected final Option<Config.CustomTrim> option;
         private Function<Option<String>, ControllerBuilder<String>> materialController;
         private Function<Option<String>, ControllerBuilder<String>> patternController;
 
-        public Builder(Option<List<String>> option) {
+        public Builder(Option<Config.CustomTrim> option) {
             this.option = option;
         }
 
-        static Builder create(Option<List<String>> option) {
+        static Builder create(Option<Config.CustomTrim> option) {
             return new Builder(option);
         }
 
@@ -103,7 +103,7 @@ public class CustomTrimsListController implements Controller<List<String>> {
         }
 
         @Override
-        public Controller<List<String>> build() {
+        public Controller<Config.CustomTrim> build() {
             return new CustomTrimsListController(option, materialController, patternController);
         }
     }
@@ -174,6 +174,19 @@ public class CustomTrimsListController implements Controller<List<String>> {
         }
 
         @Override
+        public void setFocused(boolean focused) {
+            materialElement.setFocused(focused);
+            patternElement.setFocused(focused);
+        }
+
+        @Override
+        public boolean isFocused() {
+            boolean material = materialElement.isFocused();
+            boolean pattern = patternElement.isFocused();
+            return material ||pattern;
+        }
+
+        @Override
         protected int getHoveredControlWidth() {
             return getUnhoveredControlWidth();
         }
@@ -198,6 +211,17 @@ public class CustomTrimsListController implements Controller<List<String>> {
         public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             materialElement.render(graphics, mouseX, mouseY, delta);
             patternElement.render(graphics, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public NarrationPriority narrationPriority() {
+            return materialElement.narrationPriority();
+        }
+
+        @Override
+        public void updateNarration(NarrationElementOutput narrationElementOutput) {
+            materialElement.updateNarration(narrationElementOutput);
+            patternElement.updateNarration(narrationElementOutput);
         }
     }
 }
