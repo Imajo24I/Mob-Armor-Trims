@@ -43,7 +43,6 @@ dependencies {
 
     //fixme:
     // for some reason it doesn't like when running yacl in dev enviroment
-    // Because of this, compileOnly is currently used, to atleast be able to run the mod without yacl in forge
 
     // modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
     compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"

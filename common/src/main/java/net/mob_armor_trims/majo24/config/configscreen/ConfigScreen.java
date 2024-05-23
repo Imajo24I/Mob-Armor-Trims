@@ -1,4 +1,4 @@
-package net.mob_armor_trims.majo24.fabric.config;
+package net.mob_armor_trims.majo24.config.configscreen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
@@ -6,12 +6,10 @@ import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.mob_armor_trims.majo24.MobArmorTrims;
+import net.mob_armor_trims.majo24.config.Config;
 import net.mob_armor_trims.majo24.config.ConfigManager;
-import net.mob_armor_trims.majo24.config.TrimSystem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static net.minecraft.network.chat.Component.literal;
 
@@ -59,14 +57,14 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
             .name(literal("General"))
             .tooltip(literal("General settings for this mod."))
-            .option(Option.<TrimSystem>createBuilder()
+            .option(Option.<Config.TrimSystem>createBuilder()
                 .name(literal("Trim System"))
                 .description(trimSytemOptionDescription)
-                .binding(TrimSystem.RANDOM_TRIMS,
+                .binding(Config.TrimSystem.RANDOM_TRIMS,
                         () -> MobArmorTrims.configManager.getEnabledSystem(),
                         enabledSystem -> MobArmorTrims.configManager.setEnabledSystem(enabledSystem))
                 .controller(opt -> EnumControllerBuilder.create(opt)
-                        .enumClass(TrimSystem.class)
+                        .enumClass(Config.TrimSystem.class)
                         .formatValue(trimSystemFormatter))
                 .build())
 
@@ -121,7 +119,7 @@ public class ConfigScreen {
             .name(literal("Custom Trims"))
             .tooltip(literal("Settings for the Custom Trims System."))
 
-            .group(ListOption.<List<String>>createBuilder()
+            .group(ListOption.<Config.CustomTrim>createBuilder()
                 .name(literal("Custom Trims List"))
                 .description(customTrimsListOptionDescription)
                 .binding(new ArrayList<>(),
@@ -130,7 +128,7 @@ public class ConfigScreen {
                 .controller(opt -> CustomTrimsListController.Builder.create(opt)
                         .patternController(StringControllerBuilder::create)
                         .materialController(StringControllerBuilder::create))
-                .initial(Arrays.asList("", ""))
+                .initial(new Config.CustomTrim("", ""))
                 .build())
             .build();
     }

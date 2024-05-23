@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.mob_armor_trims.majo24.MobArmorTrims;
-import net.mob_armor_trims.majo24.forge.config.ConfigScreen;
+import net.mob_armor_trims.majo24.config.configscreen.ConfigScreen;
 
 @Mod(MobArmorTrims.MOD_ID)
 public final class MobArmorTrimsForge {
