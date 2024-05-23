@@ -46,6 +46,7 @@ dependencies {
     // for some reason it doesn't like when running yacl in dev enviroment
 
     // modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+1.20.5-neoforge"
+    compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+1.20.5-neoforge"
 }
 
 processResources {
