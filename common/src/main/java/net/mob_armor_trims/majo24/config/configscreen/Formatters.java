@@ -16,8 +16,8 @@ public class Formatters {
 
     public static class TrimSystem implements ValueFormatter<Config.TrimSystem> {
         @Override
-        public Component format(Config.TrimSystem value) {
-            return switch (value) {
+        public Component format(Config.TrimSystem selectedSystem) {
+            return switch (selectedSystem) {
                 case RANDOM_TRIMS -> Component.literal("Random Trims");
                 case CUSTOM_TRIMS -> Component.literal("Custom Trims");
                 case NONE -> Component.literal("Disabled");
