@@ -55,9 +55,7 @@ public class RandomTrims {
 
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
         CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-        if (customTrim == null) {
-            return;
-        }
+        if (customTrim == null) {return;}
 
         ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
         if (armorTrim == null) {return;}
