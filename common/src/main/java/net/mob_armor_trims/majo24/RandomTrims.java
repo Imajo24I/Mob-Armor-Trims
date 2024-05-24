@@ -56,10 +56,14 @@ public class RandomTrims {
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
         if (MobArmorTrims.configManager.getApplyToEntireArmor()) {
             CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-            if (customTrim == null) {return;}
+            if (customTrim == null) {
+                return;
+            }
 
-            ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
-            if (armorTrim == null) {return;}
+            ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
+            if (armorTrim == null) {
+                return;
+            }
 
             for (ItemStack armor : equippedArmor) {
                 if (armor.getItem() != Items.AIR) {
@@ -73,7 +77,7 @@ public class RandomTrims {
                 CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
                 if (customTrim == null) {return;}
 
-                ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
+                ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
                 if (armorTrim == null) {return;}
 
                 ArmorTrim.setTrim(registryAccess, armor, armorTrim);

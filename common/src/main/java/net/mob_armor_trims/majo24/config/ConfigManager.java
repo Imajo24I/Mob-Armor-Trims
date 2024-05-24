@@ -3,15 +3,16 @@ package net.mob_armor_trims.majo24.config;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ConfigManager {
     public static final Config.TrimSystem DEFAULT_ENABLED_SYSTEM = Config.TrimSystem.RANDOM_TRIMS;
@@ -26,6 +27,8 @@ public class ConfigManager {
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
 
     private final Config config;
+    private final Map<List<String>, ArmorTrim> cachedCustomTrims;
+
     public final Path configPath;
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
                 .setPrettyPrinting()
@@ -34,6 +37,7 @@ public class ConfigManager {
     public ConfigManager(Config config, Path configPath) {
         this.config = config;
         this.configPath = configPath;
+        this.cachedCustomTrims = new HashMap<>();
     }
 
     public static Config getConfigFromFile(Path configPath) {
@@ -137,6 +141,24 @@ public class ConfigManager {
 
     public void setCustomTrimsList(List<Config.CustomTrim> customTrimsList) {
         this.config.setCustomTrimsList(customTrimsList);
+    }
+
+    public void addCustomTrimToCache(String material, String pattern, ArmorTrim trim) {
+        this.cachedCustomTrims.put(Arrays.asList(material, pattern), trim);
+    }
+
+    @Nullable
+    public ArmorTrim getOrCreateCachedCustomTrim(String material, String pattern, RegistryAccess registryAccess) {
+        ArmorTrim cachedTrim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
+        if (cachedTrim == null) {
+            ArmorTrim newTrim = new Config.CustomTrim(material, pattern).getTrim(registryAccess);
+            if (newTrim == null) {
+                return null;
+            }
+            this.addCustomTrimToCache(material, pattern, newTrim);
+            return newTrim;
+        }
+        return cachedTrim;
     }
 
     public boolean getApplyToEntireArmor() {
