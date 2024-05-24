@@ -3,10 +3,8 @@ package net.mob_armor_trims.majo24;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -57,9 +55,7 @@ public class RandomTrims {
 
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
         CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-        if (customTrim == null) {
-            return;
-        }
+        if (customTrim == null) {return;}
 
         ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
         if (armorTrim == null) {return;}
