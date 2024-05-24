@@ -71,7 +71,7 @@ jobs:
           curseforge-id: ${{env.curseforge_id}}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-fabric"
+          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-forge"
           github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
 
           name: "${{env.RELEASE_NAME}}"
