@@ -1,15 +1,20 @@
 package net.mob_armor_trims.majo24.config;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.mob_armor_trims.majo24.MobArmorTrims;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -31,8 +36,8 @@ public class ConfigManager {
 
     public final Path configPath;
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
-                .setPrettyPrinting()
-                .create();
+            .setPrettyPrinting()
+            .create();
 
     public ConfigManager(Config config, Path configPath) {
         this.config = config;
@@ -59,7 +64,7 @@ public class ConfigManager {
                 MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
                 jsonConfig = new String(Files.readAllBytes(configPath));
                 Config config = GSON.fromJson(jsonConfig, Config.class);
-                validateConfig(config);
+                config = validateConfig(config);
                 return config;
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not read Mob Armor Trims config file. Using default config", e);
@@ -68,24 +73,20 @@ public class ConfigManager {
         }
     }
 
-    public static void validateConfig(Config config) {
-        if (config.getEnabledSystem() == null) {
-            config.setEnabledSystem(Config.TrimSystem.RANDOM_TRIMS);
-            MobArmorTrims.LOGGER.warn("Enabled System Config is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_ENABLED_SYSTEM);
-        }
-        if (config.getCustomTrimsList() == null) {
-            config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
-            MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
-        }
-
-        List<Config.CustomTrim> customTrimsList = config.getCustomTrimsList();
-        customTrimsList.removeIf(customTrim -> (customTrim.material() == null) || (customTrim.pattern() == null));
-    }
-
     public static Config getDefaultConfig() {
         return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
                 DEFAULT_CUSTOM_TRIMS_LIST, DEFAULT_APPLY_TO_ENTIRE_ARMOR,
                 DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+    }
+
+    private static Config validateConfig(Config config) {
+        //fixme: This is a very bad and just temporary solution to fix crashing when updating to 2.1.0
+
+        if (config.getEnabledSystem() == null || config.getCustomTrimsList() == null) {
+            MobArmorTrims.LOGGER.error("Invalid Mob Armor Trims Config. Using default config until fixed");
+            return getDefaultConfig();
+        }
+        return config;
     }
 
     public void saveConfig() {
