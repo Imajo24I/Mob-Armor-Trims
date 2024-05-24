@@ -1,14 +1,12 @@
 package net.mob_armor_trims.majo24.config;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.armortrim.*;
 import net.mob_armor_trims.majo24.MobArmorTrims;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,12 +21,13 @@ public class Config {
 
     // System of giving mobs only armor out of custom trims list
     private List<CustomTrim> customTrimsList;
+    private boolean applyToEntireArmor;
 
     // Stacked Armor Trims Compatiblity
     private int stackedTrimChance;
     private int maxStackedTrims;
 
-    public Config(TrimSystem enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<CustomTrim> customTrimsList, int stackedTrimChance, int maxStackedTrims) {
+    public Config(TrimSystem enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<CustomTrim> customTrimsList, boolean applyToEntireArmor, int stackedTrimChance, int maxStackedTrims) {
         this.enabledSystem = enabledSystem;
 
         this.trimChance = trimChance;
@@ -36,6 +35,7 @@ public class Config {
         this.noTrimsChance = noTrimsChance;
 
         this.customTrimsList = customTrimsList;
+        this.applyToEntireArmor = applyToEntireArmor;
 
         this.stackedTrimChance = stackedTrimChance;
         this.maxStackedTrims = maxStackedTrims;
@@ -77,6 +77,14 @@ public class Config {
         return customTrimsList;
     }
 
+    public boolean getApplyToEntireArmor() {
+        return applyToEntireArmor;
+    }
+
+    public void setApplyToEntireArmor(boolean applyToEntireArmor) {
+        this.applyToEntireArmor = applyToEntireArmor;
+    }
+
     public void setCustomTrimsList(List<CustomTrim> customTrimsList) {
         this.customTrimsList = customTrimsList;
     }
@@ -98,6 +106,7 @@ public class Config {
     }
 
     public record CustomTrim(String material, String pattern) {
+        @Nullable
         public ArmorTrim getTrim(RegistryAccess registryAccess) {
             String trimPatternIdentifier = pattern;
             if (!trimPatternIdentifier.contains("_armor_trim_smithing_template")) {

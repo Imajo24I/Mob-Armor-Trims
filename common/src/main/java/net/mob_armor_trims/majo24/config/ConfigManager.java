@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.RandomSource;
 import net.mob_armor_trims.majo24.MobArmorTrims;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +20,7 @@ public class ConfigManager {
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
     public static final List<Config.CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
+    public static final boolean DEFAULT_APPLY_TO_ENTIRE_ARMOR = true;
 
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
@@ -71,14 +73,15 @@ public class ConfigManager {
             config.setCustomTrimsList(DEFAULT_CUSTOM_TRIMS_LIST);
             MobArmorTrims.LOGGER.warn("Custom Trims List is invalid or couldn't be found. Using default value: {}. Please make sure your config is valid", DEFAULT_CUSTOM_TRIMS_LIST);
         }
+
         List<Config.CustomTrim> customTrimsList = config.getCustomTrimsList();
         customTrimsList.removeIf(customTrim -> (customTrim.material() == null) || (customTrim.pattern() == null));
     }
 
     public static Config getDefaultConfig() {
         return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
-                DEFAULT_CUSTOM_TRIMS_LIST,
-            DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
+                DEFAULT_CUSTOM_TRIMS_LIST, DEFAULT_APPLY_TO_ENTIRE_ARMOR,
+                DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
     public void saveConfig() {
@@ -118,6 +121,7 @@ public class ConfigManager {
     /**
      * @return Returns random Custom Trim out of the Custom Trims List
     */
+    @Nullable
     public Config.CustomTrim getCustomTrim(RandomSource random) {
         List<Config.CustomTrim> customTrimsList = this.config.getCustomTrimsList();
         if (customTrimsList.isEmpty()) {
@@ -133,6 +137,14 @@ public class ConfigManager {
 
     public void setCustomTrimsList(List<Config.CustomTrim> customTrimsList) {
         this.config.setCustomTrimsList(customTrimsList);
+    }
+
+    public boolean getApplyToEntireArmor() {
+        return this.config.getApplyToEntireArmor();
+    }
+
+    public void setApplyToEntireArmor(boolean applyToEntireArmor) {
+        this.config.setApplyToEntireArmor(applyToEntireArmor);
     }
 
     public int getStackedTrimChance() {

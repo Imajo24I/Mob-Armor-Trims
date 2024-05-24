@@ -1,6 +1,7 @@
 package net.mob_armor_trims.majo24.config.configscreen;
 
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
@@ -130,6 +131,16 @@ public class ConfigScreen {
                         .materialController(StringControllerBuilder::create))
                 .initial(new Config.CustomTrim("", ""))
                 .build())
+
+                .option(Option.<Boolean>createBuilder()
+                        .name(literal("Apply To Entire Armor"))
+                        .description(OptionDescription.of(literal("Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece")))
+                        .binding(ConfigManager.DEFAULT_APPLY_TO_ENTIRE_ARMOR,
+                                () -> MobArmorTrims.configManager.getApplyToEntireArmor(),
+                                applyToEntireArmor -> MobArmorTrims.configManager.setApplyToEntireArmor(applyToEntireArmor))
+                        .controller(BooleanControllerBuilder::create)
+                        .build())
+
             .build();
     }
 
