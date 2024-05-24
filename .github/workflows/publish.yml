@@ -1,4 +1,4 @@
-name: Publish on GitHub, CurseForge & Modrinth
+name: Publish 1.20.1
 
 on: [workflow_dispatch]
 
@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew clean build
 
       # MC Publish Fabric
-      - name: Publish Fabric (CurseForge/Modrinth/GitHub)
+      - name: Publish Fabric
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: ${{env.modrinth_id}}
@@ -61,8 +61,8 @@ jobs:
           java: "${{env.JAVA_VERSION}}"
           files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
 
-      # MC Publish Fabric
-      - name: Publish Forge (CurseForge/Modrinth/GitHub)
+      # MC Publish Forge
+      - name: Publish Forge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: ${{env.modrinth_id}}
