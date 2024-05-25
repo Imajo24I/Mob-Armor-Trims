@@ -85,7 +85,7 @@ public class ConfigScreen {
     private static ConfigCategory buildRandomTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Random Trims"))
-            .tooltip(literal("Settings for the Random Trims System."))
+            .tooltip(literal("Settings for the Random Trims System.\nThese settings will only make a difference, if the random trims system is enabled."))
 
             .option(Option.<Integer>createBuilder()
                 .name(literal("Trim Chance"))
@@ -117,7 +117,7 @@ public class ConfigScreen {
     private static ConfigCategory buildCustomTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Custom Trims"))
-            .tooltip(literal("Settings for the Custom Trims System."))
+            .tooltip(literal("Settings for the Custom Trims System.\nThese settings will only make a difference, if the custom trims system is enabled."))
 
             .group(ListOption.<Config.CustomTrim>createBuilder()
                 .name(literal("Custom Trims List"))
@@ -146,7 +146,7 @@ public class ConfigScreen {
     private static ConfigCategory buildStackedTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Stacked Trims"))
-            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility."))
+            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility.\nThese settings will only make a difference, if the Stacked Armor Trims mod is used and the random trims System is enabled."))
 
             .option(Option.<Integer>createBuilder()
                 .name(literal("Stacked Trim Chance"))
