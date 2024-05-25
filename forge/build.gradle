@@ -49,7 +49,8 @@ dependencies {
 
 
     // NightConfig
-    implementation "com.electronwill.night-config:toml:${project.night_config_version}"
+    implementation include("com.electronwill.night-config:core:${project.night_config_version}")
+    implementation include("com.electronwill.night-config:toml:${project.night_config_version}")
 }
 
 processResources {
