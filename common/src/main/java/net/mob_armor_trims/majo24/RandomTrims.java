@@ -53,14 +53,28 @@ public class RandomTrims {
     }
 
     public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RandomSource random, RegistryAccess registryAccess) {
-        Config.CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-        if (customTrim == null) {return;}
+        if (MobArmorTrims.configManager.getApplyToEntireArmor()) {
+            Config.CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
+            if (customTrim == null) {return;}
 
-        ArmorTrim armorTrim = customTrim.getTrim(registryAccess);
-        if (armorTrim == null) {return;}
+            ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
+            if (armorTrim == null) {return;}
 
-        for (ItemStack armor : equippedArmor) {
-            if (armor.getItem() != Items.AIR) {
+            for (ItemStack armor : equippedArmor) {
+                if (armor.getItem() != Items.AIR) {
+                    armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+                }
+            }
+        } else {
+            for (ItemStack armor : equippedArmor) {
+                if (armor.getItem() == Items.AIR) {break;}
+
+                Config.CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
+                if (customTrim == null) {break;}
+
+                ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
+                if (armorTrim == null) {return;}
+
                 armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
             }
         }

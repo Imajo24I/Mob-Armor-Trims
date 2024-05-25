@@ -43,6 +43,9 @@ dependencies {
 
     // Mod Menu
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+    // NightConfig
+    implementation "com.electronwill.night-config:toml:${project.night_config_version}"
 }
 
 processResources {

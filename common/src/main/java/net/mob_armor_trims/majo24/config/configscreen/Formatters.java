@@ -16,21 +16,12 @@ public class Formatters {
 
     public static class TrimSystem implements ValueFormatter<Config.TrimSystem> {
         @Override
-        public Component format(Config.TrimSystem value) {
-            switch (value) {
-                case RANDOM_TRIMS -> {
-                    return Component.literal("Random Trims");
-                }
-                case CUSTOM_TRIMS -> {
-                    return Component.literal("Custom Trims");
-                }
-                case NONE -> {
-                    return Component.literal("Disabled");
-                }
-                default -> {
-                    return Component.literal("Error: Unknown Trim System");
-                }
-            }
+        public Component format(Config.TrimSystem selectedSystem) {
+            return switch (selectedSystem) {
+                case RANDOM_TRIMS -> Component.literal("Random Trims");
+                case CUSTOM_TRIMS -> Component.literal("Custom Trims");
+                case NONE -> Component.literal("Disabled");
+            };
         }
     }
 }
