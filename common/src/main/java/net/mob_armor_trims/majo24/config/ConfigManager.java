@@ -1,5 +1,6 @@
 package net.mob_armor_trims.majo24.config;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
@@ -61,54 +62,90 @@ public class ConfigManager {
     private static CommentedFileConfig fileConfigFromConfig(Config config, Path configPath) {
         CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
 
-        fileConfig.setComment("enabled_system", """
-         Select the System of how to select, what trims to give mobs.
-         - RANDOM_TRIMS: Randomly choose the trim, but also take the previous trim highly into account.
-         - CUSTOM_TRIMS: Choose the trim from a list of custom trims. You can manage the trims yourself""");
-        fileConfig.add("enabled_system", config.getEnabledSystem());
+        // General Subcategory
+        CommentedConfig general = fileConfig.createSubConfig();
 
-        fileConfig.setComment("no_trims_chance", " Chance of the mob having no trims at all");
-        fileConfig.add("no_trims_chance", config.getNoTrimsChance());
+        general.add("enabled_system", config.getEnabledSystem());
+        general.setComment("enabled_system", """
+            Select the System of how to select, what trims to give mobs.
+            - RANDOM_TRIMS: Randomly choose the trim, but also take the previous trim highly into account.
+            - CUSTOM_TRIMS: Choose the trim from a list of custom trims. You can manage the trims yourself""");
 
-        fileConfig.setComment("trim_chance", " Chance of each armor piece from a mob having an armor trim. Only applies when using RANDOM_TRIMS system");
-        fileConfig.add("trim_chance", config.getTrimChance());
+        general.add("no_trims_chance", config.getNoTrimsChance());
+        general.setComment("no_trims_chance", "Chance of the mob having no trims at all");
 
-        fileConfig.setComment("similar_trim_chance", " Chance of each armor piece having a similar armor trim as the previous armor piece. Only applies when using RANDOM_TRIMS system");
-        fileConfig.add("similar_trim_chance", config.getSimilarTrimChance());
+        // Random Trims system Subcategory
+        CommentedConfig randomTrims = fileConfig.createSubConfig();
 
-        fileConfig.setComment("apply_to_entire_armor", " Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece. Only applies when using CUSTOM_TRIMS system");
-        fileConfig.add("apply_to_entire_armor", config.getApplyToEntireArmor());
+        randomTrims.add("trim_chance", config.getTrimChance());
+        randomTrims.setComment("trim_chance", "Chance of each armor piece from a mob having an armor trim.");
 
-        fileConfig.setComment("custom_trims_list", """
-             The list of custom trims.
+        randomTrims.add("similar_trim_chance", config.getSimilarTrimChance());
+        randomTrims.setComment("similar_trim_chance", "Chance of each armor piece having a similar armor trim as the previous armor piece.");
+
+        // Custom Trims system Subcategory
+        CommentedConfig customTrims = fileConfig.createSubConfig();
+
+        customTrims.add("apply_to_entire_armor", config.getApplyToEntireArmor());
+        customTrims.setComment("apply_to_entire_armor", "Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece");
+
+        customTrims.add("custom_trims_list", Config.CustomTrim.toStringList(config.getCustomTrimsList()));
+        customTrims.setComment("custom_trims_list", """
+            The list of custom trims.
+           
+            To create a new custom trim, add a new list with two String fields inside the brackets. For example: [["", ""]]
+            Make sure to have it separated with a comma from other custom trims.
+           
+            In the left string field, enter a valid trim material.
+            As an example: "quartz".
+           
+            In the right string field, enter a valid trim pattern.
+            As an example: "silence"
             
-             To create a new custom trim, add a new list with two String fields inside the brackets. For example: [["", ""]]
-             Make sure to have it separated with a comma from other custom trims.
-            
-             In the left string field, enter a valid trim material.
-             As an example: "quartz".
-            
-             In the right string field, enter a valid trim pattern.
-             As an example: "silence"
-            
-             To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.""");
-        fileConfig.add("custom_trims_list", Config.CustomTrim.toStringList(config.getCustomTrimsList()));
+            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.""");
 
-        fileConfig.setComment("stacked_trim_chance", " Chance of each armor piece having an additional armor trim on it. Only applies when using RANDOM_TRIMS system, and when using the stacked armor trims mod.");
-        fileConfig.add("stacked_trim_chance", config.getStackedTrimChance());
+        // Stacked Trims system Subcategory
+        CommentedConfig stackedTrims = fileConfig.createSubConfig();
 
-        fileConfig.setComment("max_stacked_trims", " The maximum amount of armor trims that can be stacked on each other. Only applies when using RANDOM_TRIMS system, and when using the stacked armor trims mod.");
-        fileConfig.add("max_stacked_trims", config.getMaxStackedTrims());
+        stackedTrims.add("stacked_trim_chance", config.getStackedTrimChance());
+        stackedTrims.setComment("stacked_trim_chance", "Chance of each armor piece having an additional armor trim on it.");
+
+        stackedTrims.add("max_stacked_trims", config.getMaxStackedTrims());
+        stackedTrims.setComment("max_stacked_trims", "The maximum amount of armor trims that can be stacked on each other.");
+
+        // Add all subcategories to the main config
+        fileConfig.add("general", general);
+        fileConfig.setComment("general", "General Settings for the mod.");
+
+        fileConfig.add("random_trims", randomTrims);
+        fileConfig.setComment("random_trims", "Settings for the Random Trims system.\nThese settings will only make a difference, if the RANDOM_TRIMS system is enabled");
+
+        fileConfig.add("custom_trims", customTrims);
+        fileConfig.setComment("custom_trims", "Settings for the Custom Trims system.\nThese settings will only make a difference, if the CUSTOM_TRIMS system is enabled");
+
+        fileConfig.add("stacked_trims", stackedTrims);
+        fileConfig.setComment("stacked_trims", "Settings for the Stacked Armor Trims Mod Compatibility.\nThese settings will only make a difference, if the STACKED_TRIMS system is enabled and the stacked armor trims mod is used");
         return fileConfig;
     }
 
     private static Config configFromFileConfig(CommentedFileConfig fileConfig) {
-        return new Config(
-                Config.TrimSystem.valueOf(fileConfig.get("enabled_system")), fileConfig.get("trim_chance"),
-                fileConfig.get("similar_trim_chance"), fileConfig.get("no_trims_chance"),
-                Config.CustomTrim.fromList(fileConfig.get("custom_trims_list")), fileConfig.get("apply_to_entire_armor"),
-                fileConfig.get("stacked_trim_chance"), fileConfig.get("max_stacked_trims")
-        );
+        try {
+            com.electronwill.nightconfig.core.Config generalCategory = fileConfig.get("general");
+            com.electronwill.nightconfig.core.Config randomTrimsCategory = fileConfig.get("random_trims");
+            com.electronwill.nightconfig.core.Config customTrimsCategory = fileConfig.get("custom_trims");
+            com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
+
+            return new Config(
+                    Config.TrimSystem.valueOf(generalCategory.get("enabled_system")),
+                    randomTrimsCategory.get("trim_chance"),
+                    randomTrimsCategory.get("similar_trim_chance"), generalCategory.get("no_trims_chance"),
+                    Config.CustomTrim.fromList(customTrimsCategory.get("custom_trims_list")), customTrimsCategory.get("apply_to_entire_armor"),
+                    stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
+            );
+        } catch (Exception e) {
+            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under .minecraft/config/mob_armor_trims.toml");
+            throw e;
+        }
     }
 
     public static Config getDefaultConfig() {
