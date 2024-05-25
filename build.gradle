@@ -15,6 +15,9 @@ allprojects {
     version = rootProject.mod_version
 
     repositories {
+        // Night Config
+        mavenCentral()
+
         // Parchment mappings
         maven {
             name = 'ParchmentMC'

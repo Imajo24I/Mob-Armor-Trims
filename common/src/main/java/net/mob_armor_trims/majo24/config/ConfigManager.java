@@ -1,12 +1,13 @@
 package net.mob_armor_trims.majo24.config;
 
-import com.google.gson.*;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,9 +29,6 @@ public class ConfigManager {
     private final Map<List<String>, ArmorTrim> cachedCustomTrims;
 
     public final Path configPath;
-    public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
-            .setPrettyPrinting()
-            .create();
 
     public ConfigManager(Config config, Path configPath) {
         this.config = config;
@@ -39,31 +37,47 @@ public class ConfigManager {
     }
 
     public static Config getConfigFromFile(Path configPath) {
-        if (!Files.exists(configPath)) {
+        if (Files.exists(configPath)) {
+            // Get config from file
+            MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
+            CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
+            fileConfig.load();
+            return configFromFileConfig(fileConfig);
+        } else {
+            // Create a new Config
             Config newConfig = getDefaultConfig();
             try {
                 MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
                 Files.createFile(configPath);
-                String jsonConfig = GSON.toJson(newConfig);
-                Files.writeString(configPath, jsonConfig);
+                CommentedFileConfig fileConfig = fileConfigFromConfig(newConfig, configPath);
+                fileConfig.save();
             } catch (IOException e) {
                 MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file", e);
             }
             return newConfig;
-        } else {
-            String jsonConfig;
-            try {
-                // Get config from file
-                MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
-                jsonConfig = new String(Files.readAllBytes(configPath));
-                Config config = GSON.fromJson(jsonConfig, Config.class);
-                config = validateConfig(config);
-                return config;
-            } catch (IOException e) {
-                MobArmorTrims.LOGGER.error("Could not read Mob Armor Trims config file. Using default config", e);
-                return getDefaultConfig();
-            }
         }
+    }
+
+    private static CommentedFileConfig fileConfigFromConfig(Config config, Path configPath) {
+        CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
+        fileConfig.add("enabled_system", config.getEnabledSystem());
+        fileConfig.add("no_trims_chance", config.getNoTrimsChance());
+        fileConfig.add("trim_chance", config.getTrimChance());
+        fileConfig.add("similar_trim_chance", config.getSimilarTrimChance());
+        fileConfig.add("apply_to_entire_armor", config.getApplyToEntireArmor());
+        fileConfig.add("custom_trims_list", Config.CustomTrim.toStringList(config.getCustomTrimsList()));
+        fileConfig.add("stacked_trim_chance", config.getStackedTrimChance());
+        fileConfig.add("max_stacked_trims", config.getMaxStackedTrims());
+        return fileConfig;
+    }
+
+    private static Config configFromFileConfig(CommentedFileConfig fileConfig) {
+        return new Config(
+                Config.TrimSystem.valueOf(fileConfig.get("enabled_system")), fileConfig.get("trim_chance"),
+                fileConfig.get("similar_trim_chance"), fileConfig.get("no_trims_chance"),
+                Config.CustomTrim.fromList(fileConfig.get("custom_trims_list")), fileConfig.get("apply_to_entire_armor"),
+                fileConfig.get("stacked_trim_chance"), fileConfig.get("max_stacked_trims")
+        );
     }
 
     public static Config getDefaultConfig() {
@@ -72,24 +86,10 @@ public class ConfigManager {
                 DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
-    private static Config validateConfig(Config config) {
-        //fixme: This is a very bad and just temporary solution to fix crashing when updating to 2.1.0
-
-        if (config.getEnabledSystem() == null || config.getCustomTrimsList() == null) {
-            MobArmorTrims.LOGGER.error("Invalid Mob Armor Trims Config. Using default config until fixed");
-            return getDefaultConfig();
-        }
-        return config;
-    }
-
     public void saveConfig() {
         MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
-        String jsonConfig = GSON.toJson(config);
-        try {
-            Files.writeString(configPath, jsonConfig);
-        } catch (IOException e) {
-            MobArmorTrims.LOGGER.error("Could not save Mob Armor Trims config to file - ", e);
-        }
+        CommentedFileConfig fileConfig = fileConfigFromConfig(this.config, configPath);
+        fileConfig.save();
     }
 
     public Config.TrimSystem getEnabledSystem() {

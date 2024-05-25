@@ -20,6 +20,6 @@ public final class MobArmorTrimsNeoforge {
         }
 
         // Run our common setup.
-        MobArmorTrims.init(FMLPaths.CONFIGDIR.get().resolve("mob_armor_trims.json"));
+        MobArmorTrims.init(FMLPaths.CONFIGDIR.get().resolve("mob_armor_trims.toml"));
     }
 }

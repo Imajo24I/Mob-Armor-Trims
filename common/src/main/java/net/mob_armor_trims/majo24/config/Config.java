@@ -8,6 +8,7 @@ import net.minecraft.world.item.armortrim.*;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Config {
@@ -125,6 +126,14 @@ public class Config {
             }
 
             return new ArmorTrim(trimMaterial, trimPattern);
+        }
+
+        public static List<List<String>> toStringList(List<CustomTrim> customTrimsList) {
+            return customTrimsList.stream().map(customTrim -> Arrays.asList(customTrim.material, customTrim.pattern)).toList();
+        }
+
+        public static List<CustomTrim> fromList(List<List<String>> stringCustomTrimsList) {
+            return stringCustomTrimsList.stream().map(stringCustomTrim -> new CustomTrim(stringCustomTrim.get(0), stringCustomTrim.get(1))).toList();
         }
     }
 
