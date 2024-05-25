@@ -11,7 +11,7 @@ public final class MobArmorTrimsFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         MobArmorTrims.isStackedArmorTrimsLoaded = FabricLoader.getInstance().isModLoaded("stacked_trims");
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MobArmorTrims.MOD_ID + ".json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MobArmorTrims.MOD_ID + ".toml");
         // Run our common setup.
         MobArmorTrims.init(configPath);
     }

@@ -13,4 +13,7 @@ dependencies {
 
     // YACL
     modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+1.20.5-fabric"
+
+    // NightConfig
+    implementation "com.electronwill.night-config:toml:${project.night_config_version}"
 }

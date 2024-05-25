@@ -1,6 +1,7 @@
 package net.mob_armor_trims.majo24.config.configscreen;
 
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
@@ -29,7 +30,6 @@ public class ConfigScreen {
             
             In the right option, enter a valid trim pattern.
             As an example: "silence"
-            
             
             To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
             """));
@@ -85,7 +85,7 @@ public class ConfigScreen {
     private static ConfigCategory buildRandomTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Random Trims"))
-            .tooltip(literal("Settings for the Random Trims System."))
+            .tooltip(literal("Settings for the Random Trims System.\nThese settings will only make a difference, if the random trims system is enabled."))
 
             .option(Option.<Integer>createBuilder()
                 .name(literal("Trim Chance"))
@@ -117,7 +117,7 @@ public class ConfigScreen {
     private static ConfigCategory buildCustomTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Custom Trims"))
-            .tooltip(literal("Settings for the Custom Trims System."))
+            .tooltip(literal("Settings for the Custom Trims System.\nThese settings will only make a difference, if the custom trims system is enabled."))
 
             .group(ListOption.<Config.CustomTrim>createBuilder()
                 .name(literal("Custom Trims List"))
@@ -130,13 +130,23 @@ public class ConfigScreen {
                         .materialController(StringControllerBuilder::create))
                 .initial(new Config.CustomTrim("", ""))
                 .build())
+
+            .option(Option.<Boolean>createBuilder()
+                    .name(literal("Apply To Entire Armor"))
+                    .description(OptionDescription.of(literal("Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece")))
+                    .binding(ConfigManager.DEFAULT_APPLY_TO_ENTIRE_ARMOR,
+                            () -> MobArmorTrims.configManager.getApplyToEntireArmor(),
+                            applyToEntireArmor -> MobArmorTrims.configManager.setApplyToEntireArmor(applyToEntireArmor))
+                    .controller(BooleanControllerBuilder::create)
+                    .build())
+
             .build();
     }
 
     private static ConfigCategory buildStackedTrimsCategory() {
         return ConfigCategory.createBuilder()
             .name(literal("Stacked Trims"))
-            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility."))
+            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility.\nThese settings will only make a difference, if the Stacked Armor Trims mod is used and the random trims System is enabled."))
 
             .option(Option.<Integer>createBuilder()
                 .name(literal("Stacked Trim Chance"))

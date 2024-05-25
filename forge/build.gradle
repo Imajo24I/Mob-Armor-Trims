@@ -46,6 +46,10 @@ dependencies {
 
     // modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
     compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-forge"
+
+
+    // NightConfig
+    implementation "com.electronwill.night-config:toml:${project.night_config_version}"
 }
 
 processResources {
