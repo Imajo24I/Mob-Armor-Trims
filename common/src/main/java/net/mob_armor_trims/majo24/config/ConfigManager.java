@@ -136,7 +136,7 @@ public class ConfigManager {
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
 
             return new Config(
-                    Config.TrimSystem.valueOf(generalCategory.get("enabled_system")),
+                    generalCategory.getEnum("enabled_system", Config.TrimSystem.class),
                     randomTrimsCategory.get("trim_chance"),
                     randomTrimsCategory.get("similar_trim_chance"), generalCategory.get("no_trims_chance"),
                     Config.CustomTrim.fromList(customTrimsCategory.get("custom_trims_list")), customTrimsCategory.get("apply_to_entire_armor"),
