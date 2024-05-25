@@ -31,7 +31,6 @@ public class ConfigScreen {
             In the right option, enter a valid trim pattern.
             As an example: "silence"
             
-            
             To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
             """));
 
@@ -134,7 +133,7 @@ public class ConfigScreen {
 
             .option(Option.<Boolean>createBuilder()
                     .name(literal("Apply To Entire Armor"))
-                    .description(OptionDescription.of(literal("Should the custom armor trim be applied to the entire armor.\n+If false, a new custom trim will be chosen for each armor piece")))
+                    .description(OptionDescription.of(literal("Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece")))
                     .binding(ConfigManager.DEFAULT_APPLY_TO_ENTIRE_ARMOR,
                             () -> MobArmorTrims.configManager.getApplyToEntireArmor(),
                             applyToEntireArmor -> MobArmorTrims.configManager.setApplyToEntireArmor(applyToEntireArmor))
