@@ -60,13 +60,44 @@ public class ConfigManager {
 
     private static CommentedFileConfig fileConfigFromConfig(Config config, Path configPath) {
         CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
+
+        fileConfig.setComment("enabled_system", """
+         Select the System of how to select, what trims to give mobs.
+         - RANDOM_TRIMS: Randomly choose the trim, but also take the previous trim highly into account.
+         - CUSTOM_TRIMS: Choose the trim from a list of custom trims. You can manage the trims yourself""");
         fileConfig.add("enabled_system", config.getEnabledSystem());
+
+        fileConfig.setComment("no_trims_chance", " Chance of the mob having no trims at all");
         fileConfig.add("no_trims_chance", config.getNoTrimsChance());
+
+        fileConfig.setComment("trim_chance", " Chance of each armor piece from a mob having an armor trim. Only applies when using RANDOM_TRIMS system");
         fileConfig.add("trim_chance", config.getTrimChance());
+
+        fileConfig.setComment("similar_trim_chance", " Chance of each armor piece having a similar armor trim as the previous armor piece. Only applies when using RANDOM_TRIMS system");
         fileConfig.add("similar_trim_chance", config.getSimilarTrimChance());
+
+        fileConfig.setComment("apply_to_entire_armor", " Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece. Only applies when using CUSTOM_TRIMS system");
         fileConfig.add("apply_to_entire_armor", config.getApplyToEntireArmor());
+
+        fileConfig.setComment("custom_trims_list", """
+             The list of custom trims.
+            
+             To create a new custom trim, add a new list with two String fields inside the brackets. For example: [["", ""]]
+             Make sure to have it separated with a comma from other custom trims.
+            
+             In the left string field, enter a valid trim material.
+             As an example: "quartz".
+            
+             In the right string field, enter a valid trim pattern.
+             As an example: "silence"
+            
+             To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.""");
         fileConfig.add("custom_trims_list", Config.CustomTrim.toStringList(config.getCustomTrimsList()));
+
+        fileConfig.setComment("stacked_trim_chance", " Chance of each armor piece having an additional armor trim on it. Only applies when using RANDOM_TRIMS system, and when using the stacked armor trims mod.");
         fileConfig.add("stacked_trim_chance", config.getStackedTrimChance());
+
+        fileConfig.setComment("max_stacked_trims", " The maximum amount of armor trims that can be stacked on each other. Only applies when using RANDOM_TRIMS system, and when using the stacked armor trims mod.");
         fileConfig.add("max_stacked_trims", config.getMaxStackedTrims());
         return fileConfig;
     }
