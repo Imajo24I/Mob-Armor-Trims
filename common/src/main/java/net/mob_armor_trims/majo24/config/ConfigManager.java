@@ -52,7 +52,7 @@ public class ConfigManager {
                 Files.createFile(configPath);
                 CommentedFileConfig fileConfig = fileConfigFromConfig(newConfig, configPath);
                 fileConfig.save();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file", e);
             }
             return newConfig;
