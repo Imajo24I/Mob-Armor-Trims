@@ -67,13 +67,13 @@ public class RandomTrims {
             }
         } else {
             for (ItemStack armor : equippedArmor) {
-                if (armor.getItem() == Items.AIR) {break;}
+                if (armor.getItem() == Items.AIR) {continue;}
 
                 Config.CustomTrim customTrim = MobArmorTrims.configManager.getCustomTrim(random);
-                if (customTrim == null) {break;}
+                if (customTrim == null) {continue;}
 
                 ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
-                if (armorTrim == null) {return;}
+                if (armorTrim == null) {continue;}
 
                 armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
             }
