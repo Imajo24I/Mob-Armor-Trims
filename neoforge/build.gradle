@@ -47,10 +47,6 @@ dependencies {
 
     // modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-neoforge"
     compileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-neoforge"
-
-    // Night Config
-    implementation include("com.electronwill.night-config:core:${project.night_config_version}")
-    implementation include("com.electronwill.night-config:toml:${project.night_config_version}")
 }
 
 processResources {
