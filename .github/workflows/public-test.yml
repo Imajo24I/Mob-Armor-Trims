@@ -1,0 +1,73 @@
+name: Publish Test
+
+on: [workflow_dispatch]
+
+env:
+  MINECRAFT_VERSION: 1.20.1
+  JAVA_VERSION: 17
+  MOD_VERSION: 2.1.0
+  RELEASE_NAME: Mob Armor Trims
+  modrinth_id: hHVaPgFK
+  curseforge_id: 1005441
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Enviroment Variables
+        run: env
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "temurin"
+          java-version: ${{env.JAVA_VERSION}}
+
+      - name: Make Gradlew Wrapper Executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+
+      - name: Build
+        run: ./gradlew clean build
+
+      # MC Publish Fabric
+      - name: Publish Fabric
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-fabric"
+          github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+
+          name: "${{env.RELEASE_NAME}}"
+          version: "${{env.VERSION}}"
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+          loaders: fabric
+          game-versions: "${{env.MINECRAFT_VERSION}}"
+          java: "${{env.JAVA_VERSION}}"
+          files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+
+      # MC Publish Forge
+      - name: Publish Forge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-forge"
+          github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+
+          name: "${{env.RELEASE_NAME}}"
+          version: "${{env.VERSION}}"
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+          loaders: forge
+          game-versions: "${{env.MINECRAFT_VERSION}}"
+          java: "${{env.JAVA_VERSION}}"
+          files: forge/build/libs/!(*-@(dev|sources|javadoc)).jar
