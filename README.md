@@ -24,7 +24,7 @@ For 1.20.4, you can use
 - [Fabric](https://fabricmc.net/) - When using Fabric, this mod depends on [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Neoforge](https://neoforged.net/) - When using Neoforge, this mod has no dependencies
 
-For 1.20.6, you can use 
+For 1.20.5/1.20.6, you can use 
 - [Fabric](https://fabricmc.net/) - When using Fabric, this mod depends on [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Neoforge](https://neoforged.net/) - When using Neoforge, this mod has no dependencies
 
