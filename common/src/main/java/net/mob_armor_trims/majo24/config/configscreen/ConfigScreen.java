@@ -5,7 +5,15 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.MultiLineTextWidget;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.Config;
 import net.mob_armor_trims.majo24.config.ConfigManager;
@@ -171,5 +179,39 @@ public class ConfigScreen {
                     .step(1))
                 .build())
             .build();
+    }
+
+    static class BackupScreen extends OptionsSubScreen {
+        public BackupScreen(Screen parent) {
+            super(parent, Minecraft.getInstance().options, Component.literal("screen, default"));
+        }
+                @Override
+        public void init() {
+            MultiLineTextWidget messageWidget = new MultiLineTextWidget(
+                    width / 2 - 100, height / 2 - 40,
+                    Component.literal("Install Yet Another Config Lib to access the config screen."),
+                    minecraft.font);
+            messageWidget.setMaxWidth(240);
+            messageWidget.setCentered(true);
+            addRenderableWidget(messageWidget);
+
+            Button openLinkButton = Button.builder(Component.literal("View on Modrinth"),
+                            button -> minecraft.setScreen(new ConfirmLinkScreen(
+                                    open -> {
+                                        if (open) Util.getPlatform().openUri("https://modrinth.com/mod/yacl");
+                                        minecraft.setScreen(lastScreen);
+                                    }, "https://modrinth.com/mod/yacl", true)))
+                    .pos(width / 2 - 120, height / 2)
+                    .size(115, 20)
+                    .build();
+            addRenderableWidget(openLinkButton);
+
+            Button exitButton = Button.builder(CommonComponents.GUI_OK,
+                            button -> onClose())
+                    .pos(width / 2 + 5, height / 2)
+                    .size(115, 20)
+                    .build();
+            addRenderableWidget(exitButton);
+        }
     }
 }
