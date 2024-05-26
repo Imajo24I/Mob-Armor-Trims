@@ -1,1 +1,3 @@
-- Fix formatting of Max Stacked Trims option
+- Fix formatting of the Max Stacked Trims option
+- Add Backup Screen recommending to install YACL instead of not being able to access the Config Screen
+- Fix publish
