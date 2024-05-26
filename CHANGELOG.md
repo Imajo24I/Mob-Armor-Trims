@@ -1,0 +1,1 @@
+- Fix formatting of Max Stacked Trims option
