@@ -2,6 +2,7 @@ package net.mob_armor_trims.majo24.neoforge;
 
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.configscreen.ConfigScreen;
+import net.mob_armor_trims.majo24.config.configscreen.ConfigScreenProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -14,10 +15,8 @@ public final class MobArmorTrimsNeoforge {
         MobArmorTrims.isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
-        if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
-            ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
-                    () -> (client, parent) -> ConfigScreen.getConfigScreen(parent));
-        }
+        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
+            () -> (client, parent) -> ConfigScreenProvider.getConfigScreen(parent));
 
 
         // Run our common setup.
