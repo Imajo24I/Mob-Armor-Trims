@@ -82,4 +82,4 @@ jobs:
           loaders: neoforge
           game-versions: "${{env.MINECRAFT_VERSION}}"
           java: "${{env.JAVA_VERSION}}"
-          files: neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: neoforge/build/libs/!(*-@(dev|sources|javadoc|dev-shadow)).jar
