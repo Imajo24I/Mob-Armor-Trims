@@ -7,6 +7,7 @@ import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.mob_armor_trims.majo24.MobArmorTrims;
 import net.mob_armor_trims.majo24.config.Config;
 import net.mob_armor_trims.majo24.config.ConfigManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -213,6 +215,13 @@ public class ConfigScreen {
                     .size(115, 20)
                     .build();
             addRenderableWidget(exitButton);
+        }
+
+        @Override
+        public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+            renderDirtBackground(graphics);
+            graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff); // Optionally, for title
+            super.render(graphics, mouseX, mouseY, delta);
         }
     }
 }
