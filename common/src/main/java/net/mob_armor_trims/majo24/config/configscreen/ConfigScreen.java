@@ -185,7 +185,8 @@ public class ConfigScreen {
         public BackupScreen(Screen parent) {
             super(parent, Minecraft.getInstance().options, Component.literal("Mob Armor Trims"));
         }
-                @Override
+
+        @Override
         public void init() {
             MultiLineTextWidget messageWidget = new MultiLineTextWidget(
                     width / 2 - 120, height / 2 - 40,
