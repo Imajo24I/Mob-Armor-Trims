@@ -185,13 +185,13 @@ public class ConfigScreen {
 
     static class BackupScreen extends OptionsSubScreen {
         public BackupScreen(Screen parent) {
-            super(parent, Minecraft.getInstance().options, Component.literal("screen, default"));
+            super(parent, Minecraft.getInstance().options, Component.literal("Mob Armor Trims"));
         }
 
         @Override
         public void init() {
             MultiLineTextWidget messageWidget = new MultiLineTextWidget(
-                    width / 2 - 100, height / 2 - 40,
+                    width / 2 - 110, height / 2 - 40,
                     Component.literal("Install Yet Another Config Lib to access the config screen."),
                     minecraft.font);
             messageWidget.setMaxWidth(240);
@@ -220,7 +220,7 @@ public class ConfigScreen {
         @Override
         public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             renderDirtBackground(graphics);
-            graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff); // Optionally, for title
+            graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
             super.render(graphics, mouseX, mouseY, delta);
         }
     }
