@@ -14,14 +14,14 @@ logoFile = "assets/mob_armor_trims/icon.png"
 [[dependencies.mob_armor_trims]]
 modId = "neoforge"
 type = "required"
-versionRange = "[20.6,)"
+versionRange = "[20.5,20.6]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.mob_armor_trims]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.20.6,)"
+versionRange = "[1.20.5,1.20.6]"
 ordering = "NONE"
 side = "BOTH"
 
