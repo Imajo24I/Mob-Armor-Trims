@@ -168,8 +168,7 @@ public class ConfigScreen {
                         maxStackedTrims -> MobArmorTrims.configManager.setMaxStackedTrims(maxStackedTrims))
                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                     .range(0, 5)
-                    .step(1)
-                    .formatValue(integerToPercentageFormatter))
+                    .step(1))
                 .build())
             .build();
     }
