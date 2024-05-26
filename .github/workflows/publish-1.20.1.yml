@@ -59,7 +59,7 @@ jobs:
           loaders: fabric
           game-versions: "${{env.MINECRAFT_VERSION}}"
           java: "${{env.JAVA_VERSION}}"
-          files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: fabric/build/libs/!(*-@(dev|sources|javadoc|dev-shadow)).jar
 
       # MC Publish Forge
       - name: Publish Forge
@@ -82,4 +82,4 @@ jobs:
           loaders: forge
           game-versions: "${{env.MINECRAFT_VERSION}}"
           java: "${{env.JAVA_VERSION}}"
-          files: forge/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: forge/build/libs/!(*-@(dev|sources|javadoc|dev-shadow)).jar
