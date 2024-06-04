@@ -1,2 +1,3 @@
+- Remove Fabric API dependency
 - Use `translatable` instead of `literal`
   - This allows for translating the mod to other languages
