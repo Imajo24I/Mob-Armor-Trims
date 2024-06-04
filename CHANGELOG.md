@@ -1,4 +1,2 @@
-- Add Support for 1.20.5
-- Add Backup Screen recommending to install YACL instead of not being able to access the Config Screen
-- Fix formatting of the Max Stacked Trims option
-- Fix publish
+- Use `translatable` instead of `literal`
+  - This allows for translating the mod to other languages

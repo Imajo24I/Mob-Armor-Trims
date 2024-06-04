@@ -22,34 +22,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static net.minecraft.network.chat.Component.literal;
+import static net.minecraft.network.chat.Component.translatable;
 
 public class ConfigScreen {
     private ConfigScreen() {}
-
-    public static final OptionDescription trimSytemOptionDescription = OptionDescription.of(literal("""
-        Select the System of how to select, what trims to give mobs.
-        - Random Trims: Randomly choose the trim, but also take the previous trim highly into account.
-        - Custom Trims: Choose the trim out of a list of custom trims. You can manage the trims yourself"""));
-
-    public static final OptionDescription customTrimsListOptionDescription = OptionDescription.of(literal("""
-            Manage the list of custom trims here. You can add, edit and remove custom trims.
-            
-            In the left option, enter a valid trim material.
-            As an example: "quartz".
-            
-            In the right option, enter a valid trim pattern.
-            As an example: "silence"
-            
-            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
-            """));
 
     public static final Formatters.IntegerToPercentage integerToPercentageFormatter = new Formatters.IntegerToPercentage();
     public static final Formatters.TrimSystem trimSystemFormatter = new Formatters.TrimSystem();
 
     public static Screen getConfigScreen(Screen parent) {
         YetAnotherConfigLib.Builder configScreen = YetAnotherConfigLib.createBuilder()
-                .title(literal("Mob Armor Trims"))
+                .title(Component.literal("Mob Armor Trims"))
                 .save(MobArmorTrims.configManager::saveConfig)
 
                 .category(buildGeneralCategory())
@@ -65,11 +48,11 @@ public class ConfigScreen {
 
     private static ConfigCategory buildGeneralCategory() {
         return ConfigCategory.createBuilder()
-            .name(literal("General"))
-            .tooltip(literal("General settings for this mod."))
+            .name(translatable("mob_armor_trims.config.general"))
+            .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
             .option(Option.<Config.TrimSystem>createBuilder()
-                .name(literal("Trim System"))
-                .description(trimSytemOptionDescription)
+                .name(translatable("mob_armor_trims.config.general.trimSystem"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
                 .binding(Config.TrimSystem.RANDOM_TRIMS,
                         () -> MobArmorTrims.configManager.getEnabledSystem(),
                         enabledSystem -> MobArmorTrims.configManager.setEnabledSystem(enabledSystem))
@@ -79,8 +62,8 @@ public class ConfigScreen {
                 .build())
 
             .option(Option.<Integer>createBuilder()
-                .name(literal("No Trims Chance"))
-                .description(OptionDescription.of(literal("Chance of the mob having no trims at all")))
+                .name(translatable("mob_armor_trims.config.general.noTrimsChance"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.noTrimsChance.description")))
                 .binding(ConfigManager.DEFAULT_NO_TRIMS_CHANCE,
                         () -> MobArmorTrims.configManager.getNoTrimsChance(),
                         noTrimsChance -> MobArmorTrims.configManager.setNoTrimsChance(noTrimsChance))
@@ -94,12 +77,12 @@ public class ConfigScreen {
 
     private static ConfigCategory buildRandomTrimsCategory() {
         return ConfigCategory.createBuilder()
-            .name(literal("Random Trims"))
-            .tooltip(literal("Settings for the Random Trims System.\nThese settings will only make a difference, if the random trims system is enabled."))
+            .name(translatable("mob_armor_trims.config.randomTrims"))
+            .tooltip(translatable("mob_armor_trims.config.randomTrims.tooltip"))
 
             .option(Option.<Integer>createBuilder()
-                .name(literal("Trim Chance"))
-                .description(OptionDescription.of(literal("Chance of each armor piece of a mob having an armor trim")))
+                .name(translatable("mob_armor_trims.config.randomTrims.trimChance"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.trimChance.description")))
                 .binding(ConfigManager.DEFAULT_TRIM_CHANCE,
                         () -> MobArmorTrims.configManager.getTrimChance(),
                         trimsChance -> MobArmorTrims.configManager.setTrimChance(trimsChance))
@@ -110,8 +93,8 @@ public class ConfigScreen {
                 .build())
 
             .option(Option.<Integer>createBuilder()
-                .name(literal("Similar Trim Chance"))
-                .description(OptionDescription.of(literal("Chance of each armor piece having a similar armor trim as the previous armor piece")))
+                .name(translatable("mob_armor_trims.config.randomTrims.similarTrimChance"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.similarTrimChance.description")))
                 .binding(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE,
                         () -> MobArmorTrims.configManager.getSimilarTrimChance(),
                         similarTrimChance -> MobArmorTrims.configManager.setSimilarTrimChance(similarTrimChance))
@@ -126,12 +109,12 @@ public class ConfigScreen {
 
     private static ConfigCategory buildCustomTrimsCategory() {
         return ConfigCategory.createBuilder()
-            .name(literal("Custom Trims"))
-            .tooltip(literal("Settings for the Custom Trims System.\nThese settings will only make a difference, if the custom trims system is enabled."))
+            .name(translatable("mob_armor_trims.config.customTrims"))
+            .tooltip(translatable("mob_armor_trims.config.customTrims.tooltip"))
 
             .group(ListOption.<Config.CustomTrim>createBuilder()
-                .name(literal("Custom Trims List"))
-                .description(customTrimsListOptionDescription)
+                .name(translatable("mob_armor_trims.config.customTrims.customTrimsList"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrims.customTrimsList.description")))
                 .binding(new ArrayList<>(),
                         () -> MobArmorTrims.configManager.getCustomTrimsList(),
                         customTrimsList -> MobArmorTrims.configManager.setCustomTrimsList(customTrimsList))
@@ -142,8 +125,8 @@ public class ConfigScreen {
                 .build())
 
             .option(Option.<Boolean>createBuilder()
-                    .name(literal("Apply To Entire Armor"))
-                    .description(OptionDescription.of(literal("Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece")))
+                    .name(translatable("mob_armor_trims.config.customTrims.applyToEntireArmor"))
+                    .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrims.applyToEntireArmor.description")))
                     .binding(ConfigManager.DEFAULT_APPLY_TO_ENTIRE_ARMOR,
                             () -> MobArmorTrims.configManager.getApplyToEntireArmor(),
                             applyToEntireArmor -> MobArmorTrims.configManager.setApplyToEntireArmor(applyToEntireArmor))
@@ -155,12 +138,12 @@ public class ConfigScreen {
 
     private static ConfigCategory buildStackedTrimsCategory() {
         return ConfigCategory.createBuilder()
-            .name(literal("Stacked Trims"))
-            .tooltip(literal("Settings for the Stacked Armor Trims mod compatibility.\nThese settings will only make a difference, if the Stacked Armor Trims mod is used and the random trims System is enabled."))
+            .name(translatable("mob_armor_trims.config.stackedTrims"))
+            .tooltip(translatable("mob_armor_trims.config.stackedTrims.tooltip"))
 
             .option(Option.<Integer>createBuilder()
-                .name(literal("Stacked Trim Chance"))
-                .description(OptionDescription.of(literal("Chance of each armor piece having an additional armor trim on it when the Stacked Armor Trims mod is enabled")))
+                .name(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance.description")))
                 .binding(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE,
                         () -> MobArmorTrims.configManager.getStackedTrimChance(),
                         stackedTrimChance -> MobArmorTrims.configManager.setStackedTrimChance(stackedTrimChance))
@@ -171,8 +154,8 @@ public class ConfigScreen {
                 .build())
 
             .option(Option.<Integer>createBuilder()
-                .name(literal("Max Stacked Trims"))
-                .description(OptionDescription.of(literal("The maximum amount of armor trims that can be stacked on each other when the Stacked Armor Trims mod is enabled")))
+                .name(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims"))
+                .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims.description")))
                 .binding(ConfigManager.DEFAULT_MAX_STACKED_TRIMS,
                         () -> MobArmorTrims.configManager.getMaxStackedTrims(),
                         maxStackedTrims -> MobArmorTrims.configManager.setMaxStackedTrims(maxStackedTrims))
@@ -192,13 +175,13 @@ public class ConfigScreen {
         public void init() {
             MultiLineTextWidget messageWidget = new MultiLineTextWidget(
                     width / 2 - 110, height / 2 - 40,
-                    Component.literal("Install Yet Another Config Lib to access the config screen."),
+                    translatable("mob_armor_trims.config.backup_screen.installYACL"),
                     minecraft.font);
             messageWidget.setMaxWidth(240);
             messageWidget.setCentered(true);
             addRenderableWidget(messageWidget);
 
-            Button openLinkButton = Button.builder(Component.literal("View on Modrinth"),
+            Button openLinkButton = Button.builder(translatable("mob_armor_trims.config.backup_screen.viewOnModrinth"),
                             button -> minecraft.setScreen(new ConfirmLinkScreen(
                                     open -> {
                                         if (open) Util.getPlatform().openUri("https://modrinth.com/mod/yacl");
