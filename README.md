@@ -49,4 +49,7 @@ These two systems are:
 Currently, there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
 
 ## Issues
-If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
+If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)  
+- Crash when opening a Config Screen while using forge:  
+  This is a known issue with YACL, where it crashes when opening any config screen done with YACL on Forge 1.20.1.  
+  As a workaround, change the version of YACL from `3.4.4` to `3.4.2`.
