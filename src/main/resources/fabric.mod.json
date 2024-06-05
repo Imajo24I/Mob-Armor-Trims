@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "${description}",
+  "authors": [
+    "majo24"
+  ],
+  "contact": {
+    "homepage": "${github_link}",
+    "sources": "${github_link}",
+    "issues": "${issues_link}"
+  },
+  "license": "MIT",
+  "icon": "assets/mob_armor_trims/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.majo24.mob_armor_trims.MobArmorTrims"
+    ],
+    "modmenu": [
+      "net.majo24.mob_armor_trims.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "mob_armor_trims.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "${mcdep}"
+  },
+  "recommends": {
+    "modmenu": ">=${modmenu_version}",
+    "yet_another_config_lib_v3": ">=${yacl_version}"
+  }
+}

@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "*"
+issueTrackerURL = "${issues_link}"
+license = "MIT"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${name}"
+authors = "majo24"
+description = "${description}"
+logoFile = "assets/mob_armor_trims/icon.png"
+
+[["dependencies.{id}"]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${forgeConstraint}"
+ordering = "NONE"
+side = "BOTH"
+
+[["dependencies.{id}"]]
+modId = "minecraft"
+type = "required"
+versionRange = "${mcdep}"
+ordering = "NONE"
+side = "BOTH"
+
+[["dependencies.{id}"]]
+modId = "yet_another_config_lib_v3"
+type = "optional"
+reason = "Yet Another Config Lib is highly recommended, as it is required to configure this mod through the Config Menu of Neoforge."
+versionRange = "[${yacl_version},)"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[mixins]]
+config = "mob_armor_trims.mixins.json"

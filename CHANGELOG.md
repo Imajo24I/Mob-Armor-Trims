@@ -1,0 +1,5 @@
+- Use `translatable` instead of `literal`
+  - Allows for much easier translation to other languages
+- Remove Fabric API dependency
+- Port to Multiloader-version setup using [stonecutter-tk](https://github.com/kikugie/stonecutter-kt)
+- Cleanup stuff
