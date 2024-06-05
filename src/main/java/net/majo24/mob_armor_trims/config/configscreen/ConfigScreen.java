@@ -203,7 +203,7 @@ public class ConfigScreen {
         @Override
         public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             //? <=1.20.1
-            /*renderDirtBackground(graphics);*/
+            renderDirtBackground(graphics);
             graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
             super.render(graphics, mouseX, mouseY, delta);
         }

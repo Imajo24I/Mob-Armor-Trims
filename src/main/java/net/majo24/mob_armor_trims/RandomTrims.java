@@ -13,9 +13,9 @@ import net.majo24.mob_armor_trims.config.Config.CustomTrim;
 import net.majo24.mob_armor_trims.config.Config.TrimSystem;
 
 /*? >=1.20.5 {*/
-import net.minecraft.core.component.DataComponentPatch;
+/*import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-/*?}*/
+*//*?}*/
 
 public class RandomTrims {
     private RandomTrims() {}
@@ -73,10 +73,10 @@ public class RandomTrims {
             for (ItemStack armor : equippedArmor) {
                 if (armor.getItem() != Items.AIR) {
                     /*? >=1.20.5 {*/
-                    armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-                    /*?} else {*/
-                    /*ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-                     *//*?}*/
+                    /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+                    *//*?} else {*/
+                    ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+                     /*?}*/
                 }
             }
         } else {
@@ -90,10 +90,10 @@ public class RandomTrims {
                 if (armorTrim == null) {continue;}
 
                 /*? >=1.20.5 {*/
-                armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-                /*?} else {*/
-                /*ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-                 *//*?}*/
+                /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+                *//*?} else {*/
+                ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+                 /*?}*/
             }
         }
     }
@@ -113,10 +113,10 @@ public class RandomTrims {
         }
 
         /*? >=1.20.5 {*/
-        armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-        /*?} else {*/
-        /*ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-         *//*?}*/
+        /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+        *//*?} else {*/
+        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+         /*?}*/
         return armorTrim;
     }
 }
