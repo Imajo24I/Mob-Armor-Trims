@@ -16,17 +16,9 @@ This mod is serverside.
 ##  Dependencies
 
 ### Required
-For 1.20.1, you can use
-- [Fabric](https://fabricmc.net/) - When using Fabric, this mod also depends on [Fabric API](https://modrinth.com/mod/fabric-api)
-- [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/) - When using Forge, this mod has no dependencies
-
-For 1.20.4, you can use
-- [Fabric](https://fabricmc.net/) - When using Fabric, this mod depends on [Fabric API](https://modrinth.com/mod/fabric-api)
-- [Neoforge](https://neoforged.net/) - When using Neoforge, this mod has no dependencies
-
-For 1.20.5/1.20.6, you can use 
-- [Fabric](https://fabricmc.net/) - When using Fabric, this mod depends on [Fabric API](https://modrinth.com/mod/fabric-api)
-- [Neoforge](https://neoforged.net/) - When using Neoforge, this mod has no dependencies
+- For 1.20.1, you can use [Fabric](https://fabricmc.net/) or [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/)  
+- For 1.20.4, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)  
+- For 1.20.5/1.20.6, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)  
 
 ### Optional
 You can configure this mod inside minecraft using a Config Screen.  
