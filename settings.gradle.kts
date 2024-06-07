@@ -21,6 +21,8 @@ extensions.configure<StonecutterSettings> {
     centralScript = "build.gradle.kts"
 
     shared {
+        vcsVersion("1.20.1-fabric")
+
         fun mc(mcVersion: String, loaders: Iterable<String>) {
             for (loader in loaders) {
                 versions("$mcVersion-$loader")
