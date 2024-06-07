@@ -121,7 +121,6 @@ dependencies {
 loom {
     runConfigs.all {
         ideConfigGenerated(stonecutter.current.isActive)
-        vmArgs("-Dmixin.debug.export=true")
         runDir = "../../run"
     }
 }
@@ -168,35 +167,6 @@ tasks.processResources {
         } else {
             filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
             exclude("fabric.mod.json", "META-INF/mods.toml")
-        }
-    }
-}
-
-afterEvaluate {
-    loom {
-        runs {
-            configureEach {
-                // 1.20.6 doesn't support shenandoah?
-                // vmArgs("-Xmx2G", "-XX:+UseShenandoahGC")
-
-                property("fabric.development", "true")
-                property("mixin.debug", "true")
-                property("mixin.debug.export.decompile", "false")
-                property("mixin.debug.verbose", "true")
-                property("mixin.dumpTargetOnFailure", "true")
-                // makes silent failures into hard-failures
-                property("mixin.checks", "true")
-                property("mixin.hotSwap", "true")
-
-                /*
-                val mixinJarFile = configurations.compileClasspath.get().files {
-                    it.group == "net.fabricmc" && it.name == "sponge-mixin"
-                }.firstOrNull()
-                Commented out, as Neoforge doesn't support it yet or smth like that and it throws an error
-                if (mixinJarFile != null)
-                    vmArg("-javaagent:$mixinJarFile")
-                 */
-            }
         }
     }
 }
