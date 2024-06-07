@@ -1,5 +1,6 @@
 plugins {
     id("dev.architectury.loom") version "1.6.+"
+    id("me.modmuss50.mod-publish-plugin") version "0.5.1"
 }
 
 class ModData {
@@ -187,10 +188,10 @@ afterEvaluate {
                 property("mixin.checks", "true")
                 property("mixin.hotSwap", "true")
 
+                /*
                 val mixinJarFile = configurations.compileClasspath.get().files {
                     it.group == "net.fabricmc" && it.name == "sponge-mixin"
                 }.firstOrNull()
-                /*
                 Commented out, as Neoforge doesn't support it yet or smth like that and it throws an error
                 if (mixinJarFile != null)
                     vmArg("-javaagent:$mixinJarFile")
@@ -200,3 +201,46 @@ afterEvaluate {
     }
 }
 
+publishMods {
+    displayName = "${mod.name} ${mod.version} for $mcVersion"
+    file.set(tasks.remapJar.get().archiveFile)
+    version = mod.version.toString()
+        changelog.set(
+        rootProject.file("changelog.md")
+            .takeIf { it.exists() }
+            ?.readText()
+            ?: "No changelog provided."
+    )
+    type = STABLE
+    modLoaders.add(loader.loader)
+
+    val stableMCVersions = listOf(stonecutter.current.version)
+
+    dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
+            providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null ||
+            providers.environmentVariable("GITHUB_TOKEN").getOrNull() == null
+
+    modrinth {
+        projectId.set("hHVaPgFK")
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions.addAll(stableMCVersions)
+        optional {
+            slug.set("yacl")
+            if (loader.isFabric) {
+                slug.set("modmenu")
+            }
+        }
+    }
+
+    curseforge {
+        projectId.set("1005441")
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.addAll(stableMCVersions)
+        optional {
+            slug.set("YetAnotherConfigLib")
+            if (loader.isFabric) {
+                slug.set("Mod Menu")
+            }
+        }
+    }
+}

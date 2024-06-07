@@ -1,85 +1,34 @@
-name: Publish 1.20.1
+name: Publish
 
 on: [workflow_dispatch]
-
-env:
-  MINECRAFT_VERSION: 1.20.1
-  JAVA_VERSION: 21
-  MOD_VERSION: 2.1.1
-  RELEASE_NAME: Mob Armor Trims
-  modrinth_id: hHVaPgFK
-  curseforge_id: 1005441
-
-permissions:
-  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Publish with Gradle
+
     steps:
-      - name: Check Enviroment Variables
-        run: env
-
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          submodules: true
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
+          java-version: 17
+          distribution: temurin
+      - uses: actions/cache@v3
         with:
-          distribution: "temurin"
-          java-version: ${{env.JAVA_VERSION}}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ./.gradle/loom-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-      - name: Make Gradlew Wrapper Executable
-        if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Build
-        run: ./gradlew clean build
-
-      # MC Publish Fabric
-      - name: Publish Fabric
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-id: ${{env.modrinth_id}}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          curseforge-id: ${{env.curseforge_id}}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-fabric"
-          github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
-
-          name: "${{env.RELEASE_NAME}}"
-          version: "${{env.VERSION}}"
-          version-type: release
-          changelog-file: CHANGELOG.md
-
-          loaders: fabric
-          game-versions: "${{env.MINECRAFT_VERSION}}"
-          java: "${{env.JAVA_VERSION}}"
-          files: fabric/build/libs/!(*-@(dev|sources|javadoc|dev-shadow)).jar
-
-      # MC Publish Forge
-      - name: Publish Forge
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-id: ${{env.modrinth_id}}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          curseforge-id: ${{env.curseforge_id}}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          github-tag: "mc${{env.MINECRAFT_VERSION}}-${{env.VERSION}}-forge"
-          github-token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
-
-          name: "${{env.RELEASE_NAME}}"
-          version: "${{env.VERSION}}"
-          version-type: release
-          changelog-file: CHANGELOG.md
-
-          loaders: forge
-          game-versions: "${{env.MINECRAFT_VERSION}}"
-          java: "${{env.JAVA_VERSION}}"
-          files: forge/build/libs/!(*-@(dev|sources|javadoc|dev-shadow)).jar
+      - name: Build with Gradle
+        run: ./gradlew chiseledPublishMods --no-daemon
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
