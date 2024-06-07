@@ -9,8 +9,8 @@ class ModData {
     val version = property("mod.version")
     val group = property("mod.group").toString()
     val description = property("mod.description")
-    val github_link = property("mod.github_link")
-    val issues_link = property("mod.issues_link")
+    val githubLink = property("mod.github_link")
+    val issuesLink = property("mod.issues_link")
 }
 
 val mod = ModData()
@@ -28,8 +28,8 @@ val loader = LoaderData()
 val mcVersion = property("mod.mc_version")
 val mcDep = property("mod.mc_dep")
 
-val modmenu_version = property("deps.modmenu_version")
-val yacl_version = if (mcVersion == "1.20.6") {
+val modmenuVersion = property("deps.modmenu_version")
+val yaclVersion = if (mcVersion == "1.20.6") {
     // YACL version for 1.20.6 has 1.20.5 in name
     "${property("deps.yacl_version")}+1.20.5"
 } else {
@@ -87,10 +87,10 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}-fabric")
+        modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}-fabric")
 
         // Mod Menu
-        modImplementation("com.terraformersmc:modmenu:${modmenu_version}")
+        modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
 
         // Fabric API - Not a dependency, but so yacl and modmenu don't create errors
         //TODO: find alternative
@@ -104,13 +104,13 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yacl_version}-neoforge")
+        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}-neoforge")
     }
     if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yacl_version}-forge")
+        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}-forge")
     }
 
     // NightConfig
@@ -136,10 +136,10 @@ tasks.processResources {
         put("version", mod.version)
         put("mcdep", mcDep)
         put("description", mod.description)
-        put("github_link", mod.github_link)
-        put("issues_link", mod.issues_link)
-        put("modmenu_version", modmenu_version)
-        put("yacl_version", yacl_version)
+        put("github_link", mod.githubLink)
+        put("issues_link", mod.issuesLink)
+        put("modmenu_version", modmenuVersion)
+        put("yacl_version", yaclVersion)
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
