@@ -127,7 +127,7 @@ loom {
 
 java {
     val java = if (stonecutter.compare(
-                mcVersion.toString(),
+                stonecutter.current.version,
                 "1.20.6"
             ) >= 0
         ) JavaVersion.VERSION_21 else JavaVersion.VERSION_17

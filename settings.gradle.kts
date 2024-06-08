@@ -25,7 +25,7 @@ extensions.configure<StonecutterSettings> {
 
         fun mc(mcVersion: String, loaders: Iterable<String>) {
             for (loader in loaders) {
-                versions("$mcVersion-$loader")
+                vers("$mcVersion-$loader", mcVersion)
             }
         }
 
