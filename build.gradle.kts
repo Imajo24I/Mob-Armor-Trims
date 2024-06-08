@@ -126,6 +126,13 @@ loom {
 }
 
 java {
+    val java = if (stonecutter.compare(
+                mcVersion.toString(),
+                "1.20.6"
+            ) >= 0
+        ) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    sourceCompatibility = java
+    targetCompatibility = java
     withSourcesJar()
 }
 
