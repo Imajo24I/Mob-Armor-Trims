@@ -29,12 +29,7 @@ val mcVersion = property("mod.mc_version")
 val mcDep = property("mod.mc_dep")
 
 val modmenuVersion = property("deps.modmenu_version")
-val yaclVersion = if (mcVersion == "1.20.6") {
-    // YACL version for 1.20.6 has 1.20.5 in name
-    "${property("deps.yacl_version")}+1.20.5"
-} else {
-    "${property("deps.yacl_version")}+${property("mod.mc_version")}"
-}
+val yaclVersion = findProperty("deps.yacl_version")
 
 version = "${mod.version}+${mcVersion}-${loader.loader}"
 group = mod.group
@@ -87,7 +82,7 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}-fabric")
+        modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-fabric")
 
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
@@ -104,13 +99,13 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}-neoforge")
+        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-neoforge")
     }
     if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}-forge")
+        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-forge")
     }
 
     // NightConfig
