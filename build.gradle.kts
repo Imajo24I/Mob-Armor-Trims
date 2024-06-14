@@ -181,7 +181,7 @@ publishMods {
     displayName = "${mod.name} ${mod.version} for $mcVersion"
     file.set(tasks.remapJar.get().archiveFile)
     version = mod.version.toString()
-        changelog.set(
+    changelog.set(
         rootProject.file("changelog.md")
             .takeIf { it.exists() }
             ?.readText()
@@ -193,8 +193,7 @@ publishMods {
     val stableMCVersions = listOf(stonecutter.current.version)
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
-            providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null ||
-            providers.environmentVariable("GITHUB_TOKEN").getOrNull() == null
+            providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
     modrinth {
         projectId.set("hHVaPgFK")
