@@ -1,7 +1,7 @@
 package net.majo24.mob_armor_trims;
 
 /*? if fabric {*/
-import net.fabricmc.api.ModInitializer;
+/*import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.majo24.mob_armor_trims.config.ConfigManager;
@@ -25,18 +25,18 @@ public class MobArmorTrims implements ModInitializer {
 		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
 	}
 }
-/*?} elif neoforge {*/
-/*import net.majo24.mob_armor_trims.config.ConfigManager;
+*//*?} elif neoforge {*/
+import net.majo24.mob_armor_trims.config.ConfigManager;
 import net.majo24.mob_armor_trims.config.configscreen.ConfigScreenProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
-/^? >1.20.5 {^/
+/*? >1.20.5 {*/
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-/^?} else {^/
-/^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^//^?}^/
+/*?} else {*/
+/*import net.neoforged.neoforge.client.ConfigScreenHandler;
+*//*?}*/
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,19 +54,19 @@ public class MobArmorTrims {
         isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
-        /^? <1.20.5 {^/
-        /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+        /*? <1.20.5 {*/
+        /*ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
-        ^//^?} else {^/
+        *//*?} else {*/
         ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
             () -> (client, parent) -> ConfigScreenProvider.getConfigScreen(parent));
-        /^?}^/
+        /*?}*/
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
 		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
     }
 }
-*//*?} elif forge {*/
+/*?} elif forge {*/
 /*import net.majo24.mob_armor_trims.config.configscreen.ConfigScreenProvider;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;

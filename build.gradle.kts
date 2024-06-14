@@ -74,8 +74,12 @@ dependencies {
     mappings(loom.layered {
         // Mojmap mappings
         officialMojangMappings()
+
         // Parchment mappings (it adds parameter mappings & javadoc)
-        parchment("org.parchmentmc.data:parchment-${property("mod.mc_version")}:${property("deps.parchment_version")}@zip")
+        optionalProp("deps.parchment_version") {
+            parchment("org.parchmentmc.data:parchment-${property("mod.mc_version")}:$it@zip")
+        }
+
     })
 
     if (loader.isFabric) {
@@ -215,4 +219,11 @@ publishMods {
             }
         }
     }
+}
+
+fun <T> optionalProp(property: String, block: (String) -> T?): T? =
+    findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
+
+fun isPropDefined(property: String): Boolean {
+    return property(property)?.toString()?.isNotBlank() ?: false
 }

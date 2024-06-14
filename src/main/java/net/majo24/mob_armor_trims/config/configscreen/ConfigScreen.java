@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
-import net.minecraft.client.gui.screens.OptionsSubScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -19,6 +18,12 @@ import net.majo24.mob_armor_trims.MobArmorTrims;
 import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.config.ConfigManager;
 import org.jetbrains.annotations.NotNull;
+
+/*? <1.21 {*/
+/*import net.minecraft.client.gui.screens.OptionsSubScreen;
+*//*?} else {*/
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
+/*?}*/
 
 import java.util.ArrayList;
 
@@ -200,12 +205,17 @@ public class ConfigScreen {
             addRenderableWidget(exitButton);
         }
 
+        /*? >=1.21 {*/
+        @Override
+        protected void addOptions() {}
+        /*?}*/
+
         @Override
         public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             //? <=1.20.1
-            renderDirtBackground(graphics);
-            graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
+            /*renderDirtBackground(graphics);*/
             super.render(graphics, mouseX, mouseY, delta);
+            graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
         }
     }
 }
