@@ -194,6 +194,7 @@ publishMods {
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
+    dryRun = true
 
     modrinth {
         projectId.set("hHVaPgFK")
