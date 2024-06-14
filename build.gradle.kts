@@ -214,7 +214,7 @@ publishMods {
         optional {
             slug.set("YetAnotherConfigLib")
             if (loader.isFabric) {
-                slug.set("Mod Menu")
+                slug.set("modmenu")
             }
         }
     }
