@@ -199,11 +199,9 @@ publishMods {
         projectId.set("hHVaPgFK")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.addAll(stableMCVersions)
-        optional {
-            slug.set("yacl")
-            if (loader.isFabric) {
-                slug.set("modmenu")
-            }
+        optional("yacl")
+        if (loader.isFabric) {
+            optional("modmenu")
         }
     }
 
@@ -211,11 +209,10 @@ publishMods {
         projectId.set("1005441")
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.addAll(stableMCVersions)
-        optional {
-            slug.set("yacl")
-            if (loader.isFabric) {
-                slug.set("modmenu")
-            }
+        serverRequired = true
+        optional("yacl")
+        if (loader.isFabric) {
+            optional("modmenu")
         }
     }
 }
