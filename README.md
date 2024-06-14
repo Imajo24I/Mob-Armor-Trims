@@ -19,16 +19,17 @@ This mod is serverside.
 - For 1.20.1, you can use [Fabric](https://fabricmc.net/) or [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/)  
 - For 1.20.4, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)  
 - For 1.20.5/1.20.6, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)  
+- For 1.21, you use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)  
 
 ### Optional
 You can configure this mod inside minecraft using a Config Screen.  
 These are the dependencies for each modloader to be able to do this:
-- Fabric:  [Mod Menu](https://modrinth.com/mod/modmenu) and [Yet Another Config Lib](https://modrinth.com/mod/yacl)
+- Fabric: [Mod Menu](https://modrinth.com/mod/modmenu) and [Yet Another Config Lib](https://modrinth.com/mod/yacl)
 - Forge/Neoforge: [Yet Another Config Lib](https://modrinth.com/mod/yacl)
 
 ## Configure
 You can configure this mod through a
-- Config Screen -  Dependencies for this can be found under `Dependencies` > `Optional` in this file
+- Config Screen - Dependencies for this can be found under `Dependencies` > `Optional` in this file
 - Config file - The config file is located in `.minecraft/config/mob_armor_trims.json`
  
 There are two different systems of how the mod chooses what trims to give the mob.  
