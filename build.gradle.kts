@@ -212,7 +212,7 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.addAll(stableMCVersions)
         optional {
-            slug.set("YetAnotherConfigLib")
+            slug.set("yacl")
             if (loader.isFabric) {
                 slug.set("modmenu")
             }
