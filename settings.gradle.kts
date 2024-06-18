@@ -9,11 +9,12 @@ pluginManagement {
         maven("https://maven.minecraftforge.net/")
         maven("https://maven.architectury.dev")
         maven("https://maven.kikugie.dev/snapshots")
+        maven("https://maven.kikugie.dev/releases")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.4-rc.2"
+    id("dev.kikugie.stonecutter") version "0.4"
 }
 
 extensions.configure<StonecutterSettings> {
