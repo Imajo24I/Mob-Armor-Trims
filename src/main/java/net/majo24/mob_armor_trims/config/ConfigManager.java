@@ -209,13 +209,10 @@ public class ConfigManager {
     }
 
     @Nullable
-    public ArmorTrim getOrCreateCachedCustomTrim(String material, String pattern, RegistryAccess registryAccess) {
+    public ArmorTrim getOrCreateCachedCustomTrim(String material, String pattern, RegistryAccess registryAccess) throws IllegalStateException {
         ArmorTrim cachedTrim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
         if (cachedTrim == null) {
             ArmorTrim newTrim = new Config.CustomTrim(material, pattern).getTrim(registryAccess);
-            if (newTrim == null) {
-                return null;
-            }
             this.addCustomTrimToCache(material, pattern, newTrim);
             return newTrim;
         }

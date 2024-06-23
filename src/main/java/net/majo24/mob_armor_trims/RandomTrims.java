@@ -65,18 +65,17 @@ public class RandomTrims {
                 return;
             }
 
-            ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
-            if (armorTrim == null) {
+            ArmorTrim armorTrim;
+            try {
+                armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
+            } catch (IllegalStateException e) {
+                MobArmorTrims.LOGGER.error("Failed to create armor trim. Please ensure this is a valid custom trim: {} - {}", customTrim.material(), customTrim.pattern(), e);
                 return;
             }
 
             for (ItemStack armor : equippedArmor) {
                 if (armor.getItem() != Items.AIR) {
-                    /*? >=1.20.5 {*/
-                    /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-                    *//*?} else {*/
-                    ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-                     /*?}*/
+                    applyTrim(armor, armorTrim, registryAccess);
                 }
             }
         } else {
@@ -89,13 +88,18 @@ public class RandomTrims {
                 ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedCustomTrim(customTrim.material(), customTrim.pattern(), registryAccess);
                 if (armorTrim == null) {continue;}
 
-                /*? >=1.20.5 {*/
-                /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-                *//*?} else {*/
-                ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-                 /*?}*/
+                applyTrim(armor, armorTrim, registryAccess);
             }
         }
+    }
+
+    // TODO: only make registryAccess a parameter for 1.20.4 and lower
+    public static void applyTrim(ItemStack armor, ArmorTrim armorTrim, RegistryAccess registryAccess) {
+        /*? >=1.20.5 {*/
+        /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+        *//*?} else {*/
+        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+         /*?}*/
     }
 
     private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armor, ArmorTrim lastTrim) {
@@ -112,11 +116,7 @@ public class RandomTrims {
             }
         }
 
-        /*? >=1.20.5 {*/
-        /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-        *//*?} else {*/
-        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-         /*?}*/
+        applyTrim(armor, armorTrim, registryAccess);
         return armorTrim;
     }
 }

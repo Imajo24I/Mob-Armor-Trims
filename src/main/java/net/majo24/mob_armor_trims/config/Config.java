@@ -107,8 +107,7 @@ public class Config {
     }
 
     public record CustomTrim(String material, String pattern) {
-        @Nullable
-        public ArmorTrim getTrim(RegistryAccess registryAccess) {
+        public ArmorTrim getTrim(RegistryAccess registryAccess) throws IllegalStateException {
             String trimPatternIdentifier = pattern;
             if (!trimPatternIdentifier.contains("_armor_trim_smithing_template")) {
                 trimPatternIdentifier += "_armor_trim_smithing_template";
@@ -121,8 +120,7 @@ public class Config {
                 trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(material)).getDefaultInstance()).orElseThrow();
                 trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternIdentifier)).getDefaultInstance()).orElseThrow();
             } catch (Exception e) {
-                MobArmorTrims.LOGGER.error("Failed to create armor trim. Please ensure this is a valid custom trim: {}; {} - {}", material, pattern, e);
-                return null;
+                throw new IllegalStateException("Failed to create armor trim. Please ensure this is a valid custom trim: " + material + " - " + pattern, e);
             }
 
             return new ArmorTrim(trimMaterial, trimPattern);

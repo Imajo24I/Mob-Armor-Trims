@@ -7,10 +7,17 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
+import net.majo24.mob_armor_trims.RandomTrims;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.majo24.mob_armor_trims.config.Config;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.armortrim.ArmorTrim;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -219,6 +226,39 @@ public class CustomTrimsListController implements Controller<Config.CustomTrim> 
         public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             materialElement.render(graphics, mouseX, mouseY, delta);
             patternElement.render(graphics, mouseX, mouseY, delta);
+
+            // Display armor preview
+            ItemStack armor = Items.DIAMOND_CHESTPLATE.getDefaultInstance();
+            Minecraft mc = Minecraft.getInstance();
+            ClientLevel level = mc.level;
+
+            int previewX = materialElement.getDimension().x() - 37;
+            int previewY = materialElement.getDimension().y() + 3;
+
+            boolean validTrim = true;
+
+            if (level != null) {
+                // As RegistryAccess is accessible, apply trim to armor preview
+                RegistryAccess registryAccess = level.registryAccess();
+                try {
+                    ArmorTrim armorTrim = control.option.pendingValue().getTrim(registryAccess);
+                    RandomTrims.applyTrim(armor, armorTrim, registryAccess);
+                } catch (IllegalStateException e) {
+                    validTrim = false;
+                }
+
+                graphics.renderItem(armor, previewX, previewY);
+
+                if (!validTrim) {
+                    // Armor Trim is not valid, so draw an exclamation mark to indicate this
+                    graphics.drawCenteredString(mc.font, "!", previewX + 3, previewY + 3, -65536);
+                }
+            } else {
+                // RegistryAccess is not accessible, so draw a question mark over it,
+                // indicating preview cannot be correctly displayed
+                graphics.renderItem(armor, previewX, previewY);
+                graphics.drawCenteredString(mc.font, "?", previewX, previewY, 0xffffff);
+            }
         }
 
         @Override
