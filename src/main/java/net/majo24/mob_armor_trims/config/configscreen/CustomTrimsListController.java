@@ -227,6 +227,9 @@ public class CustomTrimsListController implements Controller<Config.CustomTrim> 
             materialElement.render(graphics, mouseX, mouseY, delta);
             patternElement.render(graphics, mouseX, mouseY, delta);
 
+            /*
+            // Commented out for now, as the Custom Trims System will get replaced entirely and this doesn't work properly yet
+
             // Display armor preview
             ItemStack armor = Items.DIAMOND_CHESTPLATE.getDefaultInstance();
             Minecraft mc = Minecraft.getInstance();
@@ -259,6 +262,7 @@ public class CustomTrimsListController implements Controller<Config.CustomTrim> 
                 graphics.renderItem(armor, previewX, previewY);
                 graphics.drawCenteredString(mc.font, "?", previewX, previewY, 0xffffff);
             }
+            */
         }
 
         @Override
