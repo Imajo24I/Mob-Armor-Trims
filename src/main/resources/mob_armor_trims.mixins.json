@@ -2,6 +2,7 @@
   "required": true,
   "package": "net.majo24.mob_armor_trims.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "net.majo24.mob_armor_trims.mixin.ConditionalMixinPlugin",
   "mixins": [
     "spawn_entities_trimmed.OnNaturalSpawnMixin",
     "yacl.CategoryTabOptionListAccessor"
