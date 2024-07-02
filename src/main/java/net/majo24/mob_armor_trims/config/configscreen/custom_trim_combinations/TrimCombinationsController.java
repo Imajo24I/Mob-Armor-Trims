@@ -15,6 +15,7 @@ import net.majo24.mob_armor_trims.config.TrimCombination;
 import net.majo24.mob_armor_trims.mixin.yacl.CategoryTabOptionListAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
@@ -346,8 +347,6 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
 
         @Override
         public void setFocused(boolean focused) {
-            super.setFocused(focused);
-
             collapseWidget.setFocused(focused);
             applyOnMaterialWidget.setFocused(focused);
             bootsTrimWidget.setFocused(focused);
@@ -404,6 +403,21 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         @Override
         public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
             return collapseWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || applyOnMaterialWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || bootsTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || leggingsTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || chestplateTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || helmetTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        }
+
+        @Override
+        public NarrationPriority narrationPriority() {
+            return collapseWidget.narrationPriority();
+        }
+
+        @Override
+        public void updateNarration(NarrationElementOutput narrationElementOutput) {
+            collapseWidget.updateNarration(narrationElementOutput);
+            applyOnMaterialWidget.updateNarration(narrationElementOutput);
+            bootsTrimWidget.updateNarration(narrationElementOutput);
+            leggingsTrimWidget.updateNarration(narrationElementOutput);
+            chestplateTrimWidget.updateNarration(narrationElementOutput);
+            helmetTrimWidget.updateNarration(narrationElementOutput);
         }
     }
 }

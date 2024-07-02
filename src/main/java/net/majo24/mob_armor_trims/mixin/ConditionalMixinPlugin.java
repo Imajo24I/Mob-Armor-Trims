@@ -1,7 +1,14 @@
 package net.majo24.mob_armor_trims.mixin;
-
 /*? if fabric {*/
 import net.fabricmc.loader.api.FabricLoader;
+/*?} else if forge {*/
+/*import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.LoadingModList;
+*//*?} else {*//*
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.LoadingModList;
+import net.neoforged.fml.loading.moddiscovery.ModInfo;
+*//*?}*/
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -23,9 +30,21 @@ public final class ConditionalMixinPlugin implements IMixinConfigPlugin {
      */
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return !mixinClassName.equals("net.majo24.mob_armor_trims.mixin.yacl.CategoryTabOptionListAccessor")
-                || FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3");
+        return !isYaclMixin(mixinClassName) || isYaclPresent();
     }
+
+    private boolean isYaclMixin(String mixinClassName) {
+        return mixinClassName.equals("net.majo24.mob_armor_trims.mixin.yacl.CategoryTabOptionListAccessor");
+    }
+
+    private boolean isYaclPresent() {
+        /*? if fabric {*/
+        return FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3");
+        /*?} else {*/
+        /*return LoadingModList.get().getMods().stream().map(ModInfo::getModId).toList().contains("yet_another_config_lib_v3");
+        *//*?}*/
+    }
+
 
     /**
      * Called after the plugin is instantiated, do any setup here.
@@ -108,4 +127,3 @@ public final class ConditionalMixinPlugin implements IMixinConfigPlugin {
 
     }
 }
-/*? } */
