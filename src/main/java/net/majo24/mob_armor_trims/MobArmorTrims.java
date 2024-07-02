@@ -33,10 +33,10 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
 /^? >1.20.5 {^/
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-/^?} else {^/
-/^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^//^?}^/
+/^import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+^//^?} else {^/
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+/^?}^/
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,12 +55,12 @@ public class MobArmorTrims {
 
         // Register Config Screen
         /^? <1.20.5 {^/
-        /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
-        ^//^?} else {^/
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
+        /^?} else {^/
+        /^ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
             () -> (client, parent) -> ConfigScreenProvider.getConfigScreen(parent));
-        /^?}^/
+        ^//^?}^/
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
 		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);

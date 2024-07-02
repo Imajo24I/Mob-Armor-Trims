@@ -2,11 +2,10 @@ package net.majo24.mob_armor_trims.mixin;
 /*? if fabric {*/
 import net.fabricmc.loader.api.FabricLoader;
 /*?} else if forge {*/
-/*import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.LoadingModList;
-*//*?} else {*//*
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.LoadingModList;
+/*import net.minecraftforge.fml.loading.LoadingModList;
+import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+*//*?} else {*/
+/*import net.neoforged.fml.loading.LoadingModList;
 import net.neoforged.fml.loading.moddiscovery.ModInfo;
 *//*?}*/
 import org.objectweb.asm.tree.ClassNode;

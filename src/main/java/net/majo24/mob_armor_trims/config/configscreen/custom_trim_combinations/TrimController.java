@@ -158,8 +158,8 @@ public class TrimController implements Controller<CustomTrim> {
         /*?} else {*/
         /*@Override
         public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-            boolean material = materialElement.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-            boolean pattern = patternElement.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            boolean material = materialWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            boolean pattern = patternWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
             return material || pattern;
         }
         *//*?}*/
