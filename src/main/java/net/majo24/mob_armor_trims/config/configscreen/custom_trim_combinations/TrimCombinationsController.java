@@ -244,7 +244,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
                 graphics.renderItem(armorItem, x, y);
             } else {
                 graphics.renderItem(Items.DIAMOND_CHESTPLATE.getDefaultInstance(), x, y);
-                graphics.drawCenteredString(mc.font, "!", x + 3, y, -65536);
+                graphics.drawCenteredString(mc.font, "!", x, y, -65536);
             }
         }
 
@@ -280,7 +280,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
 
                     if (!validTrim) {
                         // Armor Trim is not valid, so draw an exclamation mark to indicate this
-                        graphics.drawCenteredString(mc.font, "!", previewX + 3, previewY, -65536);
+                        graphics.drawCenteredString(mc.font, "!", previewX, previewY, -65536);
                     }
                 } else {
                     // RegistryAccess is not accessible, so draw a question mark over it,
