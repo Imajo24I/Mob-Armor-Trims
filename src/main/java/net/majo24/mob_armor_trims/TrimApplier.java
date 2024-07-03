@@ -90,7 +90,6 @@ public class TrimApplier {
                 continue;
             }
 
-
             ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
             if (armorTrim == null) {
                 continue;
