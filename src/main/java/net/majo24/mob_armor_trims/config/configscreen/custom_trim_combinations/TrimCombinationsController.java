@@ -189,7 +189,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             this.collapseWidget = new LowProfileButtonWidget(dim.x(), dim.y(),
                     20, 20,
                     Component.literal(control.collapsed ? "▶" : "▼"),
-                    (buttonWidget) -> {
+                    buttonWidget -> {
                         control.setCollapsed(!control.collapsed);
                         buttonWidget.setMessage(Component.literal(control.collapsed ? "▶" : "▼"));
 
