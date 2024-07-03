@@ -1,10 +1,11 @@
 package net.majo24.mob_armor_trims.config.configscreen;
 
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.StringControllerBuilder;
+import net.majo24.mob_armor_trims.config.CustomTrim;
+import net.majo24.mob_armor_trims.config.TrimCombination;
+import net.majo24.mob_armor_trims.config.configscreen.custom_trim_combinations.TrimCombinationsController;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,14 +56,14 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
                 .name(translatable("mob_armor_trims.config.general"))
                 .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
-                .option(Option.<Config.TrimSystem>createBuilder()
+                .option(Option.<Config.TrimSystems>createBuilder()
                         .name(translatable("mob_armor_trims.config.general.trimSystem"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
-                        .binding(Config.TrimSystem.RANDOM_TRIMS,
+                        .binding(Config.TrimSystems.RANDOM_TRIMS,
                                 () -> MobArmorTrims.configManager.getEnabledSystem(),
                                 enabledSystem -> MobArmorTrims.configManager.setEnabledSystem(enabledSystem))
                         .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(Config.TrimSystem.class)
+                                .enumClass(Config.TrimSystems.class)
                                 .formatValue(trimSystemFormatter))
                         .build())
 
@@ -114,30 +115,18 @@ public class ConfigScreen {
 
     private static ConfigCategory buildCustomTrimsCategory() {
         return ConfigCategory.createBuilder()
-                .name(translatable("mob_armor_trims.config.customTrims"))
-                .tooltip(translatable("mob_armor_trims.config.customTrims.tooltip"))
+                .name(translatable("mob_armor_trims.config.customTrimCombinations"))
+                .tooltip(translatable("mob_armor_trims.config.customTrimCombinations.tooltip"))
 
-                .group(ListOption.<Config.CustomTrim>createBuilder()
-                        .name(translatable("mob_armor_trims.config.customTrims.customTrimsList"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrims.customTrimsList.description")))
+                .group(ListOption.<TrimCombination>createBuilder()
+                        .name(translatable("mob_armor_trims.config.customTrimCombinations"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrimCombinations.trimCombinations.description")))
                         .binding(new ArrayList<>(),
-                                () -> MobArmorTrims.configManager.getCustomTrimsList(),
-                                customTrimsList -> MobArmorTrims.configManager.setCustomTrimsList(customTrimsList))
-                        .controller(opt -> CustomTrimsListController.Builder.create(opt)
-                                .patternController(StringControllerBuilder::create)
-                                .materialController(StringControllerBuilder::create))
-                        .initial(new Config.CustomTrim("", ""))
+                                () -> MobArmorTrims.configManager.getTrimCombinations(),
+                                trimCombinations -> MobArmorTrims.configManager.setTrimCombinations(trimCombinations))
+                        .controller(TrimCombinationsController.Builder::create)
+                        .initial(new TrimCombination("", CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY))
                         .build())
-
-                .option(Option.<Boolean>createBuilder()
-                        .name(translatable("mob_armor_trims.config.customTrims.applyToEntireArmor"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrims.applyToEntireArmor.description")))
-                        .binding(ConfigManager.DEFAULT_APPLY_TO_ENTIRE_ARMOR,
-                                () -> MobArmorTrims.configManager.getApplyToEntireArmor(),
-                                applyToEntireArmor -> MobArmorTrims.configManager.setApplyToEntireArmor(applyToEntireArmor))
-                        .controller(BooleanControllerBuilder::create)
-                        .build())
-
                 .build();
     }
 

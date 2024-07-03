@@ -1,19 +1,10 @@
 package net.majo24.mob_armor_trims.config;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.armortrim.*;
-import net.majo24.mob_armor_trims.MobArmorTrims;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class Config {
     // General
-    private TrimSystem enabledSystem;
+    private TrimSystems enabledSystem;
 
     // Random Trims System
     private int trimChance;
@@ -21,32 +12,30 @@ public class Config {
     private int noTrimsChance;
 
     // System of giving mobs only armor out of custom trims list
-    private List<CustomTrim> customTrimsList;
-    private boolean applyToEntireArmor;
+    private List<TrimCombination> trimCombinations;
 
     // Stacked Armor Trims Compatiblity
     private int stackedTrimChance;
     private int maxStackedTrims;
 
-    public Config(TrimSystem enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<CustomTrim> customTrimsList, boolean applyToEntireArmor, int stackedTrimChance, int maxStackedTrims) {
+    public Config(TrimSystems enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<TrimCombination> trimCombinations, int stackedTrimChance, int maxStackedTrims) {
         this.enabledSystem = enabledSystem;
 
         this.trimChance = trimChance;
         this.similarTrimChance = similarTrimChance;
         this.noTrimsChance = noTrimsChance;
 
-        this.customTrimsList = customTrimsList;
-        this.applyToEntireArmor = applyToEntireArmor;
+        this.trimCombinations = trimCombinations;
 
         this.stackedTrimChance = stackedTrimChance;
         this.maxStackedTrims = maxStackedTrims;
     }
 
-    public TrimSystem getEnabledSystem() {
+    public TrimSystems getEnabledSystem() {
         return enabledSystem;
     }
 
-    public void setEnabledSystem(TrimSystem enabledSystem) {
+    public void setEnabledSystem(TrimSystems enabledSystem) {
         this.enabledSystem = enabledSystem;
     }
 
@@ -74,20 +63,12 @@ public class Config {
         this.noTrimsChance = noTrimsChance;
     }
 
-    public List<CustomTrim> getCustomTrimsList() {
-        return customTrimsList;
+    public List<TrimCombination> getTrimCombinations() {
+        return trimCombinations;
     }
 
-    public boolean getApplyToEntireArmor() {
-        return applyToEntireArmor;
-    }
-
-    public void setApplyToEntireArmor(boolean applyToEntireArmor) {
-        this.applyToEntireArmor = applyToEntireArmor;
-    }
-
-    public void setCustomTrimsList(List<CustomTrim> customTrimsList) {
-        this.customTrimsList = customTrimsList;
+    public void setTrimCombinations(List<TrimCombination> trimCombinations) {
+        this.trimCombinations = trimCombinations;
     }
 
     public int getStackedTrimChance() {
@@ -106,38 +87,9 @@ public class Config {
         this.maxStackedTrims = maxStackedTrims;
     }
 
-    public record CustomTrim(String material, String pattern) {
-        public ArmorTrim getTrim(RegistryAccess registryAccess) throws IllegalStateException {
-            String trimPatternIdentifier = pattern;
-            if (!trimPatternIdentifier.contains("_armor_trim_smithing_template")) {
-                trimPatternIdentifier += "_armor_trim_smithing_template";
-            }
-
-            Holder.Reference<TrimMaterial> trimMaterial;
-            Holder.Reference<TrimPattern> trimPattern;
-
-            try {
-                trimMaterial = TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(material)).getDefaultInstance()).orElseThrow();
-                trimPattern = TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(trimPatternIdentifier)).getDefaultInstance()).orElseThrow();
-            } catch (Exception e) {
-                throw new IllegalStateException("Failed to create armor trim. Please ensure this is a valid custom trim: " + material + " - " + pattern, e);
-            }
-
-            return new ArmorTrim(trimMaterial, trimPattern);
-        }
-
-        public static List<List<String>> toStringList(List<CustomTrim> customTrimsList) {
-            return customTrimsList.stream().map(customTrim -> Arrays.asList(customTrim.material, customTrim.pattern)).toList();
-        }
-
-        public static List<CustomTrim> fromList(List<List<String>> stringCustomTrimsList) {
-            return stringCustomTrimsList.stream().map(stringCustomTrim -> new CustomTrim(stringCustomTrim.get(0), stringCustomTrim.get(1))).toList();
-        }
-    }
-
-    public enum TrimSystem {
+    public enum TrimSystems {
         RANDOM_TRIMS,
-        CUSTOM_TRIMS,
+        CUSTOM_TRIM_COMBINATIONS,
         NONE,
     }
 }

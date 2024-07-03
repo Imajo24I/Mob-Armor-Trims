@@ -31,3 +31,6 @@ mandatory = false
 versionRange = "[${yacl_version},)"
 ordering = "AFTER"
 side = "CLIENT"
+
+[[mixins]]
+config="mob_armor_trims.mixins.json"

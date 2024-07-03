@@ -14,12 +14,9 @@
   "mob_armor_trims.config.randomTrims.similarTrimChance.description": "Chance of each armor piece having a similar armor trim as the previous armor piece",
 
 
-  "mob_armor_trims.config.customTrims": "Custom Trims",
-  "mob_armor_trims.config.customTrims.tooltip": "Settings for the Custom Trims System.\nThese settings will only make a difference, if the custom trims system is enabled.",
-  "mob_armor_trims.config.customTrims.customTrimsList": "Custom Trims List",
-  "mob_armor_trims.config.customTrims.customTrimsList.description": "Manage the list of custom trims here. You can add, edit and remove custom trims.\n\nIn the left option, enter a valid trim material.\nAs an example: \"quartz\".\n\nIn the right option, enter a valid trim pattern.\nAs an example: \"silence\"\n\nTo not have to specify the whole trim pattern, you can leave out the \"_armor_trim_smithing_template\" part of the pattern, as it is the same for every pattern.\n",
-  "mob_armor_trims.config.customTrims.applyToEntireArmor": "Apply To Entire Armor",
-  "mob_armor_trims.config.customTrims.applyToEntireArmor.description": "Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece",
+  "mob_armor_trims.config.customTrimCombinations": "Custom Trim Combinations",
+  "mob_armor_trims.config.customTrimCombinations.tooltip": "Settings for the Custom Trim Combinations System.\nThese settings will only make a difference, if the custom trim combinations system is enabled.",
+  "mob_armor_trims.config.customTrimCombinations.trimCombinations.description": "Manage the custom trim combinations here. You can add, edit and remove combinations.\n\nIn the first option, enter the material of the armor, the combination can be applied to.\nAs an example: \"iron\".\n\nIn the rest of the options, enter the Trims for each armor piece.\nIn the left option, enter a valid trim material.\nFor example: \"amethyst_shard\".\nIn the right option, enter a valid trim pattern.\nFor example: \"silence\"\n\nTo not have to specify the whole trim pattern, you can leave out the \"_armor_trim_smithing_template\" part of the pattern, as it is the same for every pattern.\n\nFor each of the options, you'll see a preview. Having nothing next to the preview, means the option is valid.\nHaving a question mark, means the mod can't check for the validity of the option in the current environment. This happens when not inside a world.\nHaving an exclamation mark, means the option is not valid.",
 
 
   "mob_armor_trims.config.stackedTrims": "Stacked Trims",

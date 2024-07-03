@@ -36,7 +36,7 @@ There are two different systems of how the mod chooses what trims to give the mo
 Most things about these systems are configurable.  
 These two systems are:
 - Random Trims - On the first armor piece of the mob, this system chooses a completely random trim to apply to the armor piece. The next trims are highly based on the previous trim of the armor.
-- Custom Trims - This system chooses an armor trim from a list of trims and applies it to the whole mob. This list of trims is completely configurable.
+- Custom Trim Combinations - This system chooses a trim combination out of a custom list of trim combinations and applies the combination to the armor. You can configure the trim combinations. Each combinations consists of a trim for each of the armor pieces and an armor material, on which the combination will applied on. It won't be applied to any armor with another material.
 
 ## Compatibility
 Currently, there are no found incompatible mods. If you find any incompatible mod, please report it [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
@@ -45,4 +45,4 @@ Currently, there are no found incompatible mods. If you find any incompatible mo
 If you have found any Issues, please report them [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)  
 - Crash when opening a Config Screen while using forge:  
   This is a known issue with YACL, where it crashes when opening any config screen done with YACL on Forge 1.20.1.  
-  As a workaround, change the version of YACL from `3.4.4` to `3.4.2`.
+  As a workaround, change the version of YACL to `3.4.2`.

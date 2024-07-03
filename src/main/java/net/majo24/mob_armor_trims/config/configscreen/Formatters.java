@@ -14,12 +14,12 @@ public class Formatters {
         }
     }
 
-    public static class TrimSystem implements ValueFormatter<Config.TrimSystem> {
+    public static class TrimSystem implements ValueFormatter<Config.TrimSystems> {
         @Override
-        public Component format(Config.TrimSystem selectedSystem) {
+        public Component format(Config.TrimSystems selectedSystem) {
             return switch (selectedSystem) {
                 case RANDOM_TRIMS -> Component.literal("Random Trims");
-                case CUSTOM_TRIMS -> Component.literal("Custom Trims");
+                case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trims");
                 case NONE -> Component.literal("Disabled");
             };
         }

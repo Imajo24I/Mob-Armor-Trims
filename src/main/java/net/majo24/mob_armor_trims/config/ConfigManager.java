@@ -3,7 +3,6 @@ package net.majo24.mob_armor_trims.config;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.majo24.mob_armor_trims.MobArmorTrims;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +13,12 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class ConfigManager {
-    public static final Config.TrimSystem DEFAULT_ENABLED_SYSTEM = Config.TrimSystem.RANDOM_TRIMS;
+    public static final Config.TrimSystems DEFAULT_ENABLED_SYSTEM = Config.TrimSystems.RANDOM_TRIMS;
     public static final int DEFAULT_TRIM_CHANCE = 50;
     public static final int DEFAULT_SIMILAR_TRIM_CHANCE = 75;
     public static final int DEFAULT_NO_TRIMS_CHANCE = 25;
 
-    public static final List<Config.CustomTrim> DEFAULT_CUSTOM_TRIMS_LIST = new ArrayList<>();
-    public static final boolean DEFAULT_APPLY_TO_ENTIRE_ARMOR = true;
+    public static final List<TrimCombination> DEFAULT_TRIM_COMBINATIONS = new ArrayList<>();
 
     public static final int DEFAULT_STACKED_TRIM_CHANCE = 10;
     public static final int DEFAULT_MAX_STACKED_TRIMS = 3;
@@ -85,23 +83,24 @@ public class ConfigManager {
         // Custom Trims system Subcategory
         CommentedConfig customTrims = fileConfig.createSubConfig();
 
-        customTrims.add("apply_to_entire_armor", config.getApplyToEntireArmor());
-        customTrims.setComment("apply_to_entire_armor", "Should the custom armor trim be applied to the entire armor.\nIf false, a new custom trim will be chosen for each armor piece");
+        customTrims.add("custom_trim_combinations", config.getTrimCombinations().stream().map(TrimCombination::toStringList).toList());
+        customTrims.setComment("custom_trim_combinations", """
+            The list of custom trim combinations.
+           
+            To create a new trim combination, add a new list with with 5 lists inside.
+            Then for the first inner list, add a String. In the rest of the inner lists, add 2 Strings.
+            It should look somewhat like this: [[""], ["", ""], ["", ""], ["", ""], ["", ""]]
+            Make sure to have the outer list separated with a comma from other trim combinations.
+           
+            In the first lists String, enter the Armor Material, the trim combination should be applied on.
+            For example: ["gold"]
+           
+            In the rest of the lists, in the first String, enter a valid Trim Material.
+            In the second String, enter a valid Trim Pattern
+            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
+            For example: ["amethyst_shard", "silence"]
+            """);
 
-        customTrims.add("custom_trims_list", Config.CustomTrim.toStringList(config.getCustomTrimsList()));
-        customTrims.setComment("custom_trims_list", """
-            The list of custom trims.
-           
-            To create a new custom trim, add a new list with two String fields inside the brackets. For example: [["", ""]]
-            Make sure to have it separated with a comma from other custom trims.
-           
-            In the left string field, enter a valid trim material.
-            As an example: "quartz".
-           
-            In the right string field, enter a valid trim pattern.
-            As an example: "silence"
-            
-            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.""");
 
         // Stacked Trims system Subcategory
         CommentedConfig stackedTrims = fileConfig.createSubConfig();
@@ -135,21 +134,21 @@ public class ConfigManager {
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
 
             return new Config(
-                    generalCategory.getEnum("enabled_system", Config.TrimSystem.class),
+                    generalCategory.getEnum("enabled_system", Config.TrimSystems.class),
                     randomTrimsCategory.get("trim_chance"),
                     randomTrimsCategory.get("similar_trim_chance"), generalCategory.get("no_trims_chance"),
-                    Config.CustomTrim.fromList(customTrimsCategory.get("custom_trims_list")), customTrimsCategory.get("apply_to_entire_armor"),
+                    TrimCombination.trimCombinationsFromStringList(customTrimsCategory.get("custom_trim_combinations")),
                     stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
             );
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under .minecraft/config/mob_armor_trims.toml");
+            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under .minecraft/config/mob_armor_trims.toml", e);
             throw e;
         }
     }
 
     public static Config getDefaultConfig() {
         return new Config(DEFAULT_ENABLED_SYSTEM, DEFAULT_TRIM_CHANCE, DEFAULT_SIMILAR_TRIM_CHANCE, DEFAULT_NO_TRIMS_CHANCE,
-                DEFAULT_CUSTOM_TRIMS_LIST, DEFAULT_APPLY_TO_ENTIRE_ARMOR,
+                DEFAULT_TRIM_COMBINATIONS,
                 DEFAULT_STACKED_TRIM_CHANCE, DEFAULT_MAX_STACKED_TRIMS);
     }
 
@@ -159,11 +158,11 @@ public class ConfigManager {
         fileConfig.save();
     }
 
-    public Config.TrimSystem getEnabledSystem() {
+    public Config.TrimSystems getEnabledSystem() {
         return this.config.getEnabledSystem();
     }
 
-    public void setEnabledSystem(Config.TrimSystem enabledSystem) {
+    public void setEnabledSystem(Config.TrimSystems enabledSystem) {
         this.config.setEnabledSystem(enabledSystem);
     }
 
@@ -183,25 +182,26 @@ public class ConfigManager {
 
     public void setNoTrimsChance(int noTrimsChance) { this.config.setNoTrimsChance(noTrimsChance); }
 
-    /**
-     * @return Returns random Custom Trim out of the Custom Trims List
-    */
     @Nullable
-    public Config.CustomTrim getCustomTrim(RandomSource random) {
-        List<Config.CustomTrim> customTrimsList = this.config.getCustomTrimsList();
-        if (customTrimsList.isEmpty()) {
-            return null;
-        } else {
-            return customTrimsList.get(random.nextInt(customTrimsList.size()));
+    public TrimCombination getTrimCombination(String requiredMaterial) {
+        List<TrimCombination> trimCombinations = this.config.getTrimCombinations();
+        if (!trimCombinations.isEmpty()) {
+            Collections.shuffle(trimCombinations);
+            for (TrimCombination trimCombination : trimCombinations) {
+                if (trimCombination.materialToApplyTo().equals(requiredMaterial)) {
+                    return trimCombination;
+                }
+            }
         }
+        return null;
     }
 
-    public List<Config.CustomTrim> getCustomTrimsList() {
-        return config.getCustomTrimsList();
+    public List<TrimCombination> getTrimCombinations() {
+        return config.getTrimCombinations();
     }
 
-    public void setCustomTrimsList(List<Config.CustomTrim> customTrimsList) {
-        this.config.setCustomTrimsList(customTrimsList);
+    public void setTrimCombinations(List<TrimCombination> trimCombinations) {
+        this.config.setTrimCombinations(trimCombinations);
     }
 
     public void addCustomTrimToCache(String material, String pattern, ArmorTrim trim) {
@@ -209,22 +209,14 @@ public class ConfigManager {
     }
 
     @Nullable
-    public ArmorTrim getOrCreateCachedCustomTrim(String material, String pattern, RegistryAccess registryAccess) throws IllegalStateException {
+    public ArmorTrim getOrCreateCachedTrim(String material, String pattern, RegistryAccess registryAccess) throws IllegalStateException {
         ArmorTrim cachedTrim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
         if (cachedTrim == null) {
-            ArmorTrim newTrim = new Config.CustomTrim(material, pattern).getTrim(registryAccess);
+            ArmorTrim newTrim = new CustomTrim(material, pattern).getTrim(registryAccess);
             this.addCustomTrimToCache(material, pattern, newTrim);
             return newTrim;
         }
         return cachedTrim;
-    }
-
-    public boolean getApplyToEntireArmor() {
-        return this.config.getApplyToEntireArmor();
-    }
-
-    public void setApplyToEntireArmor(boolean applyToEntireArmor) {
-        this.config.setApplyToEntireArmor(applyToEntireArmor);
     }
 
     public int getStackedTrimChance() {

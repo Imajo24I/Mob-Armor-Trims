@@ -1,7 +1,3 @@
-- Add Support for Fabric and Neoforge 1.21
-- Remove Fabric API dependency
-- Fix title being blurred in Backup Screen
-- Port to Multiloader-version setup using [stonecutter-tk](https://github.com/kikugie/stonecutter-kt)
-- Use `translatable` instead of `literal`
-  - Allows for much easier translation to other languages
-- Cleanup stuff
+- Replaced Custom Trims System with Custom Trim Combinations System
+  - This is similar to the old system, but allows for even greater configurability
+  - This system chooses a combination out of a configurable list and applies it to the mobs armor. You can set trims for each of the armor pieces and set the armor material, the trim should be applied on.
