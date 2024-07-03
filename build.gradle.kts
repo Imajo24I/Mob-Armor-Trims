@@ -1,5 +1,5 @@
 plugins {
-    id("dev.architectury.loom") version "1.6.+"
+    id("dev.architectury.loom") version "1.7.+"
     id("me.modmuss50.mod-publish-plugin") version "0.5.1"
 }
 
