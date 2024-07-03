@@ -17,9 +17,9 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /*? >=1.20.5 {*/
-/*import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-*//*?}*/
+/*?}*/
 
 public class TrimApplier {
     private TrimApplier() {
@@ -121,10 +121,10 @@ public class TrimApplier {
 
     public static void applyTrim(ItemStack armor, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         /*? >=1.20.5 {*/
-        /*armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-         *//*?} else {*/
-        ArmorTrim.setTrim(registryAccess, armor, armorTrim);
-        /*?}*/
+        armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+         /*?} else {*/
+        /*ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+        *//*?}*/
     }
 
     private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armor, ArmorTrim lastTrim) {

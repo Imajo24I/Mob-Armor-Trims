@@ -33,7 +33,7 @@ extensions.configure<StonecutterSettings> {
         mc("1.20.6", listOf("fabric", "neoforge"))
         mc("1.21", listOf("fabric", "neoforge"))
 
-        vcsVersion("1.20.1-fabric")
+        vcsVersion("1.21-fabric")
     }
     create(rootProject)
 }

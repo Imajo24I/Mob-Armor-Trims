@@ -375,16 +375,16 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         }
 
         /*? <=1.20.1 {*/
-        @Override
+        /*@Override
         public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
             return collapseWidget.mouseScrolled(mouseX, mouseY, delta) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, delta) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, delta) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, delta);
         }
-        /*?} else {*/
-        /*@Override
+        *//*?} else {*/
+        @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
             return collapseWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
-        *//*?}*/
+        /*?}*/
 
         @Override
         public void mouseMoved(double mouseX, double mouseY) {
