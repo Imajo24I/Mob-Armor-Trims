@@ -2,6 +2,8 @@ package net.majo24.mob_armor_trims.config;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import net.minecraft.CrashReport;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.majo24.mob_armor_trims.MobArmorTrims;
@@ -38,9 +40,14 @@ public class ConfigManager {
         if (Files.exists(configPath)) {
             // Get config from file
             MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
-            CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
-            fileConfig.load();
-            return configFromFileConfig(fileConfig);
+            try {
+                CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
+                fileConfig.load();
+                return configFromFileConfig(fileConfig);
+            } catch (Exception e) {
+                invalidConfigCrash(e, configPath);
+                return getDefaultConfig();
+            }
         } else {
             // Create a new Config
             Config newConfig = getDefaultConfig();
@@ -64,9 +71,9 @@ public class ConfigManager {
 
         general.add("enabled_system", config.getEnabledSystem());
         general.setComment("enabled_system", """
-            Select the System of how to select, what trims to give mobs.
-            - RANDOM_TRIMS: Randomly choose the trim, but also take the previous trim highly into account.
-            - CUSTOM_TRIMS: Choose the trim from a list of custom trims. You can manage the trims yourself""");
+                Select the System of how to select, what trims to give mobs.
+                - RANDOM_TRIMS: Randomly choose the trim, but also take the previous trim highly into account.
+                - CUSTOM_TRIMS: Choose the trim from a list of custom trims. You can manage the trims yourself""");
 
         general.add("no_trims_chance", config.getNoTrimsChance());
         general.setComment("no_trims_chance", "Chance of the mob having no trims at all");
@@ -85,21 +92,21 @@ public class ConfigManager {
 
         customTrims.add("custom_trim_combinations", config.getTrimCombinations().stream().map(TrimCombination::toStringList).toList());
         customTrims.setComment("custom_trim_combinations", """
-            The list of custom trim combinations.
-           
-            To create a new trim combination, add a new list with with 5 lists inside.
-            Then for the first inner list, add a String. In the rest of the inner lists, add 2 Strings.
-            It should look somewhat like this: [[""], ["", ""], ["", ""], ["", ""], ["", ""]]
-            Make sure to have the outer list separated with a comma from other trim combinations.
-           
-            In the first lists String, enter the Armor Material, the trim combination should be applied on.
-            For example: ["gold"]
-           
-            In the rest of the lists, in the first String, enter a valid Trim Material.
-            In the second String, enter a valid Trim Pattern
-            To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
-            For example: ["amethyst_shard", "silence"]
-            """);
+                The list of custom trim combinations.
+                           
+                To create a new trim combination, add a new list with with 5 lists inside.
+                Then for the first inner list, add a String. In the rest of the inner lists, add 2 Strings.
+                It should look somewhat like this: [[""], ["", ""], ["", ""], ["", ""], ["", ""]]
+                Make sure to have the outer list separated with a comma from other trim combinations.
+                           
+                In the first lists String, enter the Armor Material, the trim combination should be applied on.
+                For example: ["gold"]
+                           
+                In the rest of the lists, in the first String, enter a valid Trim Material.
+                In the second String, enter a valid Trim Pattern
+                To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
+                For example: ["amethyst_shard", "silence"]
+                """);
 
 
         // Stacked Trims system Subcategory
@@ -133,14 +140,9 @@ public class ConfigManager {
             com.electronwill.nightconfig.core.Config customTrimCombinationsCategory = fileConfig.get("trim_combinations");
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
 
-            List<TrimCombination> trimCombinations;
-
-            try {
-                trimCombinations = TrimCombination.trimCombinationsFromStringList(customTrimCombinationsCategory.get("custom_trim_combinations"));
-            } catch (Exception e) {
-                trimCombinations = DEFAULT_TRIM_COMBINATIONS;
-                MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + fileConfig.getNioPath(), e);
-            }
+            // For migration from old config files.
+            // TODO: Handle this better
+            List<TrimCombination> trimCombinations = getTrimCombinations(customTrimCombinationsCategory, fileConfig.getNioPath());
 
             return new Config(
                     generalCategory.getEnum("enabled_system", Config.TrimSystems.class),
@@ -150,8 +152,21 @@ public class ConfigManager {
                     stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
             );
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + fileConfig.getNioPath(), e);
-            throw e;
+            invalidConfigCrash(e, fileConfig.getNioPath());
+            return getDefaultConfig();
+        }
+    }
+
+    private static void invalidConfigCrash(Exception e, Path configPath) {
+        Minecraft.getInstance().delayCrash(new CrashReport("Failed to load Mob Armor Trims config from file.", new IllegalStateException("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + configPath + ".\n" + e.getMessage())));
+    }
+
+    private static List<TrimCombination> getTrimCombinations(com.electronwill.nightconfig.core.Config config, Path configPath) {
+        try {
+            return TrimCombination.trimCombinationsFromStringList(config.get("custom_trim_combinations"));
+        } catch (Exception e) {
+            MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + configPath, e);
+            return DEFAULT_TRIM_COMBINATIONS;
         }
     }
 
@@ -183,13 +198,21 @@ public class ConfigManager {
         this.config.setTrimChance(trimChance);
     }
 
-    public int getSimilarTrimChance() { return this.config.getSimilarTrimChance(); }
+    public int getSimilarTrimChance() {
+        return this.config.getSimilarTrimChance();
+    }
 
-    public void setSimilarTrimChance(int sameTrimChance) { this.config.setSimilarTrimChance(sameTrimChance); }
+    public void setSimilarTrimChance(int sameTrimChance) {
+        this.config.setSimilarTrimChance(sameTrimChance);
+    }
 
-    public int getNoTrimsChance() { return this.config.getNoTrimsChance(); }
+    public int getNoTrimsChance() {
+        return this.config.getNoTrimsChance();
+    }
 
-    public void setNoTrimsChance(int noTrimsChance) { this.config.setNoTrimsChance(noTrimsChance); }
+    public void setNoTrimsChance(int noTrimsChance) {
+        this.config.setNoTrimsChance(noTrimsChance);
+    }
 
     @Nullable
     public TrimCombination getTrimCombination(String requiredMaterial) {
@@ -232,9 +255,15 @@ public class ConfigManager {
         return this.config.getStackedTrimChance();
     }
 
-    public void setStackedTrimChance(int stackedTrimChance) { this.config.setStackedTrimChance(stackedTrimChance); }
+    public void setStackedTrimChance(int stackedTrimChance) {
+        this.config.setStackedTrimChance(stackedTrimChance);
+    }
 
-    public int getMaxStackedTrims() {return this.config.getMaxStackedTrims();}
+    public int getMaxStackedTrims() {
+        return this.config.getMaxStackedTrims();
+    }
 
-    public void setMaxStackedTrims(int maxStackedTrims) { this.config.setMaxStackedTrims(maxStackedTrims); }
+    public void setMaxStackedTrims(int maxStackedTrims) {
+        this.config.setMaxStackedTrims(maxStackedTrims);
+    }
 }
