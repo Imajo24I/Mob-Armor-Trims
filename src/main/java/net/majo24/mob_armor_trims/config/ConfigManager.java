@@ -102,7 +102,7 @@ public class ConfigManager {
                 In the first lists String, enter the Armor Material, the trim combination should be applied on.
                 For example: ["gold"]
                            
-                In the rest of the lists, in the first String, enter a valid Trim Material.
+                For the rest of the lists, in the first String, enter a valid Trim Material.
                 In the second String, enter a valid Trim Pattern
                 To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
                 For example: ["amethyst_shard", "silence"]
