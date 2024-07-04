@@ -139,7 +139,7 @@ public class ConfigManager {
                 trimCombinations = TrimCombination.trimCombinationsFromStringList(customTrimCombinationsCategory.get("custom_trim_combinations"));
             } catch (Exception e) {
                 trimCombinations = DEFAULT_TRIM_COMBINATIONS;
-                MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value.", e);
+                MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + fileConfig.getNioPath(), e);
             }
 
             return new Config(
@@ -150,7 +150,7 @@ public class ConfigManager {
                     stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
             );
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under .minecraft/config/mob_armor_trims.toml", e);
+            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + fileConfig.getNioPath(), e);
             throw e;
         }
     }
