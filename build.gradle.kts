@@ -91,10 +91,6 @@ dependencies {
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
 
-        // Fabric API - Not a dependency, but so yacl and modmenu don't create errors
-        //TODO: find alternative
-        modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-
         // NightConfig
         include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
         include("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
