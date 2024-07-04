@@ -178,7 +178,7 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${mod.name} ${mod.version} for $mcVersion"
+    displayName = "${mod.name} ${mod.version}"
     file.set(tasks.remapJar.get().archiveFile)
     version = mod.version.toString()
     changelog.set(
