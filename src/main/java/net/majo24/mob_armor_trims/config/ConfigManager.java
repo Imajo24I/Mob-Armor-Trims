@@ -87,7 +87,7 @@ public class ConfigManager {
         randomTrims.add("similar_trim_chance", config.getSimilarTrimChance());
         randomTrims.setComment("similar_trim_chance", "Chance of each armor piece having a similar armor trim as the previous armor piece.");
 
-        // Custom Trims system Subcategory
+        // Custom Trim Combinations system Subcategory
         CommentedConfig customTrims = fileConfig.createSubConfig();
 
         customTrims.add("custom_trim_combinations", config.getTrimCombinations().stream().map(TrimCombination::toStringList).toList());
