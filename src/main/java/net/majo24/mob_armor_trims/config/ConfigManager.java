@@ -118,8 +118,8 @@ public class ConfigManager {
         fileConfig.add("random_trims", randomTrims);
         fileConfig.setComment("random_trims", "Settings for the Random Trims system.\nThese settings will only make a difference, if the RANDOM_TRIMS system is enabled");
 
-        fileConfig.add("custom_trims", customTrims);
-        fileConfig.setComment("custom_trims", "Settings for the Custom Trims system.\nThese settings will only make a difference, if the CUSTOM_TRIMS system is enabled");
+        fileConfig.add("trim_combinations", customTrims);
+        fileConfig.setComment("trim_combinations", "Settings for the Custom Trim Combinations system.\nThese settings will only make a difference, if the CUSTOM_TRIM_COMBINATIONS system is enabled");
 
         fileConfig.add("stacked_trims", stackedTrims);
         fileConfig.setComment("stacked_trims", "Settings for the Stacked Armor Trims Mod Compatibility.\nThese settings will only make a difference, if the STACKED_TRIMS system is enabled and the stacked armor trims mod is used");
@@ -130,14 +130,23 @@ public class ConfigManager {
         try {
             com.electronwill.nightconfig.core.Config generalCategory = fileConfig.get("general");
             com.electronwill.nightconfig.core.Config randomTrimsCategory = fileConfig.get("random_trims");
-            com.electronwill.nightconfig.core.Config customTrimsCategory = fileConfig.get("custom_trims");
+            com.electronwill.nightconfig.core.Config customTrimCombinationsCategory = fileConfig.get("trim_combinations");
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
+
+            List<TrimCombination> trimCombinations;
+
+            try {
+                trimCombinations = TrimCombination.trimCombinationsFromStringList(customTrimCombinationsCategory.get("custom_trim_combinations"));
+            } catch (Exception e) {
+                trimCombinations = DEFAULT_TRIM_COMBINATIONS;
+                MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value.", e);
+            }
 
             return new Config(
                     generalCategory.getEnum("enabled_system", Config.TrimSystems.class),
                     randomTrimsCategory.get("trim_chance"),
                     randomTrimsCategory.get("similar_trim_chance"), generalCategory.get("no_trims_chance"),
-                    TrimCombination.trimCombinationsFromStringList(customTrimsCategory.get("custom_trim_combinations")),
+                    trimCombinations,
                     stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
             );
         } catch (Exception e) {
