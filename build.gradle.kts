@@ -186,6 +186,8 @@ publishMods {
     type = STABLE
     modLoaders.add(loader.loader)
 
+    //fixme: should be all versions in mcDep, not just the version given to stonecutter
+    // for example, if on 1.20.6, 1.20.5 wouldn't be added, even though its currently supported
     val stableMCVersions = listOf(stonecutter.current.version)
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
