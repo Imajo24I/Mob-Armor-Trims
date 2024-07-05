@@ -195,7 +195,6 @@ publishMods {
 
     modrinth {
         projectId.set("hHVaPgFK")
-        featured = true
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.addAll(stableMCVersions)
         optional("yacl")
