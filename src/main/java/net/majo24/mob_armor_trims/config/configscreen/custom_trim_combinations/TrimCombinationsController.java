@@ -319,10 +319,10 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             collapseWidget.setWidth(collapseWidget.getWidth());
 
             applyOnMaterialWidget.setDimension(defaultWidgetDimensions.moved(0, 20));
-            bootsTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 40));
-            leggingsTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 60));
-            chestplateTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 80));
-            helmetTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 100));
+            helmetTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 40));
+            chestplateTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 60));
+            leggingsTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 80));
+            bootsTrimWidget.setDimension(defaultWidgetDimensions.moved(0, 100));
 
             super.setDimension(widgetDimension);
         }
