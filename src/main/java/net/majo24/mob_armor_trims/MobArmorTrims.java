@@ -64,7 +64,7 @@ public class MobArmorTrims {
         /^?}^/
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
-		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
+		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
     }
 }
 *//*?} elif forge {*/
@@ -95,7 +95,7 @@ public class MobArmorTrims {
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
-		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
+		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
     }
 }
 *//*?}*/
