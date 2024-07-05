@@ -27,7 +27,8 @@ public class MobArmorTrims implements ModInitializer {
 	}
 }
 /*?} elif neoforge {*/
-/*import net.majo24.mob_armor_trims.config.ConfigManager;
+/*import net.majo24.mob_armor_trims.config.ConfigFileHandler;
+import net.majo24.mob_armor_trims.config.ConfigManager;
 import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -68,7 +69,8 @@ public class MobArmorTrims {
     }
 }
 *//*?} elif forge {*/
-/*import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
+/*import net.majo24.mob_armor_trims.config.ConfigFileHandler;
+import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
