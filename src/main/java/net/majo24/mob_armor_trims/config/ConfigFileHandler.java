@@ -74,7 +74,7 @@ public record ConfigFileHandler(Path configPath) {
         try {
             return Objects.requireNonNull(supplier.get());
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config entry {} from file. Using default value {} for this session. Please ensure the entry and the config file is valid. You can reset the config file by deleting the file. It is located under {}.\n", configName, defaultValue, configPath, e);
+            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config entry {} from file. Using default value {} for this session. Please ensure the entry and the config file is valid. You can reset the config file by deleting the file. It is located under {}.", configName, defaultValue, configPath, e);
             return defaultValue;
         }
     }
