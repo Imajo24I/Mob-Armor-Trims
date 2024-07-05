@@ -19,7 +19,7 @@ public class Formatters {
         public Component format(Config.TrimSystems selectedSystem) {
             return switch (selectedSystem) {
                 case RANDOM_TRIMS -> Component.literal("Random Trims");
-                case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trims");
+                case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");
                 case NONE -> Component.literal("Disabled");
             };
         }
