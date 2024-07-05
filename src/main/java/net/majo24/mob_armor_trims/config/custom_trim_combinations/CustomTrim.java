@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config;
+package net.majo24.mob_armor_trims.config.custom_trim_combinations;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;

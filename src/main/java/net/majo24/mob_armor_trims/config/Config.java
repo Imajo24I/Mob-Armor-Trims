@@ -1,5 +1,7 @@
 package net.majo24.mob_armor_trims.config;
 
+import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
+
 import java.util.List;
 
 public class Config {

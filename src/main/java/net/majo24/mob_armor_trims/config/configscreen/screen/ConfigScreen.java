@@ -1,10 +1,11 @@
-package net.majo24.mob_armor_trims.config.configscreen;
+package net.majo24.mob_armor_trims.config.configscreen.screen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
-import net.majo24.mob_armor_trims.config.CustomTrim;
-import net.majo24.mob_armor_trims.config.TrimCombination;
+import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
+import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
+import net.majo24.mob_armor_trims.config.configscreen.Formatters;
 import net.majo24.mob_armor_trims.config.configscreen.custom_trim_combinations.TrimCombinationsController;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;

@@ -1,7 +1,7 @@
 package net.majo24.mob_armor_trims;
 
-import net.majo24.mob_armor_trims.config.CustomTrim;
-import net.majo24.mob_armor_trims.config.TrimCombination;
+import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
+import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;

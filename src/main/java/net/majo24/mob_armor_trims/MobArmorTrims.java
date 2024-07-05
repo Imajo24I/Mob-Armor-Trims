@@ -4,6 +4,7 @@ package net.majo24.mob_armor_trims;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.majo24.mob_armor_trims.config.ConfigFileHandler;
 import net.majo24.mob_armor_trims.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,12 @@ public class MobArmorTrims implements ModInitializer {
 	    isStackedArmorTrimsLoaded = FabricLoader.getInstance().isModLoaded("stacked_trims");
 
 		Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MOD_ID + ".toml");
-		configManager = new ConfigManager(ConfigManager.getConfigFromFile(configPath), configPath);
+		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
 	}
 }
 /*?} elif neoforge {*/
 /*import net.majo24.mob_armor_trims.config.ConfigManager;
-import net.majo24.mob_armor_trims.config.configscreen.ConfigScreenProvider;
+import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -67,7 +68,7 @@ public class MobArmorTrims {
     }
 }
 *//*?} elif forge {*/
-/*import net.majo24.mob_armor_trims.config.configscreen.ConfigScreenProvider;
+/*import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
