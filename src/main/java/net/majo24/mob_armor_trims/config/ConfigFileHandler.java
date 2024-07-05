@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public record ConfigFileHandler(Path configPath) {
 
@@ -49,16 +50,20 @@ public record ConfigFileHandler(Path configPath) {
             com.electronwill.nightconfig.core.Config customTrimCombinationsCategory = fileConfig.get("trim_combinations");
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
 
-            // For migration from old config files.
-            // TODO: Handle this better
-            List<TrimCombination> trimCombinations = getTrimCombinations(customTrimCombinationsCategory);
+            Config.TrimSystems enabledSystem = getAndValidateConfigEntry("enabled_system", () -> generalCategory.getEnum("enabled_system", Config.TrimSystems.class), ConfigManager.DEFAULT_ENABLED_SYSTEM, fileConfig.getNioPath());
+            int trimChance = getAndValidateConfigEntry("trim_chance", () -> randomTrimsCategory.get("trim_chance"), ConfigManager.DEFAULT_TRIM_CHANCE, fileConfig.getNioPath());
+            int similarTrimChance = getAndValidateConfigEntry("similar_trim_chance", () -> randomTrimsCategory.get("similar_trim_chance"), ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE, fileConfig.getNioPath());
+            int noTrimsChance = getAndValidateConfigEntry("no_trims_chance", () -> generalCategory.get("no_trims_chance"), ConfigManager.DEFAULT_NO_TRIMS_CHANCE, fileConfig.getNioPath());
+            List<TrimCombination> trimCombinations = getAndValidateConfigEntry("custom_trim_combinations", () -> TrimCombination.trimCombinationsFromStringList(customTrimCombinationsCategory.get("custom_trim_combinations")), ConfigManager.DEFAULT_TRIM_COMBINATIONS, fileConfig.getNioPath());
+            int stackedTrimChance = getAndValidateConfigEntry("stacked_trim_chance", () -> stackedTrimsCategory.get("stacked_trim_chance"), ConfigManager.DEFAULT_STACKED_TRIM_CHANCE, fileConfig.getNioPath());
+            int maxStackedTrims = getAndValidateConfigEntry("max_stacked_trims", () -> stackedTrimsCategory.get("max_stacked_trims"), ConfigManager.DEFAULT_MAX_STACKED_TRIMS, fileConfig.getNioPath());
 
             return new Config(
-                    generalCategory.getEnum("enabled_system", Config.TrimSystems.class),
-                    randomTrimsCategory.get("trim_chance"),
-                    randomTrimsCategory.get("similar_trim_chance"), generalCategory.get("no_trims_chance"),
+                    enabledSystem,
+                    trimChance,
+                    similarTrimChance, noTrimsChance,
                     trimCombinations,
-                    stackedTrimsCategory.get("stacked_trim_chance"), stackedTrimsCategory.get("max_stacked_trims")
+                    stackedTrimChance, maxStackedTrims
             );
         } catch (Exception e) {
             invalidConfigCrash(e, fileConfig.getNioPath());
@@ -66,12 +71,12 @@ public record ConfigFileHandler(Path configPath) {
         }
     }
 
-    private static List<TrimCombination> getTrimCombinations(com.electronwill.nightconfig.core.Config config) {
+    private static <T> T getAndValidateConfigEntry(String configName, Supplier<T> supplier, T defaultValue, Path configPath) {
         try {
-            return Objects.requireNonNull(TrimCombination.trimCombinationsFromStringList(config.get("custom_trim_combinations")));
+            return Objects.requireNonNull(supplier.get());
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.warn("Failed to load custom trim combinations from Mob Armor Trims Config. Using default value.", e);
-            return ConfigManager.DEFAULT_TRIM_COMBINATIONS;
+            MobArmorTrims.LOGGER.error("Failed to load Mob Armor Trims config entry {} from file. Using default value {} for this session. Please ensure the entry and the config file is valid. You can reset the config file by deleting the file. It is located under {}.\n", configName, defaultValue, configPath, e);
+            return defaultValue;
         }
     }
 

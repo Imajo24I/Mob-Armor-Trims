@@ -1,3 +1,4 @@
 - Replaced Custom Trims System with Custom Trim Combinations System
   - This is similar to the old system, but allows for even greater configurability
   - This system chooses a combination out of a configurable list and applies it to the mobs armor. You can set trims for each of the armor pieces and set the armor material, the trim should be applied on.
+- Much improved invalid Config File Handling
