@@ -19,7 +19,6 @@ public record ConfigFileHandler(Path configPath) {
     public static Config getConfigFromFile(Path configPath) {
         if (Files.exists(configPath)) {
             // Get config from file
-            MobArmorTrims.LOGGER.info("Reading Mob Armor Trims config file");
             try {
                 CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
                 fileConfig.load();
@@ -30,9 +29,9 @@ public record ConfigFileHandler(Path configPath) {
             }
         } else {
             // Create a new Config
+            MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
             Config config = ConfigManager.getDefaultConfig();
             try {
-                MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
                 Files.createFile(configPath);
                 CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
                 fileConfig.save();
