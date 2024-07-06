@@ -37,11 +37,11 @@ public final class ConditionalMixinPlugin implements IMixinConfigPlugin {
     }
 
     private boolean isYaclPresent() {
-        /*? if fabric {*/
+        //? if fabric {
         return FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3");
-        /*?} else {*/
+        //?} else {
         /*return LoadingModList.get().getMods().stream().map(ModInfo::getModId).toList().contains("yet_another_config_lib_v3");
-        *//*?}*/
+        *///?}
     }
 
 

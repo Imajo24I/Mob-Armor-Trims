@@ -374,17 +374,17 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             return collapseWidget.keyReleased(keyCode, scanCode, modifiers) || applyOnMaterialWidget.keyReleased(keyCode, scanCode, modifiers) || bootsTrimWidget.keyReleased(keyCode, scanCode, modifiers) || leggingsTrimWidget.keyReleased(keyCode, scanCode, modifiers) || chestplateTrimWidget.keyReleased(keyCode, scanCode, modifiers) || helmetTrimWidget.keyReleased(keyCode, scanCode, modifiers);
         }
 
-        /*? <=1.20.1 {*/
+        //? <=1.20.1 {
         /*@Override
         public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
             return collapseWidget.mouseScrolled(mouseX, mouseY, delta) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, delta) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, delta) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, delta);
         }
-        *//*?} else {*/
+        *///?} else {
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
             return collapseWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
-        /*?}*/
+        //?}
 
         @Override
         public void mouseMoved(double mouseX, double mouseY) {

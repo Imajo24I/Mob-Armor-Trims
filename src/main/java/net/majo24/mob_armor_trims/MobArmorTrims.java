@@ -1,6 +1,6 @@
 package net.majo24.mob_armor_trims;
 
-/*? if fabric {*/
+//? if fabric {
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -26,7 +26,7 @@ public class MobArmorTrims implements ModInitializer {
 		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
 	}
 }
-/*?} elif neoforge {*/
+//?} elif neoforge {
 /*import net.majo24.mob_armor_trims.config.ConfigFileHandler;
 import net.majo24.mob_armor_trims.config.ConfigManager;
 import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
@@ -34,11 +34,11 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
-/^? >1.20.5 {^/
+//? >1.20.5 {
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-/^?} else {^/
+//?} else {
 /^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^//^?}^/
+^///?}
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class MobArmorTrims {
 		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
     }
 }
-*//*?} elif forge {*/
+*///?} elif forge {
 /*import net.majo24.mob_armor_trims.config.ConfigFileHandler;
 import net.majo24.mob_armor_trims.config.configscreen.screen.ConfigScreenProvider;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -100,4 +100,4 @@ public class MobArmorTrims {
 		configManager = new ConfigManager(ConfigFileHandler.getConfigFromFile(configPath), configPath);
     }
 }
-*//*?}*/
+*///?}

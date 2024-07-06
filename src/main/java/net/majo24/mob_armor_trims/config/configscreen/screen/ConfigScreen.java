@@ -195,10 +195,10 @@ public class ConfigScreen {
             addRenderableWidget(exitButton);
         }
 
-        /*? >=1.21 {*/
+        //? >=1.21 {
         @Override
         protected void addOptions() {}
-        /*?}*/
+        //?}
 
         @Override
         public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
