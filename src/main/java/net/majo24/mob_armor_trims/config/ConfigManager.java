@@ -73,6 +73,10 @@ public class ConfigManager {
         this.config.setNoTrimsChance(noTrimsChance);
     }
 
+    /**
+     * @param requiredMaterial The material the trim combination has to match
+     * @return A random trim combination that matches the given required material. Null if no trim combination matches.
+     */
     @Nullable
     public TrimCombination getTrimCombination(String requiredMaterial) {
         List<TrimCombination> trimCombinations = this.config.getTrimCombinations();

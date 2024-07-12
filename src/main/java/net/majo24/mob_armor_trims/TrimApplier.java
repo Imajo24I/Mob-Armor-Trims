@@ -22,22 +22,33 @@ import net.minecraft.core.component.DataComponents;
 //?}
 
 public class TrimApplier {
-    private TrimApplier() {
-    }
+    private TrimApplier() {}
 
-    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
+    /**
+     * Runs the enabled system on the armor
+     * @param registryAccess
+     * @param random
+     * @param armor Armor to apply the trims on
+     */
+    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         if (MobArmorTrims.configManager.getNoTrimsChance() > random.nextInt(100)) {
             return;
         }
 
         if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystems.RANDOM_TRIMS) {
-            runRandomTrimsSystem(registryAccess, random, equippedArmor);
+            runRandomTrimsSystem(registryAccess, random, armor);
         } else if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystems.CUSTOM_TRIM_COMBINATIONS) {
-            runCustomTrimsSystem(equippedArmor, registryAccess);
+            runCustomTrimCombinationsSystem(armor, registryAccess);
         }
     }
 
-    public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> equippedArmor) {
+    /**
+     * Runs the random trims system on the given armor
+     * @param registryAccess
+     * @param random
+     * @param armor Armor to apply the trims on
+     */
+    public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
         Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
         ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
@@ -45,31 +56,36 @@ public class TrimApplier {
 
         ArmorTrim lastTrim = null;
 
-        for (ItemStack armor : equippedArmor) {
+        for (ItemStack armorPiece : armor) {
             if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {
                 continue;
             }
-            if (armor.getItem() != Items.AIR) {
-                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor, lastTrim);
+            if (armorPiece.getItem() != Items.AIR) {
+                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim);
             }
 
             // Stacked Armor Trims compatibility
             if (MobArmorTrims.isStackedArmorTrimsLoaded) {
                 int appliedArmorTrims = 0;
                 while ((MobArmorTrims.configManager.getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < MobArmorTrims.configManager.getMaxStackedTrims())) {
-                    applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armor, null);
+                    applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, null);
                     appliedArmorTrims++;
                 }
             }
         }
     }
 
-    public static void runCustomTrimsSystem(Iterable<ItemStack> equippedArmor, RegistryAccess registryAccess) {
+    /**
+     * Runs the custom trim combinations system on the given armor
+     * @param armor Armor to apply the trims on
+     * @param registryAccess
+     */
+    public static void runCustomTrimCombinationsSystem(Iterable<ItemStack> armor, RegistryAccess registryAccess) {
         String requiredMaterial = "";
 
-        for (ItemStack armor : equippedArmor) {
-            if (armor.getItem() != Items.AIR) {
-                requiredMaterial = getArmorMaterial(armor);
+        for (ItemStack armorPiece : armor) {
+            if (armorPiece.getItem() != Items.AIR) {
+                requiredMaterial = getArmorMaterial(armorPiece);
                 break;
             }
         }
@@ -82,7 +98,7 @@ public class TrimApplier {
             return;
         }
 
-        Iterator<ItemStack> armorIterable = equippedArmor.iterator();
+        Iterator<ItemStack> armorIterable = armor.iterator();
 
         for (CustomTrim trim : trimCombination.trims()) {
             ItemStack armorPiece = armorIterable.next();
@@ -99,48 +115,60 @@ public class TrimApplier {
         }
     }
 
-    private static String getArmorMaterial(ItemStack armor) {
-        if (armor.toString().contains("netherite")) {
+    /** Get the material of the given armor piece */
+    private static String getArmorMaterial(ItemStack armorPiece) {
+        if (armorPiece.toString().contains("netherite")) {
             return "netherite";
-        } else if (armor.toString().contains("diamond")) {
+        } else if (armorPiece.toString().contains("diamond")) {
             return "diamond";
-        } else if (armor.toString().contains("gold")) {
+        } else if (armorPiece.toString().contains("gold")) {
             return "gold";
-        } else if (armor.toString().contains("iron")) {
+        } else if (armorPiece.toString().contains("iron")) {
             return "iron";
-        } else if (armor.toString().contains("chain")) {
+        } else if (armorPiece.toString().contains("chain")) {
             return "chain";
-        } else if (armor.toString().contains("leather")) {
+        } else if (armorPiece.toString().contains("leather")) {
             return "leather";
         } else {
-            MobArmorTrims.LOGGER.error("Could not find armor material for {}", armor);
+            MobArmorTrims.LOGGER.error("Could not find armor material for {}", armorPiece);
             return "";
         }
     }
 
-    public static void applyTrim(ItemStack armor, ArmorTrim armorTrim, RegistryAccess registryAccess) {
+    /**
+     * Apply a trim on the armor
+     * @param armorPiece Armor to apply the trim on
+     * @param armorTrim Trim to apply on the armor
+     */
+    public static void applyTrim(ItemStack armorPiece, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
-        armor.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+        armorPiece.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
         //?} else {
-        /*ArmorTrim.setTrim(registryAccess, armor, armorTrim);
+        /*ArmorTrim.setTrim(registryAccess, armorPiece, armorTrim);
          *///?}
     }
 
-    private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armor, ArmorTrim lastTrim) {
+    /**
+     * Applies a random trim on the given armor piece. The random trim orients on trimToTakeIntoAccount
+     * @param armorPiece Armor piece to apply the trim on
+     * @param trimToTakeIntoAccount The trim, the new random trim should orient on
+     * @return The random trim which was used
+     */
+    private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armorPiece, ArmorTrim trimToTakeIntoAccount) {
         Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).orElseThrow();
         Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).orElseThrow();
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
 
-        if (lastTrim != null) {
+        if (trimToTakeIntoAccount != null) {
             if (MobArmorTrims.configManager.getSimilarTrimChance() >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(lastTrim.material(), armorTrim.pattern());
+                armorTrim = new ArmorTrim(trimToTakeIntoAccount.material(), armorTrim.pattern());
             }
             if (MobArmorTrims.configManager.getSimilarTrimChance() >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(armorTrim.material(), lastTrim.pattern());
+                armorTrim = new ArmorTrim(armorTrim.material(), trimToTakeIntoAccount.pattern());
             }
         }
 
-        applyTrim(armor, armorTrim, registryAccess);
+        applyTrim(armorPiece, armorTrim, registryAccess);
         return armorTrim;
     }
 }

@@ -11,6 +11,11 @@ import java.util.List;
 public record CustomTrim(String material, String pattern) {
     public static final CustomTrim EMPTY = new CustomTrim("", "");
 
+
+    /**
+     * @return the ArmorTrim of the custom trim
+     * @throws IllegalStateException if the trim couldn't be created. Most likely due to invalid material or pattern
+     */
     public ArmorTrim getTrim(RegistryAccess registryAccess) throws IllegalStateException {
         String trimPatternIdentifier = pattern;
         if (!trimPatternIdentifier.contains("_armor_trim_smithing_template")) {
@@ -30,10 +35,17 @@ public record CustomTrim(String material, String pattern) {
         return new ArmorTrim(trimMaterial, trimPattern);
     }
 
-    public List<String> toStringList() {
+    /**
+     * @return The custom trim converted to a list containing the material and pattern as strings
+     */
+    public List<String> toList() {
         return List.of(material, pattern);
     }
 
+    /**
+     * @param customTrimAsStringList The custom trim in the form of a list containing the material and pattern as strings
+     * @return The custom trim
+     */
     public static CustomTrim fromList(List<String> customTrimAsStringList) {
         return new CustomTrim(customTrimAsStringList.get(0), customTrimAsStringList.get(1));
     }

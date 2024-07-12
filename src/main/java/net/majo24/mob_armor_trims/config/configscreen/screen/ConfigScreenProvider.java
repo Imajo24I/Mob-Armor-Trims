@@ -5,6 +5,11 @@ import net.minecraft.client.gui.screens.Screen;
 public class ConfigScreenProvider {
     private ConfigScreenProvider() {}
 
+    /**
+     * Returns the config screen of this mod
+     * @param parent The parent screen
+     * @return Config screen if YACL is loaded. Else the back-up screen which recommends installing YACL
+     */
     public static Screen getConfigScreen(Screen parent) {
         try {
             return ConfigScreen.getConfigScreen(parent);
