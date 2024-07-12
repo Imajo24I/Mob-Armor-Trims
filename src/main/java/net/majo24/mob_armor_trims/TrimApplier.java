@@ -22,13 +22,15 @@ import net.minecraft.core.component.DataComponents;
 //?}
 
 public class TrimApplier {
-    private TrimApplier() {}
+    private TrimApplier() {
+    }
 
     /**
      * Runs the enabled system on the armor
+     *
      * @param registryAccess
      * @param random
-     * @param armor Armor to apply the trims on
+     * @param armor          Armor to apply the trims on
      */
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         if (MobArmorTrims.configManager.getNoTrimsChance() > random.nextInt(100)) {
@@ -44,9 +46,10 @@ public class TrimApplier {
 
     /**
      * Runs the random trims system on the given armor
+     *
      * @param registryAccess
      * @param random
-     * @param armor Armor to apply the trims on
+     * @param armor          Armor to apply the trims on
      */
     public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
@@ -77,7 +80,8 @@ public class TrimApplier {
 
     /**
      * Runs the custom trim combinations system on the given armor
-     * @param armor Armor to apply the trims on
+     *
+     * @param armor          Armor to apply the trims on
      * @param registryAccess
      */
     public static void runCustomTrimCombinationsSystem(Iterable<ItemStack> armor, RegistryAccess registryAccess) {
@@ -115,7 +119,9 @@ public class TrimApplier {
         }
     }
 
-    /** Get the material of the given armor piece */
+    /**
+     * Get the material of the given armor piece
+     */
     private static String getArmorMaterial(ItemStack armorPiece) {
         if (armorPiece.toString().contains("netherite")) {
             return "netherite";
@@ -137,8 +143,9 @@ public class TrimApplier {
 
     /**
      * Apply a trim on the armor
+     *
      * @param armorPiece Armor to apply the trim on
-     * @param armorTrim Trim to apply on the armor
+     * @param armorTrim  Trim to apply on the armor
      */
     public static void applyTrim(ItemStack armorPiece, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
@@ -150,7 +157,8 @@ public class TrimApplier {
 
     /**
      * Applies a random trim on the given armor piece. The random trim orients on trimToTakeIntoAccount
-     * @param armorPiece Armor piece to apply the trim on
+     *
+     * @param armorPiece            Armor piece to apply the trim on
      * @param trimToTakeIntoAccount The trim, the new random trim should orient on
      * @return The random trim which was used
      */
