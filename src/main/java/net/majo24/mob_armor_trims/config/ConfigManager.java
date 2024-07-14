@@ -41,6 +41,7 @@ public class ConfigManager {
         this.fileHandler.saveConfig(this.config);
     }
 
+
     public Config.TrimSystems getEnabledSystem() {
         return this.config.getEnabledSystem();
     }
