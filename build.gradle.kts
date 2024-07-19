@@ -99,7 +99,7 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-neoforge")
+        implementation("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-neoforge") {isTransitive = false}
     }
     if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
