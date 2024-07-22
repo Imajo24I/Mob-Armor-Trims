@@ -3,6 +3,7 @@ package net.majo24.mob_armor_trims.config.configscreen.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import net.majo24.mob_armor_trims.config.ConfigWrapper;
 import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
 import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
 import net.majo24.mob_armor_trims.config.configscreen.Formatters;
@@ -17,7 +18,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.majo24.mob_armor_trims.MobArmorTrims;
-import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.config.ConfigManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,14 +57,14 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
                 .name(translatable("mob_armor_trims.config.general"))
                 .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
-                .option(Option.<Config.TrimSystems>createBuilder()
+                .option(Option.<ConfigWrapper.TrimSystems>createBuilder()
                         .name(translatable("mob_armor_trims.config.general.trimSystem"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
-                        .binding(Config.TrimSystems.RANDOM_TRIMS,
+                        .binding(ConfigWrapper.TrimSystems.RANDOM_TRIMS,
                                 () -> MobArmorTrims.configManager.getConfig().getEnabledSystem(),
                                 enabledSystem -> MobArmorTrims.configManager.getConfig().setEnabledSystem(enabledSystem))
                         .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(Config.TrimSystems.class)
+                                .enumClass(ConfigWrapper.TrimSystems.class)
                                 .formatValue(trimSystemFormatter))
                         .build())
 

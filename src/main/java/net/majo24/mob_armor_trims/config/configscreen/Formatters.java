@@ -1,8 +1,8 @@
 package net.majo24.mob_armor_trims.config.configscreen;
 
 import dev.isxander.yacl3.api.controller.ValueFormatter;
+import net.majo24.mob_armor_trims.config.ConfigWrapper;
 import net.minecraft.network.chat.Component;
-import net.majo24.mob_armor_trims.config.Config;
 
 public class Formatters {
     private Formatters() {}
@@ -14,9 +14,9 @@ public class Formatters {
         }
     }
 
-    public static class TrimSystem implements ValueFormatter<Config.TrimSystems> {
+    public static class TrimSystem implements ValueFormatter<ConfigWrapper.TrimSystems> {
         @Override
-        public Component format(Config.TrimSystems selectedSystem) {
+        public Component format(ConfigWrapper.TrimSystems selectedSystem) {
             return switch (selectedSystem) {
                 case RANDOM_TRIMS -> Component.literal("Random Trims");
                 case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");

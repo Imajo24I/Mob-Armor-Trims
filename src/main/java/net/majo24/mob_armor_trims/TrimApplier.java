@@ -11,7 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.armortrim.*;
-import net.majo24.mob_armor_trims.config.Config.TrimSystems;
+import net.majo24.mob_armor_trims.config.BaseConfig.TrimSystems;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -97,7 +97,7 @@ public class TrimApplier {
             return;
         }
 
-        TrimCombination trimCombination = MobArmorTrims.configManager.getRandomTrimCombination(requiredMaterial);
+        TrimCombination trimCombination = MobArmorTrims.configManager.getConfig().getRandomTrimCombination(requiredMaterial);
         if (trimCombination == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class TrimApplier {
                 continue;
             }
 
-            ArmorTrim armorTrim = MobArmorTrims.configManager.getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
+            ArmorTrim armorTrim = MobArmorTrims.configManager.getConfig().getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
             if (armorTrim == null) {
                 continue;
             }

@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public record ConfigFileHandler(Path configPath) {
 
-    public static Config getConfigFromFile(Path configPath) {
+    public static ConfigWrapper getConfigFromFile(Path configPath) {
         if (Files.exists(configPath)) {
             // Get config from file
             try {
@@ -30,7 +30,7 @@ public record ConfigFileHandler(Path configPath) {
         } else {
             // Create a new Config
             MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
-            Config config = ConfigManager.getDefaultConfig();
+            ConfigWrapper config = ConfigManager.getDefaultConfig();
             try {
                 Files.createFile(configPath);
                 CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
@@ -42,14 +42,14 @@ public record ConfigFileHandler(Path configPath) {
         }
     }
 
-    private static Config configFromFileConfig(CommentedFileConfig fileConfig) {
+    private static ConfigWrapper configFromFileConfig(CommentedFileConfig fileConfig) {
         try {
             com.electronwill.nightconfig.core.Config generalCategory = fileConfig.get("general");
             com.electronwill.nightconfig.core.Config randomTrimsCategory = fileConfig.get("random_trims");
             com.electronwill.nightconfig.core.Config customTrimCombinationsCategory = fileConfig.get("trim_combinations");
             com.electronwill.nightconfig.core.Config stackedTrimsCategory = fileConfig.get("stacked_trims");
 
-            Config.TrimSystems enabledSystem = getAndValidateConfigEntry("enabled_system", () -> generalCategory.getEnum("enabled_system", Config.TrimSystems.class), ConfigManager.DEFAULT_ENABLED_SYSTEM, fileConfig.getNioPath());
+            ConfigWrapper.TrimSystems enabledSystem = getAndValidateConfigEntry("enabled_system", () -> generalCategory.getEnum("enabled_system", ConfigWrapper.TrimSystems.class), ConfigManager.DEFAULT_ENABLED_SYSTEM, fileConfig.getNioPath());
             int trimChance = getAndValidateConfigEntry("trim_chance", () -> randomTrimsCategory.get("trim_chance"), ConfigManager.DEFAULT_TRIM_CHANCE, fileConfig.getNioPath());
             int similarTrimChance = getAndValidateConfigEntry("similar_trim_chance", () -> randomTrimsCategory.get("similar_trim_chance"), ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE, fileConfig.getNioPath());
             int noTrimsChance = getAndValidateConfigEntry("no_trims_chance", () -> generalCategory.get("no_trims_chance"), ConfigManager.DEFAULT_NO_TRIMS_CHANCE, fileConfig.getNioPath());
@@ -62,7 +62,7 @@ public record ConfigFileHandler(Path configPath) {
             int stackedTrimChance = getAndValidateConfigEntry("stacked_trim_chance", () -> stackedTrimsCategory.get("stacked_trim_chance"), ConfigManager.DEFAULT_STACKED_TRIM_CHANCE, fileConfig.getNioPath());
             int maxStackedTrims = getAndValidateConfigEntry("max_stacked_trims", () -> stackedTrimsCategory.get("max_stacked_trims"), ConfigManager.DEFAULT_MAX_STACKED_TRIMS, fileConfig.getNioPath());
 
-            return new Config(
+            return new ConfigWrapper(
                     enabledSystem,
                     trimChance,
                     similarTrimChance, noTrimsChance,
@@ -84,13 +84,13 @@ public record ConfigFileHandler(Path configPath) {
         }
     }
 
-    public void saveConfig(Config config) {
+    public void saveConfig(ConfigWrapper config) {
         MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
         CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
         fileConfig.save();
     }
 
-    private static CommentedFileConfig fileConfigFromConfig(Config config, Path configPath) {
+    private static CommentedFileConfig fileConfigFromConfig(ConfigWrapper config, Path configPath) {
         CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
 
         // General Subcategory

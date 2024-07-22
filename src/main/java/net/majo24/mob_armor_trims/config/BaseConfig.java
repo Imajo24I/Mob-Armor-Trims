@@ -4,7 +4,7 @@ import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombinatio
 
 import java.util.List;
 
-public class Config {
+public class BaseConfig {
     // General
     private TrimSystems enabledSystem;
 
@@ -20,7 +20,7 @@ public class Config {
     private int stackedTrimChance;
     private int maxStackedTrims;
 
-    public Config(TrimSystems enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<TrimCombination> trimCombinations, int stackedTrimChance, int maxStackedTrims) {
+    public BaseConfig(TrimSystems enabledSystem, int trimChance, int similarTrimChance, int noTrimsChance, List<TrimCombination> trimCombinations, int stackedTrimChance, int maxStackedTrims) {
         this.enabledSystem = enabledSystem;
 
         this.trimChance = trimChance;
