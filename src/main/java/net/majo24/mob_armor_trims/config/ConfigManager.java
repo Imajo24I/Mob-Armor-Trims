@@ -41,45 +41,14 @@ public class ConfigManager {
         this.fileHandler.saveConfig(this.config);
     }
 
-
-    public Config.TrimSystems getEnabledSystem() {
-        return this.config.getEnabledSystem();
-    }
-
-    public void setEnabledSystem(Config.TrimSystems enabledSystem) {
-        this.config.setEnabledSystem(enabledSystem);
-    }
-
-    public int getTrimChance() {
-        return this.config.getTrimChance();
-    }
-
-    public void setTrimChance(int trimChance) {
-        this.config.setTrimChance(trimChance);
-    }
-
-    public int getSimilarTrimChance() {
-        return this.config.getSimilarTrimChance();
-    }
-
-    public void setSimilarTrimChance(int sameTrimChance) {
-        this.config.setSimilarTrimChance(sameTrimChance);
-    }
-
-    public int getNoTrimsChance() {
-        return this.config.getNoTrimsChance();
-    }
-
-    public void setNoTrimsChance(int noTrimsChance) {
-        this.config.setNoTrimsChance(noTrimsChance);
-    }
+    public Config getConfig() { return config; }
 
     /**
      * @param requiredMaterial The material the trim combination has to match
      * @return A random trim combination that matches the given required material. Null if no trim combination matches.
      */
     @Nullable
-    public TrimCombination getTrimCombination(String requiredMaterial) {
+    public TrimCombination getRandomTrimCombination(String requiredMaterial) {
         List<TrimCombination> trimCombinations = this.config.getTrimCombinations();
         if (!trimCombinations.isEmpty()) {
             Collections.shuffle(trimCombinations);
@@ -90,14 +59,6 @@ public class ConfigManager {
             }
         }
         return null;
-    }
-
-    public List<TrimCombination> getTrimCombinations() {
-        return config.getTrimCombinations();
-    }
-
-    public void setTrimCombinations(List<TrimCombination> trimCombinations) {
-        this.config.setTrimCombinations(trimCombinations);
     }
 
     public void addCustomTrimToCache(String material, String pattern, ArmorTrim trim) {
@@ -113,21 +74,5 @@ public class ConfigManager {
             return newTrim;
         }
         return cachedTrim;
-    }
-
-    public int getStackedTrimChance() {
-        return this.config.getStackedTrimChance();
-    }
-
-    public void setStackedTrimChance(int stackedTrimChance) {
-        this.config.setStackedTrimChance(stackedTrimChance);
-    }
-
-    public int getMaxStackedTrims() {
-        return this.config.getMaxStackedTrims();
-    }
-
-    public void setMaxStackedTrims(int maxStackedTrims) {
-        this.config.setMaxStackedTrims(maxStackedTrims);
     }
 }

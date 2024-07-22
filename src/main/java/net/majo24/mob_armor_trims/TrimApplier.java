@@ -33,13 +33,13 @@ public class TrimApplier {
      * @param armor          Armor to apply the trims on
      */
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
-        if (MobArmorTrims.configManager.getNoTrimsChance() > random.nextInt(100)) {
+        if (MobArmorTrims.configManager.getConfig().getNoTrimsChance() > random.nextInt(100)) {
             return;
         }
 
-        if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystems.RANDOM_TRIMS) {
+        if (MobArmorTrims.configManager.getConfig().getEnabledSystem() == TrimSystems.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, armor);
-        } else if (MobArmorTrims.configManager.getEnabledSystem() == TrimSystems.CUSTOM_TRIM_COMBINATIONS) {
+        } else if (MobArmorTrims.configManager.getConfig().getEnabledSystem() == TrimSystems.CUSTOM_TRIM_COMBINATIONS) {
             runCustomTrimCombinationsSystem(armor, registryAccess);
         }
     }
@@ -60,7 +60,7 @@ public class TrimApplier {
         ArmorTrim lastTrim = null;
 
         for (ItemStack armorPiece : armor) {
-            if (MobArmorTrims.configManager.getTrimChance() < random.nextInt(100)) {
+            if (MobArmorTrims.configManager.getConfig().getTrimChance() < random.nextInt(100)) {
                 continue;
             }
             if (armorPiece.getItem() != Items.AIR) {
@@ -70,7 +70,7 @@ public class TrimApplier {
             // Stacked Armor Trims compatibility
             if (MobArmorTrims.isStackedArmorTrimsLoaded) {
                 int appliedArmorTrims = 0;
-                while ((MobArmorTrims.configManager.getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < MobArmorTrims.configManager.getMaxStackedTrims())) {
+                while ((MobArmorTrims.configManager.getConfig().getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < MobArmorTrims.configManager.getConfig().getMaxStackedTrims())) {
                     applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, null);
                     appliedArmorTrims++;
                 }
@@ -97,7 +97,7 @@ public class TrimApplier {
             return;
         }
 
-        TrimCombination trimCombination = MobArmorTrims.configManager.getTrimCombination(requiredMaterial);
+        TrimCombination trimCombination = MobArmorTrims.configManager.getRandomTrimCombination(requiredMaterial);
         if (trimCombination == null) {
             return;
         }
@@ -168,10 +168,10 @@ public class TrimApplier {
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
 
         if (trimToTakeIntoAccount != null) {
-            if (MobArmorTrims.configManager.getSimilarTrimChance() >= random.nextInt(100)) {
+            if (MobArmorTrims.configManager.getConfig().getSimilarTrimChance() >= random.nextInt(100)) {
                 armorTrim = new ArmorTrim(trimToTakeIntoAccount.material(), armorTrim.pattern());
             }
-            if (MobArmorTrims.configManager.getSimilarTrimChance() >= random.nextInt(100)) {
+            if (MobArmorTrims.configManager.getConfig().getSimilarTrimChance() >= random.nextInt(100)) {
                 armorTrim = new ArmorTrim(armorTrim.material(), trimToTakeIntoAccount.pattern());
             }
         }

@@ -61,8 +61,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.general.trimSystem"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
                         .binding(Config.TrimSystems.RANDOM_TRIMS,
-                                () -> MobArmorTrims.configManager.getEnabledSystem(),
-                                enabledSystem -> MobArmorTrims.configManager.setEnabledSystem(enabledSystem))
+                                () -> MobArmorTrims.configManager.getConfig().getEnabledSystem(),
+                                enabledSystem -> MobArmorTrims.configManager.getConfig().setEnabledSystem(enabledSystem))
                         .controller(opt -> EnumControllerBuilder.create(opt)
                                 .enumClass(Config.TrimSystems.class)
                                 .formatValue(trimSystemFormatter))
@@ -72,8 +72,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.general.noTrimsChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.noTrimsChance.description")))
                         .binding(ConfigManager.DEFAULT_NO_TRIMS_CHANCE,
-                                () -> MobArmorTrims.configManager.getNoTrimsChance(),
-                                noTrimsChance -> MobArmorTrims.configManager.setNoTrimsChance(noTrimsChance))
+                                () -> MobArmorTrims.configManager.getConfig().getNoTrimsChance(),
+                                noTrimsChance -> MobArmorTrims.configManager.getConfig().setNoTrimsChance(noTrimsChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -91,8 +91,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.randomTrims.trimChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.trimChance.description")))
                         .binding(ConfigManager.DEFAULT_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getTrimChance(),
-                                trimsChance -> MobArmorTrims.configManager.setTrimChance(trimsChance))
+                                () -> MobArmorTrims.configManager.getConfig().getTrimChance(),
+                                trimsChance -> MobArmorTrims.configManager.getConfig().setTrimChance(trimsChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -103,8 +103,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.randomTrims.similarTrimChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.similarTrimChance.description")))
                         .binding(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getSimilarTrimChance(),
-                                similarTrimChance -> MobArmorTrims.configManager.setSimilarTrimChance(similarTrimChance))
+                                () -> MobArmorTrims.configManager.getConfig().getSimilarTrimChance(),
+                                similarTrimChance -> MobArmorTrims.configManager.getConfig().setSimilarTrimChance(similarTrimChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -123,8 +123,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.customTrimCombinations"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrimCombinations.trimCombinations.description")))
                         .binding(new ArrayList<>(),
-                                () -> MobArmorTrims.configManager.getTrimCombinations(),
-                                trimCombinations -> MobArmorTrims.configManager.setTrimCombinations(trimCombinations))
+                                () -> MobArmorTrims.configManager.getConfig().getTrimCombinations(),
+                                trimCombinations -> MobArmorTrims.configManager.getConfig().setTrimCombinations(trimCombinations))
                         .controller(TrimCombinationsController.Builder::create)
                         .initial(new TrimCombination("", CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY))
                         .build())
@@ -140,8 +140,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance.description")))
                         .binding(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getStackedTrimChance(),
-                                stackedTrimChance -> MobArmorTrims.configManager.setStackedTrimChance(stackedTrimChance))
+                                () -> MobArmorTrims.configManager.getConfig().getStackedTrimChance(),
+                                stackedTrimChance -> MobArmorTrims.configManager.getConfig().setStackedTrimChance(stackedTrimChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -152,8 +152,8 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims.description")))
                         .binding(ConfigManager.DEFAULT_MAX_STACKED_TRIMS,
-                                () -> MobArmorTrims.configManager.getMaxStackedTrims(),
-                                maxStackedTrims -> MobArmorTrims.configManager.setMaxStackedTrims(maxStackedTrims))
+                                () -> MobArmorTrims.configManager.getConfig().getMaxStackedTrims(),
+                                maxStackedTrims -> MobArmorTrims.configManager.getConfig().setMaxStackedTrims(maxStackedTrims))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 5)
                                 .step(1))
