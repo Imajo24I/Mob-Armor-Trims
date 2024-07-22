@@ -19,6 +19,10 @@ public class ConfigManager {
     private final ConfigWrapper config;
     public final ConfigFileHandler fileHandler;
 
+    public ConfigManager(Path configPath) {
+        this(ConfigFileHandler.getConfigFromFile(configPath), configPath);
+    }
+
     public ConfigManager(ConfigWrapper config, Path configPath) {
         this.config = config;
         this.fileHandler = new ConfigFileHandler(configPath);
