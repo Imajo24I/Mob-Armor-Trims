@@ -3,7 +3,6 @@ package net.majo24.mob_armor_trims.config;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.file.FileConfig;
 import net.majo24.mob_armor_trims.MobArmorTrims;
 import net.majo24.mob_armor_trims.config.annotations.Entry;
 import net.majo24.mob_armor_trims.config.annotations.SubConfig;
@@ -21,22 +20,31 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class ConfigManager<T> {
-    private T config;
-    private final T defaultConfig;
-
+    private final T config;
+    private final Constructor<T> noArgsConstructor;
     private final Path configPath;
 
     public ConfigManager(Class<T> configClass, Path configPath) {
-        Constructor<T> noArgsConstructor;
+        this.noArgsConstructor = getNoArgsConstructor(configClass);
+        this.configPath = configPath;
+        this.config = loadConfigFromFile();
+
+    }
+
+    public T getDefaultConfig() {
         try {
-            noArgsConstructor = configClass.getDeclaredConstructor();
+            return this.noArgsConstructor.newInstance();
+        } catch (Exception e) {
+            throw new ClassFormatError("Failed to load default config for class %s.".formatted(this.noArgsConstructor.getDeclaringClass().getName()) + "\n" + e);
+        }
+    }
+
+    private Constructor<T> getNoArgsConstructor(Class<T> configClass) {
+        try {
+            return configClass.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {
             throw new ClassFormatError("Failed to find no-args constructor for config class %s.".formatted(configClass.getName()) + "\n" + e);
         }
-
-        this.defaultConfig = loadDefaultConfig(noArgsConstructor);
-        this.config = defaultConfig;
-        this.configPath = configPath;
     }
 
     public T getConfig() {
@@ -47,38 +55,32 @@ public class ConfigManager<T> {
         MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
         CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
         fileConfig.save();
+        fileConfig.close();
     }
 
-    public static <T> T loadDefaultConfig(Constructor<T> noArgsConstructor) {
-        try {
-            return noArgsConstructor.newInstance();
-        } catch (Exception e) {
-            throw new ClassFormatError("Failed to load default config for class %s.".formatted(noArgsConstructor.getDeclaringClass().getName()) + "\n" + e);
-        }
-    }
-
-    public void loadFromFile() {
+    public T loadConfigFromFile() {
         if (Files.exists(configPath)) {
             // Get config from file
             try {
                 CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
                 fileConfig.load();
-                config = configFromFile(fileConfig);
+                return configFromFileConfig(fileConfig);
             } catch (Exception e) {
                 invalidConfigCrash(e, configPath);
-                config = defaultConfig;
+                return getDefaultConfig();
             }
         } else {
             // Create a new Config
             MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
             try {
                 Files.createFile(configPath);
-                CommentedFileConfig fileConfig = fileConfigFromConfig(defaultConfig, configPath);
+                CommentedFileConfig fileConfig = fileConfigFromConfig(getDefaultConfig(), configPath);
                 fileConfig.save();
+                fileConfig.close();
             } catch (Exception e) {
                 MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file. Using default config.", e);
             }
-            this.config = defaultConfig;
+            return getDefaultConfig();
         }
     }
 
@@ -111,8 +113,8 @@ public class ConfigManager<T> {
         }
     }
 
-    public T configFromFile(CommentedFileConfig fileConfig) {
-        T newConfig = this.defaultConfig;
+    public T configFromFileConfig(CommentedFileConfig fileConfig) {
+        T newConfig = getDefaultConfig();
         recursivelyAddToConfig(newConfig, fileConfig, fileConfig.getNioPath());
         return newConfig;
     }
@@ -141,12 +143,13 @@ public class ConfigManager<T> {
     }
 
     private <E> Supplier<E> getterForEntry(Config config, ConfigEntry<E> entry, String entryName) {
-        if (entry.getDefaultValue() instanceof Enum<?>) {
-            return () -> (E) config.getEnum(entryName, ((Enum) entry.getDefaultValue()).getDeclaringClass());
+        if (entry.getDefaultValue() instanceof Enum<?> enumEntry) {
+            return () -> (E) config.getEnum(entryName, enumEntry.getDeclaringClass());
         }
         return () -> config.get(entryName);
     }
-     private static <E> E getAndValidateConfigEntry(String configName, Supplier<E> supplier, E defaultValue, Path configPath) {
+
+    private static <E> E getAndValidateConfigEntry(String configName, Supplier<E> supplier, E defaultValue, Path configPath) {
         try {
             return Objects.requireNonNull(supplier.get());
         } catch (Exception e) {

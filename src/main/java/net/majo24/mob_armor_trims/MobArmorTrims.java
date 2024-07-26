@@ -23,8 +23,7 @@ public class MobArmorTrims implements ModInitializer {
 	    isStackedArmorTrimsLoaded = FabricLoader.getInstance().isModLoaded("stacked_trims");
 
 		Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MOD_ID + ".toml");
-		configManager = new ConfigManager(Config.class, configPath);
-		configManager.loadFromFile();
+		configManager = new ConfigManager<>(Config.class, configPath);
 	}
 }
 //?} elif neoforge {
@@ -66,7 +65,6 @@ public class MobArmorTrims {
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
 		configManager = new ConfigManager(Config.class, configPath);
-		configManager.loadFromFile();
     }
 }
 *///?} elif forge {
@@ -98,7 +96,6 @@ public class MobArmorTrims {
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
 		configManager = new ConfigManager(Config.class, configPath);
-		configManager.loadFromFile();
     }
 }
 *///?}
