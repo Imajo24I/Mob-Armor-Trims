@@ -21,21 +21,24 @@ import java.util.function.Supplier;
 
 public class ConfigManager<T> {
     private final T config;
-    private final Constructor<T> noArgsConstructor;
     private final Path configPath;
+    private final Constructor<T> noArgsConstructor;
 
     public ConfigManager(Class<T> configClass, Path configPath) {
         this.noArgsConstructor = getNoArgsConstructor(configClass);
         this.configPath = configPath;
         this.config = loadConfigFromFile();
+    }
 
+    public T getConfig() {
+        return config;
     }
 
     public T getDefaultConfig() {
         try {
             return this.noArgsConstructor.newInstance();
         } catch (Exception e) {
-            throw new ClassFormatError("Failed to load default config for class %s.".formatted(this.noArgsConstructor.getDeclaringClass().getName()) + "\n" + e);
+            throw new ClassFormatError("Failed to load default config for class " + this.noArgsConstructor.getDeclaringClass().getName() + ".\n" + e);
         }
     }
 
@@ -45,10 +48,6 @@ public class ConfigManager<T> {
         } catch (NoSuchMethodException e) {
             throw new ClassFormatError("Failed to find no-args constructor for config class %s.".formatted(configClass.getName()) + "\n" + e);
         }
-    }
-
-    public T getConfig() {
-        return config;
     }
 
     public void saveConfigToFile() {
@@ -86,16 +85,16 @@ public class ConfigManager<T> {
 
     public CommentedFileConfig fileConfigFromConfig(T config, Path configPath) {
         CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
-        recursivelyAddToFileConfig(fileConfig, config);
+        recursiveAddToFileConfig(fileConfig, config);
         return fileConfig;
     }
 
-    private void recursivelyAddToFileConfig(CommentedConfig fileConfig, Object config) {
+    private void recursiveAddToFileConfig(CommentedConfig fileConfig, Object config) {
         for (Field field : config.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Entry.class)) {
                 ensureConfigFieldIsPublic(field);
 
-                ConfigEntry<?> entry = (ConfigEntry<?>) getFieldValue(field, config);
+                ConfigEntry<?> entry = (ConfigEntry<?>) getValueFromField(field, config);
                 Entry entryAnnotation = field.getAnnotation(Entry.class);
 
                 fileConfig.add(entryAnnotation.name(), entry.getValue());
@@ -106,7 +105,7 @@ public class ConfigManager<T> {
                 CommentedConfig subConfig = fileConfig.createSubConfig();
                 SubConfig subConfigAnnotation = field.getAnnotation(SubConfig.class);
 
-                recursivelyAddToFileConfig(subConfig, getFieldValue(field, config));
+                recursiveAddToFileConfig(subConfig, getValueFromField(field, config));
                 fileConfig.add(subConfigAnnotation.name(), subConfig);
                 fileConfig.setComment(subConfigAnnotation.name(), subConfigAnnotation.description());
             }
@@ -125,7 +124,7 @@ public class ConfigManager<T> {
                 ensureConfigFieldIsPublic(field);
 
                 try {
-                    ConfigEntry<E> entry = (ConfigEntry<E>) getFieldValue(field, config);
+                    ConfigEntry<E> entry = (ConfigEntry<E>) getValueFromField(field, config);
                     String entryName = field.getAnnotation(Entry.class).name();
                     E entryValue = getAndValidateConfigEntry(entryName,
                             getterForEntry(fileConfig, entry, entryName),
@@ -138,7 +137,7 @@ public class ConfigManager<T> {
             } else if (field.isAnnotationPresent(SubConfig.class)) {
                 ensureConfigFieldIsPublic(field);
 
-                recursivelyAddToConfig(getFieldValue(field, config), fileConfig.get(field.getAnnotation(SubConfig.class).name()), filePath);
+                recursivelyAddToConfig(getValueFromField(field, config), fileConfig.get(field.getAnnotation(SubConfig.class).name()), filePath);
             }
     }
 
@@ -158,7 +157,7 @@ public class ConfigManager<T> {
         }
     }
 
-    private Object getFieldValue(Field field, Object instance) {
+    private Object getValueFromField(Field field, Object instance) {
         try {
             return field.get(instance);
         } catch (Exception e) {
