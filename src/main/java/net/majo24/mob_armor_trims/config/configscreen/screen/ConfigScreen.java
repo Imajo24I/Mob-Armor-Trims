@@ -3,7 +3,7 @@ package net.majo24.mob_armor_trims.config.configscreen.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
-import net.majo24.mob_armor_trims.config.ConfigWrapper;
+import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
 import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
 import net.majo24.mob_armor_trims.config.configscreen.Formatters;
@@ -18,16 +18,15 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.majo24.mob_armor_trims.MobArmorTrims;
-import net.majo24.mob_armor_trims.config.ConfigManager;
 import org.jetbrains.annotations.NotNull;
+
+import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
 /*? <1.21 {*/
 /*import net.minecraft.client.gui.screens.OptionsSubScreen;
 *//*?} else {*/
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 /*?}*/
-
-import java.util.ArrayList;
 
 import static net.minecraft.network.chat.Component.translatable;
 
@@ -40,7 +39,7 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parent) {
         YetAnotherConfigLib.Builder configScreen = YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Mob Armor Trims"))
-                .save(MobArmorTrims.configManager::saveConfig)
+                .save(configManager::saveConfigToFile)
 
                 .category(buildGeneralCategory())
                 .category(buildRandomTrimsCategory())
@@ -57,23 +56,23 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
                 .name(translatable("mob_armor_trims.config.general"))
                 .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
-                .option(Option.<ConfigWrapper.TrimSystems>createBuilder()
+                .option(Option.<Config.TrimSystems>createBuilder()
                         .name(translatable("mob_armor_trims.config.general.trimSystem"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
-                        .binding(ConfigWrapper.TrimSystems.RANDOM_TRIMS,
-                                () -> MobArmorTrims.configManager.getConfig().getEnabledSystem(),
-                                enabledSystem -> MobArmorTrims.configManager.getConfig().setEnabledSystem(enabledSystem))
+                        .binding(Config.TrimSystems.RANDOM_TRIMS,
+                                () -> configManager.getConfig().general.enabledSystem.getValue(),
+                                enabledSystem -> configManager.getConfig().general.enabledSystem.setValue(enabledSystem))
                         .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(ConfigWrapper.TrimSystems.class)
+                                .enumClass(Config.TrimSystems.class)
                                 .formatValue(trimSystemFormatter))
                         .build())
 
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("mob_armor_trims.config.general.noTrimsChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.general.noTrimsChance.description")))
-                        .binding(ConfigManager.DEFAULT_NO_TRIMS_CHANCE,
-                                () -> MobArmorTrims.configManager.getConfig().getNoTrimsChance(),
-                                noTrimsChance -> MobArmorTrims.configManager.getConfig().setNoTrimsChance(noTrimsChance))
+                        .binding(configManager.getConfig().general.noTrimsChance.getDefaultValue(),
+                                () -> configManager.getConfig().general.noTrimsChance.getValue(),
+                                noTrimsChance -> configManager.getConfig().general.noTrimsChance.setValue(noTrimsChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -90,9 +89,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("mob_armor_trims.config.randomTrims.trimChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.trimChance.description")))
-                        .binding(ConfigManager.DEFAULT_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getConfig().getTrimChance(),
-                                trimsChance -> MobArmorTrims.configManager.getConfig().setTrimChance(trimsChance))
+                        .binding(configManager.getConfig().randomTrims.trimChance.getDefaultValue(),
+                                () -> configManager.getConfig().randomTrims.trimChance.getValue(),
+                                trimsChance -> configManager.getConfig().randomTrims.trimChance.setValue(trimsChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -102,9 +101,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("mob_armor_trims.config.randomTrims.similarTrimChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.similarTrimChance.description")))
-                        .binding(ConfigManager.DEFAULT_SIMILAR_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getConfig().getSimilarTrimChance(),
-                                similarTrimChance -> MobArmorTrims.configManager.getConfig().setSimilarTrimChance(similarTrimChance))
+                        .binding(configManager.getConfig().randomTrims.similarTrimChance.getDefaultValue(),
+                                () -> configManager.getConfig().randomTrims.similarTrimChance.getValue(),
+                                similarTrimChance -> configManager.getConfig().randomTrims.similarTrimChance.setValue(similarTrimChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -122,9 +121,9 @@ public class ConfigScreen {
                 .group(ListOption.<TrimCombination>createBuilder()
                         .name(translatable("mob_armor_trims.config.customTrimCombinations"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrimCombinations.trimCombinations.description")))
-                        .binding(new ArrayList<>(),
-                                () -> MobArmorTrims.configManager.getConfig().getTrimCombinations(),
-                                trimCombinations -> MobArmorTrims.configManager.getConfig().setTrimCombinations(trimCombinations))
+                        .binding(configManager.getConfig().customTrimCombinations.trimCombinations.getDefaultTrimCombinations(),
+                                () -> configManager.getConfig().customTrimCombinations.trimCombinations.getTrimCombinations(),
+                                trimCombinations -> configManager.getConfig().customTrimCombinations.trimCombinations.setTrimCombinations(trimCombinations))
                         .controller(TrimCombinationsController.Builder::create)
                         .initial(new TrimCombination("", CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY))
                         .build())
@@ -139,9 +138,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance.description")))
-                        .binding(ConfigManager.DEFAULT_STACKED_TRIM_CHANCE,
-                                () -> MobArmorTrims.configManager.getConfig().getStackedTrimChance(),
-                                stackedTrimChance -> MobArmorTrims.configManager.getConfig().setStackedTrimChance(stackedTrimChance))
+                        .binding(configManager.getConfig().stackedTrims.stackedTrimChance.getDefaultValue(),
+                                () -> configManager.getConfig().stackedTrims.stackedTrimChance.getValue(),
+                                stackedTrimChance -> configManager.getConfig().stackedTrims.stackedTrimChance.setValue(stackedTrimChance))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -151,9 +150,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims.description")))
-                        .binding(ConfigManager.DEFAULT_MAX_STACKED_TRIMS,
-                                () -> MobArmorTrims.configManager.getConfig().getMaxStackedTrims(),
-                                maxStackedTrims -> MobArmorTrims.configManager.getConfig().setMaxStackedTrims(maxStackedTrims))
+                        .binding(configManager.getConfig().stackedTrims.maxStackedTrims.getDefaultValue(),
+                                () -> configManager.getConfig().stackedTrims.maxStackedTrims.getValue(),
+                                maxStackedTrims -> configManager.getConfig().stackedTrims.maxStackedTrims.setValue(maxStackedTrims))
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 5)
                                 .step(1))

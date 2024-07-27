@@ -11,7 +11,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.armortrim.*;
-import net.majo24.mob_armor_trims.config.BaseConfig.TrimSystems;
+import net.majo24.mob_armor_trims.config.Config.TrimSystems;
+
+import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -33,13 +35,15 @@ public class TrimApplier {
      * @param armor          Armor to apply the trims on
      */
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
-        if (MobArmorTrims.configManager.getConfig().getNoTrimsChance() > random.nextInt(100)) {
+        if (configManager.getConfig().general.noTrimsChance.getValue() > random.nextInt(100)) {
             return;
         }
 
-        if (MobArmorTrims.configManager.getConfig().getEnabledSystem() == TrimSystems.RANDOM_TRIMS) {
+        TrimSystems enabledSystem = configManager.getConfig().general.enabledSystem.getValue();
+
+        if (enabledSystem == TrimSystems.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, armor);
-        } else if (MobArmorTrims.configManager.getConfig().getEnabledSystem() == TrimSystems.CUSTOM_TRIM_COMBINATIONS) {
+        } else if (enabledSystem == TrimSystems.CUSTOM_TRIM_COMBINATIONS) {
             runCustomTrimCombinationsSystem(armor, registryAccess);
         }
     }
@@ -59,8 +63,12 @@ public class TrimApplier {
 
         ArmorTrim lastTrim = null;
 
+        int trimChance = configManager.getConfig().randomTrims.trimChance.getValue();
+        int stackedTrimChance = configManager.getConfig().stackedTrims.stackedTrimChance.getValue();
+        int maxStackedTrims = configManager.getConfig().stackedTrims.maxStackedTrims.getValue();
+
         for (ItemStack armorPiece : armor) {
-            if (MobArmorTrims.configManager.getConfig().getTrimChance() < random.nextInt(100)) {
+            if (trimChance < random.nextInt(100)) {
                 continue;
             }
             if (armorPiece.getItem() != Items.AIR) {
@@ -70,7 +78,7 @@ public class TrimApplier {
             // Stacked Armor Trims compatibility
             if (MobArmorTrims.isStackedArmorTrimsLoaded) {
                 int appliedArmorTrims = 0;
-                while ((MobArmorTrims.configManager.getConfig().getStackedTrimChance() >= random.nextInt(100)) && (appliedArmorTrims < MobArmorTrims.configManager.getConfig().getMaxStackedTrims())) {
+                while ((stackedTrimChance >= random.nextInt(100)) && (appliedArmorTrims < maxStackedTrims)) {
                     applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, null);
                     appliedArmorTrims++;
                 }
@@ -97,7 +105,7 @@ public class TrimApplier {
             return;
         }
 
-        TrimCombination trimCombination = MobArmorTrims.configManager.getConfig().getRandomTrimCombination(requiredMaterial);
+        TrimCombination trimCombination = configManager.getConfig().getRandomTrimCombination(requiredMaterial);
         if (trimCombination == null) {
             return;
         }
@@ -110,7 +118,7 @@ public class TrimApplier {
                 continue;
             }
 
-            ArmorTrim armorTrim = MobArmorTrims.configManager.getConfig().getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
+            ArmorTrim armorTrim = configManager.getConfig().getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
             if (armorTrim == null) {
                 continue;
             }
@@ -168,10 +176,13 @@ public class TrimApplier {
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
 
         if (trimToTakeIntoAccount != null) {
-            if (MobArmorTrims.configManager.getConfig().getSimilarTrimChance() >= random.nextInt(100)) {
+            int similarTrimChance = configManager.getConfig().randomTrims.similarTrimChance.getValue();
+
+            if (similarTrimChance >= random.nextInt(100)) {
                 armorTrim = new ArmorTrim(trimToTakeIntoAccount.material(), armorTrim.pattern());
             }
-            if (MobArmorTrims.configManager.getConfig().getSimilarTrimChance() >= random.nextInt(100)) {
+
+            if (similarTrimChance >= random.nextInt(100)) {
                 armorTrim = new ArmorTrim(armorTrim.material(), trimToTakeIntoAccount.pattern());
             }
         }
