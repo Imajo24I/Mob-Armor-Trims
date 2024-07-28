@@ -19,11 +19,11 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -170,11 +170,43 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         private final AbstractWidget chestplateTrimWidget;
         private final AbstractWidget helmetTrimWidget;
 
-        public static final List<ItemStack> DIAMOND_ARMOR_ITEMS = List.of(
-                Items.DIAMOND_BOOTS.getDefaultInstance(),
-                Items.DIAMOND_LEGGINGS.getDefaultInstance(),
-                Items.DIAMOND_CHESTPLATE.getDefaultInstance(),
-                Items.DIAMOND_HELMET.getDefaultInstance()
+        public static final List<List<ItemStack>> ARMOR_ITEMS = List.of(
+                List.of(
+                        Items.LEATHER_BOOTS.getDefaultInstance(),
+                        Items.LEATHER_LEGGINGS.getDefaultInstance(),
+                        Items.LEATHER_CHESTPLATE.getDefaultInstance(),
+                        Items.LEATHER_HELMET.getDefaultInstance()
+                ),
+                List.of(
+                        Items.CHAINMAIL_BOOTS.getDefaultInstance(),
+                        Items.CHAINMAIL_LEGGINGS.getDefaultInstance(),
+                        Items.CHAINMAIL_CHESTPLATE.getDefaultInstance(),
+                        Items.CHAINMAIL_HELMET.getDefaultInstance()
+                ),
+                List.of(
+                        Items.IRON_BOOTS.getDefaultInstance(),
+                        Items.IRON_LEGGINGS.getDefaultInstance(),
+                        Items.IRON_CHESTPLATE.getDefaultInstance(),
+                        Items.IRON_HELMET.getDefaultInstance()
+                ),
+                List.of(
+                        Items.GOLDEN_BOOTS.getDefaultInstance(),
+                        Items.GOLDEN_LEGGINGS.getDefaultInstance(),
+                        Items.GOLDEN_CHESTPLATE.getDefaultInstance(),
+                        Items.GOLDEN_HELMET.getDefaultInstance()
+                ),
+                List.of(
+                        Items.DIAMOND_BOOTS.getDefaultInstance(),
+                        Items.DIAMOND_LEGGINGS.getDefaultInstance(),
+                        Items.DIAMOND_CHESTPLATE.getDefaultInstance(),
+                        Items.DIAMOND_HELMET.getDefaultInstance()
+                ),
+                List.of(
+                        Items.NETHERITE_BOOTS.getDefaultInstance(),
+                        Items.NETHERITE_LEGGINGS.getDefaultInstance(),
+                        Items.NETHERITE_CHESTPLATE.getDefaultInstance(),
+                        Items.NETHERITE_HELMET.getDefaultInstance()
+                )
         );
 
         public ControllerElement(TrimCombinationsController control, YACLScreen screen, Dimension<Integer> dim, AbstractWidget applyOnMaterialWidget, AbstractWidget bootsTrimWidget, AbstractWidget leggingsTrimWidget, AbstractWidget chestplateTrimWidget, AbstractWidget helmetTrimWidget) {
@@ -206,7 +238,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             Minecraft mc = Minecraft.getInstance();
             ClientLevel level = mc.level;
 
-            renderMaterialToApplyOnPreview(graphics, mc);
+            renderMaterialToApplyOnPreview(graphics);
             renderArmorPreviews(graphics, mc, level);
 
             if (!control.collapsed) {
@@ -218,14 +250,15 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             }
         }
 
-        private void renderMaterialToApplyOnPreview(GuiGraphics graphics, Minecraft mc) {
+        private void renderMaterialToApplyOnPreview(GuiGraphics graphics) {
             String materialToApplyOn = control.option.pendingValue().materialToApplyTo();
             ItemStack armorItem = switch (materialToApplyOn) {
                 case "netherite" -> Items.NETHERITE_CHESTPLATE.getDefaultInstance();
                 case "diamond" -> Items.DIAMOND_CHESTPLATE.getDefaultInstance();
                 case "gold" -> Items.GOLDEN_CHESTPLATE.getDefaultInstance();
                 case "iron" -> Items.IRON_CHESTPLATE.getDefaultInstance();
-                case "chain" -> Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
+                case "chainmail" -> Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
+                case "leather" -> Items.LEATHER_CHESTPLATE.getDefaultInstance();
                 default -> null;
             };
 
@@ -240,12 +273,9 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
                 y = collapseWidget.getY() + 23;
             }
 
-            if (armorItem != null) {
-                graphics.renderItem(armorItem, x, y);
-            } else {
-                graphics.renderItem(Items.DIAMOND_CHESTPLATE.getDefaultInstance(), x, y);
-                graphics.drawCenteredString(mc.font, "!", x, y, -65536);
-            }
+            graphics.renderItem(
+                    Objects.requireNonNullElseGet(armorItem, Items.BARRIER::getDefaultInstance)
+                    , x, y);
         }
 
         private void renderArmorPreviews(GuiGraphics graphics, Minecraft mc, ClientLevel level) {
@@ -263,29 +293,31 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             }
 
             for (int index = 3; index >= 0; index--) {
-                ItemStack armor = DIAMOND_ARMOR_ITEMS.get(index);
-                boolean validTrim = true;
+                List<ItemStack> armorItems = switch (control.option.pendingValue().materialToApplyTo()) {
+                    case "leather" -> ARMOR_ITEMS.get(0);
+                    case "chainmail" -> ARMOR_ITEMS.get(1);
+                    case "iron" -> ARMOR_ITEMS.get(2);
+                    case "diamond" -> ARMOR_ITEMS.get(4);
+                    case "netherite" -> ARMOR_ITEMS.get(5);
+                    default -> ARMOR_ITEMS.get(3);
+                };
+                ItemStack preview = armorItems.get(index);
 
                 if (level != null) {
-                    // As RegistryAccess is accessible, apply trim to armor preview and render exclamation mark if not valid
+                    // As RegistryAccess is accessible, apply trim to armor preview and render a barrier if not valid
                     RegistryAccess registryAccess = level.registryAccess();
                     try {
                         ArmorTrim armorTrim = customTrims.get(index).getTrim(registryAccess);
-                        TrimApplier.applyTrim(armor, armorTrim, registryAccess);
+                        TrimApplier.applyTrim(preview, armorTrim, registryAccess);
                     } catch (IllegalStateException e) {
-                        validTrim = false;
+                        preview = Items.BARRIER.getDefaultInstance();
                     }
 
-                    graphics.renderItem(armor, previewX, previewY);
-
-                    if (!validTrim) {
-                        // Armor Trim is not valid, so draw an exclamation mark to indicate this
-                        graphics.drawCenteredString(mc.font, "!", previewX, previewY, -65536);
-                    }
+                    graphics.renderItem(preview, previewX, previewY);
                 } else {
-                    // RegistryAccess is not accessible, so draw a question mark over it,
-                    // indicating preview cannot be correctly displayed
-                    graphics.renderItem(armor, previewX, previewY);
+                    // RegistryAccess is not accessible, so draw a question mark over the preview,
+                    // indicating it cannot be correctly displayed
+                    graphics.renderItem(Items.BARRIER.getDefaultInstance(), previewX, previewY);
                     graphics.drawCenteredString(mc.font, "?", previewX, previewY, 0xffffff);
                 }
 
