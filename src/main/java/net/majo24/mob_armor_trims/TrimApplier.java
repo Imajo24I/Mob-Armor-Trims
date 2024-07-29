@@ -101,7 +101,7 @@ public class TrimApplier {
                 break;
             }
         }
-        if (Objects.equals(requiredMaterial, "")) {
+        if (requiredMaterial.isEmpty()) {
             return;
         }
 
