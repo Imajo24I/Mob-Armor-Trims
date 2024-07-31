@@ -96,20 +96,26 @@ public class ConfigManager<T> {
 
                 ConfigEntry<?> entry = (ConfigEntry<?>) getValueFromField(field, config);
                 Entry entryAnnotation = field.getAnnotation(Entry.class);
+                String entryDescription = createDescription(entryAnnotation.description());
 
                 fileConfig.add(entryAnnotation.name(), entry.getValue());
-                fileConfig.setComment(entryAnnotation.name(), entryAnnotation.description());
+                fileConfig.setComment(entryAnnotation.name(), entryDescription);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
                 ensureConfigFieldIsPublic(field);
 
                 CommentedConfig subConfig = fileConfig.createSubConfig();
                 SubConfig subConfigAnnotation = field.getAnnotation(SubConfig.class);
+                String subConfigDescription = createDescription(subConfigAnnotation.description());
 
                 recursiveAddToFileConfig(subConfig, getValueFromField(field, config));
                 fileConfig.add(subConfigAnnotation.name(), subConfig);
-                fileConfig.setComment(subConfigAnnotation.name(), subConfigAnnotation.description());
+                fileConfig.setComment(subConfigAnnotation.name(), subConfigDescription);
             }
         }
+    }
+
+    private String createDescription(String description) {
+        return " " + description.replace("\n", "\n ");
     }
 
     public T configFromFileConfig(CommentedFileConfig fileConfig) {
