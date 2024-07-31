@@ -95,8 +95,7 @@ public class Config {
                 For the rest of the lists, in the first String, enter a valid Trim Material.
                 In the second String, enter a valid Trim Pattern
                 To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
-                For example: ["amethyst_shard", "silence"]
-                """)
+                For example: ["amethyst_shard", "silence"]""")
         public final TrimCombinationsEntry trimCombinations = new TrimCombinationsEntry(new ArrayList<>());
     }
 
