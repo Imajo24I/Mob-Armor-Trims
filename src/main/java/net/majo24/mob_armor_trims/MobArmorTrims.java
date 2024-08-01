@@ -34,11 +34,12 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
-//? >1.20.5 {
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-//?} else {
-/^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^///?}
+//? >1.20.4 {
+/^import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.fml.ModContainer;
+^///?} else {
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+//?}
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,21 +53,26 @@ public class MobArmorTrims {
     public static boolean isStackedArmorTrimsLoaded = false;
     public static ConfigManager<Config> configManager;
 
-    public MobArmorTrims() {
+    public MobArmorTrims(/^? >1.20.4 {^//^ModContainer container^//^?}^/) {
         isStackedArmorTrimsLoaded = ModList.get().isLoaded("stacked_trims");
 
         // Register Config Screen
         /^? <1.20.5 {^/
-        /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
-        ^//^?} else {^/
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
-            () -> (client, parent) -> ConfigScreenProvider.getConfigScreen(parent));
-        /^?}^/
+        /^?} else {^/
+        /^container.registerExtensionPoint(IConfigScreenFactory.class, getConfigScreen());
+        ^//^?}^/
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve(MOD_ID + ".toml");
 		configManager = new ConfigManager<>(Config.class, configPath);
     }
+
+    /^? >1.20.4 {^/
+    /^private IConfigScreenFactory getConfigScreen() {
+        return (modContainer, screen) -> ConfigScreenProvider.getConfigScreen(screen);
+    }
+    ^//^?}^/
 }
 *///?} elif forge {
 /*import net.majo24.mob_armor_trims.config.Config;
