@@ -1,6 +1,1 @@
-- Improved Custom Trim Combinations Screen
-  - Previews of the trims will now change accordingly to the material to apply on
-  - Previews of not valid options will now be displayed as a barriers
-- Fixed leather not being valid for materials to apply custom trim combinations on
-- Improved general Compatibility
-- Rewritten config backend
+- Support for 1.21.1
