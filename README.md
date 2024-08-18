@@ -1,4 +1,6 @@
-[<img src="https://github.com/sn0wfrog/modding-badges/blob/main/Available%20on%20Modrinth.png" alt="Available on Modrinth" width="200"/>](https://modrinth.com/mod/mob-armor-trims)
+[![GitHub](https://raw.githubusercontent.com/intergrav/devins-badges/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/compact-minimal/available/github_vector.svg)](https://github.com/Imajo24I/Mob-Armor-Trims)
+[![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/mob-armor-trims)
+[![CurseForge](https://raw.githubusercontent.com/intergrav/devins-badges/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/compact-minimal/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/mob-armor-trims)
 
 # Mob Armor Trims
 
@@ -58,15 +60,18 @@ These two systems are:
 
 Currently, there are no found incompatible mods.
 If you find any incompatible mod, please report
-the incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
+the
+incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
 
 ## Issues
 
 If you have found any Issue, please report
-the issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
+the
+issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
 
 ### Known Issues:
 
 - Crash when opening the Config Screen:  
-  This is a known issue with YACL (Yet Another Config Lib), where it crashes when opening any config screen created with YACL on Forge 1.20.1. 
+  This is a known issue with YACL (Yet Another Config Lib), where it crashes when opening any config screen created with
+  YACL on Forge 1.20.1.
   As a workaround, downgrade the version of YACL to `3.4.2`.
