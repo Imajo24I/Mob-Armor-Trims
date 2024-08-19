@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.configscreen;
+package net.majo24.mob_armor_trims.config.screen;
 
 import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.majo24.mob_armor_trims.config.Config;

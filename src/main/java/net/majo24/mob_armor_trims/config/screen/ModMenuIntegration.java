@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.configscreen;
+package net.majo24.mob_armor_trims.config.screen;
 
 //? if fabric {
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
