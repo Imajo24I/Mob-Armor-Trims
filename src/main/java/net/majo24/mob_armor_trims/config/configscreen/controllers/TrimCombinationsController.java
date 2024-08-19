@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.configscreen.custom_trim_combinations;
+package net.majo24.mob_armor_trims.config.configscreen.controllers;
 
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;

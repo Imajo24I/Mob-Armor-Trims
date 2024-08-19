@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.configscreen.screen;
+package net.majo24.mob_armor_trims.config.configscreen;
 
 import net.minecraft.client.gui.screens.Screen;
 
