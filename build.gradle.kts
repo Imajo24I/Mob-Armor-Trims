@@ -186,9 +186,7 @@ publishMods {
     type = STABLE
     modLoaders.add(loader.loader)
 
-    //fixme: should be all versions in mcDep, not just the version given to stonecutter
-    // for example, if on 1.20.6, 1.20.5 wouldn't be added, even though its currently supported
-    val stableMCVersions = listOf(stonecutter.current.version)
+    val targets = property("mod.mc_targets").toString().split(", ")
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
@@ -196,7 +194,7 @@ publishMods {
     modrinth {
         projectId.set("hHVaPgFK")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.addAll(stableMCVersions)
+        minecraftVersions.addAll(targets)
         optional("yacl")
         if (loader.isFabric) {
             optional("modmenu")
@@ -206,7 +204,7 @@ publishMods {
     curseforge {
         projectId.set("1005441")
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.addAll(stableMCVersions)
+        minecraftVersions.addAll(targets)
         serverRequired = true
         optional("yacl")
         if (loader.isFabric) {
