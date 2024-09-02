@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.entries;
+package net.majo24.mob_armor_trims.config.backend.entries;
 
 public abstract class ConfigEntry<T> {
     private final T defaultValue;

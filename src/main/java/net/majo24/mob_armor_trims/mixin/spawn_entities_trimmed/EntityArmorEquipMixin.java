@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 @Mixin(Mob.class)
-public abstract class OnNaturalSpawnMixin extends LivingEntity {
+public abstract class EntityArmorEquipMixin extends LivingEntity {
     @Shadow public abstract @NotNull Iterable<ItemStack> getArmorSlots();
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots")
@@ -25,7 +25,7 @@ public abstract class OnNaturalSpawnMixin extends LivingEntity {
         TrimApplier.applyTrims(this.level().registryAccess(), super.random, this.getArmorSlots());
     }
 
-    protected OnNaturalSpawnMixin(EntityType<? extends LivingEntity> entityType, Level world) {
+    protected EntityArmorEquipMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 }

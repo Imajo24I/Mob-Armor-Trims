@@ -1,6 +1,6 @@
-package net.majo24.mob_armor_trims.config.entries;
+package net.majo24.mob_armor_trims.config.backend.entries;
 
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 
 import java.util.ArrayList;
 import java.util.List;

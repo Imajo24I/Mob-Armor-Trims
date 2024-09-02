@@ -1,7 +1,7 @@
 package net.majo24.mob_armor_trims;
 
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -16,7 +16,6 @@ import net.majo24.mob_armor_trims.config.Config.TrimSystems;
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 //? >=1.20.5 {
 import net.minecraft.core.component.DataComponentPatch;
@@ -28,7 +27,7 @@ public class TrimApplier {
     }
 
     /**
-     * Runs the enabled system on the armor
+     * Runs the enabled backend on the armor
      *
      * @param registryAccess
      * @param random
@@ -49,7 +48,7 @@ public class TrimApplier {
     }
 
     /**
-     * Runs the random trims system on the given armor
+     * Runs the random trims backend on the given armor
      *
      * @param registryAccess
      * @param random
@@ -87,7 +86,7 @@ public class TrimApplier {
     }
 
     /**
-     * Runs the custom trim combinations system on the given armor
+     * Runs the custom trim combinations backend on the given armor
      *
      * @param armor          Armor to apply the trims on
      * @param registryAccess

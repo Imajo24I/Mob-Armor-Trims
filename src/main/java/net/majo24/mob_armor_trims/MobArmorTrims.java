@@ -29,7 +29,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
  *///?}
 
 import net.majo24.mob_armor_trims.config.Config;
-import net.majo24.mob_armor_trims.config.ConfigManager;
+import net.majo24.mob_armor_trims.config.backend.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     @Override
     public void onInitialize() {
         isStackedArmorTrimsLoaded = isModLoaded("stacked_trims");
-        configManager = new ConfigManager<>(Config.class, getConfigPath());
+        configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
     }
 
     public static boolean isModLoaded(String modId) {

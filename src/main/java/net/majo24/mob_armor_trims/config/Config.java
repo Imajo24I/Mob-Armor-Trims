@@ -1,12 +1,12 @@
 package net.majo24.mob_armor_trims.config;
 
-import net.majo24.mob_armor_trims.config.annotations.Entry;
-import net.majo24.mob_armor_trims.config.annotations.SubConfig;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
-import net.majo24.mob_armor_trims.config.entries.PrimitiveEntry;
-import net.majo24.mob_armor_trims.config.entries.TrimCombinationsEntry;
-import net.majo24.mob_armor_trims.config.entries.TrimSystemEntry;
+import net.majo24.mob_armor_trims.config.backend.annotations.Entry;
+import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
+import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
+import net.majo24.mob_armor_trims.config.backend.entries.PrimitiveEntry;
+import net.majo24.mob_armor_trims.config.backend.entries.TrimCombinationsEntry;
+import net.majo24.mob_armor_trims.config.backend.entries.TrimSystemEntry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import org.jetbrains.annotations.Nullable;
@@ -49,17 +49,19 @@ public class Config {
         return cachedTrim;
     }
 
+
     @SubConfig(name = "general", description = "General Settings for the mod")
     public final GeneralSubConfig general = new GeneralSubConfig();
 
-    @SubConfig(name = "random_trims", description = "Settings for the Random Trims system.\nThese settings will only make a difference, if the RANDOM_TRIMS system is enabled")
+    @SubConfig(name = "random_trims", description = "Settings for the Random Trims backend.\nThese settings will only make a difference, if the RANDOM_TRIMS backend is enabled")
     public final RandomTrimsSubConfig randomTrims = new RandomTrimsSubConfig();
 
-    @SubConfig(name = "trim_combinations", description = "Settings for the Custom Trim Combinations system.\nThese settings will only make a difference, if the CUSTOM_TRIM_COMBINATIONS system is enabled")
+    @SubConfig(name = "trim_combinations", description = "Settings for the Custom Trim Combinations backend.\nThese settings will only make a difference, if the CUSTOM_TRIM_COMBINATIONS backend is enabled")
     public final TrimCombinationsSubConfig customTrimCombinations = new TrimCombinationsSubConfig();
 
-    @SubConfig(name = "stacked_trims", description = "Settings for the Stacked Armor Trims Mod Compatibility.\\nThese settings will only make a difference, if the STACKED_TRIMS system is enabled and the stacked armor trims mod is used")
+    @SubConfig(name = "stacked_trims", description = "Settings for the Stacked Armor Trims Mod Compatibility.\nThese settings will only make a difference, if the STACKED_TRIMS backend is enabled and the stacked armor trims mod is used")
     public final StackedTrimsSubConfig stackedTrims = new StackedTrimsSubConfig();
+
 
     public static final class GeneralSubConfig {
         @Entry(name = "enabled_system", description = """

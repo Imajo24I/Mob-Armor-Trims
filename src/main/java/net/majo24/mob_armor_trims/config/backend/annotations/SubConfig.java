@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.annotations;
+package net.majo24.mob_armor_trims.config.backend.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface Entry {
+public @interface SubConfig {
     String name();
     String description();
 }

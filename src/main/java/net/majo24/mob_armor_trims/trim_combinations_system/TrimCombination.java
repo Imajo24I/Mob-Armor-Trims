@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.config.custom_trim_combinations;
+package net.majo24.mob_armor_trims.trim_combinations_system;
 
 import java.util.List;
 

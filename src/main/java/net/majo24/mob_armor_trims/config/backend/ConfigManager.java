@@ -1,14 +1,14 @@
-package net.majo24.mob_armor_trims.config;
+package net.majo24.mob_armor_trims.config.backend;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import net.majo24.mob_armor_trims.MobArmorTrims;
-import net.majo24.mob_armor_trims.config.annotations.Entry;
-import net.majo24.mob_armor_trims.config.annotations.SubConfig;
-import net.majo24.mob_armor_trims.config.entries.ConfigEntry;
+import net.majo24.mob_armor_trims.config.backend.annotations.Entry;
+import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
+import net.majo24.mob_armor_trims.config.backend.entries.ConfigEntry;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -24,7 +24,10 @@ public class ConfigManager<T> {
     private final Path configPath;
     private final Constructor<T> noArgsConstructor;
 
-    public ConfigManager(Class<T> configClass, Path configPath) {
+    private final Logger logger;
+
+    public ConfigManager(Class<T> configClass, Path configPath, Logger logger) {
+        this.logger = logger;
         this.noArgsConstructor = getNoArgsConstructor(configClass);
         this.configPath = configPath;
         this.config = loadConfigFromFile();
@@ -51,7 +54,7 @@ public class ConfigManager<T> {
     }
 
     public void saveConfigToFile() {
-        MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
+        logger.info("Saving Mob Armor Trims config to file");
         CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
         fileConfig.save();
         fileConfig.close();
@@ -70,14 +73,14 @@ public class ConfigManager<T> {
             }
         } else {
             // Create a new Config
-            MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
+            logger.info("Creating Mob Armor Trims config file");
             try {
                 Files.createFile(configPath);
                 CommentedFileConfig fileConfig = fileConfigFromConfig(getDefaultConfig(), configPath);
                 fileConfig.save();
                 fileConfig.close();
             } catch (Exception e) {
-                MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file. Using default config.", e);
+                logger.error("Could not create Mob Armor Trims config file. Using default config.", e);
             }
             return getDefaultConfig();
         }
@@ -154,11 +157,11 @@ public class ConfigManager<T> {
         return () -> config.get(entryName);
     }
 
-    private static <E> E getAndValidateConfigEntry(String configName, Supplier<E> supplier, E defaultValue, Path configPath) {
+    private <E> E getAndValidateConfigEntry(String configName, Supplier<E> supplier, E defaultValue, Path configPath) {
         try {
             return Objects.requireNonNull(supplier.get());
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load config option \"{}\" from Mob Armor Trims config file. Using the default value \"{}\" for this session. Please ensure the entry and the config file are valid. You can reset the config file by deleting the file. It is located under \"{}\".", configName, defaultValue, configPath, e);
+            logger.error("Failed to load config option \"{}\" from Mob Armor Trims config file. Using the default value \"{}\" for this session. Please ensure the entry and the config file are valid. You can reset the config file by deleting the file. It is located under \"{}\".", configName, defaultValue, configPath, e);
             return defaultValue;
         }
     }

@@ -10,9 +10,9 @@ import dev.isxander.yacl3.gui.LowProfileButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.majo24.mob_armor_trims.TrimApplier;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
-import net.majo24.mob_armor_trims.mixin.yacl.CategoryTabOptionListAccessor;
+import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
+import net.majo24.mob_armor_trims.mixin.yacl.OptionListAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -226,7 +226,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
                         buttonWidget.setMessage(Component.literal(control.collapsed ? "▶" : "▼"));
 
                         if (this.screen.tabManager.getCurrentTab() instanceof YACLScreen.CategoryTab categoryTab) {
-                            ((CategoryTabOptionListAccessor) categoryTab).getOptionList().getList().refreshOptions();
+                            ((OptionListAccessor) categoryTab).getOptionList().getList().refreshOptions();
                         }
                     });
         }

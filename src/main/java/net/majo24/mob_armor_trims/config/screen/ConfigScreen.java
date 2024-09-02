@@ -3,9 +3,10 @@ package net.majo24.mob_armor_trims.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.majo24.mob_armor_trims.config.Config;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.CustomTrim;
-import net.majo24.mob_armor_trims.config.custom_trim_combinations.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.majo24.mob_armor_trims.config.screen.controllers.TrimCombinationsController;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -23,14 +24,15 @@ import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
 /*? <1.21 {*/
 /*import net.minecraft.client.gui.screens.OptionsSubScreen;
-*//*?} else {*/
+ *//*?} else {*/
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 /*?}*/
 
 import static net.minecraft.network.chat.Component.translatable;
 
 public class ConfigScreen {
-    private ConfigScreen() {}
+    private ConfigScreen() {
+    }
 
     public static final Formatters.IntegerToPercentage integerToPercentageFormatter = new Formatters.IntegerToPercentage();
     public static final Formatters.TrimSystem trimSystemFormatter = new Formatters.TrimSystem();
@@ -159,6 +161,26 @@ public class ConfigScreen {
                 .build();
     }
 
+    public static class Formatters {
+        public static class IntegerToPercentage implements ValueFormatter<Integer> {
+            @Override
+            public Component format(Integer value) {
+                return Component.literal(value.toString() + "%");
+            }
+        }
+
+        public static class TrimSystem implements ValueFormatter<Config.TrimSystems> {
+            @Override
+            public Component format(Config.TrimSystems selectedSystem) {
+                return switch (selectedSystem) {
+                    case RANDOM_TRIMS -> Component.literal("Random Trims");
+                    case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");
+                    case NONE -> Component.literal("Disabled");
+                };
+            }
+        }
+    }
+
     static class BackupScreen extends OptionsSubScreen {
         public BackupScreen(Screen parent) {
             super(parent, Minecraft.getInstance().options, Component.literal("Mob Armor Trims"));
@@ -195,7 +217,8 @@ public class ConfigScreen {
 
         //? >=1.21 {
         @Override
-        protected void addOptions() {}
+        protected void addOptions() {
+        }
         //?}
 
         @Override
