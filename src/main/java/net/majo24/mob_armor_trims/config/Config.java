@@ -83,7 +83,7 @@ public class Config {
     }
 
     public static final class TrimCombinationsSubConfig {
-        @Entry(name = "controllers", description = """
+        @Entry(name = "custom_trim_combinations", description = """
                 The list of custom trim combinations.
                 
                 To create a new trim combination, add a new list with with 5 lists inside.
