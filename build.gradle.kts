@@ -13,7 +13,10 @@ class ModData {
     val issuesLink = property("mod.issues_link")
 }
 
-val mod = ModData()
+class Dependencies {
+    val modmenuVersion = property("deps.modmenu_version")
+    val yaclVersion = property("deps.yacl_version")
+}
 
 class LoaderData {
     val loader = loom.platform.get().name.lowercase()
@@ -23,15 +26,18 @@ class LoaderData {
     val isForgeLike = isNeoforge || isForge
 }
 
+class McData {
+    val version = property("mod.mc_version")
+    val dep = property("mod.mc_dep")
+    val targets = property("mod.mc_targets").toString().split(", ")
+}
+
+val mc = McData()
+val mod = ModData()
+val deps = Dependencies()
 val loader = LoaderData()
 
-val mcVersion = property("mod.mc_version")
-val mcDep = property("mod.mc_dep")
-
-val modmenuVersion = property("deps.modmenu_version")
-val yaclVersion = findProperty("deps.yacl_version")
-
-version = "${mod.version}+${mcVersion}-${loader.loader}"
+version = "${mod.version}+${mc.version}-${loader.loader}"
 group = mod.group
 base { archivesName.set(mod.id) }
 
@@ -70,7 +76,7 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${mcVersion}")
+    minecraft("com.mojang:minecraft:${mc.version}")
     mappings(loom.layered {
         // Mojmap mappings
         officialMojangMappings()
@@ -86,10 +92,10 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-fabric")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-fabric")
 
         // Mod Menu
-        modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+        modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
 
         // NightConfig
         include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
@@ -99,13 +105,13 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-neoforge") {isTransitive = false}
+        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-neoforge") {isTransitive = false}
     }
     if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${yaclVersion}+${mcVersion}-forge")
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge")
     }
 
     // NightConfig
@@ -136,17 +142,17 @@ tasks.processResources {
         put("id", mod.id)
         put("name", mod.name)
         put("version", mod.version)
-        put("mcdep", mcDep)
+        put("mcdep", mc.dep)
         put("description", mod.description)
         put("github_link", mod.githubLink)
         put("issues_link", mod.issuesLink)
-        put("modmenu_version", modmenuVersion)
-        put("yacl_version", yaclVersion)
+        put("modmenu_version", deps.modmenuVersion)
+        put("yacl_version", deps.yaclVersion)
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
         }
-        if (mcVersion == "1.20.1" || mcVersion == "1.20.4") {
+        if (mc.version == "1.20.1" || mc.version == "1.20.4") {
             put("forge_id", loader.loader)
         }
     }
@@ -163,7 +169,7 @@ tasks.processResources {
     }
 
     if (loader.isNeoforge) {
-        if (mcVersion == "1.20.4") {
+        if (mc.version == "1.20.4") {
             filesMatching("META-INF/mods.toml") { expand(props) }
             exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
         } else {
@@ -174,7 +180,7 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${mod.name} ${mod.version} for ${loader.loader.replaceFirstChar { it.uppercase() }} $mcVersion"
+    displayName = "${mod.name} ${mod.version} for ${loader.loader.replaceFirstChar { it.uppercase() }} ${mc.version}"
     file.set(tasks.remapJar.get().archiveFile)
     version = mod.version.toString()
     changelog.set(
@@ -186,15 +192,13 @@ publishMods {
     type = STABLE
     modLoaders.add(loader.loader)
 
-    val targets = property("mod.mc_targets").toString().split(", ")
-
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
     modrinth {
         projectId.set("hHVaPgFK")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.addAll(targets)
+        minecraftVersions.addAll(mc.targets)
         optional("yacl")
         if (loader.isFabric) {
             optional("modmenu")
@@ -204,7 +208,7 @@ publishMods {
     curseforge {
         projectId.set("1005441")
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.addAll(targets)
+        minecraftVersions.addAll(mc.targets)
         serverRequired = true
         optional("yacl")
         if (loader.isFabric) {
