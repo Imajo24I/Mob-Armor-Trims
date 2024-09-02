@@ -20,7 +20,7 @@
       "net.majo24.mob_armor_trims.MobArmorTrims"
     ],
     "modmenu": [
-      "net.majo24.mob_armor_trims.config.configscreen.ModMenuIntegration"
+      "net.majo24.mob_armor_trims.config.screen.ModMenuIntegration"
     ]
   },
   "mixins": [
