@@ -22,7 +22,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
-*/ //?}
+ *///?}
 
 //? if forgeLike {
 /*import net.majo24.mob_armor_trims.config.screen.ConfigScreenProvider;
@@ -51,7 +51,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
         //? if forgeLike {
         /*registerConfigScreen(
         //? if >1.20.4
-                container
+                /^container^/
         );
         *///?}
     }
@@ -90,15 +90,15 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     //? if forgeLike {
     /*public static void registerConfigScreen(
             //? if >1.20.4
-            ModContainer container
+            /^ModContainer container^/
     ) {
         /^? <1.20.5 {^/
-        /^
+        
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
-        ^//^?} else {^/
-        container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, screen) -> ConfigScreenProvider.getConfigScreen(screen));
-        /^?}^/
+        /^?} else {^/
+        /^container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, screen) -> ConfigScreenProvider.getConfigScreen(screen));
+        ^//^?}^/
     }
     *///?}
 }

@@ -5,6 +5,8 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -152,4 +154,30 @@ public abstract class ControllerWidgetHelper<T extends Controller<?>> extends Co
     public boolean charTyped(char codePoint, int modifiers) {
         return anyWidgetMatches(widget -> widget.charTyped(codePoint, modifiers)) || super.charTyped(codePoint, modifiers);
     }
+
+    @Override
+    public boolean isFocused() {
+        return anyWidgetMatches(GuiEventListener::isFocused);
+    }
+
+    @Override
+    public void setFocused(boolean focused) {
+        forWidget(widget -> widget.setFocused(focused));
+    }
+
+    /**
+     * {@return the narration priority}
+     */
+    @Override
+    public @NotNull NarrationPriority narrationPriority() {
+        return NarrationPriority.HOVERED;
+    }
+
+    /**
+     * Updates the narration output with the current narration information.
+     *
+     * @param narrationElementOutput the output to update with narration information.
+     */
+    @Override
+    public void updateNarration(NarrationElementOutput narrationElementOutput) {}
 }
