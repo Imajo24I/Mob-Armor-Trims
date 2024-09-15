@@ -39,13 +39,6 @@ public abstract class ControllerWidgetHelper<T extends Controller<?>> extends Co
         return guiEventsListeners().stream().anyMatch(action);
     }
 
-    /**
-     * Checks if every widget matches the predicate
-     */
-    public boolean everyWidgetMatches(Predicate<GuiEventListener> action) {
-        return guiEventsListeners().stream().allMatch(action);
-    }
-
     @Override
     protected int getHoveredControlWidth() {
         return getUnhoveredControlWidth();
