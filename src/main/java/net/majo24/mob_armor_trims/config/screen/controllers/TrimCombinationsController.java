@@ -8,28 +8,27 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.LowProfileButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.majo24.mob_armor_trims.TrimApplier;
+import net.majo24.mob_armor_trims.config.screen.controllers.helpers.ControllerHelper;
+import net.majo24.mob_armor_trims.config.screen.controllers.helpers.ControllerWidgetHelper;
 import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
 import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.majo24.mob_armor_trims.mixin.yacl.OptionListAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class TrimCombinationsController implements Controller<TrimCombination> {
-    private final Option<TrimCombination> option;
+public class TrimCombinationsController extends ControllerHelper<TrimCombination> {
     private final Controller<String> applyOnController;
     private final Controller<CustomTrim> bootsTrimController;
     private final Controller<CustomTrim> leggingsTrimController;
@@ -38,7 +37,8 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
     private boolean collapsed;
 
     public TrimCombinationsController(Option<TrimCombination> option, Function<Option<String>, ControllerBuilder<String>> applyOnController, Function<Option<CustomTrim>, ControllerBuilder<CustomTrim>> bootsTrimController, Function<Option<CustomTrim>, ControllerBuilder<CustomTrim>> leggingsTrimController, Function<Option<CustomTrim>, ControllerBuilder<CustomTrim>> chestplateTrimController, Function<Option<CustomTrim>, ControllerBuilder<CustomTrim>> helmetTrimController) {
-        this.option = option;
+        super(option);
+
         this.collapsed = true;
 
         this.bootsTrimController = createOption("Boots Trim:", bootsTrimController,
@@ -78,37 +78,8 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         ).controller();
     }
 
-    private static <T> Option<T> createOption(String name, Function<Option<T>, ControllerBuilder<T>> controller, Supplier<T> get, Consumer<T> set) {
-        return Option.<T>createBuilder()
-                .name(Component.literal(name))
-                .binding(
-                        get.get(),
-                        get,
-                        set
-                )
-                .instant(true)
-                .controller(controller)
-                .build();
-    }
-
     public void setCollapsed(Boolean collapsed) {
         this.collapsed = collapsed;
-    }
-
-    /**
-     * Gets the dedicated {@link Option} for this controller
-     */
-    @Override
-    public Option<TrimCombination> option() {
-        return option;
-    }
-
-    /**
-     * Gets the formatted value based on {@link Option#pendingValue()}
-     */
-    @Override
-    public Component formatValue() {
-        return Component.empty();
     }
 
     /**
@@ -162,7 +133,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         }
     }
 
-    public static class ControllerElement extends ControllerWidget<TrimCombinationsController> {
+    public static class ControllerElement extends ControllerWidgetHelper<TrimCombinationsController> {
         private final LowProfileButtonWidget collapseWidget;
         private final AbstractWidget applyOnMaterialWidget;
         private final AbstractWidget bootsTrimWidget;
@@ -251,7 +222,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         }
 
         private void renderMaterialToApplyOnPreview(GuiGraphics graphics) {
-            String materialToApplyOn = control.option.pendingValue().materialToApplyTo();
+            String materialToApplyOn = control.option().pendingValue().materialToApplyTo();
             ItemStack armorItem = switch (materialToApplyOn) {
                 case "netherite" -> Items.NETHERITE_CHESTPLATE.getDefaultInstance();
                 case "diamond" -> Items.DIAMOND_CHESTPLATE.getDefaultInstance();
@@ -279,7 +250,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         }
 
         private void renderArmorPreviews(GuiGraphics graphics, Minecraft mc, ClientLevel level) {
-            List<CustomTrim> customTrims = control.option.pendingValue().trims();
+            List<CustomTrim> customTrims = control.option().pendingValue().trims();
 
             int previewX;
             int previewY;
@@ -293,7 +264,7 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             }
 
             for (int index = 3; index >= 0; index--) {
-                List<ItemStack> armorItems = switch (control.option.pendingValue().materialToApplyTo()) {
+                List<ItemStack> armorItems = switch (control.option().pendingValue().materialToApplyTo()) {
                     case "leather" -> ARMOR_ITEMS.get(0);
                     case "chainmail" -> ARMOR_ITEMS.get(1);
                     case "iron" -> ARMOR_ITEMS.get(2);
@@ -330,11 +301,6 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
         }
 
         @Override
-        protected int getHoveredControlWidth() {
-            return getUnhoveredControlWidth();
-        }
-
-        @Override
         public void setDimension(Dimension<Integer> widgetDimension) {
             Dimension<Integer> defaultWidgetDimensions;
 
@@ -359,103 +325,15 @@ public class TrimCombinationsController implements Controller<TrimCombination> {
             super.setDimension(widgetDimension);
         }
 
-        @Override
-        public void unfocus() {
-            super.unfocus();
-
-            collapseWidget.setFocused(false);
-            applyOnMaterialWidget.setFocused(false);
-            bootsTrimWidget.setFocused(false);
-            leggingsTrimWidget.setFocused(false);
-            chestplateTrimWidget.setFocused(false);
-            helmetTrimWidget.setFocused(false);
-        }
-
-        @Override
-        public boolean isFocused() {
-            return collapseWidget.isFocused() || applyOnMaterialWidget.isFocused() || bootsTrimWidget.isFocused() || leggingsTrimWidget.isFocused() || chestplateTrimWidget.isFocused() || helmetTrimWidget.isFocused();
-        }
-
-        @Override
-        public void setFocused(boolean focused) {
-            collapseWidget.setFocused(focused);
-            applyOnMaterialWidget.setFocused(focused);
-            bootsTrimWidget.setFocused(focused);
-            leggingsTrimWidget.setFocused(focused);
-            chestplateTrimWidget.setFocused(focused);
-            helmetTrimWidget.setFocused(focused);
-        }
-
-        @Override
-        public boolean charTyped(char chr, int modifiers) {
-            return collapseWidget.charTyped(chr, modifiers)
-                    || applyOnMaterialWidget.charTyped(chr, modifiers)
-                    || bootsTrimWidget.charTyped(chr, modifiers)
-                    || leggingsTrimWidget.charTyped(chr, modifiers)
-                    || chestplateTrimWidget.charTyped(chr, modifiers)
-                    || helmetTrimWidget.charTyped(chr, modifiers);
-        }
-
-        @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            return collapseWidget.keyPressed(keyCode, scanCode, modifiers) || applyOnMaterialWidget.keyPressed(keyCode, scanCode, modifiers) || bootsTrimWidget.keyPressed(keyCode, scanCode, modifiers) || leggingsTrimWidget.keyPressed(keyCode, scanCode, modifiers) || chestplateTrimWidget.keyPressed(keyCode, scanCode, modifiers) || helmetTrimWidget.keyPressed(keyCode, scanCode, modifiers);
-        }
-
-        @Override
-        public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-            return collapseWidget.keyReleased(keyCode, scanCode, modifiers) || applyOnMaterialWidget.keyReleased(keyCode, scanCode, modifiers) || bootsTrimWidget.keyReleased(keyCode, scanCode, modifiers) || leggingsTrimWidget.keyReleased(keyCode, scanCode, modifiers) || chestplateTrimWidget.keyReleased(keyCode, scanCode, modifiers) || helmetTrimWidget.keyReleased(keyCode, scanCode, modifiers);
-        }
-
-        //? <=1.20.1 {
-        /*@Override
-        public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-            return collapseWidget.mouseScrolled(mouseX, mouseY, delta) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, delta) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, delta) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, delta) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, delta);
-        }
-        *///?} else {
-        @Override
-        public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-            return collapseWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || applyOnMaterialWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || bootsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || leggingsTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || chestplateTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY) || helmetTrimWidget.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-        }
-        //?}
-
-        @Override
-        public void mouseMoved(double mouseX, double mouseY) {
-            collapseWidget.mouseMoved(mouseX, mouseY);
-            applyOnMaterialWidget.mouseMoved(mouseX, mouseY);
-            bootsTrimWidget.mouseMoved(mouseX, mouseY);
-            leggingsTrimWidget.mouseMoved(mouseX, mouseY);
-            chestplateTrimWidget.mouseMoved(mouseX, mouseY);
-            helmetTrimWidget.mouseMoved(mouseX, mouseY);
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            return collapseWidget.mouseClicked(mouseX, mouseY, button) || applyOnMaterialWidget.mouseClicked(mouseX, mouseY, button) || bootsTrimWidget.mouseClicked(mouseX, mouseY, button) || leggingsTrimWidget.mouseClicked(mouseX, mouseY, button) || chestplateTrimWidget.mouseClicked(mouseX, mouseY, button) || helmetTrimWidget.mouseClicked(mouseX, mouseY, button);
-        }
-
-        @Override
-        public boolean mouseReleased(double mouseX, double mouseY, int button) {
-            return collapseWidget.mouseReleased(mouseX, mouseY, button) || applyOnMaterialWidget.mouseReleased(mouseX, mouseY, button) || bootsTrimWidget.mouseReleased(mouseX, mouseY, button) || leggingsTrimWidget.mouseReleased(mouseX, mouseY, button) || chestplateTrimWidget.mouseReleased(mouseX, mouseY, button) || helmetTrimWidget.mouseReleased(mouseX, mouseY, button);
-        }
-
-        @Override
-        public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-            return collapseWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || applyOnMaterialWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || bootsTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || leggingsTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || chestplateTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || helmetTrimWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-        }
-
-        @Override
-        public NarrationPriority narrationPriority() {
-            return collapseWidget.narrationPriority();
-        }
-
-        @Override
-        public void updateNarration(NarrationElementOutput narrationElementOutput) {
-            collapseWidget.updateNarration(narrationElementOutput);
-            applyOnMaterialWidget.updateNarration(narrationElementOutput);
-            bootsTrimWidget.updateNarration(narrationElementOutput);
-            leggingsTrimWidget.updateNarration(narrationElementOutput);
-            chestplateTrimWidget.updateNarration(narrationElementOutput);
-            helmetTrimWidget.updateNarration(narrationElementOutput);
+        public List<GuiEventListener> guiEventsListeners() {
+            return Arrays.asList(
+                    collapseWidget,
+                    applyOnMaterialWidget,
+                    helmetTrimWidget,
+                    chestplateTrimWidget,
+                    leggingsTrimWidget,
+                    bootsTrimWidget
+            );
         }
     }
 }
