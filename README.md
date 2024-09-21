@@ -6,33 +6,34 @@
 
 This minecraft mod makes mobs be able to spawn with naturally trimmed armor.
 
-## What does the mod exactly do?
 
-If a mob spawns with armor, there's a configurable chance of the armor having armor trims on its pieces.  
+When a mob spawns, each of the mob's armor pieces has a chance to have an armor trim applied to it.
 By default, the armor trims are randomly chosen, while also taking the previous trim into account,  
 resulting in good-looking trim combinations.  
 Alternatively, you can configure this mod to use customizable trim combinations instead of random trims.
 
-## Clientside/Serverside
+## Supported Versions/Loaders/Environments
 
 This mod is serverside.
+
+For 1.20.1, this mod supports [Fabric](https://fabricmc.net/) and [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/).<br>
+For supported minecraft versions above 1.20.1, this mod supports [Fabric](https://fabricmc.net/) and [Neoforge](https://neoforged.net/).
+
+Supported minecraft versions are:
+- 1.20.1
+- 1.20.4
+- 1.20.5 - 1.20.6
+- 1.21-1.21.1
 
 ## Dependencies
 
 ### Required
 
-Except a modloader, there are no required dependencies.  
-You can find the modloaders you can use for each minecraft version here:
-
-- For 1.20.1, you can use [Fabric](https://fabricmc.net/)
-  or [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
-- For 1.20.4, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)
-- For 1.20.5/1.20.6, you can use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)
-- For 1.21, you use [Fabric](https://fabricmc.net/) or [Neoforge](https://neoforged.net/)
+This mod has no required dependencies.
 
 ### Optional
 
-You can configure this mod inside minecraft using a Config Screen.  
+You can configure this mod inside minecraft using a config screen.  
 These are the dependencies for each modloader to be able to do this:
 
 - Fabric: [Mod Menu](https://modrinth.com/mod/modmenu) and [Yet Another Config Lib](https://modrinth.com/mod/yacl)
@@ -42,8 +43,8 @@ These are the dependencies for each modloader to be able to do this:
 
 You can configure this mod through a
 
-- Config Screen: Dependencies for this can be found under `Dependencies` > `Optional` in this file
-- Config file: The config file is located in `.minecraft/config/mob_armor_trims.json`
+- Config Screen: Dependencies for this can be found under `Dependencies` > `Optional`
+- Config file: The config file is located under `.minecraft/config/mob_armor_trims.toml`
 
 There are two different systems of how the mod chooses what trims to give the mob.  
 Most things about these systems are configurable.  
@@ -56,18 +57,10 @@ These two systems are:
   for each of the armor pieces and an armor material, on which the combination will applied on. It won't be applied to
   any armor with another material.
 
-## Compatibility
-
-Currently, there are no found incompatible mods.
-If you find any incompatible mod, please report
-the
-incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml)
-
 ## Issues
 
-If you have found any Issue, please report
-the
-issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
+If you have found any incompatible mod, please report the incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
+If you have found any other issue, please report the issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
 
 ### Known Issues:
 
@@ -75,3 +68,7 @@ issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&l
   This is a known issue with YACL (Yet Another Config Lib), where it crashes when opening any config screen created with
   YACL on Forge 1.20.1.
   As a workaround, downgrade the version of YACL to `3.4.2`.
+
+- Incompatibility with Global Packs:
+  Resource Packs/Data Packs are seemingly not recognized by Global Packs when this mod is loaded.
+  This will be fixed soon.
