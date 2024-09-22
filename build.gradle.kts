@@ -92,7 +92,7 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-fabric")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}")
 
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
@@ -100,18 +100,16 @@ dependencies {
         // NightConfig
         include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
         include("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
-    }
-    if (loader.isNeoforge) {
+    } else if (loader.isNeoforge) {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-neoforge") {isTransitive = false}
-    }
-    if (loader.isForge) {
+        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}") {isTransitive = false}
+    } else if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge")
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge")  {isTransitive = false}
     }
 
     // NightConfig
