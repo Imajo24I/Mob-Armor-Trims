@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.Inject;
 
-@Mixin(value = Mob.class)
+@Mixin(Mob.class)
 public abstract class SpawnMobTrimmed extends LivingEntity {
     protected SpawnMobTrimmed(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
