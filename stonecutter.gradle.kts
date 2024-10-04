@@ -5,11 +5,16 @@ plugins {
 stonecutter active "1.21-fabric" /* [SC] DO NOT EDIT */
 
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
-    group = "build"
+    group = "chiseled"
     ofTask("build")
 }
 
 stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
-    group = "publishing"
+    group = "chiseled"
     ofTask("publishMods")
+}
+
+stonecutter registerChiseled tasks.register("chiseledRunClient", stonecutter.chiseled) {
+    group = "chiseled"
+    ofTask("runClient")
 }
