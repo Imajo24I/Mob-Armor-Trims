@@ -1,1 +1,1 @@
-- Support for 1.21.1
+- Fix Global Packs incompatibility
