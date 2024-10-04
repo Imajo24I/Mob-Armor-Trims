@@ -68,7 +68,3 @@ If you have found any other issue, please report the issue [here](https://github
   This is a known issue with YACL (Yet Another Config Lib), where it crashes when opening any config screen created with
   YACL on Forge 1.20.1.
   As a workaround, downgrade the version of YACL to `3.4.2`.
-
-- Incompatibility with Global Packs:
-  Resource Packs/Data Packs are seemingly not recognized by Global Packs when this mod is loaded.
-  This will be fixed soon.
