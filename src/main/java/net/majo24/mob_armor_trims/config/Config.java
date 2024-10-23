@@ -8,8 +8,13 @@ import net.majo24.mob_armor_trims.config.backend.entries.PrimitiveEntry;
 import net.majo24.mob_armor_trims.config.backend.entries.TrimCombinationsEntry;
 import net.majo24.mob_armor_trims.config.backend.entries.TrimSystemEntry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.item.armortrim.ArmorTrim;
 import org.jetbrains.annotations.Nullable;
+
+//? >=1.21.2 {
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+//?} else {
+/*import net.minecraft.world.item.armortrim.ArmorTrim;
+*///?}
 
 import java.util.*;
 

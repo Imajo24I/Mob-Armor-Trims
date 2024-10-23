@@ -10,8 +10,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.armortrim.*;
 import net.majo24.mob_armor_trims.config.Config.TrimSystems;
+
+//? >=1.21.2 {
+import net.minecraft.world.item.equipment.trim.*;
+//?} else {
+/*import net.minecraft.world.item.armortrim.*;
+ *///?}
 
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
@@ -56,9 +61,15 @@ public class TrimApplier {
      */
     public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
-        Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
         ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
+
+        //? >=1.21.2 {
+        Registry<TrimMaterial> materialRegistry = registryAccess.lookupOrThrow(materialKey);
+        Registry<TrimPattern> patternRegistry = registryAccess.lookupOrThrow(patternKey);
+        //?} else {
+        /*Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
         Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(patternKey);
+        *///?}
 
         ArmorTrim lastTrim = null;
 

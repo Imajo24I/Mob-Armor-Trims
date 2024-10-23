@@ -21,7 +21,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.armortrim.ArmorTrim;
+
+//? >=1.21.2 {
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+//?} else {
+/*import net.minecraft.world.item.armortrim.ArmorTrim;*///?}
 
 import java.util.Arrays;
 import java.util.List;

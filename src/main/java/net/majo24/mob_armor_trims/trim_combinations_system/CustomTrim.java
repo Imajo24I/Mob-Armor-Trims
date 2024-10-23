@@ -4,7 +4,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.armortrim.*;
+import net.minecraft.world.item.ItemStack;
+
+//? >=1.21.2 {
+import net.minecraft.world.item.equipment.trim.*;
+//?} else {
+/*import net.minecraft.world.item.armortrim.*;
+ *///?}
 
 import java.util.List;
 
@@ -42,8 +48,10 @@ public record CustomTrim(String material, String pattern) {
     }
 
     private Holder.Reference<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
+        ItemStack materialItem = getItemFromId(material);
+
         try {
-            return TrimMaterials.getFromIngredient(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(material)).getDefaultInstance()).orElseThrow();
+            return TrimMaterials.getFromIngredient(registryAccess, materialItem).orElseThrow();
         } catch (Exception e) {
             return null;
         }
@@ -51,10 +59,19 @@ public record CustomTrim(String material, String pattern) {
 
     private Holder.Reference<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
         try {
-            return TrimPatterns.getFromTemplate(registryAccess, BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(pattern)).getDefaultInstance()).orElseThrow();
+            ItemStack patternItem = getItemFromId(pattern);
+            return TrimPatterns.getFromTemplate(registryAccess, patternItem).orElseThrow();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private ItemStack getItemFromId(String id) {
+        return BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(id))
+                //? >=1.21.2 {
+                .orElseThrow().value()
+                //?}
+                .getDefaultInstance();
     }
 
     /**
