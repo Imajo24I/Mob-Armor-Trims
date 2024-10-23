@@ -40,7 +40,14 @@ public abstract class ControllerHelper<T> implements Controller<T> {
                         get,
                         set
                 )
+
+                //TODO: Replace with stateManager
+                // Currently not done, to maintain compatibility with YACL 3.5.2,
+                // since YACL 3.5.4+ causes crashes on Forge 1.20.1
+                // Once this bug has been fixed, this can be done
+                // (Or just use Stonecutter versioning and don't have to wait)
                 .instant(true)
+
                 .controller(controllerBuilder)
                 .build();
     }
