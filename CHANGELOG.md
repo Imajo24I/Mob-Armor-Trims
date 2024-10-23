@@ -1,3 +1,1 @@
-- Fix Global Packs incompatibility
-- Fix versions with multiple compatible versions only getting marked as compatible on one of them
-- Cleanup of some stuff
+- Add support for 1.21.2
