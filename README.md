@@ -6,24 +6,31 @@
 
 This minecraft mod makes mobs be able to spawn with naturally trimmed armor.
 
-
 When a mob spawns, each of the mob's armor pieces has a chance to have an armor trim applied to it.
 By default, the armor trims are randomly chosen, while also taking the previous trim into account,  
 resulting in good-looking trim combinations.  
 Alternatively, you can configure this mod to use customizable trim combinations instead of random trims.
 
-## Supported Versions/Loaders/Environments
+This mod is serverside, meaning it has to be on the server for it to take any effect.
 
-This mod is serverside.
+## Supported Minecraft Versions and Loaders
 
-For 1.20.1, this mod supports [Fabric](https://fabricmc.net/) and [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/).<br>
-For supported minecraft versions above 1.20.1, this mod supports [Fabric](https://fabricmc.net/) and [Neoforge](https://neoforged.net/).
+| Minecraft       | Fabric | Neoforge | Forge |
+|-----------------|--------|----------|-------|
+| 1.20.1          | ✅      | ❌        | ✅     |
+| 1.20.4          | ✅      | ✅        | ❌     |
+| 1.20.5 - 1.20.6 | ✅      | ✅        | ❌     |
+| 1.21 - 1.21.1   | ✅      | ✅        | ❌     |
+| 1.21.1 - 1.21.3 | ✅      | ✅        | ❌     |
 
-Supported minecraft versions are:
-- 1.20.1
-- 1.20.4
-- 1.20.5 - 1.20.6
-- 1.21 - 1.21.3
+✅ - Supported:  
+These versions are actively supported and are receiving features, bug fixes, and optimization updates.
+
+⚠️ - Deprecated:  
+These versions are no longer receiving updates.
+
+❌ - Unavailable:  
+There are no downloads available for these versions.
 
 ## Dependencies
 
@@ -33,7 +40,7 @@ This mod has no required dependencies.
 
 ### Optional
 
-You can configure this mod inside minecraft using a config screen.  
+The optional dependencies of this mod allow you to configure this mod through a config screen.  
 These are the dependencies for each modloader to be able to do this:
 
 - Fabric: [Mod Menu](https://modrinth.com/mod/modmenu) and [Yet Another Config Lib](https://modrinth.com/mod/yacl)
@@ -59,8 +66,10 @@ These two systems are:
 
 ## Issues
 
-If you have found any incompatible mod, please report the incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
-If you have found any other issue, please report the issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
+If you have found any incompatible mod, please report the
+incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
+If you have found any other issue, please report the
+issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
 
 ### Known Issues:
 
