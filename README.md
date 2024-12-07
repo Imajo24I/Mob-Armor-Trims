@@ -21,7 +21,7 @@ This mod is serverside, meaning it has to be on the server for it to take any ef
 | 1.20.4          | ✅      | ✅        | ❌     |
 | 1.20.5 - 1.20.6 | ✅      | ✅        | ❌     |
 | 1.21 - 1.21.1   | ✅      | ✅        | ❌     |
-| 1.21.2 - 1.21.3 | ✅      | ✅        | ❌     |
+| 1.21.2 - 1.21.4 | ✅      | ✅        | ❌     |
 
 ✅ - Supported:  
 These versions are actively supported and are receiving features, bug fixes, and optimization updates.
