@@ -81,7 +81,7 @@ public class Config {
 
     public static final class RandomTrimsSubConfig {
         @Entry(name = "trim_chance", description = "Chance of each armor piece from a mob having an armor trim")
-        public final PrimitiveEntry<Integer> trimChance = new PrimitiveEntry<>(50);
+        public final PrimitiveEntry<Integer> trimChance = new PrimitiveEntry<>(75);
 
         @Entry(name = "similar_trim_chance", description = "Chance of each armor piece having a similar armor trim as the previous armor piece")
         public final PrimitiveEntry<Integer> similarTrimChance = new PrimitiveEntry<>(75);
