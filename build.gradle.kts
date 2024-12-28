@@ -41,10 +41,13 @@ version = "${mod.version}+${mc.version}-${loader.loader}"
 group = mod.group
 base { archivesName.set(mod.id) }
 
-stonecutter.const("fabric", loader.isFabric)
-stonecutter.const("neoforge", loader.isNeoforge)
-stonecutter.const("forge", loader.isForge)
-stonecutter.const("forgeLike", loader.isForgeLike)
+stonecutter {
+    const("fabric", loader.isFabric)
+    const("neoforge", loader.isNeoforge)
+    const("forge", loader.isForge)
+    const("forgeLike", loader.isForgeLike)
+}
+
 
 loom {
     mods {
@@ -104,12 +107,16 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}") {isTransitive = false}
+        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}") {
+            isTransitive = false
+        }
     } else if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge")  {isTransitive = false}
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge") {
+            isTransitive = false
+        }
     }
 
     // NightConfig
@@ -125,11 +132,7 @@ loom {
 }
 
 java {
-    val java = if (stonecutter.compare(
-                stonecutter.current.version,
-                "1.20.6"
-            ) >= 0
-        ) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val java = if (stonecutter.eval(stonecutter.current.version, "1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = java
     targetCompatibility = java
     withSourcesJar()

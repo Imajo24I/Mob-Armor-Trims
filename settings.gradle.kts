@@ -1,5 +1,3 @@
-import dev.kikugie.stonecutter.StonecutterSettings
-
 pluginManagement {
     repositories {
         mavenCentral()
@@ -14,11 +12,11 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.4.4"
+    id("dev.kikugie.stonecutter") version "0.5"
 }
 
-extensions.configure<StonecutterSettings> {
-    kotlinController= true
+stonecutter {
+    kotlinController = true
     centralScript = "build.gradle.kts"
 
     shared {
@@ -33,9 +31,8 @@ extensions.configure<StonecutterSettings> {
         mc("1.20.6", listOf("fabric", "neoforge"))
         mc("1.21", listOf("fabric", "neoforge"))
         mc("1.21.2", listOf("fabric", "neoforge"))
-
-        vcsVersion("1.21.2-fabric")
     }
+
     create(rootProject)
 }
 
