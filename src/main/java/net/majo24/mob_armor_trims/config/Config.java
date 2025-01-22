@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 //?} else {
 /*import net.minecraft.world.item.armortrim.ArmorTrim;
-*///?}
+ *///?}
 
 import java.util.*;
 
@@ -39,19 +39,15 @@ public class Config {
         return null;
     }
 
-    public void addCustomTrimToCache(String material, String pattern, ArmorTrim trim) {
-        this.cachedCustomTrims.put(Arrays.asList(material, pattern), trim);
-    }
-
     @Nullable
     public ArmorTrim getOrCreateCachedTrim(String material, String pattern, RegistryAccess registryAccess) throws IllegalStateException {
-        ArmorTrim cachedTrim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
-        if (cachedTrim == null) {
-            ArmorTrim newTrim = new CustomTrim(material, pattern).getTrim(registryAccess);
-            this.addCustomTrimToCache(material, pattern, newTrim);
-            return newTrim;
+        ArmorTrim trim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
+        if (trim == null) {
+            trim = new CustomTrim(material, pattern).getTrim(registryAccess);
+            this.cachedCustomTrims.put(Arrays.asList(material, pattern), trim);
         }
-        return cachedTrim;
+
+        return trim;
     }
 
 
