@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 /*import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 
 //? >1.20.4 {
@@ -21,6 +22,7 @@ import net.neoforged.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
  *///?}
 
@@ -49,10 +51,12 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     ) {
         onInitialize();
         //? if forgeLike {
-        /*registerConfigScreen(
-        //? if >1.20.4
-                container
-        );
+        /*if (FMLLoader.getDist().isClient()) {
+            registerConfigScreen(
+                    //? if >1.20.4
+                    container
+            );
+        }
         *///?}
     }
 

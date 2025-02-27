@@ -1,3 +1,1 @@
-- Add support for 1.21.4
-- Fix 1.21.2 neoforge not being set as compatible on modrinth and curseforge
-- Adjust the default value for the trim chance config from 50% to 75%
+- Fix crash happening at startup on forge and neoforge dedicated servers
