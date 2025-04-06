@@ -3,6 +3,7 @@ package net.majo24.mob_armor_trims;
 import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
 import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.majo24.mob_armor_trims.config.Config.TrimSystems;
+
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
 import net.minecraft.core.Holder;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -72,9 +74,8 @@ public class TrimApplier {
             if (trimChance < random.nextInt(100)) {
                 continue;
             }
-            if (!armorPiece.isEmpty()) {
-                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim);
-            }
+
+            lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim);
 
             // Stacked Armor Trims compatibility
             if (MobArmorTrims.isStackedArmorTrimsLoaded) {
@@ -95,10 +96,6 @@ public class TrimApplier {
                 requiredMaterial = getArmorMaterial(armorPiece);
                 break;
             }
-        }
-
-        if (requiredMaterial.isEmpty()) {
-            return;
         }
 
         TrimCombination trimCombination = configManager.getConfig().getRandomTrimCombination(requiredMaterial);
