@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Mixin(Mob.class)
 public abstract class SpawnMobTrimmed extends LivingEntity {
@@ -28,7 +27,7 @@ public abstract class SpawnMobTrimmed extends LivingEntity {
                 .filter(armorPiece -> !armorPiece.isEmpty())
                 .toList();
         //?} else {
-        /*List<ItemStack> armor = StreamSupport.stream(this.getArmorSlots().spliterator(), false)
+        /*List<ItemStack> armor = java.util.stream.StreamSupport.stream(this.getArmorSlots().spliterator(), false)
                 .filter(armorPiece -> !armorPiece.isEmpty())
                 .toList();
         *///?}
