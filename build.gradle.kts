@@ -95,10 +95,10 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modRuntimeOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}")
 
         // Fabric API - Required by Mod Menu
-        modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
