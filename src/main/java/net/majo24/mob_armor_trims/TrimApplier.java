@@ -72,7 +72,7 @@ public class TrimApplier {
             if (trimChance < random.nextInt(100)) {
                 continue;
             }
-            if (armorPiece.getItem() != Items.AIR) {
+            if (!armorPiece.isEmpty()) {
                 lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim);
             }
 
@@ -91,7 +91,7 @@ public class TrimApplier {
         String requiredMaterial = "";
 
         for (ItemStack armorPiece : armor) {
-            if (armorPiece.getItem() != Items.AIR) {
+            if (!armorPiece.isEmpty()) {
                 requiredMaterial = getArmorMaterial(armorPiece);
                 break;
             }

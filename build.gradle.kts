@@ -85,9 +85,9 @@ dependencies {
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
-        optionalProp("deps.parchment_version") {
+        /*optionalProp("deps.parchment_version") {
             parchment("org.parchmentmc.data:parchment-${property("mod.mc_version")}:$it@zip")
-        }
+        }*/
 
     })
 
@@ -95,7 +95,7 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}")
 
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
@@ -107,14 +107,14 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-${loader.loader}") {
+        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
             isTransitive = false
         }
     } else if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}+${mc.version}-forge") {
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
             isTransitive = false
         }
     }
@@ -132,7 +132,11 @@ loom {
 }
 
 java {
-    val java = if (stonecutter.eval(stonecutter.current.version, ">=1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val java = if (stonecutter.eval(
+            stonecutter.current.version,
+            ">=1.20.6"
+        )
+    ) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = java
     targetCompatibility = java
     withSourcesJar()

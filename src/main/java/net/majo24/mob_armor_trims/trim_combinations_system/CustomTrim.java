@@ -3,6 +3,8 @@ package net.majo24.mob_armor_trims.trim_combinations_system;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,12 +31,12 @@ public record CustomTrim(String material, String pattern) {
             trimPatternId += TRIM_PATTER_SUFFIX;
         }
 
-        Holder.Reference<TrimMaterial> trimMaterial = getMaterial(material, registryAccess);
+        Holder<TrimMaterial> trimMaterial = getMaterial(material, registryAccess);
         if (trimMaterial == null) {
             throw new IllegalStateException("Failed to create armor trim. Please ensure this is a valid trim material: " + material);
         }
 
-        Holder.Reference<TrimPattern> trimPattern = getPattern(trimPatternId, registryAccess);
+        Holder<TrimPattern> trimPattern = getPattern(trimPatternId, registryAccess);
         if (trimPattern == null) {
             trimPatternId = trimPatternId.replace(TRIM_PATTER_SUFFIX, "");
             trimPattern = getPattern(trimPatternId, registryAccess);
@@ -47,7 +49,7 @@ public record CustomTrim(String material, String pattern) {
         return new ArmorTrim(trimMaterial, trimPattern);
     }
 
-    private Holder.Reference<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
+    private Holder<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
         ItemStack materialItem = getItemFromId(material);
 
         try {
@@ -57,10 +59,10 @@ public record CustomTrim(String material, String pattern) {
         }
     }
 
-    private Holder.Reference<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
+    private Holder<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
         try {
-            ItemStack patternItem = getItemFromId(pattern);
-            return TrimPatterns.getFromTemplate(registryAccess, patternItem).orElseThrow();
+            ResourceLocation resourceLocation = ResourceLocation.tryParse(pattern);
+            return registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().filter((reference) -> reference.key().location().equals(resourceLocation)).findFirst().orElseThrow();
         } catch (Exception e) {
             return null;
         }
