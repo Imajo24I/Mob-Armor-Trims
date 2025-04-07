@@ -38,7 +38,7 @@ public class TrimApplier {
     /**
      * Runs the selected system on the given armor
      */
-    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
+    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armor) {
         if (configManager.getConfig().general.noTrimsChance.getValue() > random.nextInt(100)) {
             return;
         }
@@ -88,14 +88,11 @@ public class TrimApplier {
         }
     }
 
-    public static void runCustomTrimCombinationsSystem(Iterable<ItemStack> armor, RegistryAccess registryAccess) {
-        String requiredMaterial = "";
+    public static void runCustomTrimCombinationsSystem(List<ItemStack> armor, RegistryAccess registryAccess) {
+        String requiredMaterial = getArmorMaterial(armor.getFirst());
 
-        for (ItemStack armorPiece : armor) {
-            if (!armorPiece.isEmpty()) {
-                requiredMaterial = getArmorMaterial(armorPiece);
-                break;
-            }
+        if (requiredMaterial.isEmpty()) {
+            return;
         }
 
         TrimCombination trimCombination = configManager.getConfig().getRandomTrimCombination(requiredMaterial);
@@ -107,10 +104,6 @@ public class TrimApplier {
 
         for (CustomTrim trim : trimCombination.trims()) {
             ItemStack armorPiece = armorIterator.next();
-            if (armorPiece.getItem() == Items.AIR) {
-                continue;
-            }
-
             ArmorTrim armorTrim = configManager.getConfig().getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
 
             if (armorTrim != null) {
