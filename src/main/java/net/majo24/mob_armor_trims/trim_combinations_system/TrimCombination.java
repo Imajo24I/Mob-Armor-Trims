@@ -3,7 +3,8 @@ package net.majo24.mob_armor_trims.trim_combinations_system;
 import java.util.ArrayList;
 import java.util.List;
 
-public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, CustomTrim chestplateTrim, CustomTrim leggingsTrim, CustomTrim bootsTrim) {
+public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, CustomTrim chestplateTrim,
+                              CustomTrim leggingsTrim, CustomTrim bootsTrim) {
     public List<List<String>> toStringList() {
         return List.of(List.of(this.materialToApplyTo),
                 this.bootsTrim.toList(),
@@ -16,12 +17,13 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
      * @return A list of all custom trims from this trim combination
      */
     public List<CustomTrim> trims() {
-        return new ArrayList<>(List.of(this.bootsTrim, this.leggingsTrim, this.chestplateTrim, this.helmetTrim));
+        return new ArrayList<>(List.of(this.helmetTrim, this.chestplateTrim, this.leggingsTrim, this.bootsTrim));
     }
 
     /**
      * Replaces the custom trim at the given index
-     * @param trim The new custom trim
+     *
+     * @param trim  The new custom trim
      * @param index Index of the replaced trim (0: boots, 1: leggings, 2: chestplate, 3: helmet)
      * @return A new TrimCombination
      */
@@ -33,6 +35,7 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
 
     /**
      * Replaces the material to apply the trims to
+     *
      * @param materialToApplyTo The material to apply the trims to
      * @return A new TrimCombination
      */

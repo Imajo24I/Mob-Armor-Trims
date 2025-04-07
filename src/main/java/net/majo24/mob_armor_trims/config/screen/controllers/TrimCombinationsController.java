@@ -47,19 +47,19 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
 
         this.bootsTrimController = createOption("Boots Trim:", bootsTrimController,
                 () -> option.pendingValue().bootsTrim(),
-                value -> option.requestSet(option.pendingValue().withTrim(value, 0))).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 3))).controller();
 
         this.leggingsTrimController = createOption("Leggings Trim:", leggingsTrimController,
                 () -> option.pendingValue().leggingsTrim(),
-                value -> option.requestSet(option.pendingValue().withTrim(value, 1))).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 2))).controller();
 
         this.chestplateTrimController = createOption("Chestplate Trim:", chestplateTrimController,
                 () -> option.pendingValue().chestplateTrim(),
-                value -> option.requestSet(option.pendingValue().withTrim(value, 2))).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 1))).controller();
 
         this.helmetTrimController = createOption("Helmet Trim:", helmetTrimController,
                 () -> option.pendingValue().helmetTrim(),
-                value -> option.requestSet(option.pendingValue().withTrim(value, 3))).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 0))).controller();
 
         this.applyOnController = createOption("Material to apply on:", applyOnController,
                 () -> option.pendingValue().materialToApplyTo(),
@@ -86,7 +86,7 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
 
 
         AbstractWidget applyOnMaterialWidget = this.applyOnController.provideWidget(screen, widgetDimension.moved(0, 20));
-        AbstractWidget helmetTrimWidget = this.helmetTrimController.provideWidget(screen, widgetDimension.moved(0, 400));
+        AbstractWidget helmetTrimWidget = this.helmetTrimController.provideWidget(screen, widgetDimension.moved(0, 40));
         AbstractWidget chestplateTrimWidget = this.chestplateTrimController.provideWidget(screen, widgetDimension.moved(0, 60));
         AbstractWidget leggingsTrimWidget = this.leggingsTrimController.provideWidget(screen, widgetDimension.moved(0, 80));
         AbstractWidget bootsTrimWidget = this.bootsTrimController.provideWidget(screen, widgetDimension.moved(0, 100));
@@ -251,7 +251,7 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
                 previewY = collapseWidget.getY() + 43;
             }
 
-            for (int index = 3; index >= 0; index--) {
+            for (int index = 0; index <= 3; index++) {
                 List<ItemStack> armorItems = switch (control.option().pendingValue().materialToApplyTo()) {
                     case "leather" -> ARMOR_ITEMS.get(0);
                     case "chainmail" -> ARMOR_ITEMS.get(1);

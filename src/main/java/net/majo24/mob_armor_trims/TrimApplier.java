@@ -102,7 +102,7 @@ public class TrimApplier {
 
         Iterator<ItemStack> armorIterator = armor.iterator();
 
-        for (CustomTrim trim : trimCombination.trims()) {
+        for (CustomTrim trim : trimCombination.trims().reversed()) {
             ItemStack armorPiece = armorIterator.next();
             ArmorTrim armorTrim = configManager.getConfig().getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
 
