@@ -1,1 +1,2 @@
-- Fix crash happening at startup on forge and neoforge dedicated servers
+- Add support for 1.21.5
+- Fix incorrect order of trims in trim combination setting
