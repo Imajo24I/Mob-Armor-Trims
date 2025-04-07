@@ -11,12 +11,32 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
                 this.helmetTrim.toList());
     }
 
-
     /**
      * @return A list of all custom trims from this trim combination
      */
     public List<CustomTrim> trims() {
         return List.of(this.bootsTrim, this.leggingsTrim, this.chestplateTrim, this.helmetTrim);
+    }
+
+    /**
+     * Replaces the custom trim at the given index
+     * @param trim The new custom trim
+     * @param index Index of the replaced trim (0: boots, 1: leggings, 2: chestplate, 3: helmet)
+     * @return A new TrimCombination
+     */
+    public TrimCombination withTrim(CustomTrim trim, int index) {
+        List<CustomTrim> trims = this.trims();
+        trims.set(index, trim);
+        return new TrimCombination(this.materialToApplyTo, trims.get(0), trims.get(1), trims.get(2), trims.get(3));
+    }
+
+    /**
+     * Replaces the material to apply the trims to
+     * @param materialToApplyTo The material to apply the trims to
+     * @return A new TrimCombination
+     */
+    public TrimCombination withMaterialToApplyTo(String materialToApplyTo) {
+        return new TrimCombination(materialToApplyTo, this.bootsTrim, this.leggingsTrim, this.chestplateTrim, this.helmetTrim);
     }
 
     /**

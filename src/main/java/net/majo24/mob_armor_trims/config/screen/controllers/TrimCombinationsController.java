@@ -47,39 +47,23 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
 
         this.bootsTrimController = createOption("Boots Trim:", bootsTrimController,
                 () -> option.pendingValue().bootsTrim(),
-                value -> {
-                    TrimCombination trimCombination = option.pendingValue();
-                    option.requestSet(new TrimCombination(trimCombination.materialToApplyTo(), trimCombination.helmetTrim(), trimCombination.chestplateTrim(), trimCombination.leggingsTrim(), value));
-                }).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 0))).controller();
 
         this.leggingsTrimController = createOption("Leggings Trim:", leggingsTrimController,
                 () -> option.pendingValue().leggingsTrim(),
-                value -> {
-                    TrimCombination trimCombination = option.pendingValue();
-                    option.requestSet(new TrimCombination(trimCombination.materialToApplyTo(), trimCombination.helmetTrim(), trimCombination.chestplateTrim(), value, trimCombination.bootsTrim()));
-                }).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 1))).controller();
 
         this.chestplateTrimController = createOption("Chestplate Trim:", chestplateTrimController,
                 () -> option.pendingValue().chestplateTrim(),
-                value -> {
-                    TrimCombination trimCombination = option.pendingValue();
-                    option.requestSet(new TrimCombination(trimCombination.materialToApplyTo(), trimCombination.helmetTrim(), value, trimCombination.leggingsTrim(), trimCombination.bootsTrim()));
-                }).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 2))).controller();
 
         this.helmetTrimController = createOption("Helmet Trim:", helmetTrimController,
                 () -> option.pendingValue().helmetTrim(),
-                value -> {
-                    TrimCombination trimCombination = option.pendingValue();
-                    option.requestSet(new TrimCombination(trimCombination.materialToApplyTo(), value, trimCombination.chestplateTrim(), trimCombination.leggingsTrim(), trimCombination.bootsTrim()));
-                }).controller();
+                value -> option.requestSet(option.pendingValue().withTrim(value, 3))).controller();
 
         this.applyOnController = createOption("Material to apply on:", applyOnController,
                 () -> option.pendingValue().materialToApplyTo(),
-                value -> {
-                    TrimCombination trimCombination = option.pendingValue();
-                    option.requestSet(new TrimCombination(value, trimCombination.helmetTrim(), trimCombination.chestplateTrim(), trimCombination.leggingsTrim(), trimCombination.bootsTrim()));
-                }
-        ).controller();
+                value -> option.requestSet(option.pendingValue().withMaterialToApplyTo(value))).controller();
     }
 
     public void setCollapsed(Boolean collapsed) {
