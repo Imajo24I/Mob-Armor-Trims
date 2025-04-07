@@ -86,10 +86,10 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
 
 
         AbstractWidget applyOnMaterialWidget = this.applyOnController.provideWidget(screen, widgetDimension.moved(0, 20));
-        AbstractWidget bootsTrimWidget = this.bootsTrimController.provideWidget(screen, widgetDimension.moved(0, 40));
-        AbstractWidget leggingsTrimWidget = this.leggingsTrimController.provideWidget(screen, widgetDimension.moved(0, 60));
-        AbstractWidget chestplateTrimWidget = this.chestplateTrimController.provideWidget(screen, widgetDimension.moved(0, 80));
-        AbstractWidget helmetTrimWidget = this.helmetTrimController.provideWidget(screen, widgetDimension.moved(0, 100));
+        AbstractWidget helmetTrimWidget = this.helmetTrimController.provideWidget(screen, widgetDimension.moved(0, 400));
+        AbstractWidget chestplateTrimWidget = this.chestplateTrimController.provideWidget(screen, widgetDimension.moved(0, 60));
+        AbstractWidget leggingsTrimWidget = this.leggingsTrimController.provideWidget(screen, widgetDimension.moved(0, 80));
+        AbstractWidget bootsTrimWidget = this.bootsTrimController.provideWidget(screen, widgetDimension.moved(0, 100));
 
         return new ControllerElement(this, screen, widgetDimension, applyOnMaterialWidget, bootsTrimWidget, leggingsTrimWidget, chestplateTrimWidget, helmetTrimWidget);
     }
@@ -202,10 +202,10 @@ public class TrimCombinationsController extends ControllerHelper<TrimCombination
 
             if (!control.collapsed) {
                 applyOnMaterialWidget.render(graphics, mouseX, mouseY, delta);
-                bootsTrimWidget.render(graphics, mouseX, mouseY, delta);
-                leggingsTrimWidget.render(graphics, mouseX, mouseY, delta);
-                chestplateTrimWidget.render(graphics, mouseX, mouseY, delta);
                 helmetTrimWidget.render(graphics, mouseX, mouseY, delta);
+                chestplateTrimWidget.render(graphics, mouseX, mouseY, delta);
+                leggingsTrimWidget.render(graphics, mouseX, mouseY, delta);
+                bootsTrimWidget.render(graphics, mouseX, mouseY, delta);
             }
         }
 
