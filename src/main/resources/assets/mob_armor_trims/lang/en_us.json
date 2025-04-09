@@ -20,6 +20,11 @@
   "mob_armor_trims.config.stackedTrims.maxStackedTrims": "Max Stacked Trims",
   "mob_armor_trims.config.stackedTrims.maxStackedTrims.description": "The maximum amount of armor trims that can be stacked on each other when the Stacked Armor Trims mod is enabled",
 
+  "mob_armor_trims.config.utils": "Utils",
+  "mob_armor_trims.config.utils.tooltip": "Different utility buttons to make configuring the mod easier",
+  "mob_armor_trims.config.utils.reloadConfig": "Reload Config",
+  "mob_armor_trims.config.utils.reloadConfig.description": "Reload the config from the config file.\nUseful for configuring the Custom Trims Combination system, since it is only configurable through the config file.",
+
   "mob_armor_trims.config.backup_screen.installYACL": "Install Yet Another Config Lib to access the config screen.",
   "mob_armor_trims.config.backup_screen.viewOnModrinth": "View on Modrinth"
 

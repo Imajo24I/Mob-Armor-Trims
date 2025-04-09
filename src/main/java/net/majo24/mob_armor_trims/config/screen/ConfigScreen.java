@@ -40,7 +40,8 @@ public class ConfigScreen {
                 .save(configManager::saveConfigToFile)
 
                 .category(buildGeneralCategory())
-                .category(buildRandomTrimsCategory());
+                .category(buildRandomTrimsCategory())
+                .category(buildUtilsCategory());
 
         if (MobArmorTrims.isStackedArmorTrimsLoaded) {
             configScreen.category(buildStackedTrimsCategory());
@@ -136,6 +137,22 @@ public class ConfigScreen {
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 5)
                                 .step(1))
+                        .build())
+                .build();
+    }
+
+    private static ConfigCategory buildUtilsCategory() {
+        return ConfigCategory.createBuilder()
+                .name(translatable("mob_armor_trims.config.utils"))
+                .tooltip(translatable("mob_armor_trims.config.utils.tooltip"))
+
+                .option(ButtonOption.createBuilder()
+                        .name(translatable("mob_armor_trims.config.utils.reloadConfig"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.utils.reloadConfig.description")))
+                        .action((screen, option) -> {
+                            MobArmorTrims.reloadConfig();
+                            screen.onClose();
+                        })
                         .build())
                 .build();
     }
