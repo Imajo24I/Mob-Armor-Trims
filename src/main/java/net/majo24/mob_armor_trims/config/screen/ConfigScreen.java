@@ -5,9 +5,6 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.majo24.mob_armor_trims.config.Config;
-import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
-import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
-import net.majo24.mob_armor_trims.config.screen.controllers.TrimCombinationsController;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -43,8 +40,7 @@ public class ConfigScreen {
                 .save(configManager::saveConfigToFile)
 
                 .category(buildGeneralCategory())
-                .category(buildRandomTrimsCategory())
-                .category(buildCustomTrimsCategory());
+                .category(buildRandomTrimsCategory());
 
         if (MobArmorTrims.isStackedArmorTrimsLoaded) {
             configScreen.category(buildStackedTrimsCategory());
@@ -111,23 +107,6 @@ public class ConfigScreen {
                                 .formatValue(integerToPercentageFormatter))
                         .build())
 
-                .build();
-    }
-
-    private static ConfigCategory buildCustomTrimsCategory() {
-        return ConfigCategory.createBuilder()
-                .name(translatable("mob_armor_trims.config.customTrimCombinations"))
-                .tooltip(translatable("mob_armor_trims.config.customTrimCombinations.tooltip"))
-
-                .group(ListOption.<TrimCombination>createBuilder()
-                        .name(translatable("mob_armor_trims.config.customTrimCombinations"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.customTrimCombinations.trimCombinations.description")))
-                        .binding(configManager.getConfig().customTrimCombinations.trimCombinations.getDefaultTrimCombinations(),
-                                () -> configManager.getConfig().customTrimCombinations.trimCombinations.getTrimCombinations(),
-                                trimCombinations -> configManager.getConfig().customTrimCombinations.trimCombinations.setTrimCombinations(trimCombinations))
-                        .controller(TrimCombinationsController.Builder::create)
-                        .initial(new TrimCombination("", CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY, CustomTrim.EMPTY))
-                        .build())
                 .build();
     }
 

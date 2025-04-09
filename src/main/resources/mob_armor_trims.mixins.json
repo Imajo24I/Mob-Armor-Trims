@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "spawn_entities_trimmed.SpawnMobTrimmed",
-    "yacl.OptionListAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
