@@ -1,5 +1,9 @@
 package net.majo24.mob_armor_trims.trim_combinations_system;
 
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,27 +24,16 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
         return new ArrayList<>(List.of(this.helmetTrim, this.chestplateTrim, this.leggingsTrim, this.bootsTrim));
     }
 
-    /**
-     * Replaces the custom trim at the given index
-     *
-     * @param trim  The new custom trim
-     * @param index Index of the replaced trim (0: boots, 1: leggings, 2: chestplate, 3: helmet)
-     * @return A new TrimCombination
-     */
-    public TrimCombination withTrim(CustomTrim trim, int index) {
-        List<CustomTrim> trims = this.trims();
-        trims.set(index, trim);
-        return new TrimCombination(this.materialToApplyTo, trims.get(0), trims.get(1), trims.get(2), trims.get(3));
-    }
-
-    /**
-     * Replaces the material to apply the trims to
-     *
-     * @param materialToApplyTo The material to apply the trims to
-     * @return A new TrimCombination
-     */
-    public TrimCombination withMaterialToApplyTo(String materialToApplyTo) {
-        return new TrimCombination(materialToApplyTo, this.bootsTrim, this.leggingsTrim, this.chestplateTrim, this.helmetTrim);
+    public void validate(RegistryAccess registryAccess, LocalPlayer player, int index) {
+        for (CustomTrim trim : this.trims()) {
+            try {
+                trim.getTrim(registryAccess);
+            } catch (IllegalStateException e) {
+                player.displayClientMessage(Component.literal(
+                        "Found invalid trim: \"" + trim + "\" in trim combination " + index
+                ), false);
+            }
+        }
     }
 
     /**

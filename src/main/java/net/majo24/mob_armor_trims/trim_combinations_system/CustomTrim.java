@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -17,7 +16,6 @@ import net.minecraft.world.item.equipment.trim.*;
 import java.util.List;
 
 public record CustomTrim(String material, String pattern) {
-    public static final CustomTrim EMPTY = new CustomTrim("", "");
     private static final String TRIM_PATTER_SUFFIX = "_armor_trim_smithing_template";
 
 
@@ -50,9 +48,8 @@ public record CustomTrim(String material, String pattern) {
     }
 
     private Holder<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
-        ItemStack materialItem = getItemFromId(material);
-
         try {
+            ItemStack materialItem = getItemFromId(material);
             return TrimMaterials.getFromIngredient(registryAccess, materialItem).orElseThrow();
         } catch (Exception e) {
             return null;
@@ -62,7 +59,7 @@ public record CustomTrim(String material, String pattern) {
     private Holder<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
         try {
             ResourceLocation resourceLocation = ResourceLocation.tryParse(pattern);
-            return registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().filter((reference) -> reference.key().location().equals(resourceLocation)).findFirst().orElseThrow();
+            return registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().filter(reference -> reference.key().location().equals(resourceLocation)).findFirst().orElseThrow();
         } catch (Exception e) {
             return null;
         }

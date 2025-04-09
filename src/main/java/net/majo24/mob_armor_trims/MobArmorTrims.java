@@ -91,6 +91,11 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
         return configDirPath.resolve(MOD_ID + ".toml");
     }
 
+    /** Reloads the config from the config file */
+    public static void reloadConfig() {
+        configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
+    }
+
     //? if forgeLike {
     /*public static void registerConfigScreen(
             //? if >1.20.4
