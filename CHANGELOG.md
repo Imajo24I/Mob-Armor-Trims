@@ -1,2 +1,8 @@
-- Add support for 1.21.5
-- Fix incorrect order of trims in trim combination setting
+- Remove the custom trim combinations setting from the config screen
+  - The custom trim combinations system is still configurable through the config file, just not through the config screen anymore
+  - See https://github.com/Imajo24I/Mob-Armor-Trims/pull/13
+  - TLDR: Too much effort to maintain for what its worth
+- Add a new `Utils` category to the config screen
+  - Contains a button to reload config from config file and a button which validates and reports incorrect trim combinations 
+  - This is added to make the custom trims combinations system easier and much less tedious to configure, now that the setting for it in the config screen has been removed
+- Fix potential crash when using custom trim combinations system
