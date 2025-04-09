@@ -24,6 +24,8 @@
   "mob_armor_trims.config.utils.tooltip": "Different utility buttons to make configuring the mod easier",
   "mob_armor_trims.config.utils.reloadConfig": "Reload Config",
   "mob_armor_trims.config.utils.reloadConfig.description": "Reload the config from the config file.\nUseful for configuring the Custom Trims Combination system, since it is only configurable through the config file.",
+  "mob_armor_trims.config.utils.validateCustomTrimCombinations": "Validate Custom Trim Combinations",
+  "mob_armor_trims.config.utils.validateCustomTrimCombinations.description": "Validates the Custom Trim Combinations and logs each invalid combination in chat.\nOnly works while inside a world.",
 
   "mob_armor_trims.config.backup_screen.installYACL": "Install Yet Another Config Lib to access the config screen.",
   "mob_armor_trims.config.backup_screen.viewOnModrinth": "View on Modrinth"

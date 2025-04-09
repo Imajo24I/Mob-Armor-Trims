@@ -5,6 +5,7 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.majo24.mob_armor_trims.config.Config;
+import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,6 +13,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.majo24.mob_armor_trims.MobArmorTrims;
@@ -152,6 +156,32 @@ public class ConfigScreen {
                         .action((screen, option) -> {
                             MobArmorTrims.reloadConfig();
                             screen.onClose();
+                        })
+                        .build())
+
+                .option(ButtonOption.createBuilder()
+                        .name(translatable("mob_armor_trims.config.utils.validateCustomTrimCombinations"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.utils.validateCustomTrimCombinations.description")))
+                        .action((screen, option) -> {
+                            LocalPlayer player = Minecraft.getInstance().player;
+                            ClientLevel level = Minecraft.getInstance().level;
+
+                            if (level == null || player == null) {
+                                return;
+                            }
+
+                            RegistryAccess registryAccess = level.registryAccess();
+
+                            player.displayClientMessage(Component.literal("Validating custom trim combinations..."), false);
+
+                            int index = 1;
+                            for (TrimCombination trimCombination : configManager.getConfig().customTrimCombinations.trimCombinations.getTrimCombinations()) {
+                                trimCombination.validate(registryAccess, player, index);
+                                index++;
+                            }
+
+
+                            player.displayClientMessage(Component.literal("Done validating custom trim combinations"), false);
                         })
                         .build())
                 .build();

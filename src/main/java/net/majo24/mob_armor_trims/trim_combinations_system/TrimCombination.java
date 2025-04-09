@@ -1,5 +1,9 @@
 package net.majo24.mob_armor_trims.trim_combinations_system;
 
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +45,18 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
      */
     public TrimCombination withMaterialToApplyTo(String materialToApplyTo) {
         return new TrimCombination(materialToApplyTo, this.bootsTrim, this.leggingsTrim, this.chestplateTrim, this.helmetTrim);
+    }
+
+    public void validate(RegistryAccess registryAccess, LocalPlayer player, int index) {
+        for (CustomTrim trim : this.trims()) {
+            try {
+                trim.getTrim(registryAccess);
+            } catch (IllegalStateException e) {
+                player.displayClientMessage(Component.literal(
+                        "Found invalid trim: \"" + trim + "\" in trim combination " + index
+                ), false);
+            }
+        }
     }
 
     /**

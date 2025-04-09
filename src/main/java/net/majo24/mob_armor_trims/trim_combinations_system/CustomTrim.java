@@ -50,9 +50,8 @@ public record CustomTrim(String material, String pattern) {
     }
 
     private Holder<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
-        ItemStack materialItem = getItemFromId(material);
-
         try {
+            ItemStack materialItem = getItemFromId(material);
             return TrimMaterials.getFromIngredient(registryAccess, materialItem).orElseThrow();
         } catch (Exception e) {
             return null;
