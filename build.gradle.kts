@@ -59,6 +59,8 @@ loom {
     if (isForge) {
         forge.mixinConfigs("mob_armor_trims.mixins.json")
     }
+
+    accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.accesswidener")
 }
 
 repositories {

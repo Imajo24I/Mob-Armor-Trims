@@ -5,11 +5,13 @@ package net.majo24.mob_armor_trims;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 //?} elif neoforge {
-/*import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
+/*import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 //? >1.20.4 {
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -32,6 +34,10 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.config.backend.ConfigManager;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +51,32 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static boolean isStackedArmorTrimsLoaded = false;
     public static ConfigManager<Config> configManager;
 
+    //? if fabric {
+    public static final LootItemFunctionType<TrimLootTablesFunction> TRIM_LOOT_TABLES_FUNCTION = Registry.register(
+            BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            ResourceLocation.tryBuild(MobArmorTrims.MOD_ID, "trim_loot_tables_function"),
+            new LootItemFunctionType<>(TrimLootTablesFunction.CODEC));
+
+    //?} else {
+    /*public static final DeferredRegister<LootItemFunctionType<?>> deferredRegister = DeferredRegister.create(
+            BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            MOD_ID
+    );
+
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<TrimLootTablesFunction>> TRIM_LOOT_TABLES_FUNCTION = deferredRegister.register(
+            "trim_loot_tables_function",
+            () -> new LootItemFunctionType<>(TrimLootTablesFunction.CODEC)
+    );
+    *///?}
+
+
     public MobArmorTrims(
             //? if >1.20.4 && neoforge
             /*ModContainer container*/
     ) {
-        onInitialize();
         //? if forgeLike {
-        /*if (FMLLoader.getDist().isClient()) {
+        /*onInitialize();
+        if (FMLLoader.getDist().isClient()) {
             registerConfigScreen(
                     //? if >1.20.4
                     container

@@ -13,7 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import com.mojang.datafixers.util.Pair;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -53,16 +53,9 @@ public class TrimApplier {
     }
 
     public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
-        ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
-        ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
-
-        //? >=1.21.2 {
-        Registry<TrimMaterial> materialRegistry = registryAccess.lookupOrThrow(materialKey);
-        Registry<TrimPattern> patternRegistry = registryAccess.lookupOrThrow(patternKey);
-        //?} else {
-        /*Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
-        Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(patternKey);
-        *///?}
+        Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
+        Registry<TrimMaterial> materialRegistry = registries.getFirst();
+        Registry<TrimPattern> patternRegistry = registries.getSecond();
 
         ArmorTrim lastTrim = null;
 
@@ -86,6 +79,21 @@ public class TrimApplier {
                 }
             }
         }
+    }
+
+    public static Pair<Registry<TrimMaterial>, Registry<TrimPattern>> getTrimRegistries(RegistryAccess registryAccess) {
+        ResourceKey<Registry<TrimMaterial>> materialKey = Registries.TRIM_MATERIAL;
+        ResourceKey<Registry<TrimPattern>> patternKey = Registries.TRIM_PATTERN;
+
+        //? >=1.21.2 {
+        Registry<TrimMaterial> materialRegistry = registryAccess.lookupOrThrow(materialKey);
+        Registry<TrimPattern> patternRegistry = registryAccess.lookupOrThrow(patternKey);
+        //?} else {
+        /*Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(materialKey);
+        Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(patternKey);
+        *///?}
+
+        return new Pair<>(materialRegistry, patternRegistry);
     }
 
     public static void runCustomTrimCombinationsSystem(List<ItemStack> armor, RegistryAccess registryAccess) {
@@ -148,7 +156,7 @@ public class TrimApplier {
      * @param referenceTrim The trim, the new random trim should take into account
      * @return The random trim which was used
      */
-    private static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armorPiece, @Nullable ArmorTrim referenceTrim) {
+    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armorPiece, @Nullable ArmorTrim referenceTrim) {
         Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).orElseThrow();
         Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).orElseThrow();
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
