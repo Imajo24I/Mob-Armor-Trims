@@ -1,10 +1,15 @@
 package net.majo24.mob_armor_trims;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+//? if 1.20.4 {
+/*import com.mojang.serialization.Codec;
+*///?} else if >1.20.4 {
 import com.mojang.serialization.MapCodec;
+//?} else {
+/*import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+*///?}
+
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -58,7 +63,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    protected @NotNull ItemStack run(ItemStack itemStack, LootContext lootContext) {
+    protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
         if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR)) return itemStack;
 
         RandomSource random = lootContext.getRandom();

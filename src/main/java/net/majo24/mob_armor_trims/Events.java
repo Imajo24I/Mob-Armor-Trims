@@ -12,8 +12,10 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 //? if neoforge {
 /^import com.google.common.collect.ImmutableList;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 ^///?} else {
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.LootTableLoadEvent;
 import org.apache.commons.lang3.ArrayUtils;
 //?}
@@ -24,10 +26,19 @@ public class Events {
     private Events() {
     }
 
-    //TODO: only apply Function on loottables that include trimmable items
-
-    //? if fabric {
     public static void registerEvents() {
+        //? if fabric {
+        addTrimFunctionToLootTables();
+        //?} else if neoforge {
+        /*NeoForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);
+        *///?} else
+        /*MinecraftForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);*/
+        ///?}
+    }
+
+    //TODO: only apply TrimLootTablesFunction on LootTables that include trimmable items
+    //? if fabric {
+    public static void addTrimFunctionToLootTables() {
         //? if >1.20.6 {
         LootTableEvents.MODIFY.register((key, builder, source, registries) -> builder.apply(TrimLootTablesFunction.builder().build()));
         //?} else if 1.20.6 {
@@ -37,7 +48,7 @@ public class Events {
         *///?}
     }
     //?} else if neoforge {
-    /*public static void registerEvents(LootTableLoadEvent event) {
+    /*public static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
         LootTable table = event.getTable();
 
         table.functions = ImmutableList.<LootItemFunction>builder()
@@ -48,7 +59,7 @@ public class Events {
         table.compositeFunction = LootItemFunctions.compose(table.functions);
     }
     *///?} else {
-    /*public  static void registerEvents(LootTableLoadEvent event) {
+    /*public  static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
         LootTable table = event.getTable();
 
         table.functions = ArrayUtils.add(table.functions, TrimLootTablesFunction.builder().build());

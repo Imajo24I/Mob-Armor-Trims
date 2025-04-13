@@ -4,27 +4,22 @@ package net.majo24.mob_armor_trims;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 //?} elif neoforge {
-
 /*import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
 //? >1.20.4 {
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+/^import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.fml.ModContainer;
-//?} else {
-/^import net.neoforged.neoforge.client.ConfigScreenHandler;
- ^///?}
+^///?} else {
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+ //?}
 *///?} else {
 /*import net.minecraft.core.registries.Registries;
 import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -100,11 +95,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
                     container
             );
         }
-
-        //? if neoforge {
-        /^NeoForge.EVENT_BUS.addListener(Events::registerEvents);
-            ^///?} else
-        MinecraftForge.EVENT_BUS.addListener(Events::registerEvents);
         *///?}
     }
 
@@ -113,10 +103,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public void onInitialize() {
         isStackedArmorTrimsLoaded = isModLoaded("stacked_trims");
         configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
-
-        //? if fabric
         Events.registerEvents();
-
     }
 
     public static boolean isModLoaded(String modId) {
@@ -149,7 +136,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static void reloadConfig() {
         configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
     }
-
     //? if forgeLike {
     /*public static void registerConfigScreen(
             //? if >1.20.4
