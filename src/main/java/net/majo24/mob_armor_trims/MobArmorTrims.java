@@ -4,7 +4,9 @@ package net.majo24.mob_armor_trims;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 //?} elif neoforge {
+
 /*import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
@@ -18,17 +20,30 @@ import net.neoforged.fml.ModContainer;
 //?} else {
 /^import net.neoforged.neoforge.client.ConfigScreenHandler;
  ^///?}
+*///?} else {
+/*import net.minecraft.core.registries.Registries;
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 *///?}
 
 //? if forgeLike {
 /*import net.majo24.mob_armor_trims.config.screen.ConfigScreenProvider;
-*///?}
+*///?} else {
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+//?}
 
 import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.config.backend.ConfigManager;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,13 +69,23 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
             *///?}
 
     //?} else if neoforge {
-    /*public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<TrimLootTablesFunction>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+    /*//? if >1.20.4 {
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+    //?} else {
+    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+     ^///?}
             BuiltInRegistries.LOOT_FUNCTION_TYPE,
             MOD_ID
     ).register(
             "trim_loot_tables_function",
-            () -> new LootItemFunctionType<>(TrimLootTablesFunction.CODEC)
+            () -> new LootItemFunctionType(TrimLootTablesFunction.CODEC)
     );
+    *///?} else {
+    /*public static final RegistryObject<LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MOD_ID)
+            .register(
+                    "trim_loot_tables_function",
+                    () -> TrimLootTablesFunction.builder().build().getType()
+            );
     *///?}
 
     public MobArmorTrims(
@@ -76,7 +101,10 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
             );
         }
 
-        NeoForge.EVENT_BUS.addListener(Events::registerEvents);
+        //? if neoforge {
+        /^NeoForge.EVENT_BUS.addListener(Events::registerEvents);
+            ^///?} else
+        MinecraftForge.EVENT_BUS.addListener(Events::registerEvents);
         *///?}
     }
 
@@ -128,7 +156,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
             ModContainer container
     ) {
         /^? <1.20.5 {^/
-        
+
         /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
         ^//^?} else {^/

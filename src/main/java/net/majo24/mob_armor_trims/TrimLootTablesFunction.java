@@ -3,6 +3,7 @@ package net.majo24.mob_armor_trims;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
@@ -29,15 +30,19 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     protected TrimLootTablesFunction(
             //? if >1.20.1 {
             List<LootItemCondition>
-             //?} else {
-            /*LootItemCondition[]
-                    *///?}
+                    //?} else {
+                    /*LootItemCondition[]
+                     *///?}
                     predicates) {
         super(predicates);
     }
 
     //? if >1.20.1 {
+    //? if 1.20.4 {
+    /*public static final Codec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.create(
+    *///?} else {
     public static final MapCodec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.mapCodec(
+    //?}
             instance -> commonFields(instance)
                     .apply(instance, TrimLootTablesFunction::new)
     );
@@ -48,7 +53,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         //? if fabric {
         return MobArmorTrims.TRIM_LOOT_TABLES_FUNCTION;
         //?} else {
-        /*return MobArmorTrims.TRIM_LOOT_TABLES_FUNCTION.value();
+        /*return MobArmorTrims.TRIM_LOOT_TABLES_FUNCTION.get();
          *///?}
     }
 
@@ -69,11 +74,10 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
 
     public static LootItemConditionalFunction.Builder<?> builder() {
-        System.out.println("CREATED BUILDER!");
         return simpleBuilder(TrimLootTablesFunction::new);
     }
 
-    //? if 1.20.1 {
+    //? if 1.20.1 && (neoforge || fabric) {
     /*public static class Serializer extends LootItemConditionalFunction.Serializer<TrimLootTablesFunction> {
         @Override
         public @NotNull TrimLootTablesFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {

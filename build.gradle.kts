@@ -56,11 +56,15 @@ loom {
         }
     }
 
-    if (isForge) {
-        forge.mixinConfigs("mob_armor_trims.mixins.json")
+    if (isForgeLike) {
+        if (isForge) {
+            forge.mixinConfigs("mob_armor_trims.mixins.json")
+            accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.1_20_1.accesswidener")
+            forge.convertAccessWideners.set(true)
+        } else {
+            accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.accesswidener")
+        }
     }
-
-    accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.accesswidener")
 }
 
 repositories {

@@ -24,7 +24,6 @@
     ]
   },
   "mixins": ["mob_armor_trims.mixins.json"],
-  "accessWidener": "mob_armor_trims.accesswidener",
   "depends": {
     "fabricloader": ">=0.15.11",
     "minecraft": "${mcdep}"
