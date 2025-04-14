@@ -176,4 +176,18 @@ public class TrimApplier {
         applyTrim(armorPiece, armorTrim, registryAccess);
         return armorTrim;
     }
+
+    /**
+     * Apply a random trim to an item.
+     * Should only be used when theres only item to trim.
+     * Should not be used when theres multiple, related items that should be trimmed
+     * @param itemStack Item to apply the trim on
+     */
+    public static void applyRandomTrimToItem(ItemStack itemStack, RandomSource random, RegistryAccess registryAccess) {
+        Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
+        Registry<TrimMaterial> materialRegistry = registries.getFirst();
+        Registry<TrimPattern> patternRegistry = registries.getSecond();
+
+        TrimApplier.applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, itemStack, null);
+    }
 }

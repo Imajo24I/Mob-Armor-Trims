@@ -65,10 +65,10 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
 
     //?} else if neoforge {
     /*//? if >1.20.4 {
-    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
-    //?} else {
-    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
-     ^///?}
+    /^public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+    ^///?} else {
+    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+     //?}
             BuiltInRegistries.LOOT_FUNCTION_TYPE,
             MOD_ID
     ).register(

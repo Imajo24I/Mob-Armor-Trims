@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.mixin.spawn_entities_trimmed;
+package net.majo24.mob_armor_trims.mixin;
 
 import net.majo24.mob_armor_trims.TrimApplier;
 import net.minecraft.util.RandomSource;
@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import java.util.List;
 
 @Mixin(Mob.class)
-public abstract class SpawnMobTrimmed extends LivingEntity {
-    protected SpawnMobTrimmed(EntityType<? extends LivingEntity> entityType, Level world) {
+public abstract class SpawnMobsTrimmedMixin extends LivingEntity {
+    protected SpawnMobsTrimmedMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots")
-    private void populateDefaultEquipmentSlots(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
+    private void trimArmor(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
         //? if >=1.21.5 {
         List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
                 .map(this::getItemBySlot)

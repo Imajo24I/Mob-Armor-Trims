@@ -3,7 +3,8 @@
   "package": "net.majo24.mob_armor_trims.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "spawn_entities_trimmed.SpawnMobTrimmed"
+    "VillagerTradesMixin",
+    "SpawnMobsTrimmedMixin"
   ],
   "injectors": {
     "defaultRequire": 1
