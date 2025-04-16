@@ -6,6 +6,7 @@ import net.majo24.mob_armor_trims.config.Config.TrimSystems;
 
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 //? >=1.21.2 {
 import net.minecraft.world.item.equipment.trim.*;
@@ -153,15 +155,19 @@ public class TrimApplier {
     }
 
     /**
-     * Applies a random trim on the given armor piece. The random trim also takes referenceTrim into account.
+     * Applies a random trim on the given armor piece. The random trim also takes referenceTrim and the blacklist into account.
      *
      * @param armorPiece    Armor piece to apply the trim on
      * @param referenceTrim The trim, the new random trim should take into account
-     * @return The random trim which was used
+     * @return null if all TrimPatterns inside the patternRegistry are blacklisted, otherwise the random trim which was used
      */
+    @Nullable
     public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armorPiece, @Nullable ArmorTrim referenceTrim, boolean usePiglinMaterials) {
+        List<Holder.Reference<TrimPattern>> trimPatterns = getAndFilterPatterns(patternRegistry);
+        if (trimPatterns.isEmpty()) return null;
+
         Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).orElseThrow();
-        Holder.Reference<TrimPattern> randomTrimPattern = patternRegistry.getRandom(random).orElseThrow();
+        Holder.Reference<TrimPattern> randomTrimPattern = Util.getRandom(trimPatterns, random);
         ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
 
         if (referenceTrim != null) {
@@ -186,6 +192,24 @@ public class TrimApplier {
 
         applyTrim(armorPiece, armorTrim, registryAccess);
         return armorTrim;
+    }
+
+    private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
+        List<Holder.Reference<TrimPattern>> trimPatterns = new java.util.ArrayList<>(patternRegistry.listElements().toList());
+        List<Pattern> patterns = configManager.getConfig().randomTrims.blacklist.getPatterns();
+
+        trimPatterns.removeIf(trimPattern -> {
+            String resourceLocation = trimPattern.key().location().toString();
+            for (Pattern pattern : patterns) {
+                if (pattern.matcher(resourceLocation).find()) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        return trimPatterns;
     }
 
     /**
