@@ -83,8 +83,8 @@ public class Config {
         @Entry(name = "similar_trim_chance", description = "Chance of each armor piece having a similar armor trim as the previous armor piece")
         public final PrimitiveEntry<Integer> similarTrimChance = new PrimitiveEntry<>(75);
 
-        @Entry(name = "blacklist", description = "Blacklist for trim patterns.\nThis uses regex. This means, if you want to check for a specific pattern, you need to use \"^pattern$\" instead of just \"pattern\"")
-        public final BlacklistEntry blacklist = new BlacklistEntry(Arrays.asList("^tooltrims:.*"));
+        @Entry(name = "blacklist", description = "Blacklist for trim patterns.\nThis uses regex. This means, if you want to check for a specific pattern, you need to use \"^[pattern$]\" instead of just \"[pattern]\".\nBy default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor.")
+        public final BlacklistEntry blacklist = new BlacklistEntry(List.of("^tooltrims:.*"));
     }
 
     public static final class TrimCombinationsSubConfig {

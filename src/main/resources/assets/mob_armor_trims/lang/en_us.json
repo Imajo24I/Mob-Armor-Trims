@@ -12,6 +12,8 @@
   "mob_armor_trims.config.randomTrims.trimChance.description": "Chance of each armor piece of a mob having an armor trim",
   "mob_armor_trims.config.randomTrims.similarTrimChance": "Similar Trim Chance",
   "mob_armor_trims.config.randomTrims.similarTrimChance.description": "Chance of each armor piece having a similar armor trim as the previous armor piece",
+  "mob_armor_trims.config.randomTrims.blacklist": "Blacklist for Trim Patterns",
+  "mob_armor_trims.config.randomTrims.blacklist.description": "This is a blacklist for disabling trim patterns.\n\nRegex is used, which helps reducing a lot of repetition.\nThis also means, if you want to check for a specific pattern, you need to use \"^[pattern]$\" instead of just \"[pattern]\"\n\nBy default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor.",
 
   "mob_armor_trims.config.stackedTrims": "Stacked Trims",
   "mob_armor_trims.config.stackedTrims.tooltip": "Settings for the Stacked Armor Trims mod compatibility.\nThese settings will only make a difference, if the Stacked Armor Trims mod is used and the random trims System is enabled.",

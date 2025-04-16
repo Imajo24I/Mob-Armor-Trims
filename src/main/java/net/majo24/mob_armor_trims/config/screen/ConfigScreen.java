@@ -3,6 +3,7 @@ package net.majo24.mob_armor_trims.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import dev.isxander.yacl3.api.controller.ValueFormatter;
 import net.majo24.mob_armor_trims.config.Config;
 import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
@@ -111,6 +112,17 @@ public class ConfigScreen {
                                 .step(1)
                                 .formatValue(integerToPercentageFormatter))
                         .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("mob_armor_trims.config.randomTrims.blacklist"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.blacklist.description")))
+                        .binding(configManager.getConfig().randomTrims.blacklist.getDefaultValue(),
+                                () -> configManager.getConfig().randomTrims.blacklist.getValue(),
+                                blacklist -> configManager.getConfig().randomTrims.blacklist.setValue(blacklist))
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .build()
+                )
 
                 .build();
     }
