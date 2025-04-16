@@ -1,10 +1,9 @@
 package net.majo24.mob_armor_trims.mixin;
 
-import net.majo24.mob_armor_trims.TrimApplier;import net.minecraft.util.RandomSource;
+import net.majo24.mob_armor_trims.TrimApplier;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

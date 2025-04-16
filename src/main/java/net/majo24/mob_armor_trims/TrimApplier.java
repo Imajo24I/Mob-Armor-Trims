@@ -149,9 +149,9 @@ public class TrimApplier {
     public static void applyTrim(ItemStack armorPiece, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
         armorPiece.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-        //?} else {
+         //?} else {
         /*ArmorTrim.setTrim(registryAccess, armorPiece, armorTrim);
-         *///?}
+        *///?}
     }
 
     /**
@@ -183,9 +183,15 @@ public class TrimApplier {
         }
 
         if (usePiglinMaterials) {
+            //? >=1.21.2 {
             Holder.Reference<TrimMaterial> trimMaterial = ((random.nextBoolean())
                     ? materialRegistry.get(TrimMaterials.NETHERITE)
                     : materialRegistry.get(TrimMaterials.GOLD)).orElseThrow();
+            //?} else {
+            /*Holder.Reference<TrimMaterial> trimMaterial = (random.nextBoolean())
+                    ? materialRegistry.getHolderOrThrow(TrimMaterials.NETHERITE)
+                    : materialRegistry.getHolderOrThrow(TrimMaterials.GOLD);
+            *///?}
 
             armorTrim = new ArmorTrim(trimMaterial, armorTrim.pattern());
         }
@@ -195,7 +201,12 @@ public class TrimApplier {
     }
 
     private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
+        //? if >=1.21.2 {
         List<Holder.Reference<TrimPattern>> trimPatterns = new java.util.ArrayList<>(patternRegistry.listElements().toList());
+        //?} else {
+        /*List<Holder.Reference<TrimPattern>> trimPatterns = new java.util.ArrayList<>(patternRegistry.holders().toList());
+        *///?}
+
         List<Pattern> patterns = configManager.getConfig().randomTrims.blacklist.getPatterns();
 
         trimPatterns.removeIf(trimPattern -> {
