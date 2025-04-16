@@ -84,7 +84,7 @@ public class Config {
         public final PrimitiveEntry<Integer> similarTrimChance = new PrimitiveEntry<>(75);
 
         @Entry(name = "blacklist", description = "Blacklist for trim patterns.\nThis uses regex. This means, if you want to check for a specific pattern, you need to use \"^pattern$\" instead of just \"pattern\"")
-        public final BlacklistEntry blacklist = new BlacklistEntry(new ArrayList<>());
+        public final BlacklistEntry blacklist = new BlacklistEntry(Arrays.asList("^tooltrims:.*"));
     }
 
     public static final class TrimCombinationsSubConfig {

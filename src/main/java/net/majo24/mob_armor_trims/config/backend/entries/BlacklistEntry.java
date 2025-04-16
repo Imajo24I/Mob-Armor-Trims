@@ -9,6 +9,7 @@ public class BlacklistEntry extends ConfigEntry<List<String>> {
 
     public BlacklistEntry(List<String> defaultValue) {
         super(defaultValue);
+        setValue(defaultValue);
     }
 
     public List<Pattern> getPatterns() {
