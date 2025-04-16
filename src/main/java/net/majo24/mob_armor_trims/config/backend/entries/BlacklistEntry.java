@@ -1,7 +1,10 @@
 package net.majo24.mob_armor_trims.config.backend.entries;
 
+import net.majo24.mob_armor_trims.MobArmorTrims;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class BlacklistEntry extends ConfigEntry<List<String>> {
@@ -33,6 +36,13 @@ public class BlacklistEntry extends ConfigEntry<List<String>> {
      */
     @Override
     public void setValue(List<String> value) {
-        this.patterns = value.stream().map(Pattern::compile).toList();
+        this.patterns = value.stream().map(pattern -> {
+            try {
+                return Pattern.compile(pattern);
+            } catch (Exception e) {
+                MobArmorTrims.LOGGER.error("Failed to parse regex pattern \"{}\". Please ensure this is a valid pattern. Skipping this pattern for now.", pattern, e);
+                return null;
+            }
+        }).filter(Objects::nonNull).toList();
     }
 }
