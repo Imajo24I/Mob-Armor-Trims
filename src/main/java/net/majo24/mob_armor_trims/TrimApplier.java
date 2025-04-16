@@ -18,6 +18,7 @@ import com.mojang.datafixers.util.Pair;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -202,9 +203,9 @@ public class TrimApplier {
 
     private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
         //? if >=1.21.2 {
-        List<Holder.Reference<TrimPattern>> trimPatterns = new java.util.ArrayList<>(patternRegistry.listElements().toList());
+        List<Holder.Reference<TrimPattern>> trimPatterns = new ArrayList<>(patternRegistry.listElements().toList());
         //?} else {
-        /*List<Holder.Reference<TrimPattern>> trimPatterns = new java.util.ArrayList<>(patternRegistry.holders().toList());
+        /*List<Holder.Reference<TrimPattern>> trimPatterns = new ArrayList<>(patternRegistry.holders().toList());
         *///?}
 
         List<Pattern> patterns = configManager.getConfig().randomTrims.blacklist.getPatterns();

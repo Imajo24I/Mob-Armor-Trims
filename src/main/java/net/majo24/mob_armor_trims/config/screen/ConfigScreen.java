@@ -16,11 +16,20 @@ import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.majo24.mob_armor_trims.MobArmorTrims;
 import org.jetbrains.annotations.NotNull;
+import net.majo24.mob_armor_trims.MobArmorTrims;
+
+//? >=1.21.2 {
+import net.minecraft.world.item.equipment.trim.*;
+//?} else {
+/*import net.minecraft.world.item.armortrim.*;
+ *///?}
 
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 
@@ -29,6 +38,12 @@ import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
  *//*?} else {*/
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 /*?}*/
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static net.minecraft.network.chat.Component.translatable;
 
@@ -178,9 +193,7 @@ public class ConfigScreen {
                             LocalPlayer player = Minecraft.getInstance().player;
                             ClientLevel level = Minecraft.getInstance().level;
 
-                            if (level == null || player == null) {
-                                return;
-                            }
+                            if (level == null || player == null) return;
 
                             RegistryAccess registryAccess = level.registryAccess();
 
@@ -196,6 +209,69 @@ public class ConfigScreen {
                             player.displayClientMessage(Component.literal("Done validating custom trim combinations"), false);
                         })
                         .build())
+
+                .option(ButtonOption.createBuilder()
+                        .name(translatable("mob_armor_trims.config.utils.validateBlacklist"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.utils.validateBlacklist.description")))
+                        .action((screen, option) -> {
+                            LocalPlayer player = Minecraft.getInstance().player;
+                            ClientLevel level = Minecraft.getInstance().level;
+
+                            if (level == null || player == null) return;
+
+                            //? >=1.21.2 {
+                            Registry<TrimPattern> patternRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+                            List<Holder.Reference<TrimPattern>> trimPatternsList = new ArrayList<>(patternRegistry.listElements().toList());
+                            //?} else {
+                            /*Registry<TrimPattern> patternRegistry = level.registryAccess().registryOrThrow(Registries.TRIM_PATTERN);
+                            List<Holder.Reference<TrimPattern>> trimPatternsList = new ArrayList<>(patternRegistry.holders().toList());
+                            *///?}
+
+                            Map<String, Boolean> trimPatterns = trimPatternsList.stream().collect(
+                                    Collectors.toMap(trimPattern -> trimPattern.key().location().toString(), trimPattern -> false)
+                            );
+
+                            Map<Pattern, Boolean> blacklist = configManager.getConfig().randomTrims.blacklist.getPatterns().stream().collect(
+                                    Collectors.toMap(pattern -> pattern, pattern -> false)
+                            );
+
+
+                            player.displayClientMessage(Component.literal("Validating blacklist..."), false);
+                            player.displayClientMessage(Component.literal("\n"), false);
+
+
+                            for (Map.Entry<Pattern, Boolean> pattern : blacklist.entrySet()) {
+                                for (Map.Entry<String, Boolean> trimPattern : trimPatterns.entrySet()) {
+                                    if (pattern.getKey().matcher(trimPattern.getKey()).find()) {
+                                        pattern.setValue(true);
+                                        trimPattern.setValue(true);
+                                        player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" blacklists trim pattern \"" + trimPattern.getKey() + "\""), false);
+                                    }
+                                }
+                            }
+
+                            player.displayClientMessage(Component.literal("\nChecking for not blacklisted trim patterns\n"), false);
+
+                            for (Map.Entry<String, Boolean> trimPattern : trimPatterns.entrySet()) {
+                                if (!trimPattern.getValue()) {
+                                    player.displayClientMessage(Component.literal("Trim pattern \"" + trimPattern.getKey() + "\" is not blacklisted"), false);
+                                }
+                            }
+
+                            player.displayClientMessage(Component.literal("\nChecking for unnecessary regex patterns\n"), false);
+
+                            for (Map.Entry<Pattern, Boolean> pattern : blacklist.entrySet()) {
+                                if (!pattern.getValue()) {
+                                    player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" does not blacklist any registered trim pattern."), false);
+                                }
+                            }
+
+                            player.displayClientMessage(Component.literal("\n"), false);
+                            player.displayClientMessage(Component.literal("Done validating blacklist"), false);
+                        })
+                        .build()
+                )
+
                 .build();
     }
 
