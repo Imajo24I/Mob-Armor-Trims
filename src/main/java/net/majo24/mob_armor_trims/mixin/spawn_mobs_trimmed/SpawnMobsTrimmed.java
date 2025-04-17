@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.mixin;
+package net.majo24.mob_armor_trims.mixin.spawn_mobs_trimmed;
 
 import net.majo24.mob_armor_trims.TrimApplier;
 import net.minecraft.world.DifficultyInstance;

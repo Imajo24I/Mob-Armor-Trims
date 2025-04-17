@@ -1,12 +1,9 @@
-package net.majo24.mob_armor_trims.mixin;
+package net.majo24.mob_armor_trims.mixin.spawn_mobs_trimmed;
 
 import net.majo24.mob_armor_trims.TrimApplier;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractSkeleton.class)
-public abstract class SpawnSkeletonsTrimmed extends LivingEntity {
-    protected SpawnSkeletonsTrimmed(EntityType<? extends LivingEntity> entityType, Level level) {
-        super(entityType, level);
+@Mixin(Zombie.class)
+public abstract class SpawnZombiesTrimmed extends LivingEntity {
+    protected SpawnZombiesTrimmed(EntityType<? extends LivingEntity> entityType, Level world) {
+        super(entityType, world);
     }
 
     @Inject(method = "finalizeSpawn", at = @At("RETURN"))

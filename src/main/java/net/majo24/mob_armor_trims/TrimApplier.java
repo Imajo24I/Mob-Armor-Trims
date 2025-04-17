@@ -53,9 +53,18 @@ public class TrimApplier {
                 .toList();
         *///?}
 
-        if (!armor.isEmpty()) {
-            boolean usePiglinMaterials = entity.getType() == EntityType.PIGLIN;
-            applyTrims(entity.level().registryAccess(), entity.getRandom(), armor, usePiglinMaterials);
+        RandomSource random = entity.getRandom();
+
+        if (configManager.getConfig().general.noTrimsChance.getValue() <= random.nextInt(100)) {
+            if (!armor.isEmpty()) {
+                boolean usePiglinMaterials = entity.getType() == EntityType.PIGLIN;
+                applyTrims(entity.level().registryAccess(), random, armor, usePiglinMaterials);
+            }
+
+            if (MobArmorTrims.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID)
+                    && configManager.getConfig().randomTrims.trimChance.getValue() >= random.nextInt(100)) {
+                ToolTrimsCompat.toolTrimsCompat(entity);
+            }
         }
     }
 
@@ -66,10 +75,6 @@ public class TrimApplier {
      * @param usePiglinMaterials If true and random trims system is active, only netherite or gold will be used as the trim material
      */
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armor, boolean usePiglinMaterials) {
-        if (configManager.getConfig().general.noTrimsChance.getValue() > random.nextInt(100)) {
-            return;
-        }
-
         TrimSystems enabledSystem = configManager.getConfig().general.enabledSystem.getValue();
 
         if (enabledSystem == TrimSystems.RANDOM_TRIMS) {
@@ -209,11 +214,7 @@ public class TrimApplier {
     }
 
     private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
-        //? if >=1.21.2 {
-        List<Holder.Reference<TrimPattern>> trimPatterns = new ArrayList<>(patternRegistry.listElements().toList());
-        //?} else {
-        /*List<Holder.Reference<TrimPattern>> trimPatterns = new ArrayList<>(patternRegistry.holders().toList());
-        *///?}
+        List<Holder.Reference<TrimPattern>> trimPatterns = getPatterns(patternRegistry);
 
         List<Pattern> patterns = configManager.getConfig().randomTrims.blacklist.getPatterns();
 
@@ -229,6 +230,15 @@ public class TrimApplier {
         });
 
         return trimPatterns;
+    }
+
+    public static List<Holder.Reference<TrimPattern>> getPatterns(Registry<TrimPattern> patternRegistry) {
+        //? if >=1.21.2 {
+        return new ArrayList<>(patternRegistry.listElements().toList());
+        //?} else {
+        /*return new ArrayList<>(patternRegistry.holders().toList());
+         *///?}
+
     }
 
     /**
