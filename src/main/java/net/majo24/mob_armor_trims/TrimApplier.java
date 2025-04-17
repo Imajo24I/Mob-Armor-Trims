@@ -63,7 +63,7 @@ public class TrimApplier {
                 applyTrims(entity.level().registryAccess(), random, armor, usePiglinMaterials);
             }
 
-            if (MobArmorTrims.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID)
+            if ((MobArmorTrims.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || MobArmorTrims.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                     && configManager.getConfig().randomTrims.trimChance.getValue() >= random.nextInt(100)) {
                 ToolTrimsCompat.toolTrimsCompat(entity);
             }
