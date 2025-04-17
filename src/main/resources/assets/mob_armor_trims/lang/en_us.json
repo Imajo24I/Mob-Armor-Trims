@@ -15,13 +15,6 @@
   "mob_armor_trims.config.randomTrims.blacklist": "Blacklist for Trim Patterns",
   "mob_armor_trims.config.randomTrims.blacklist.description": "This is a blacklist for disabling trim patterns.\n\nRegex is used, which helps reducing a lot of repetition.\nThis also means, if you want to check for a specific pattern, you need to use \"^[pattern]$\" instead of just \"[pattern]\"\n\nBy default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor.",
 
-  "mob_armor_trims.config.stackedTrims": "Stacked Trims",
-  "mob_armor_trims.config.stackedTrims.tooltip": "Settings for the Stacked Armor Trims mod compatibility.\nThese settings will only make a difference, if the Stacked Armor Trims mod is used and the random trims System is enabled.",
-  "mob_armor_trims.config.stackedTrims.stackedTrimsChance": "Stacked Trim Chance",
-  "mob_armor_trims.config.stackedTrims.stackedTrimsChance.description": "Chance of each armor piece having an additional armor trim on it when the Stacked Armor Trims mod is enabled",
-  "mob_armor_trims.config.stackedTrims.maxStackedTrims": "Max Stacked Trims",
-  "mob_armor_trims.config.stackedTrims.maxStackedTrims.description": "The maximum amount of armor trims that can be stacked on each other when the Stacked Armor Trims mod is enabled",
-
   "mob_armor_trims.config.utils": "Utils",
   "mob_armor_trims.config.utils.tooltip": "Different utility buttons to make configuring the mod easier",
   "mob_armor_trims.config.utils.reloadConfig": "Reload Config",

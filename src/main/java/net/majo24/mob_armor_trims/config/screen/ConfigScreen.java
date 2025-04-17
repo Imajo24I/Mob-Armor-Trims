@@ -63,10 +63,6 @@ public class ConfigScreen {
                 .category(buildRandomTrimsCategory())
                 .category(buildUtilsCategory());
 
-        if (MobArmorTrims.isStackedArmorTrimsLoaded) {
-            configScreen.category(buildStackedTrimsCategory());
-        }
-
         return configScreen.build().generateScreen(parent);
     }
 
@@ -139,36 +135,6 @@ public class ConfigScreen {
                         .build()
                 )
 
-                .build();
-    }
-
-    private static ConfigCategory buildStackedTrimsCategory() {
-        return ConfigCategory.createBuilder()
-                .name(translatable("mob_armor_trims.config.stackedTrims"))
-                .tooltip(translatable("mob_armor_trims.config.stackedTrims.tooltip"))
-
-                .option(Option.<Integer>createBuilder()
-                        .name(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.stackedTrimsChance.description")))
-                        .binding(configManager.getConfig().stackedTrims.stackedTrimChance.getDefaultValue(),
-                                () -> configManager.getConfig().stackedTrims.stackedTrimChance.getValue(),
-                                stackedTrimChance -> configManager.getConfig().stackedTrims.stackedTrimChance.setValue(stackedTrimChance))
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, 100)
-                                .step(1)
-                                .formatValue(integerToPercentageFormatter))
-                        .build())
-
-                .option(Option.<Integer>createBuilder()
-                        .name(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.stackedTrims.maxStackedTrims.description")))
-                        .binding(configManager.getConfig().stackedTrims.maxStackedTrims.getDefaultValue(),
-                                () -> configManager.getConfig().stackedTrims.maxStackedTrims.getValue(),
-                                maxStackedTrims -> configManager.getConfig().stackedTrims.maxStackedTrims.setValue(maxStackedTrims))
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, 5)
-                                .step(1))
-                        .build())
                 .build();
     }
 

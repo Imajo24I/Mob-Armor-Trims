@@ -63,26 +63,12 @@ public class TrimApplier {
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
 
+        int trimChance = configManager.getConfig().randomTrims.trimChance.getValue();
         ArmorTrim lastTrim = null;
 
-        int trimChance = configManager.getConfig().randomTrims.trimChance.getValue();
-        int stackedTrimChance = configManager.getConfig().stackedTrims.stackedTrimChance.getValue();
-        int maxStackedTrims = configManager.getConfig().stackedTrims.maxStackedTrims.getValue();
-
         for (ItemStack armorPiece : armor) {
-            if (trimChance < random.nextInt(100)) {
-                continue;
-            }
-
-            lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim, usePiglinMaterials);
-
-            // Stacked Armor Trims compatibility
-            if (MobArmorTrims.isStackedArmorTrimsLoaded) {
-                int appliedArmorTrims = 0;
-                while ((stackedTrimChance >= random.nextInt(100)) && (appliedArmorTrims < maxStackedTrims)) {
-                    applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, null, usePiglinMaterials);
-                    appliedArmorTrims++;
-                }
+            if (trimChance >= random.nextInt(100)) {
+                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim, usePiglinMaterials);
             }
         }
     }

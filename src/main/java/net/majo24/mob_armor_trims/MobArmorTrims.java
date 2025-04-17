@@ -50,7 +50,6 @@ import java.nio.file.Path;
 public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static final String MOD_ID = "mob_armor_trims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static boolean isStackedArmorTrimsLoaded = false;
     public static ConfigManager<Config> configManager;
 
     //? if fabric {
@@ -101,7 +100,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     //? if fabric
     @Override
     public void onInitialize() {
-        isStackedArmorTrimsLoaded = isModLoaded("stacked_trims");
         configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
         Events.registerEvents();
     }

@@ -61,10 +61,6 @@ public class Config {
     @SubConfig(name = "trim_combinations", description = "Settings for the Custom Trim Combinations backend.\nThese settings will only make a difference, if the CUSTOM_TRIM_COMBINATIONS backend is enabled")
     public final TrimCombinationsSubConfig customTrimCombinations = new TrimCombinationsSubConfig();
 
-    @SubConfig(name = "stacked_trims", description = "Settings for the Stacked Armor Trims Mod Compatibility.\nThese settings will only make a difference, if the STACKED_TRIMS backend is enabled and the stacked armor trims mod is used")
-    public final StackedTrimsSubConfig stackedTrims = new StackedTrimsSubConfig();
-
-
     public static final class GeneralSubConfig {
         @Entry(name = "enabled_system", description = """
                 Select the System of how to select, what trims to give mobs.
@@ -104,14 +100,6 @@ public class Config {
                 To not have to specify the whole trim pattern, you can leave out the "_armor_trim_smithing_template" part of the pattern, as it is the same for every pattern.
                 For example: ["amethyst_shard", "silence"]""")
         public final TrimCombinationsEntry trimCombinations = new TrimCombinationsEntry(new ArrayList<>());
-    }
-
-    public static final class StackedTrimsSubConfig {
-        @Entry(name = "stacked_trim_chance", description = "Chance of each armor piece having an additional armor trim on ")
-        public final PrimitiveEntry<Integer> stackedTrimChance = new PrimitiveEntry<>(10);
-
-        @Entry(name = "max_stacked_trims", description = "The maximum amount of armor trims that can be stacked on each other")
-        public final PrimitiveEntry<Integer> maxStackedTrims = new PrimitiveEntry<>(3);
     }
 
     public enum TrimSystems {
