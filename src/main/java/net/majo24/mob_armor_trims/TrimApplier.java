@@ -13,6 +13,9 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.datafixers.util.Pair;
 
@@ -36,6 +39,24 @@ import net.minecraft.core.component.DataComponents;
 
 public class TrimApplier {
     private TrimApplier() {
+    }
+
+    public static void trimEquipment(LivingEntity entity) {
+        //? if >=1.21.5 {
+        List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
+                .map(entity::getItemBySlot)
+                .filter(armorPiece -> !armorPiece.isEmpty())
+                .toList();
+        //?} else {
+        /*List<ItemStack> armor = java.util.stream.StreamSupport.stream(this.getArmorSlots().spliterator(), false)
+                .filter(armorPiece -> !armorPiece.isEmpty())
+                .toList();
+        *///?}
+
+        if (!armor.isEmpty()) {
+            boolean usePiglinMaterials = entity.getType() == EntityType.PIGLIN;
+            applyTrims(entity.level().registryAccess(), entity.getRandom(), armor, usePiglinMaterials);
+        }
     }
 
     /**
