@@ -14,10 +14,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.datafixers.util.Pair;
+
+//? if >=1.21.5
+import net.minecraft.world.entity.EquipmentSlotGroup;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +50,7 @@ public class TrimApplier {
                 .filter(armorPiece -> !armorPiece.isEmpty())
                 .toList();
         //?} else {
-        /*List<ItemStack> armor = java.util.stream.StreamSupport.stream(this.getArmorSlots().spliterator(), false)
+        /*List<ItemStack> armor = java.util.stream.StreamSupport.stream(entity.getArmorSlots().spliterator(), false)
                 .filter(armorPiece -> !armorPiece.isEmpty())
                 .toList();
         *///?}
