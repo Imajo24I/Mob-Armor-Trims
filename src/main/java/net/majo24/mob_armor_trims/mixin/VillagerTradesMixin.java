@@ -1,5 +1,6 @@
 package net.majo24.mob_armor_trims.mixin;
 
+import net.majo24.mob_armor_trims.ToolTrimsCompat;
 import net.majo24.mob_armor_trims.TrimApplier;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
@@ -33,12 +34,16 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
 
         ItemStack trade = merchantOffers.get(merchantOffers.size() - 1).getResult();
 
-        if (!trade.is(ItemTags.TRIMMABLE_ARMOR)) return;
+        if (!trade.is(ItemTags.TRIMMABLE_ARMOR) && !trade.is(ToolTrimsCompat.TRIMMABLE_TOOL_TAG)) return;
 
         Level level = this.level();
         RandomSource random = level.getRandom();
         RegistryAccess registryAccess = level.registryAccess();
 
-        TrimApplier.applyRandomTrimToItem(trade, random, registryAccess);
+        if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
+            TrimApplier.applyRandomTrimToItem(trade, registryAccess, random);
+        } else {
+            ToolTrimsCompat.toolTrimsCompat(trade, registryAccess, random);
+        }
     }
 }

@@ -69,7 +69,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         RandomSource random = lootContext.getRandom();
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
-        TrimApplier.applyRandomTrimToItem(itemStack, random, registryAccess);
+        TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
         return itemStack;
     }
 

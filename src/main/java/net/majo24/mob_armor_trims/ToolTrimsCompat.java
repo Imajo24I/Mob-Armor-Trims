@@ -41,19 +41,15 @@ public class ToolTrimsCompat {
     private ToolTrimsCompat() {
     }
 
-    public static void toolTrimsCompat(LivingEntity entity) {
-        ItemStack mainhand = entity.getMainHandItem();
-
+    public static void toolTrimsCompat(ItemStack mainhand, RegistryAccess registryAccess, RandomSource random) {
         if (!mainhand.isEmpty() && (mainhand.is(TRIMMABLE_TOOL_TAG) || mainhand.is(ItemTags.TRIMMABLE_ARMOR))) {
-            RegistryAccess registryAccess = entity.level().registryAccess();
-
             Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
             Registry<TrimMaterial> materialRegistry = registries.getFirst();
             Registry<TrimPattern> patternRegistry = registries.getSecond();
 
             ArmorTrim trim = new ArmorTrim(
-                    materialRegistry.getRandom(entity.getRandom()).orElseThrow(),
-                    getRandomToolPattern(patternRegistry, entity.getRandom())
+                    materialRegistry.getRandom(random).orElseThrow(),
+                    getRandomToolPattern(patternRegistry, random)
             );
 
             TrimApplier.applyTrim(mainhand, trim, registryAccess);

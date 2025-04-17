@@ -65,7 +65,7 @@ public class TrimApplier {
 
             if ((MobArmorTrims.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || MobArmorTrims.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                     && configManager.getConfig().randomTrims.trimChance.getValue() >= random.nextInt(100)) {
-                ToolTrimsCompat.toolTrimsCompat(entity);
+                ToolTrimsCompat.toolTrimsCompat(entity.getMainHandItem(), entity.level().registryAccess(), entity.getRandom());
             }
         }
     }
@@ -250,7 +250,7 @@ public class TrimApplier {
      *
      * @param itemStack Item to apply the trim on
      */
-    public static void applyRandomTrimToItem(ItemStack itemStack, RandomSource random, RegistryAccess registryAccess) {
+    public static void applyRandomTrimToItem(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
