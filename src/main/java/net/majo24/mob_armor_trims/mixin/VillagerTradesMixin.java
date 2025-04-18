@@ -1,5 +1,6 @@
 package net.majo24.mob_armor_trims.mixin;
 
+import net.majo24.mob_armor_trims.MobArmorTrims;
 import net.majo24.mob_armor_trims.ToolTrimsCompat;
 import net.majo24.mob_armor_trims.TrimApplier;
 import net.minecraft.core.RegistryAccess;
@@ -26,11 +27,16 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
 
     @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER))
     private void trimTrades(MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
+        int minLevel = MobArmorTrims.configManager.getConfig().general.trimTrades.minLevel.getValue();
+
         //? if >=1.21.5 {
-        if (this.getVillagerData().level()  <= 2) return;
+        if (this.getVillagerData().level()  < minLevel) return;
         //?} else {
-        /*if (this.getVillagerData().getLevel()  <= 2) return;
+        /*if (this.getVillagerData().getLevel()  < minLevel) return;
         *///?}
+
+        int trimChance = MobArmorTrims.configManager.getConfig().general.trimTrades.trimChance.getValue();
+        if (trimChance > random.nextInt(100)) return;
 
         ItemStack trade = merchantOffers.get(merchantOffers.size() - 1).getResult();
 

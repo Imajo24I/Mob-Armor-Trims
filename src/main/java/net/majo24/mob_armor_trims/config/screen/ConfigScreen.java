@@ -70,28 +70,83 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
                 .name(translatable("mob_armor_trims.config.general"))
                 .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
-                .option(Option.<Config.TrimSystems>createBuilder()
-                        .name(translatable("mob_armor_trims.config.general.trimSystem"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimSystem.description")))
-                        .binding(Config.TrimSystems.RANDOM_TRIMS,
-                                () -> configManager.getConfig().general.enabledSystem.getValue(),
-                                enabledSystem -> configManager.getConfig().general.enabledSystem.setValue(enabledSystem))
-                        .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(Config.TrimSystems.class)
-                                .formatValue(trimSystemFormatter))
+
+                .group(OptionGroup.createBuilder()
+                        .name(translatable("mob_armor_trims.config.general.trimMobs"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.description")))
+
+                        .option(Option.<Config.TrimSystems>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.trimMobs.trimSystem"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.trimSystem.description")))
+                                .binding(Config.TrimSystems.RANDOM_TRIMS,
+                                        () -> configManager.getConfig().general.trimMobs.enabledSystem.getValue(),
+                                        enabledSystem -> configManager.getConfig().general.trimMobs.enabledSystem.setValue(enabledSystem))
+                                .controller(opt -> EnumControllerBuilder.create(opt)
+                                        .enumClass(Config.TrimSystems.class)
+                                        .formatValue(trimSystemFormatter))
+                                .build())
+
+                        .option(Option.<Integer>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.trimMobs.noTrimsChance"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.noTrimsChance.description")))
+                                .binding(configManager.getConfig().general.trimMobs.noTrimsChance.getDefaultValue(),
+                                        () -> configManager.getConfig().general.trimMobs.noTrimsChance.getValue(),
+                                        noTrimsChance -> configManager.getConfig().general.trimMobs.noTrimsChance.setValue(noTrimsChance))
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 100)
+                                        .step(1)
+                                        .formatValue(integerToPercentageFormatter))
+                                .build())
+
                         .build())
 
-                .option(Option.<Integer>createBuilder()
-                        .name(translatable("mob_armor_trims.config.general.noTrimsChance"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.noTrimsChance.description")))
-                        .binding(configManager.getConfig().general.noTrimsChance.getDefaultValue(),
-                                () -> configManager.getConfig().general.noTrimsChance.getValue(),
-                                noTrimsChance -> configManager.getConfig().general.noTrimsChance.setValue(noTrimsChance))
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, 100)
-                                .step(1)
-                                .formatValue(integerToPercentageFormatter))
+                .group(OptionGroup.createBuilder()
+                        .name(translatable("mob_armor_trims.config.general.trimLootTables"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimLootTables.description")))
+
+                        .option(Option.<Integer>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.trimLootTables.trimChance"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimLootTables.trimChance.description")))
+                                .binding(configManager.getConfig().general.trimLootTables.trimChance.getDefaultValue(),
+                                        () -> configManager.getConfig().general.trimLootTables.trimChance.getValue(),
+                                        trimChance -> configManager.getConfig().general.trimLootTables.trimChance.setValue(trimChance))
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 100)
+                                        .step(1)
+                                        .formatValue(integerToPercentageFormatter))
+                                .build()
+
+                        ).build())
+
+                .group(OptionGroup.createBuilder()
+                        .name(translatable("mob_armor_trims.config.general.trimTrades"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimTrades.description")))
+
+                        .option(Option.<Integer>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.trimTrades.trimChance"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimTrades.trimChance.description")))
+                                .binding(configManager.getConfig().general.trimTrades.trimChance.getDefaultValue(),
+                                        () -> configManager.getConfig().general.trimTrades.trimChance.getValue(),
+                                        trimChance -> configManager.getConfig().general.trimTrades.trimChance.setValue(trimChance))
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(0, 100)
+                                        .step(1)
+                                        .formatValue(integerToPercentageFormatter))
+                                .build())
+
+                        .option(Option.<Integer>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.trimTrades.minLevel"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimTrades.minLevel.description")))
+                                .binding(configManager.getConfig().general.trimTrades.minLevel.getDefaultValue(),
+                                        () -> configManager.getConfig().general.trimTrades.minLevel.getValue(),
+                                        minLevel -> configManager.getConfig().general.trimTrades.minLevel.setValue(minLevel))
+                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                        .range(1, 5)
+                                        .step(1))
+                                .build())
+
                         .build())
+
                 .build();
     }
 

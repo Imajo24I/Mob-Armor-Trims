@@ -57,7 +57,7 @@ public class TrimApplier {
 
         RandomSource random = entity.getRandom();
 
-        if (configManager.getConfig().general.noTrimsChance.getValue() <= random.nextInt(100)) {
+        if (configManager.getConfig().general.trimMobs.noTrimsChance.getValue() <= random.nextInt(100)) {
             if (!armor.isEmpty()) {
                 boolean usePiglinMaterials = entity.getType() == EntityType.PIGLIN;
                 applyTrims(entity.level().registryAccess(), random, armor, usePiglinMaterials);
@@ -77,7 +77,7 @@ public class TrimApplier {
      * @param usePiglinMaterials If true and random trims system is active, only netherite or gold will be used as the trim material
      */
     public static void applyTrims(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armor, boolean usePiglinMaterials) {
-        TrimSystems enabledSystem = configManager.getConfig().general.enabledSystem.getValue();
+        TrimSystems enabledSystem = configManager.getConfig().general.trimMobs.enabledSystem.getValue();
 
         if (enabledSystem == TrimSystems.RANDOM_TRIMS) {
             runRandomTrimsSystem(registryAccess, random, armor, usePiglinMaterials);

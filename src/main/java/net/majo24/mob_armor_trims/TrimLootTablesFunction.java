@@ -69,6 +69,9 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         RandomSource random = lootContext.getRandom();
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
+        int trimChance = MobArmorTrims.configManager.getConfig().general.trimLootTables.trimChance.getValue();
+        if (trimChance > random.nextInt(100)) return itemStack;
+
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
         } else {
