@@ -25,6 +25,7 @@
   },
   "mixins": ["mob_armor_trims.mixins.json"],
   "depends": {
+    "fabric-api": ">=${fapi_version}",
     "fabricloader": ">=0.15.11",
     "minecraft": "${mcdep}"
   },

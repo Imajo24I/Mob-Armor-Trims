@@ -165,6 +165,8 @@ tasks.processResources {
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
+        } else {
+            put("fapi_version", findProperty("deps.fabric_api"))
         }
         if (mc.version == "1.20.1" || mc.version == "1.20.4") {
             put("forge_id", loader.loader)
