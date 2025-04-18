@@ -41,8 +41,8 @@ public class ToolTrimsCompat {
     private ToolTrimsCompat() {
     }
 
-    public static void toolTrimsCompat(ItemStack mainhand, RegistryAccess registryAccess, RandomSource random) {
-        if (!mainhand.isEmpty() && (mainhand.is(TRIMMABLE_TOOL_TAG) || mainhand.is(ItemTags.TRIMMABLE_ARMOR))) {
+    public static void toolTrimsCompat(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
+        if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOL_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
             Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
             Registry<TrimMaterial> materialRegistry = registries.getFirst();
             Registry<TrimPattern> patternRegistry = registries.getSecond();
@@ -52,7 +52,7 @@ public class ToolTrimsCompat {
                     getRandomToolPattern(patternRegistry, random)
             );
 
-            TrimApplier.applyTrim(mainhand, trim, registryAccess);
+            TrimApplier.applyTrim(itemStack, trim, registryAccess);
         }
     }
 

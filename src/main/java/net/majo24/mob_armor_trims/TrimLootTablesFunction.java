@@ -64,12 +64,16 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
-        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR)) return itemStack;
+        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOL_TAG)) return itemStack;
 
         RandomSource random = lootContext.getRandom();
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
-        TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
+        if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
+            TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
+        } else {
+            ToolTrimsCompat.toolTrimsCompat(itemStack, registryAccess, random);
+        }
         return itemStack;
     }
 
