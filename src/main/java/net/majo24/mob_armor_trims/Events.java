@@ -36,7 +36,6 @@ public class Events {
         ///?}
     }
 
-    //TODO: only apply TrimLootTablesFunction on LootTables that include trimmable items
     //? if fabric {
     public static void addTrimFunctionToLootTables() {
         //? if >1.20.6 {
