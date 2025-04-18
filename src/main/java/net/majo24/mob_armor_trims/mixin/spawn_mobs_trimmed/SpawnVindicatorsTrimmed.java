@@ -1,7 +1,6 @@
 package net.majo24.mob_armor_trims.mixin.spawn_mobs_trimmed;
 
 import net.majo24.mob_armor_trims.TrimApplier;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Vindicator;
@@ -13,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Vindicator.class)
-public abstract class SpawnVindicatorTrimmed extends LivingEntity {
-    protected SpawnVindicatorTrimmed(EntityType<? extends LivingEntity> entityType, Level level) {
+public abstract class SpawnVindicatorsTrimmed extends LivingEntity {
+    protected SpawnVindicatorsTrimmed(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
     }
 

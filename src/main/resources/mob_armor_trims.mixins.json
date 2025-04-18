@@ -5,7 +5,7 @@
   "mixins": [
     "spawn_mobs_trimmed.SpawnMobsTrimmed",
     "spawn_mobs_trimmed.SpawnSkeletonsTrimmed",
-    "spawn_mobs_trimmed.SpawnVindicatorTrimmed",
+    "spawn_mobs_trimmed.SpawnVindicatorsTrimmed",
     "spawn_mobs_trimmed.SpawnZombiesTrimmed",
     "VillagerTradesMixin"
   ],
