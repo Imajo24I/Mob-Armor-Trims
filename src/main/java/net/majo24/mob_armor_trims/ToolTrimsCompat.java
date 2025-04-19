@@ -10,15 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-//? >=1.21.2 {
-import net.minecraft.world.item.equipment.trim.*;
-//?} else {
-/*import net.minecraft.world.item.armortrim.*;
- *///?}
 
 import java.util.List;
 

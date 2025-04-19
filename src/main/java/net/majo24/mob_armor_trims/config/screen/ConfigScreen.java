@@ -22,14 +22,10 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.equipment.trim.*;
 import org.jetbrains.annotations.NotNull;
 import net.majo24.mob_armor_trims.MobArmorTrims;
 
-//? >=1.21.2 {
-import net.minecraft.world.item.equipment.trim.*;
-//?} else {
-/*import net.minecraft.world.item.armortrim.*;
- *///?}
 
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;
 

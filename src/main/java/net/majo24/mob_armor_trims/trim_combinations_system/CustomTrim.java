@@ -5,13 +5,9 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
 
-//? >=1.21.2 {
-import net.minecraft.world.item.equipment.trim.*;
-//?} else {
-/*import net.minecraft.world.item.armortrim.*;
- *///?}
 
 import java.util.List;
 

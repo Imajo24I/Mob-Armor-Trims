@@ -47,6 +47,11 @@ stonecutter {
     const("neoforge", loader.isNeoforge)
     const("forge", loader.isForge)
     const("forgeLike", loader.isForgeLike)
+    replacement(
+        eval(current.version, ">=1.21.2"),
+        "import net.minecraft.world.item.armortrim.*;",
+        "import net.minecraft.world.item.equipment.trim.*;",
+    )
 }
 
 

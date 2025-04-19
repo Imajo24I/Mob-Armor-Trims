@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.datafixers.util.Pair;
 
@@ -28,11 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//? >=1.21.2 {
-import net.minecraft.world.item.equipment.trim.*;
-//?} else {
-/*import net.minecraft.world.item.armortrim.*;
- *///?}
 
 //? >=1.20.5 {
 import net.minecraft.core.component.DataComponentPatch;

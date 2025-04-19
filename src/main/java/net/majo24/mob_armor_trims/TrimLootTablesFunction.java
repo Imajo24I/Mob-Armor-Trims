@@ -9,9 +9,7 @@ import com.mojang.serialization.MapCodec;
 import com.google.gson.JsonObject;
 *///?}
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
@@ -21,12 +19,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
-
-//? >=1.21.2 {
-import net.minecraft.world.item.equipment.trim.*;
- //?} else {
-/*import net.minecraft.world.item.armortrim.*;
-*///?}
 
 import java.util.List;
 

@@ -11,12 +11,12 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 //? >1.20.4 {
-/^import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.fml.ModContainer;
-^///?} else {
-import net.neoforged.fml.ModLoadingContext;
+//?} else {
+/^import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.client.ConfigScreenHandler;
- //?}
+ ^///?}
 *///?} else {
 /*import net.minecraft.core.registries.Registries;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -64,10 +64,10 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
 
     //?} else if neoforge {
     /*//? if >1.20.4 {
-    /^public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
-    ^///?} else {
-    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
-     //?}
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+    //?} else {
+    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION = DeferredRegister.create(
+     ^///?}
             BuiltInRegistries.LOOT_FUNCTION_TYPE,
             MOD_ID
     ).register(
