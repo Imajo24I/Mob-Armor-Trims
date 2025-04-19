@@ -114,15 +114,10 @@ public class TrimApplier {
 
     public static void runCustomTrimCombinationsSystem(List<ItemStack> armor, RegistryAccess registryAccess) {
         String requiredMaterial = getArmorMaterial(armor.getFirst());
-
-        if (requiredMaterial.isEmpty()) {
-            return;
-        }
+        if (requiredMaterial == null) return;
 
         TrimCombination trimCombination = configManager.getConfig().getRandomTrimCombination(requiredMaterial);
-        if (trimCombination == null) {
-            return;
-        }
+        if (trimCombination == null) return;
 
         Iterator<ItemStack> armorIterator = armor.iterator();
 
@@ -136,10 +131,10 @@ public class TrimApplier {
 
         }
     }
-
     /**
      * Get the material of the given armor piece
      */
+    @Nullable
     private static String getArmorMaterial(ItemStack armorPiece) {
         for (String material : List.of("netherite", "diamond", "gold", "iron", "chain", "leather")) {
             if (armorPiece.toString().contains(material)) {
@@ -148,7 +143,7 @@ public class TrimApplier {
         }
 
         MobArmorTrims.LOGGER.error("Could not find armor material for {}", armorPiece);
-        return "";
+        return null;
     }
 
     /**

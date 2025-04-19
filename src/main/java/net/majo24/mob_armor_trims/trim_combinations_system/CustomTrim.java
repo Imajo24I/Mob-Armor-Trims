@@ -7,42 +7,34 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 
 import java.util.List;
+import java.util.Objects;
 
 public record CustomTrim(String material, String pattern) {
-    private static final String TRIM_PATTER_SUFFIX = "_armor_trim_smithing_template";
+    private static final String TRIM_PATTERN_SUFFIX = "_armor_trim_smithing_template";
 
 
     /**
-     * @return the ArmorTrim of the custom trim
-     * @throws IllegalStateException if the trim couldn't be created. Most likely due to invalid material or pattern
+     * @return an ArmorTrim created from this custom trim. Null if the trim couldn't be created
      */
-    public ArmorTrim getTrim(RegistryAccess registryAccess) throws IllegalStateException {
-        String trimPatternId = pattern;
-        if (!trimPatternId.endsWith(TRIM_PATTER_SUFFIX)) {
-            trimPatternId += TRIM_PATTER_SUFFIX;
-        }
-
+    @Nullable
+    public ArmorTrim getTrim(RegistryAccess registryAccess) {
         Holder<TrimMaterial> trimMaterial = getMaterial(material, registryAccess);
-        if (trimMaterial == null) {
-            throw new IllegalStateException("Failed to create armor trim. Please ensure this is a valid trim material: " + material);
-        }
+        if (trimMaterial == null) return null;
 
-        Holder<TrimPattern> trimPattern = getPattern(trimPatternId, registryAccess);
+        Holder<TrimPattern> trimPattern = getPattern(pattern, registryAccess);
         if (trimPattern == null) {
-            trimPatternId = trimPatternId.replace(TRIM_PATTER_SUFFIX, "");
-            trimPattern = getPattern(trimPatternId, registryAccess);
-
-            if (trimPattern == null) {
-                throw new IllegalStateException("Failed to create armor trim. Please ensure this is a valid trim pattern: " + trimPatternId);
-            }
+            trimPattern = getPattern(pattern + TRIM_PATTERN_SUFFIX, registryAccess);
+            if (trimPattern == null) return null;
         }
 
         return new ArmorTrim(trimMaterial, trimPattern);
     }
 
+    @Nullable
     private Holder<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
         try {
             ItemStack materialItem = getItemFromId(material);
@@ -52,6 +44,7 @@ public record CustomTrim(String material, String pattern) {
         }
     }
 
+    @Nullable
     private Holder<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
         try {
             ResourceLocation resourceLocation = ResourceLocation.tryParse(pattern);
@@ -62,7 +55,7 @@ public record CustomTrim(String material, String pattern) {
     }
 
     private ItemStack getItemFromId(String id) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(id))
+        return BuiltInRegistries.ITEM.get(Objects.requireNonNull(ResourceLocation.tryParse(id)))
                 //? >=1.21.2 {
                 .orElseThrow().value()
                 //?}

@@ -24,7 +24,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.equipment.trim.*;
 import org.jetbrains.annotations.NotNull;
-import net.majo24.mob_armor_trims.MobArmorTrims;
 
 
 import static net.majo24.mob_armor_trims.MobArmorTrims.configManager;

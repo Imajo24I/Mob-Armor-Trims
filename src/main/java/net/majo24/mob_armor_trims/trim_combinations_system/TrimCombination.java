@@ -26,9 +26,7 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
 
     public void validate(RegistryAccess registryAccess, LocalPlayer player, int index) {
         for (CustomTrim trim : this.trims()) {
-            try {
-                trim.getTrim(registryAccess);
-            } catch (IllegalStateException e) {
+            if (trim.getTrim(registryAccess) == null) {
                 player.displayClientMessage(Component.literal(
                         "Found invalid trim: \"" + trim + "\" in trim combination " + index
                 ), false);

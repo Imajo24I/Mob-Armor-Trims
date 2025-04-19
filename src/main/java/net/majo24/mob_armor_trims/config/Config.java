@@ -24,6 +24,7 @@ public class Config {
     @Nullable
     public TrimCombination getRandomTrimCombination(String requiredMaterial) {
         List<TrimCombination> trimCombinations = this.customTrimCombinations.trimCombinations.getTrimCombinations();
+
         if (!trimCombinations.isEmpty()) {
             Collections.shuffle(trimCombinations);
             for (TrimCombination trimCombination : trimCombinations) {
@@ -32,14 +33,18 @@ public class Config {
                 }
             }
         }
+
         return null;
     }
 
     @Nullable
-    public ArmorTrim getOrCreateCachedTrim(String material, String pattern, RegistryAccess registryAccess) throws IllegalStateException {
+    public ArmorTrim getOrCreateCachedTrim(String material, String pattern, RegistryAccess registryAccess) {
         ArmorTrim trim = this.cachedCustomTrims.get(Arrays.asList(material, pattern));
+
         if (trim == null) {
             trim = new CustomTrim(material, pattern).getTrim(registryAccess);
+            if (trim == null) return null;
+
             this.cachedCustomTrims.put(Arrays.asList(material, pattern), trim);
         }
 
