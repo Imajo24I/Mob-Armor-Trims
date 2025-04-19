@@ -25,7 +25,7 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
         super(arg, arg2);
     }
 
-    @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER))
+    @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), remap = false)
     private void trimTrades(MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
         int minLevel = MobArmorTrims.configManager.getConfig().general.trimTrades.minLevel.getValue();
 
