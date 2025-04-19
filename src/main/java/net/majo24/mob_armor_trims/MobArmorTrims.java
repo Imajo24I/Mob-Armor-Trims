@@ -100,7 +100,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     //? if fabric
     @Override
     public void onInitialize() {
-        configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
+        configManager = new ConfigManager<>(Config.class, getConfigPath());
         Events.registerEvents();
     }
 
@@ -132,7 +132,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
      * Reloads the config from the config file
      */
     public static void reloadConfig() {
-        configManager = new ConfigManager<>(Config.class, getConfigPath(), LOGGER);
+        configManager = new ConfigManager<>(Config.class, getConfigPath());
     }
     //? if forgeLike {
     /*public static void registerConfigScreen(
