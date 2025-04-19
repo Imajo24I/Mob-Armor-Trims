@@ -13,9 +13,10 @@ class ModData {
     val issuesLink = property("mod.issues_link")
 }
 
-class Dependencies {
-    val modmenuVersion = property("deps.modmenu_version")
-    val yaclVersion = property("deps.yacl_version")
+class ModDependencies {
+    val modmenu = property("deps.modmenu_version")
+    val yacl = property("deps.yacl_version")
+    val fabricApi = findProperty("deps.fabric_api")
 }
 
 class LoaderData {
@@ -34,7 +35,7 @@ class McData {
 
 val mc = McData()
 val mod = ModData()
-val deps = Dependencies()
+val deps = ModDependencies()
 val loader = LoaderData()
 
 version = "${mod.version}+${mc.version}-${loader.loader}"
@@ -91,9 +92,9 @@ dependencies {
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
-        /*optionalProp("deps.parchment_version") {
-            parchment("org.parchmentmc.data:parchment-${property("mod.mc_version")}:$it@zip")
-        }*/
+        optionalProp("deps.parchment_version") {
+            parchment("org.parchmentmc.data:parchment-${mc.version}:$it@zip")
+        }
 
     })
 
@@ -101,13 +102,13 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yacl}")
 
         // Fabric API - Required by Mod Menu
-        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${deps.fabricApi}")
 
         // Mod Menu
-        modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
+        modImplementation("com.terraformersmc:modmenu:${deps.modmenu}")
 
         // NightConfig
         include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
@@ -116,14 +117,14 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
+        implementation("dev.isxander:yet-another-config-lib:${deps.yacl}") {
             isTransitive = false
         }
     } else if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yacl}") {
             isTransitive = false
         }
     }
@@ -160,13 +161,13 @@ tasks.processResources {
         put("description", mod.description)
         put("github_link", mod.githubLink)
         put("issues_link", mod.issuesLink)
-        put("modmenu_version", deps.modmenuVersion)
-        put("yacl_version", deps.yaclVersion)
+        put("modmenu_version", deps.modmenu)
+        put("yacl_version", deps.yacl)
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
         } else {
-            put("fapi_version", findProperty("deps.fabric_api"))
+            put("fabric_api", deps.fabricApi)
         }
         if (mc.version == "1.20.1" || mc.version == "1.20.4") {
             put("forge_id", loader.loader)
@@ -235,7 +236,3 @@ publishMods {
 
 fun <T> optionalProp(property: String, block: (String) -> T?): T? =
     findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
-
-fun isPropDefined(property: String): Boolean {
-    return property(property)?.toString()?.isNotBlank() ?: false
-}
