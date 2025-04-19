@@ -19,10 +19,6 @@ public class BlacklistEntry extends ConfigEntry<List<String>> {
         return patterns;
     }
 
-    public void setPatterns(List<Pattern> patterns) {
-        this.patterns = patterns;
-    }
-
     /**
      * @return the value in a primitive type
      */

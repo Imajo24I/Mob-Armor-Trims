@@ -38,6 +38,7 @@ import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -198,7 +199,7 @@ public class ConfigScreen {
                         .name(translatable("mob_armor_trims.config.utils.reloadConfig"))
                         .description(OptionDescription.of(translatable("mob_armor_trims.config.utils.reloadConfig.description")))
                         .action((screen, option) -> {
-                            MobArmorTrims.reloadConfig();
+                            configManager.reloadConfig();
                             screen.onClose();
                         })
                         .build())
@@ -322,7 +323,7 @@ public class ConfigScreen {
             MultiLineTextWidget messageWidget = new MultiLineTextWidget(
                     width / 2 - 110, height / 2 - 40,
                     translatable("mob_armor_trims.config.backup_screen.installYACL"),
-                    minecraft.font);
+                    Objects.requireNonNull(minecraft).font);
             messageWidget.setMaxWidth(240);
             messageWidget.setCentered(true);
             addRenderableWidget(messageWidget);

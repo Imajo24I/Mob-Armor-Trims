@@ -16,10 +16,6 @@ public class TrimCombinationsEntry extends ConfigEntry<List<List<List<String>>>>
         return trimCombinations;
     }
 
-    public void setTrimCombinations(List<TrimCombination> trimCombinations) {
-        this.trimCombinations = trimCombinations;
-    }
-
     @Override
     public List<List<List<String>>> getValue() {
         return this.trimCombinations.stream().map(TrimCombination::toStringList).toList();
@@ -28,9 +24,5 @@ public class TrimCombinationsEntry extends ConfigEntry<List<List<List<String>>>>
     @Override
     public void setValue(List<List<List<String>>> value) {
         this.trimCombinations = value.stream().map(TrimCombination::trimCombinationFromList).toList();
-    }
-
-    public List<TrimCombination> getDefaultTrimCombinations() {
-        return new ArrayList<>();
     }
 }

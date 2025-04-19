@@ -9,7 +9,6 @@ import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
 import net.majo24.mob_armor_trims.config.backend.entries.ConfigEntry;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -21,7 +20,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class ConfigManager<T> {
-    private final T config;
+    private T config;
     private final Path configPath;
     private final Constructor<T> noArgsConstructor;
 
@@ -41,6 +40,13 @@ public class ConfigManager<T> {
         } catch (Exception e) {
             throw new ClassFormatError("Failed to load default config for class " + this.noArgsConstructor.getDeclaringClass().getName() + ".\n" + e);
         }
+    }
+
+    /**
+     * Reloads the config from the config file
+     */
+    public void reloadConfig() {
+        this.config = loadConfigFromFile();
     }
 
     private Constructor<T> getNoArgsConstructor(Class<T> configClass) {
@@ -139,7 +145,7 @@ public class ConfigManager<T> {
                             filePath);
                     entry.setValue(entryValue);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
             } else if (field.isAnnotationPresent(SubConfig.class)) {
                 ensureConfigFieldIsPublic(field);
@@ -168,7 +174,7 @@ public class ConfigManager<T> {
         try {
             return field.get(instance);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

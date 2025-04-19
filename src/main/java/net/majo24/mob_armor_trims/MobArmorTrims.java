@@ -44,18 +44,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 //? if forgeLike
 /*@Mod("mob_armor_trims")*/
 public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static final String MOD_ID = "mob_armor_trims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static ConfigManager<Config> configManager;
+    public static final ConfigManager<Config> configManager = new ConfigManager<>(Config.class, getConfigPath());
 
     //? if fabric {
     public static final LootItemFunctionType TRIM_LOOT_TABLES_FUNCTION = Registry.register(
             BuiltInRegistries.LOOT_FUNCTION_TYPE,
-            ResourceLocation.tryBuild(MobArmorTrims.MOD_ID, "trim_loot_tables_function"),
+            Objects.requireNonNull(ResourceLocation.tryBuild(MobArmorTrims.MOD_ID, "trim_loot_tables_function")),
             //? if >1.20.1 {
             new LootItemFunctionType(TrimLootTablesFunction.CODEC));
             //?} else {
@@ -100,7 +101,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     //? if fabric
     @Override
     public void onInitialize() {
-        configManager = new ConfigManager<>(Config.class, getConfigPath());
         Events.registerEvents();
     }
 
@@ -128,12 +128,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
         return configDirPath.resolve(MOD_ID + ".toml");
     }
 
-    /**
-     * Reloads the config from the config file
-     */
-    public static void reloadConfig() {
-        configManager = new ConfigManager<>(Config.class, getConfigPath());
-    }
     //? if forgeLike {
     /*public static void registerConfigScreen(
             //? if >1.20.4
