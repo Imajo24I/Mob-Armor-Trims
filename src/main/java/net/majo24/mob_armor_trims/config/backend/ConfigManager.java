@@ -1,190 +1,204 @@
 package net.majo24.mob_armor_trims.config.backend;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
-import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.google.gson.*;
 import net.majo24.mob_armor_trims.MobArmorTrims;
+import net.majo24.mob_armor_trims.config.Config;
+import net.majo24.mob_armor_trims.config.TrimMobsSubConfig;
 import net.majo24.mob_armor_trims.config.backend.annotations.Entry;
 import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
-import net.majo24.mob_armor_trims.config.backend.entries.ConfigEntry;
-import net.minecraft.CrashReport;
-import net.minecraft.client.Minecraft;
+import org.quiltmc.parsers.json.JsonReader;
+import org.quiltmc.parsers.json.JsonWriter;
+import org.quiltmc.parsers.json.gson.GsonReader;
+import org.quiltmc.parsers.json.gson.GsonWriter;
 
-import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 public class ConfigManager<T> {
-    private T config;
+    private T instance;
+    private final T defaults;
     private final Path configPath;
-    private final Constructor<T> noArgsConstructor;
+
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .serializeNulls().setPrettyPrinting()
+            .create();
 
     public ConfigManager(Class<T> configClass, Path configPath) {
-        this.noArgsConstructor = getNoArgsConstructor(configClass);
         this.configPath = configPath;
-        this.config = loadConfigFromFile();
+        this.defaults = createDefaultInstance(configClass);
+        this.instance = defaults;
     }
 
-    public T getConfig() {
-        return config;
+    public T instance() {
+        return instance;
     }
 
-    public T getDefaultConfig() {
-        try {
-            return this.noArgsConstructor.newInstance();
+    public T defaults() {
+        return defaults;
+    }
+
+    /**
+     * Deserializes the config file and loads the instance
+     */
+    public void loadInstance() {
+        MobArmorTrims.LOGGER.info("Loading Mob Armor Trims config from config file");
+        if (!Files.exists(configPath)) {
+            MobArmorTrims.LOGGER.info("Creating new Mob Armor Trims config file.");
+            saveInstance();
+            return;
+        }
+
+        try (JsonReader jsonReader = JsonReader.json5(configPath)) {
+            GsonReader gsonReader = new GsonReader(jsonReader);
+            jsonReader.beginObject();
+            recursivelyDeserialze(jsonReader, gsonReader, instance);
+            jsonReader.endObject();
+
         } catch (Exception e) {
-            throw new ClassFormatError("Failed to load default config for class " + this.noArgsConstructor.getDeclaringClass().getName() + ".\n" + e);
+            MobArmorTrims.LOGGER.error("Failed to deserialize and load Mob Armor Trims config from config file", e);
+            this.instance = defaults;
+        }
+    }
+
+    private void recursivelyDeserialze(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {
+        Map<String, Field> fieldMap = new HashMap<>();
+        Arrays.stream(config.getClass().getDeclaredFields()).forEach(field -> {
+            if (field.isAnnotationPresent(Entry.class)) {
+                fieldMap.put(Objects.requireNonNull(field.getAnnotation(Entry.class)).name(), field);
+            } else if (field.isAnnotationPresent(SubConfig.class)) {
+                fieldMap.put(Objects.requireNonNull(field.getAnnotation(SubConfig.class)).name(), field);
+            }
+        });
+
+        while (jsonReader.hasNext()) {
+            String name = jsonReader.nextName();
+            Field field = fieldMap.get(name);
+
+            if (field == null) {
+                MobArmorTrims.LOGGER.warn("Found unknown config field while deserializing config file: {}", name);
+                jsonReader.skipValue();
+                continue;
+            }
+            fieldMap.remove(name);
+            ensureFieldIsPublic(field);
+
+            if (field.isAnnotationPresent(Entry.class)) {
+                JsonElement element = this.gson.fromJson(gsonReader, JsonElement.class);
+
+                if (element.isJsonNull()) {
+                    MobArmorTrims.LOGGER.warn("Found null value for config field {} while deserializing config file", name);
+                } else {
+                    field.set(config, this.gson.fromJson(element, field.getGenericType()));
+                }
+            } else {
+                jsonReader.beginObject();
+                recursivelyDeserialze(jsonReader, gsonReader, field.get(config));
+                jsonReader.endObject();
+            }
         }
     }
 
     /**
-     * Reloads the config from the config file
+     * Serializes the instance and saves it to the config file
      */
-    public void reloadConfig() {
-        this.config = loadConfigFromFile();
-    }
-
-    private Constructor<T> getNoArgsConstructor(Class<T> configClass) {
-        try {
-            return configClass.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new ClassFormatError("Failed to find no-args constructor for config class %s.".formatted(configClass.getName()) + "\n" + e);
-        }
-    }
-
-    public void saveConfigToFile() {
+    public void saveInstance() {
         MobArmorTrims.LOGGER.info("Saving Mob Armor Trims config to file");
-        CommentedFileConfig fileConfig = fileConfigFromConfig(config, configPath);
-        fileConfig.save();
-        fileConfig.close();
-    }
 
-    public T loadConfigFromFile() {
-        if (Files.exists(configPath)) {
-            // Get config from file
-            try {
-                CommentedFileConfig fileConfig = CommentedFileConfig.of(configPath.toFile());
-                fileConfig.load();
-                return configFromFileConfig(fileConfig);
-            } catch (Exception e) {
-                invalidConfigCrash(e, configPath);
-                return getDefaultConfig();
-            }
-        } else {
-            // Create a new Config
-            MobArmorTrims.LOGGER.info("Creating Mob Armor Trims config file");
-            try {
-                Files.createFile(configPath);
-                CommentedFileConfig fileConfig = fileConfigFromConfig(getDefaultConfig(), configPath);
-                fileConfig.save();
-                fileConfig.close();
-            } catch (Exception e) {
-                MobArmorTrims.LOGGER.error("Could not create Mob Armor Trims config file. Using default config.", e);
-            }
-            return getDefaultConfig();
+        try (StringWriter stringWriter = new StringWriter()) {
+            JsonWriter jsonWriter = JsonWriter.json5(stringWriter);
+            GsonWriter gsonWriter = new GsonWriter(jsonWriter);
+            jsonWriter.beginObject();
+
+            recursivelySerialize(jsonWriter, gsonWriter, instance);
+
+            jsonWriter.endObject();
+            jsonWriter.flush();
+
+            Files.writeString(this.configPath, stringWriter.toString(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+        } catch (Exception e) {
+            MobArmorTrims.LOGGER.error("Failed to serialize and save Mob Armor Trims config to config file", e);
         }
     }
 
-    public CommentedFileConfig fileConfigFromConfig(T config, Path configPath) {
-        CommentedFileConfig fileConfig = CommentedFileConfig.of(new File(configPath.toString()));
-        recursiveAddToFileConfig(fileConfig, config);
-        return fileConfig;
-    }
-
-    private void recursiveAddToFileConfig(CommentedConfig fileConfig, Object config) {
+    private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalAccessException {
         for (Field field : config.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Entry.class)) {
-                ensureConfigFieldIsPublic(field);
+                ensureFieldIsPublic(field);
 
-                ConfigEntry<?> entry = (ConfigEntry<?>) getValueFromField(field, config);
-                Entry entryAnnotation = field.getAnnotation(Entry.class);
-                String entryDescription = createDescription(entryAnnotation.description());
+                Entry entry = field.getAnnotation(Entry.class);
 
-                fileConfig.add(entryAnnotation.name(), entry.getValue());
-                fileConfig.setComment(entryAnnotation.name(), entryDescription);
-            } else if (field.isAnnotationPresent(SubConfig.class)) {
-                ensureConfigFieldIsPublic(field);
-
-                CommentedConfig subConfig = fileConfig.createSubConfig();
-                SubConfig subConfigAnnotation = field.getAnnotation(SubConfig.class);
-                String subConfigDescription = createDescription(subConfigAnnotation.description());
-
-                recursiveAddToFileConfig(subConfig, getValueFromField(field, config));
-                fileConfig.add(subConfigAnnotation.name(), subConfig);
-                fileConfig.setComment(subConfigAnnotation.name(), subConfigDescription);
-            }
-        }
-    }
-
-    private String createDescription(String description) {
-        return " " + description.replace("\n", "\n ");
-    }
-
-    public T configFromFileConfig(CommentedFileConfig fileConfig) {
-        T newConfig = getDefaultConfig();
-        recursivelyAddToConfig(newConfig, fileConfig, fileConfig.getNioPath());
-        return newConfig;
-    }
-
-    private <E> void recursivelyAddToConfig(Object config, Config fileConfig, Path filePath) {
-        for (Field field : config.getClass().getDeclaredFields())
-            if (field.isAnnotationPresent(Entry.class)) {
-                ensureConfigFieldIsPublic(field);
+                jsonWriter.name(Objects.requireNonNull(entry).name());
+                jsonWriter.comment(Objects.requireNonNull(entry).comment());
+                JsonElement element;
 
                 try {
-                    ConfigEntry<E> entry = (ConfigEntry<E>) getValueFromField(field, config);
-                    String entryName = field.getAnnotation(Entry.class).name();
-                    E entryValue = getAndValidateConfigEntry(entryName,
-                            getterForEntry(fileConfig, entry, entryName),
-                            entry.getDefaultValue(),
-                            filePath);
-                    entry.setValue(entryValue);
+                    element = this.gson.toJsonTree(field.get(config), field.getType());
                 } catch (Exception e) {
-                    throw new IllegalStateException(e);
+                    continue;
                 }
+
+                this.gson.toJson(element, gsonWriter);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
-                ensureConfigFieldIsPublic(field);
+                ensureFieldIsPublic(field);
+                SubConfig subConfig = Objects.requireNonNull(field.getAnnotation(SubConfig.class));
 
-                recursivelyAddToConfig(getValueFromField(field, config), fileConfig.get(field.getAnnotation(SubConfig.class).name()), filePath);
+                jsonWriter.name(subConfig.name());
+                jsonWriter.comment(subConfig.comment());
+
+                jsonWriter.beginObject();
+                recursivelySerialize(jsonWriter, gsonWriter, field.get(config));
+                jsonWriter.endObject();
             }
-    }
-
-    private <E> Supplier<E> getterForEntry(Config config, ConfigEntry<E> entry, String entryName) {
-        if (entry.getDefaultValue() instanceof Enum<?> enumEntry) {
-            return () -> (E) config.getEnum(entryName, enumEntry.getDeclaringClass());
-        }
-        return () -> config.get(entryName);
-    }
-
-    private <E> E getAndValidateConfigEntry(String configName, Supplier<E> supplier, E defaultValue, Path configPath) {
-        try {
-            return Objects.requireNonNull(supplier.get());
-        } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to load config option \"{}\" from Mob Armor Trims config file. Using the default value \"{}\" for this session. Please ensure the entry and the config file are valid. You can reset the config file by deleting the file. It is located under \"{}\".", configName, defaultValue, configPath, e);
-            return defaultValue;
         }
     }
 
-    private Object getValueFromField(Field field, Object instance) {
-        try {
-            return field.get(instance);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private void ensureConfigFieldIsPublic(Field field) {
+    private void ensureFieldIsPublic(Field field) {
         if (!Modifier.isPublic(field.getModifiers())) {
-            throw new IllegalStateException("Config field " + field.getName() + " located in " + config.getClass().getName() + " is not public.");
+            throw new IllegalStateException("Config field " + field.getName() + " located in " + field.getDeclaringClass().getName() + " is not public.");
         }
     }
 
-    private static void invalidConfigCrash(Exception e, Path configPath) {
-        Minecraft.getInstance().delayCrash(new CrashReport("Failed to load Mob Armor Trims config from file.", new IllegalStateException("Failed to load Mob Armor Trims config from file. Please make sure your config file is valid. You can reset it by deleting the file. It is located under " + configPath + ".\n" + e.getMessage())));
+    private T createDefaultInstance(Class<T> configClass) {
+        Constructor<T> noArgsConstructor;
+        try {
+            noArgsConstructor = configClass.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new ClassFormatError("Failed to find no-args constructor for config class " + configClass.getName() + "\n" + e);
+        }
+
+        try {
+            return noArgsConstructor.newInstance();
+        } catch (Exception e) {
+            throw new ClassFormatError("Failed to load default config for class " + noArgsConstructor.getDeclaringClass().getName() + "\n" + e);
+        }
+    }
+
+    public static class PatternTypeAdapter implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
+        @Override
+        public JsonElement serialize(Pattern src, Type typeOfSrc, JsonSerializationContext context) {
+            System.out.println("Serialize");
+            return new JsonPrimitive(src.pattern());
+        }
+
+        @Override
+        public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            System.out.println("Deserialize");
+            return Pattern.compile(json.getAsString());
+        }
     }
 }

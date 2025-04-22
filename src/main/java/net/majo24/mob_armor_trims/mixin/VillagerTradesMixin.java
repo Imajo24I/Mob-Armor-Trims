@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.majo24.mob_armor_trims.config.Config.CONFIG_MANAGER;
+
 @Mixin(AbstractVillager.class)
 public abstract class VillagerTradesMixin extends Mob implements VillagerDataHolder {
     protected VillagerTradesMixin(EntityType<? extends Mob> arg, Level arg2) {
@@ -27,7 +29,7 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
 
     @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), remap = false)
     private void trimTrades(MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
-        int minLevel = MobArmorTrims.configManager.getConfig().general.trimTrades.minLevel.getValue();
+        int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;
 
         //? if >=1.21.5 {
         if (this.getVillagerData().level()  < minLevel) return;
@@ -35,7 +37,7 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
         /*if (this.getVillagerData().getLevel()  < minLevel) return;
         *///?}
 
-        int trimChance = MobArmorTrims.configManager.getConfig().general.trimTrades.trimChance.getValue();
+        int trimChance = CONFIG_MANAGER.instance().trimTrades.trimChance;
         if (trimChance > random.nextInt(100)) return;
 
         ItemStack trade = merchantOffers.get(merchantOffers.size() - 1).getResult();

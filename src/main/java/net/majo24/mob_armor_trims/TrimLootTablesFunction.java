@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 *///?}
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.majo24.mob_armor_trims.config.Config;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
@@ -61,8 +62,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         RandomSource random = lootContext.getRandom();
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
-        int trimChance = MobArmorTrims.configManager.getConfig().general.trimLootTables.trimChance.getValue();
-        if (trimChance > random.nextInt(100)) return itemStack;
+        if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance > random.nextInt(100)) return itemStack;
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);

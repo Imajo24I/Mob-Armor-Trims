@@ -14,8 +14,8 @@ class ModData {
 }
 
 class ModDependencies {
-    val modmenu = property("deps.modmenu_version")
     val yacl = property("deps.yacl_version")
+    val modmenu = findProperty("deps.modmenu_version")
     val fabricApi = findProperty("deps.fabric_api")
 }
 
@@ -88,6 +88,9 @@ repositories {
 
     // Neoforge
     maven("https://maven.neoforged.net/releases/")
+
+    // Quilt Parser
+    maven("https://maven.quiltmc.org/repository/release/")
 }
 
 dependencies {
@@ -133,6 +136,9 @@ dependencies {
             isTransitive = false
         }
     }
+
+    // Quilt Parser
+    implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
 
     // NightConfig
     implementation("com.electronwill.night-config:core:${property("deps.night_config_version")}")

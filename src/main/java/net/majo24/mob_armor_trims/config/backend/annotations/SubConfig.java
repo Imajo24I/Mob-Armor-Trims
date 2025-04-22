@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface SubConfig {
     String name();
-    String description();
+    String comment();
 }

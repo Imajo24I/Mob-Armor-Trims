@@ -51,7 +51,6 @@ import java.util.Objects;
 public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static final String MOD_ID = "mob_armor_trims";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final ConfigManager<Config> configManager = new ConfigManager<>(Config.class, getConfigPath());
 
     //? if fabric {
     public static final LootItemFunctionType TRIM_LOOT_TABLES_FUNCTION = Registry.register(
@@ -101,6 +100,8 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     //? if fabric
     @Override
     public void onInitialize() {
+        Config.CONFIG_MANAGER.loadInstance();
+        Config.CONFIG_MANAGER.saveInstance();
         Events.registerEvents();
     }
 
@@ -125,7 +126,7 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
         /*configDirPath = FMLPaths.CONFIGDIR.get();
         *///?}
 
-        return configDirPath.resolve(MOD_ID + ".toml");
+        return configDirPath.resolve(MOD_ID + ".json5");
     }
 
     //? if forgeLike {
