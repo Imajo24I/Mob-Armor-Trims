@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public record TrimCombination(String materialToApplyTo, TrimKey helmetTrim, TrimKey chestplateTrim, TrimKey leggingsTrim, TrimKey bootsTrim) {
+public record TrimCombination(List<String> allowedArmorMaterials, TrimKey helmetTrim, TrimKey chestplateTrim, TrimKey leggingsTrim, TrimKey bootsTrim) {
     /**
      * @return A list of all trim keys
      */
@@ -38,7 +38,7 @@ public record TrimCombination(String materialToApplyTo, TrimKey helmetTrim, Trim
         if (!trimCombinations.isEmpty()) {
             Collections.shuffle(trimCombinations);
             for (TrimCombination trimCombination : trimCombinations) {
-                if (trimCombination.materialToApplyTo().equals(requiredMaterial)) {
+                if (trimCombination.allowedArmorMaterials().contains(requiredMaterial)) {
                     return trimCombination;
                 }
             }
