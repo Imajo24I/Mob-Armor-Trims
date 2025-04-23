@@ -191,13 +191,11 @@ public class ConfigManager<T> {
     public static class PatternTypeAdapter implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
         @Override
         public JsonElement serialize(Pattern src, Type typeOfSrc, JsonSerializationContext context) {
-            System.out.println("Serialize");
             return new JsonPrimitive(src.pattern());
         }
 
         @Override
         public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            System.out.println("Deserialize");
             return Pattern.compile(json.getAsString());
         }
     }

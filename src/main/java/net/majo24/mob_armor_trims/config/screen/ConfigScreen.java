@@ -1,11 +1,7 @@
 package net.majo24.mob_armor_trims.config.screen;
 
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.StringControllerBuilder;
-import dev.isxander.yacl3.api.controller.ValueFormatter;
-import net.majo24.mob_armor_trims.config.Config;
+import dev.isxander.yacl3.api.controller.*;
 import net.majo24.mob_armor_trims.config.TrimMobsSubConfig;
 import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
 import net.minecraft.Util;
@@ -46,7 +42,7 @@ public class ConfigScreen {
     private ConfigScreen() {
     }
 
-    public static final Formatters.IntegerToPercentage integerToPercentageFormatter = new Formatters.IntegerToPercentage();
+    public static final Formatters.Percentage percentageFormatter = new Formatters.Percentage();
     public static final Formatters.TrimSystem trimSystemFormatter = new Formatters.TrimSystem();
 
     public static Screen getConfigScreen(Screen parent) {
@@ -55,7 +51,7 @@ public class ConfigScreen {
                 .save(CONFIG_MANAGER::saveInstance)
 
                 .category(buildGeneralCategory())
-                .category(buildRandomTrimsCategory())
+                .category(buildTrimMobsCategory())
                 .category(buildUtilsCategory());
 
         return configScreen.build().generateScreen(parent);
@@ -67,32 +63,46 @@ public class ConfigScreen {
                 .tooltip(translatable("mob_armor_trims.config.general.tooltip"))
 
                 .group(OptionGroup.createBuilder()
-                        .name(translatable("mob_armor_trims.config.general.trimMobs"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.description")))
+                        .name(translatable("mob_armor_trims.config.general.enable_features"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.general.enable_features.description")))
 
-                        .option(Option.<TrimMobsSubConfig.TrimSystem>createBuilder()
-                                .name(translatable("mob_armor_trims.config.general.trimMobs.trimSystem"))
-                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.trimSystem.description")))
-                                .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
-                                        () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
-                                        enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
-                                .controller(opt -> EnumControllerBuilder.create(opt)
-                                        .enumClass(TrimMobsSubConfig.TrimSystem.class)
-                                        .formatValue(trimSystemFormatter))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.enable_features.enableTrimMobs"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.enable_features.enableTrimMobs.description")))
+                                .binding(CONFIG_MANAGER.defaults().enableTrimMobs,
+                                        () -> CONFIG_MANAGER.instance().enableTrimMobs,
+                                        enableTrimMobs -> CONFIG_MANAGER.instance().enableTrimMobs = enableTrimMobs)
+                                .controller(BooleanControllerBuilder::create)
                                 .build())
 
-                        .option(Option.<Integer>createBuilder()
-                                .name(translatable("mob_armor_trims.config.general.trimMobs.noTrimsChance"))
-                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.trimMobs.noTrimsChance.description")))
-                                .binding(CONFIG_MANAGER.defaults().trimMobs.noTrimsChance,
-                                        () -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance,
-                                        noTrimsChance -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance = noTrimsChance)
-                                .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                        .range(0, 100)
-                                        .step(1)
-                                        .formatValue(integerToPercentageFormatter))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.enable_features.enableTrimLootTables"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.enable_features.enableTrimLootTables.description")))
+                                .binding(CONFIG_MANAGER.defaults().enableTrimLootTables,
+                                        () -> CONFIG_MANAGER.instance().enableTrimLootTables,
+                                        enableTrimLootTables -> CONFIG_MANAGER.instance().enableTrimLootTables = enableTrimLootTables)
+                                .controller(BooleanControllerBuilder::create)
                                 .build())
 
+                        .option(Option.<Boolean>createBuilder()
+                                .name(translatable("mob_armor_trims.config.general.enable_features.enableTrimTrades"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.general.enable_features.enableTrimTrades.description")))
+                                .binding(CONFIG_MANAGER.defaults().enableTrimTrades,
+                                        () -> CONFIG_MANAGER.instance().enableTrimTrades,
+                                        enableTrimTrades -> CONFIG_MANAGER.instance().enableTrimTrades = enableTrimTrades)
+                                .controller(BooleanControllerBuilder::create)
+                                .build())
+                        .build())
+
+                .group(OptionGroup.createBuilder()
+                        .name(translatable("mob_armor_trims.config.trimMobs"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.tooltip")))
+
+                        .option(ButtonOption.createBuilder()
+                                .name(translatable("mob_armor_trims.config.trimMobs.openCategory"))
+                                .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.openCategory.description")))
+                                .action(((yaclScreen, buttonOption) -> yaclScreen.tabNavigationBar.selectTab(1, true)))
+                                .build())
                         .build())
 
                 .group(OptionGroup.createBuilder()
@@ -108,9 +118,8 @@ public class ConfigScreen {
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .formatValue(integerToPercentageFormatter))
+                                        .formatValue(percentageFormatter))
                                 .build()
-
                         ).build())
 
                 .group(OptionGroup.createBuilder()
@@ -126,7 +135,7 @@ public class ConfigScreen {
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
-                                        .formatValue(integerToPercentageFormatter))
+                                        .formatValue(percentageFormatter))
                                 .build())
 
                         .option(Option.<Integer>createBuilder()
@@ -139,54 +148,73 @@ public class ConfigScreen {
                                         .range(1, 5)
                                         .step(1))
                                 .build())
-
                         .build())
-
                 .build();
     }
 
-    private static ConfigCategory buildRandomTrimsCategory() {
-        System.out.println(CONFIG_MANAGER.defaults().trimMobs.trimCombinations.get(0).getClass());
-
+    private static ConfigCategory buildTrimMobsCategory() {
         return ConfigCategory.createBuilder()
-                .name(translatable("mob_armor_trims.config.randomTrims"))
-                .tooltip(translatable("mob_armor_trims.config.randomTrims.tooltip"))
+                .name(translatable("mob_armor_trims.config.trimMobs"))
+                .tooltip(translatable("mob_armor_trims.config.trimMobs.tooltip"))
+
+                .option(Option.<TrimMobsSubConfig.TrimSystem>createBuilder()
+                        .name(translatable("mob_armor_trims.config.trimMobs.trimSystem"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.trimSystem.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
+                                () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
+                                enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
+                        .controller(opt -> EnumControllerBuilder.create(opt)
+                                .enumClass(TrimMobsSubConfig.TrimSystem.class)
+                                .formatValue(trimSystemFormatter))
+                        .build())
 
                 .option(Option.<Integer>createBuilder()
-                        .name(translatable("mob_armor_trims.config.randomTrims.trimChance"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.trimChance.description")))
+                        .name(translatable("mob_armor_trims.config.trimMobs.noTrimsChance"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.noTrimsChance.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimMobs.noTrimsChance,
+                                () -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance,
+                                noTrimsChance -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance = noTrimsChance)
+                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                .range(0, 100)
+                                .step(1)
+                                .formatValue(percentageFormatter))
+                        .build())
+
+                .option(LabelOption.create(translatable("mob_armor_trims.config.trimMobs.randomTrims.description")))
+
+                .option(Option.<Integer>createBuilder()
+                        .name(translatable("mob_armor_trims.config.trimMobs.randomTrims.trimChance"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.randomTrims.trimChance.description")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.trimChance,
                                 () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance,
                                 trimsChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance = trimsChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
-                                .formatValue(integerToPercentageFormatter))
+                                .formatValue(percentageFormatter))
                         .build())
 
                 .option(Option.<Integer>createBuilder()
-                        .name(translatable("mob_armor_trims.config.randomTrims.similarTrimChance"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.similarTrimChance.description")))
+                        .name(translatable("mob_armor_trims.config.trimMobs.randomTrims.similarTrimChance"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.randomTrims.similarTrimChance.description")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.similarTrimChance,
                                 () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance,
                                 similarTrimChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance = similarTrimChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
-                                .formatValue(integerToPercentageFormatter))
+                                .formatValue(percentageFormatter))
                         .build())
 
                 .group(ListOption.<String>createBuilder()
-                        .name(translatable("mob_armor_trims.config.randomTrims.blacklist"))
-                        .description(OptionDescription.of(translatable("mob_armor_trims.config.randomTrims.blacklist.description")))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.blacklist.stream().map(patter -> patter.pattern()).toList(),
-                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.blacklist.stream().map(patter -> patter.pattern()).toList(),
-                                blacklist -> CONFIG_MANAGER.instance().trimMobs.randomTrims.blacklist = blacklist.stream().map(pattern -> Pattern.compile(pattern)).toList())
+                        .name(translatable("mob_armor_trims.config.trimMobs.randomTrims.blacklist"))
+                        .description(OptionDescription.of(translatable("mob_armor_trims.config.trimMobs.randomTrims.blacklist.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.blacklist.stream().map(Pattern::pattern).toList(),
+                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.blacklist.stream().map(Pattern::pattern).toList(),
+                                blacklist -> CONFIG_MANAGER.instance().trimMobs.randomTrims.blacklist = blacklist.stream().map(Pattern::compile).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
-                        .build()
-                )
-
+                        .build())
                 .build();
     }
 
@@ -294,7 +322,10 @@ public class ConfigScreen {
     }
 
     public static class Formatters {
-        public static class IntegerToPercentage implements ValueFormatter<Integer> {
+        private Formatters() {
+        }
+
+        public static class Percentage implements ValueFormatter<Integer> {
             @Override
             public Component format(Integer value) {
                 return Component.literal(value.toString() + "%");
