@@ -100,7 +100,6 @@ public class MobArmorTrims /*? if fabric {*/ implements ModInitializer/*?}*/ {
     @Override
     public void onInitialize() {
         Config.CONFIG_MANAGER.loadInstance();
-        Config.CONFIG_MANAGER.saveInstance();
         Events.registerEvents();
     }
 
