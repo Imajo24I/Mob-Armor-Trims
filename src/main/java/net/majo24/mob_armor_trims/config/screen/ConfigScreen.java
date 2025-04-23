@@ -3,7 +3,7 @@ package net.majo24.mob_armor_trims.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.mob_armor_trims.config.TrimMobsSubConfig;
-import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combination.TrimCombination;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

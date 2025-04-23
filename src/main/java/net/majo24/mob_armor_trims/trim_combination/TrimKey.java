@@ -1,4 +1,4 @@
-package net.majo24.mob_armor_trims.trim_combinations_system;
+package net.majo24.mob_armor_trims.trim_combination;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -12,12 +12,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public record CustomTrim(String material, String pattern) {
+public record TrimKey(String material, String pattern) {
     private static final String TRIM_PATTERN_SUFFIX = "_armor_trim_smithing_template";
 
 
     /**
-     * @return an ArmorTrim created from this custom trim. Null if the trim couldn't be created
+     * @return an ArmorTrim created from this trim key. Null if the trim couldn't be created
      */
     @Nullable
     public ArmorTrim getTrim(RegistryAccess registryAccess) {

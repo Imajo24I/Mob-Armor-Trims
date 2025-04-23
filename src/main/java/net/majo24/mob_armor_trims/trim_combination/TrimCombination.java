@@ -1,25 +1,24 @@
-package net.majo24.mob_armor_trims.trim_combinations_system;
+package net.majo24.mob_armor_trims.trim_combination;
 
 import net.majo24.mob_armor_trims.config.Config;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
-import org.graalvm.collections.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, CustomTrim chestplateTrim, CustomTrim leggingsTrim, CustomTrim bootsTrim) {
+public record TrimCombination(String materialToApplyTo, TrimKey helmetTrim, TrimKey chestplateTrim, TrimKey leggingsTrim, TrimKey bootsTrim) {
     /**
-     * @return A list of all custom trims from this trim combination
+     * @return A list of all trim keys
      */
-    public List<CustomTrim> trims() {
+    public List<TrimKey> trims() {
         return new ArrayList<>(List.of(this.helmetTrim, this.chestplateTrim, this.leggingsTrim, this.bootsTrim));
     }
 
     public void validate(RegistryAccess registryAccess, LocalPlayer player, int index) {
-        for (CustomTrim trim : this.trims()) {
+        for (TrimKey trim : this.trims()) {
             if (trim.getTrim(registryAccess) == null) {
                 player.displayClientMessage(Component.literal(
                         "Found invalid trim: \"" + trim + "\" in trim combination " + index
@@ -48,17 +47,17 @@ public record TrimCombination(String materialToApplyTo, CustomTrim helmetTrim, C
         return null;
     }
 
-    private static final Map<CustomTrim, ArmorTrim> cachedTrims = new HashMap<>();
+    private static final Map<TrimKey, ArmorTrim> cachedTrims = new HashMap<>();
 
     @Nullable
     public static ArmorTrim getOrCreateCachedTrim(String material, String pattern, RegistryAccess registryAccess) {
-        ArmorTrim trim = cachedTrims.get(new CustomTrim(material, pattern));
+        ArmorTrim trim = cachedTrims.get(new TrimKey(material, pattern));
 
         if (trim == null) {
-            trim = new CustomTrim(material, pattern).getTrim(registryAccess);
+            trim = new TrimKey(material, pattern).getTrim(registryAccess);
             if (trim == null) return null;
 
-            cachedTrims.put(new CustomTrim(material, pattern), trim);
+            cachedTrims.put(new TrimKey(material, pattern), trim);
         }
 
         return trim;

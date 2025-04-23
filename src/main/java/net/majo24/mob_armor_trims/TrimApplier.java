@@ -1,8 +1,8 @@
 package net.majo24.mob_armor_trims;
 
 import net.majo24.mob_armor_trims.config.TrimMobsSubConfig;
-import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
-import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combination.TrimKey;
+import net.majo24.mob_armor_trims.trim_combination.TrimCombination;
 
 import static net.majo24.mob_armor_trims.config.Config.CONFIG_MANAGER;
 
@@ -120,7 +120,7 @@ public class TrimApplier {
 
         Iterator<ItemStack> armorIterator = armor.iterator();
 
-        for (CustomTrim trim : trimCombination.trims().reversed()) {
+        for (TrimKey trim : trimCombination.trims().reversed()) {
             ItemStack armorPiece = armorIterator.next();
             ArmorTrim armorTrim = TrimCombination.getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
 

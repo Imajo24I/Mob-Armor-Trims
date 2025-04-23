@@ -2,8 +2,8 @@ package net.majo24.mob_armor_trims.config;
 
 import net.majo24.mob_armor_trims.config.backend.annotations.Entry;
 import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
-import net.majo24.mob_armor_trims.trim_combinations_system.CustomTrim;
-import net.majo24.mob_armor_trims.trim_combinations_system.TrimCombination;
+import net.majo24.mob_armor_trims.trim_combination.TrimKey;
+import net.majo24.mob_armor_trims.trim_combination.TrimCombination;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,7 +23,7 @@ public class TrimMobsSubConfig {
 
     @Entry(name = "trim_combinations", comment = "List of trim combinations")
     public List<TrimCombination> trimCombinations = List.of(
-            new TrimCombination("gold", new CustomTrim("gold", "silence"), new CustomTrim("netherite", "silence"), new CustomTrim("gold", "silence"), new CustomTrim("netherite", "silence"))
+            new TrimCombination("gold", new TrimKey("gold", "silence"), new TrimKey("netherite", "silence"), new TrimKey("gold", "silence"), new TrimKey("netherite", "silence"))
     );
 
     public static class RandomTrimsSubConfig {
