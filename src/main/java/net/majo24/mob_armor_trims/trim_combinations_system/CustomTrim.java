@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 
-import java.util.List;
 import java.util.Objects;
 
 public record CustomTrim(String material, String pattern) {
@@ -60,20 +59,5 @@ public record CustomTrim(String material, String pattern) {
                 .orElseThrow().value()
                 //?}
                 .getDefaultInstance();
-    }
-
-    /**
-     * @return The custom trim converted to a list containing the material and pattern as strings
-     */
-    public List<String> toList() {
-        return List.of(material, pattern);
-    }
-
-    /**
-     * @param customTrimAsStringList The custom trim in the form of a list containing the material and pattern as strings
-     * @return The custom trim
-     */
-    public static CustomTrim fromList(List<String> customTrimAsStringList) {
-        return new CustomTrim(customTrimAsStringList.get(0), customTrimAsStringList.get(1));
     }
 }
