@@ -40,6 +40,8 @@ public class TrimApplier {
     }
 
     public static void trimEquipment(LivingEntity entity) {
+        if (!CONFIG_MANAGER.instance().enableTrimMobs) return;
+
         //? if >=1.21.5 {
         List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
                 .map(entity::getItemBySlot)

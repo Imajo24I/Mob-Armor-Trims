@@ -57,6 +57,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
+        if (!Config.CONFIG_MANAGER.instance().enableTrimLootTables) return itemStack;
         if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOL_TAG)) return itemStack;
 
         RandomSource random = lootContext.getRandom();
