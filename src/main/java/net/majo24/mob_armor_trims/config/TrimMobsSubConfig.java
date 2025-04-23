@@ -21,6 +21,7 @@ public class TrimMobsSubConfig {
     @SubConfig(name = "random_trims", comment = "Settings for the Random Trims system.\nThese settings will only matter if the RANDOM_TRIMS system is enabled")
     public RandomTrimsSubConfig randomTrims = new RandomTrimsSubConfig();
 
+    //TODO: remove temporary default value
     @Entry(name = "trim_combinations", comment = "List of trim combinations")
     public List<TrimCombination> trimCombinations = List.of(
             new TrimCombination("gold", new TrimKey("gold", "silence"), new TrimKey("netherite", "silence"), new TrimKey("gold", "silence"), new TrimKey("netherite", "silence"))

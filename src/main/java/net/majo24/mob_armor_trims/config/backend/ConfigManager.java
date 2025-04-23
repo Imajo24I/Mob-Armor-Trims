@@ -2,8 +2,6 @@ package net.majo24.mob_armor_trims.config.backend;
 
 import com.google.gson.*;
 import net.majo24.mob_armor_trims.MobArmorTrims;
-import net.majo24.mob_armor_trims.config.Config;
-import net.majo24.mob_armor_trims.config.TrimMobsSubConfig;
 import net.majo24.mob_armor_trims.config.backend.annotations.Entry;
 import net.majo24.mob_armor_trims.config.backend.annotations.SubConfig;
 import org.quiltmc.parsers.json.JsonReader;
@@ -11,7 +9,6 @@ import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;
 import org.quiltmc.parsers.json.gson.GsonWriter;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
@@ -66,7 +63,7 @@ public class ConfigManager<T> {
         try (JsonReader jsonReader = JsonReader.json5(configPath)) {
             GsonReader gsonReader = new GsonReader(jsonReader);
             jsonReader.beginObject();
-            recursivelyDeserialze(jsonReader, gsonReader, instance);
+            recursivelyDeserialize(jsonReader, gsonReader, instance);
             jsonReader.endObject();
 
         } catch (Exception e) {
@@ -75,7 +72,7 @@ public class ConfigManager<T> {
         }
     }
 
-    private void recursivelyDeserialze(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {
+    private void recursivelyDeserialize(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {
         Map<String, Field> fieldMap = new HashMap<>();
         Arrays.stream(config.getClass().getDeclaredFields()).forEach(field -> {
             if (field.isAnnotationPresent(Entry.class)) {
@@ -107,7 +104,7 @@ public class ConfigManager<T> {
                 }
             } else {
                 jsonReader.beginObject();
-                recursivelyDeserialze(jsonReader, gsonReader, field.get(config));
+                recursivelyDeserialize(jsonReader, gsonReader, field.get(config));
                 jsonReader.endObject();
             }
         }

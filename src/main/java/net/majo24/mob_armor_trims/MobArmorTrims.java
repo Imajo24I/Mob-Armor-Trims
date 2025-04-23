@@ -37,7 +37,6 @@ import net.minecraft.resources.ResourceLocation;
 //?}
 
 import net.majo24.mob_armor_trims.config.Config;
-import net.majo24.mob_armor_trims.config.backend.ConfigManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import org.slf4j.Logger;

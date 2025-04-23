@@ -15,22 +15,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Contains code for supporting both the Tool Trims mod and the Trimmable Tools mod
  */
 public class ToolTrimsCompat {
-    public static final String TOOL_TRIMS_ID = "tooltrims";
-    public static final TagKey<Item> TRIMMABLE_TOOL_TAG;
-
     public static final String TRIMMABLE_TOOLS_ID = "trimmable_tools";
 
-    static {
-        ResourceLocation trimmableToolsResourceLocation = ResourceLocation.tryBuild(TOOL_TRIMS_ID, "trimmable_tools");
-        assert trimmableToolsResourceLocation != null;
-
-        TRIMMABLE_TOOL_TAG = TagKey.create(Registries.ITEM, trimmableToolsResourceLocation);
-    }
+    public static final String TOOL_TRIMS_ID = "tooltrims";
+    public static final TagKey<Item> TRIMMABLE_TOOL_TAG = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild(TOOL_TRIMS_ID, TRIMMABLE_TOOLS_ID)));
 
     private ToolTrimsCompat() {
     }
