@@ -55,7 +55,7 @@ public class ConfigManager<T> {
     public void loadInstance() {
         MobArmorTrims.LOGGER.info("Loading Mob Armor Trims config from config file");
         if (!Files.exists(configPath)) {
-            MobArmorTrims.LOGGER.info("Creating new Mob Armor Trims config file.");
+            MobArmorTrims.LOGGER.info("Creating new Mob Armor Trims config file with default values.");
             saveInstance();
             return;
         }
@@ -67,7 +67,7 @@ public class ConfigManager<T> {
             jsonReader.endObject();
 
         } catch (Exception e) {
-            MobArmorTrims.LOGGER.error("Failed to deserialize and load Mob Armor Trims config from config file", e);
+            MobArmorTrims.LOGGER.error("Failed to deserialize the Mob Armor Trims config file. Using the default config instead.", e);
             this.instance = defaults;
         }
     }
@@ -87,7 +87,7 @@ public class ConfigManager<T> {
             Field field = fieldMap.get(name);
 
             if (field == null) {
-                MobArmorTrims.LOGGER.warn("Found unknown config field while deserializing config file: {}", name);
+                MobArmorTrims.LOGGER.warn("Found unknown config field \"{}\" while deserializing config file", name);
                 jsonReader.skipValue();
                 continue;
             }
@@ -98,7 +98,7 @@ public class ConfigManager<T> {
                 JsonElement element = this.gson.fromJson(gsonReader, JsonElement.class);
 
                 if (element.isJsonNull()) {
-                    MobArmorTrims.LOGGER.warn("Found null value for config field {} while deserializing config file", name);
+                    MobArmorTrims.LOGGER.warn("Found null value for config field {} while deserializing config file. Using default instead.", name);
                 } else {
                     field.set(config, this.gson.fromJson(element, field.getGenericType()));
                 }
@@ -146,6 +146,8 @@ public class ConfigManager<T> {
                 try {
                     element = this.gson.toJsonTree(field.get(config), field.getType());
                 } catch (Exception e) {
+                    MobArmorTrims.LOGGER.error("Failed to serialize config field \"{}\". Saving as null.", field.getName(), e);
+                    jsonWriter.nullValue();
                     continue;
                 }
 
