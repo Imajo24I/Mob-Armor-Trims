@@ -1,5 +1,6 @@
 package net.majo24.mob_armor_trims.trim_combination;
 
+import net.majo24.mob_armor_trims.TrimApplier;
 import net.majo24.mob_armor_trims.config.Config;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;

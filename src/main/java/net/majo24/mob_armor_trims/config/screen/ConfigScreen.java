@@ -243,16 +243,15 @@ public class ConfigScreen {
 
                             RegistryAccess registryAccess = level.registryAccess();
 
-                            player.displayClientMessage(Component.literal("Validating custom trim combinations..."), false);
+                            player.displayClientMessage(Component.literal("Validating custom trim combinations...\n"), false);
 
-                            int index = 1;
+                            int index = 0;
                             for (TrimCombination trimCombination : CONFIG_MANAGER.instance().trimMobs.trimCombinations) {
                                 trimCombination.validate(registryAccess, player, index);
                                 index++;
                             }
 
-
-                            player.displayClientMessage(Component.literal("Done validating custom trim combinations"), false);
+                            player.displayClientMessage(Component.literal("\nDone validating custom trim combinations"), false);
                         })
                         .build())
 
@@ -282,9 +281,8 @@ public class ConfigScreen {
                             );
 
 
-                            player.displayClientMessage(Component.literal("Validating blacklist..."), false);
-                            player.displayClientMessage(Component.literal("\n"), false);
-
+                            player.displayClientMessage(Component.literal("Validating blacklist...\n"), false);
+                            player.displayClientMessage(Component.literal("Checking for blacklisted trim patterns\n"), false);
 
                             for (Map.Entry<Pattern, Boolean> pattern : blacklist.entrySet()) {
                                 for (Map.Entry<String, Boolean> trimPattern : trimPatterns.entrySet()) {
@@ -312,8 +310,7 @@ public class ConfigScreen {
                                 }
                             }
 
-                            player.displayClientMessage(Component.literal("\n"), false);
-                            player.displayClientMessage(Component.literal("Done validating blacklist"), false);
+                            player.displayClientMessage(Component.literal("\nDone validating blacklist"), false);
                         })
                         .build()
                 )
