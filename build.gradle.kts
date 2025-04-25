@@ -172,12 +172,12 @@ tasks.processResources {
         put("description", mod.description)
         put("github_link", mod.githubLink)
         put("issues_link", mod.issuesLink)
-        put("modmenu_version", deps.modmenu)
         put("yacl_version", deps.yacl)
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
         } else {
+            put("modmenu_version", deps.modmenu)
             put("fabric_api", deps.fabricApi)
         }
         if (mc.version == "1.20.1" || mc.version == "1.20.4") {

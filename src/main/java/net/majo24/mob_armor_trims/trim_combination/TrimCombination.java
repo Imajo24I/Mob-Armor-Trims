@@ -4,7 +4,7 @@ import net.majo24.mob_armor_trims.config.Config;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.item.equipment.trim.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
