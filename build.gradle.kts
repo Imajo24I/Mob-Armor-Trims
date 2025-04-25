@@ -117,10 +117,6 @@ dependencies {
 
         // Mod Menu
         modImplementation("com.terraformersmc:modmenu:${deps.modmenu}")
-
-        // NightConfig
-        include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
-        include("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
     } else if (loader.isNeoforge) {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
@@ -138,11 +134,10 @@ dependencies {
     }
 
     // Quilt Parser
+    implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
+    include("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
     implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
-
-    // NightConfig
-    implementation("com.electronwill.night-config:core:${property("deps.night_config_version")}")
-    implementation("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
+    include("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
 }
 
 loom {

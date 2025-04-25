@@ -21,7 +21,7 @@ public abstract class SpawnZombiesTrimmed extends LivingEntity {
     @Inject(method = "finalizeSpawn", at = @At("RETURN"))
     //? if >=1.21.2 {
     private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, EntitySpawnReason entitySpawnReason, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
-    //?} else if 1.21 {
+    //?} else if 1.20.6 || 1.21 {
     /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
     *///?} else {
     /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
