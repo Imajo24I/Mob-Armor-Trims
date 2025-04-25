@@ -229,6 +229,7 @@ publishMods {
         minecraftVersions.addAll(mc.targets)
         optional("yacl")
         if (loader.isFabric) {
+            requires("fabric-api")
             optional("modmenu")
         }
     }
@@ -240,6 +241,7 @@ publishMods {
         serverRequired = true
         optional("yacl")
         if (loader.isFabric) {
+            requires("fabric-api")
             optional("modmenu")
         }
     }
