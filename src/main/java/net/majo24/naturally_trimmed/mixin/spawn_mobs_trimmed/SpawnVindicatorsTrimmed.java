@@ -1,7 +1,6 @@
 package net.majo24.naturally_trimmed.mixin.spawn_mobs_trimmed;
 
 import net.majo24.naturally_trimmed.TrimApplier;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Vindicator;
@@ -24,7 +23,7 @@ public abstract class SpawnVindicatorsTrimmed extends LivingEntity {
     //?} else if 1.20.6 || 1.21 {
     /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
     *///?} else {
-    /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
+    /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, net.minecraft.nbt.CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
     *///?}
         TrimApplier.trimEquipment(this);
     }
