@@ -57,18 +57,18 @@ stonecutter {
 
 loom {
     mods {
-        create("mob_armor_trims") {
+        create("naturally_trimmed") {
             sourceSet(sourceSets["main"])
         }
     }
 
     if (isForgeLike) {
         if (isForge) {
-            forge.mixinConfigs("mob_armor_trims.mixins.json")
-            accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.1_20_1.accesswidener")
+            forge.mixinConfigs("naturally_trimmed.mixins.json")
+            accessWidenerPath = rootProject.file("src/main/resources/naturally_trimmed.1_20_1.accesswidener")
             forge.convertAccessWideners.set(true)
         } else {
-            accessWidenerPath = rootProject.file("src/main/resources/mob_armor_trims.accesswidener")
+            accessWidenerPath = rootProject.file("src/main/resources/naturally_trimmed.accesswidener")
         }
     }
 }

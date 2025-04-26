@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "${name}"
 authors = "majo24"
 description = "${description}"
-logoFile = "assets/mob_armor_trims/icon.png"
+logoFile = "../assets/naturally_trimmed/icon.png"
 
 [["dependencies.{id}"]]
 modId = "neoforge"
@@ -34,4 +34,4 @@ ordering = "AFTER"
 side = "CLIENT"
 
 [[mixins]]
-config = "mob_armor_trims.mixins.json"
+config = "naturally_trimmed.mixins.json"

@@ -39,4 +39,4 @@ stonecutter {
     create(rootProject)
 }
 
-rootProject.name = "Mob Armor Trims"
+rootProject.name = "Naturally Trimmed"
