@@ -148,28 +148,20 @@ public class TrimApplier {
     }
 
     /**
-     * Apply a trim on the armor
+     * Applies the armor trim onto the itemStack
      *
-     * @param armorPiece Armor to apply the trim on
-     * @param armorTrim  Trim to apply on the armor
      */
-    public static void applyTrim(ItemStack armorPiece, ArmorTrim armorTrim, RegistryAccess registryAccess) {
+    public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
-        armorPiece.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
+        itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
          //?} else {
         /*ArmorTrim.setTrim(registryAccess, armorPiece, armorTrim);
         *///?}
     }
 
-    /**
-     * Applies a random trim on the given armor piece. The random trim also takes referenceTrim and the blacklist into account.
-     *
-     * @param armorPiece    Armor piece to apply the trim on
-     * @param referenceTrim The trim, the new random trim should take into account
-     * @return null if all TrimPatterns inside the patternRegistry are blacklisted, otherwise the random trim which was used
-     */
+    /** Applies a random armor trim on the given itemStack. The random trim also considers referenceTrim and the blacklist. */
     @Nullable
-    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack armorPiece, @Nullable ArmorTrim referenceTrim, boolean usePiglinMaterials) {
+    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack itemStack, @Nullable ArmorTrim referenceTrim, boolean usePiglinMaterials) {
         List<Holder.Reference<TrimPattern>> trimPatterns = getAndFilterPatterns(patternRegistry);
         if (trimPatterns.isEmpty()) return null;
 
@@ -203,7 +195,7 @@ public class TrimApplier {
             armorTrim = new ArmorTrim(trimMaterial, armorTrim.pattern());
         }
 
-        applyTrim(armorPiece, armorTrim, registryAccess);
+        applyTrim(itemStack, armorTrim, registryAccess);
         return armorTrim;
     }
 
