@@ -12,7 +12,7 @@
     "sources": "${github_link}",
     "issues": "${issues_link}"
   },
-  "license": "MIT",
+  "license": "LGPL-3.0-only",
   "icon": "assets/naturally_trimmed/icon.png",
   "environment": "*",
   "entrypoints": {

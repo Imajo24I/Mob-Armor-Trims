@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "*"
 issueTrackerURL = "${issues_link}"
-license = "MIT"
+license = "LGPL-3.0-only"
 
 [[mods]]
 modId = "${id}"
