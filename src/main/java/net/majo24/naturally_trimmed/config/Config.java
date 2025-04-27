@@ -5,6 +5,9 @@ import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.annotations.Entry;
 import net.majo24.naturally_trimmed.config.backend.annotations.SubConfig;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
 
@@ -16,6 +19,15 @@ public class Config {
 
     @Entry(name = "enable_trim_trades", comment = "Enables the equipment from villager trades to be trimmed")
     public boolean enableTrimTrades = true;
+
+    @Entry(name = "blacklist", comment = """
+            Blacklist for trim patterns.
+            
+            This uses regex. This means, if you want to check for a specific pattern, you need to use "^[pattern$]" instead of just "[pattern]".
+            By default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor
+            
+            To ease the configuration of the blacklist, theres a utils tab inside the config screen, which contains a button to validate the blacklist.""")
+    public List<Pattern> blacklist = List.of(Pattern.compile("^tooltrims:.*"));
 
     @SubConfig(name = "trim_mobs", comment = "Settings for trimming a mob's equipment")
     public TrimMobsSubConfig trimMobs = new TrimMobsSubConfig();

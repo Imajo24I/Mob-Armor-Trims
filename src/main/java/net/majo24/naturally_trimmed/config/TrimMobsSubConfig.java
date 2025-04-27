@@ -6,7 +6,6 @@ import net.majo24.naturally_trimmed.trim_combination.TrimCombination;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TrimMobsSubConfig {
     @Entry(name = "trim_system", comment = """
@@ -49,15 +48,6 @@ public class TrimMobsSubConfig {
 
         @Entry(name = "similar_trim_chance", comment = "Chance of each armor piece having a similar armor trim as the previous armor piece")
         public int similarTrimChance = 75;
-
-        @Entry(name = "blacklist", comment = """
-                Blacklist for trim patterns.
-                
-                This uses regex. This means, if you want to check for a specific pattern, you need to use "^[pattern$]" instead of just "[pattern]".
-                By default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor
-                
-                To ease the configuration of the blacklist, theres a utils tab inside the config screen, which contains a button to validate the blacklist.""")
-        public List<Pattern> blacklist = List.of(Pattern.compile("^tooltrims:.*"));
     }
 
     public enum TrimSystem {

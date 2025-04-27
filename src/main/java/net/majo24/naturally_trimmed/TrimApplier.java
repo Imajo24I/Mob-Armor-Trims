@@ -210,7 +210,7 @@ public class TrimApplier {
     private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
         List<Holder.Reference<TrimPattern>> trimPatterns = getPatterns(patternRegistry);
 
-        List<Pattern> patterns = CONFIG_MANAGER.instance().trimMobs.randomTrims.blacklist;
+        List<Pattern> patterns = CONFIG_MANAGER.instance().blacklist;
 
         trimPatterns.removeIf(trimPattern -> {
             String resourceLocation = trimPattern.key().location().toString();
