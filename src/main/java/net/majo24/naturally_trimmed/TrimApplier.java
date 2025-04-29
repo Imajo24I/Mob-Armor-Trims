@@ -57,8 +57,7 @@ public class TrimApplier {
 
         if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance <= random.nextInt(100)) {
             if (!armor.isEmpty()) {
-                boolean usePiglinMaterials = entity.getType() == EntityType.PIGLIN;
-                applyTrims(entity.level().registryAccess(), random, armor, usePiglinMaterials);
+                applyTrims(entity.level().registryAccess(), random, armor);
             }
 
             if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
@@ -69,22 +68,19 @@ public class TrimApplier {
     }
 
     /**
-     * Runs the selected system on the given armor
-     *
-     * @param armor              Armor to apply the trims on
-     * @param usePiglinMaterials If true and random trims system is active, only netherite or gold will be used as the trim material
+     * Runs the selected trim system on the given armor
      */
-    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armor, boolean usePiglinMaterials) {
+    public static void applyTrims(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armor) {
         TrimMobsSubConfig.TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
 
         if (enabledSystem == TrimMobsSubConfig.TrimSystem.RANDOM_TRIMS) {
-            runRandomTrimsSystem(registryAccess, random, armor, usePiglinMaterials);
+            runRandomTrimsSystem(registryAccess, random, armor);
         } else {
             runCustomTrimCombinationsSystem(armor, registryAccess);
         }
     }
 
-    public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor, boolean usePiglinMaterials) {
+    public static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
@@ -93,7 +89,7 @@ public class TrimApplier {
 
         for (ItemStack armorPiece : armor) {
             if (CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance >= random.nextInt(100)) {
-                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim, usePiglinMaterials);
+                lastTrim = applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, armorPiece, lastTrim);
             }
         }
     }
@@ -161,7 +157,7 @@ public class TrimApplier {
 
     /** Applies a random armor trim on the given itemStack. The random trim also considers referenceTrim and the blacklist. */
     @Nullable
-    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack itemStack, @Nullable ArmorTrim referenceTrim, boolean usePiglinMaterials) {
+    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack itemStack, @Nullable ArmorTrim referenceTrim) {
         List<Holder.Reference<TrimPattern>> trimPatterns = getAndFilterPatterns(patternRegistry);
         if (trimPatterns.isEmpty()) return null;
 
@@ -179,20 +175,6 @@ public class TrimApplier {
             if (similarTrimChance >= random.nextInt(100)) {
                 armorTrim = new ArmorTrim(armorTrim.material(), referenceTrim.pattern());
             }
-        }
-
-        if (usePiglinMaterials) {
-            //? >=1.21.2 {
-            Holder.Reference<TrimMaterial> trimMaterial = ((random.nextBoolean())
-                    ? materialRegistry.get(TrimMaterials.NETHERITE)
-                    : materialRegistry.get(TrimMaterials.GOLD)).orElseThrow();
-            //?} else {
-            /*Holder.Reference<TrimMaterial> trimMaterial = (random.nextBoolean())
-                    ? materialRegistry.getHolderOrThrow(TrimMaterials.NETHERITE)
-                    : materialRegistry.getHolderOrThrow(TrimMaterials.GOLD);
-            *///?}
-
-            armorTrim = new ArmorTrim(trimMaterial, armorTrim.pattern());
         }
 
         applyTrim(itemStack, armorTrim, registryAccess);
@@ -239,6 +221,6 @@ public class TrimApplier {
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
 
-        TrimApplier.applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, itemStack, null, false);
+        TrimApplier.applyRandomTrim(registryAccess, materialRegistry, patternRegistry, random, itemStack, null);
     }
 }
