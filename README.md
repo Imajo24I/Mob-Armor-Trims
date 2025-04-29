@@ -2,68 +2,44 @@
 [![Modrinth](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/mob-armor-trims)
 [![CurseForge](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/mob-armor-trims)
 
-# Mob Armor Trims
+# Naturally Trimmed
 
-This minecraft mod makes mobs be able to spawn with naturally trimmed armor.
+This mod applies armor trims to naturally generated armor and equipment from mobs, loot tables and trades,
+resulting in a more complete gameplay experience
 
-When a mob spawns, each of the mob's armor pieces has a chance to have an armor trim applied to it.
-By default, the armor trims are randomly chosen, while also taking the previous trim into account,  
-resulting in good-looking trim combinations.  
-Alternatively, you can configure this mod to use customizable trim combinations instead of random trims.
+## Features
 
-This mod is serverside, meaning it has to be on the server for it to take any effect.
+- **Applies armor trims to mobs spawning with armor.** By default, the trims are chosen randomly with consideration of
+  the
+  previous trim applied to the armor set
+- **Applies random armor trims to armor from loot tables.** This includes chests from all structures (for example,
+  bastions
+  or end cities), piglin bartering and fishing.
+- **Applies random armor trims to armor from villager trades.** Note: By default, only trades above villager trading level 3 have a
+  chance of being trimmed
 
-## Supported Minecraft Versions and Loaders
 
-| Minecraft       | Fabric | Neoforge | Forge |
-|-----------------|--------|----------|-------|
-| 1.20.1          | ✅      | ❌        | ✅     |
-| 1.20.4          | ✅      | ✅        | ❌     |
-| 1.20.5 - 1.20.6 | ✅      | ✅        | ❌     |
-| 1.21 - 1.21.1   | ✅      | ✅        | ❌     |
-| 1.21.2 - 1.21.4 | ✅      | ✅        | ❌     |
-| 1.21.5          | ✅      | ✅        | ❌     |
+- Also applies armor trims to equipment like pickaxes or swords if
+  either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools)
+  or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod) is installed.
+  Note, the [Tools Trims Datapack](https://modrinth.com/mod/tool-trims-mod) is **not** supported
+- Almost all features are highly configurable. See the [Configuration section](#configuration)
 
-✅ - Supported:  
-These versions are actively supported and are receiving features, bug fixes, and optimization updates.
+## Configuration
 
-⚠️ - Deprecated:  
-These versions are no longer receiving updates.
+Almost all features of this mod are highly configurable.  
+You can configure them through either the in-game config screen (This requires other mods, see
+the [Dependencies section](#dependencies))
+or through the config file, which can be found under `.minecraft/config/naturally_trimmed.json5`.
 
-❌ - Unavailable:  
-There are no downloads available for these versions.
+For explanation on individual settings, see the comments attached to the settings.  
+Note, the settings for the custom trim combinations system are only available in the config file.
 
 ## Dependencies
 
-### Required
-
-This mod has no required dependencies.
-
-### Optional
-
-The optional dependencies of this mod allow you to configure this mod through a config screen.  
-These are the dependencies for each modloader to be able to do this:
-
-- Fabric: [Mod Menu](https://modrinth.com/mod/modmenu) and [Yet Another Config Lib](https://modrinth.com/mod/yacl)
-- Forge/Neoforge: [Yet Another Config Lib](https://modrinth.com/mod/yacl)
-
-## Configure
-
-You can configure this mod through a
-
-- Config Screen: Dependencies for this can be found under `Dependencies` > `Optional`
-- Config file: The config file is located under `.minecraft/config/mob_armor_trims.toml`
-
-There are two different systems of how the mod chooses what trims to give the mob.  
-Most things about these systems are configurable.  
-These two systems are:
-
-- Random Trims - On the first armor piece of the mob, this system chooses a completely random trim to apply to the armor
-  piece. The next trims are highly based on the previous trim of the armor.
-- Custom Trim Combinations - This system chooses a trim combination out of a custom list of trim combinations and
-  applies the combination to the armor. You can configure the trim combinations. Each combinations consists of a trim
-  for each of the armor pieces and an armor material, on which the combination will applied on. It won't be applied to
-  any armor with another material.
+This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used with Fabric.  
+Optionally,[Yet Another Config Lib](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu)
+can be used to access the config screen.
 
 ## Issues
 
