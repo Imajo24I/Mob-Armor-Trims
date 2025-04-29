@@ -38,7 +38,7 @@ Note, the settings for the custom trim combinations system are only available in
 ## Dependencies
 
 This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used with Fabric.  
-Optionally,[Yet Another Config Lib](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu)
+Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu)
 can be used to access the config screen.
 
 ## Issues
