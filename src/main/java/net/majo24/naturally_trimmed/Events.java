@@ -58,7 +58,7 @@ public class Events {
         table.compositeFunction = LootItemFunctions.compose(table.functions);
     }
     *///?} else {
-    /*public  static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
+    /*public static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
         LootTable table = event.getTable();
 
         table.functions = ArrayUtils.add(table.functions, TrimLootTablesFunction.builder().build());
