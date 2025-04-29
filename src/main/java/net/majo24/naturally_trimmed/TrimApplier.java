@@ -150,7 +150,7 @@ public class TrimApplier {
         //? >=1.20.5 {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
          //?} else {
-        /*ArmorTrim.setTrim(registryAccess, armorPiece, armorTrim);
+        /*ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);
         *///?}
     }
 
