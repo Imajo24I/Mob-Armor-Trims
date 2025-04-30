@@ -24,8 +24,8 @@
 - Improved existing `Validate Trim Combinations` button
 
 
-- Added Fabric API as a dependency
 - Fixed armor from piglins not being trimmed
+- Added Fabric API as a dependency
 - Removed explicit stacked armor trims support
 
 
