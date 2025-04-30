@@ -19,7 +19,7 @@ resulting in a more complete gameplay experience
   chance of being trimmed
 
 
-- Also applies armor trims to equipment like pickaxes or swords if
+- Also applies armor trims to tools like pickaxes or swords if
   either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools)
   or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod) is installed.
   Note, the [Tools Trims Datapack](https://modrinth.com/mod/tool-trims-mod) is **not** supported
