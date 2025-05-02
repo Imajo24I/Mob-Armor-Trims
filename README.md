@@ -1,4 +1,4 @@
-[![GitHub](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/github_vector.svg)](https://github.com/Imajo24I/Mob-Armor-Trims)
+[![GitHub](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/github_vector.svg)](https://github.com/Imajo24I/Naturally-Trimmed)
 [![Modrinth](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/mob-armor-trims)
 [![CurseForge](https://github.com/intergrav/devins-badges/raw/2dc967fc44dc73850eee42c133a55c8ffc5e30cb/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/mob-armor-trims)
 
@@ -44,6 +44,6 @@ can be used to access the config screen.
 ## Issues
 
 If you have found any incompatible mod, please report the
-incompatibility [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
+incompatibility [here](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
 If you have found any other issue, please report the
-issue [here](https://github.com/Imajo24I/Mob-Armor-Trims/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
+issue [here](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
