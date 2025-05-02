@@ -12,7 +12,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.6-beta.2"
+    id("dev.kikugie.stonecutter") version "0.6"
 }
 
 stonecutter {
@@ -32,9 +32,11 @@ stonecutter {
         mc("1.21", listOf("fabric", "neoforge"))
         mc("1.21.2", listOf("fabric", "neoforge"))
         mc("1.21.5", listOf("fabric", "neoforge"))
+
+        vcsVersion = "1.21.5-fabric"
     }
 
     create(rootProject)
 }
 
-rootProject.name = "Mob Armor Trims"
+rootProject.name = "Naturally Trimmed"

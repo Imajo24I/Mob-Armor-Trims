@@ -13,9 +13,10 @@ class ModData {
     val issuesLink = property("mod.issues_link")
 }
 
-class Dependencies {
-    val modmenuVersion = property("deps.modmenu_version")
-    val yaclVersion = property("deps.yacl_version")
+class ModDependencies {
+    val yacl = property("deps.yacl_version")
+    val modmenu = findProperty("deps.modmenu_version")
+    val fabricApi = findProperty("deps.fabric_api")
 }
 
 class LoaderData {
@@ -34,7 +35,7 @@ class McData {
 
 val mc = McData()
 val mod = ModData()
-val deps = Dependencies()
+val deps = ModDependencies()
 val loader = LoaderData()
 
 version = "${mod.version}+${mc.version}-${loader.loader}"
@@ -46,18 +47,29 @@ stonecutter {
     const("neoforge", loader.isNeoforge)
     const("forge", loader.isForge)
     const("forgeLike", loader.isForgeLike)
+    replacement(
+        eval(current.version, ">=1.21.2"),
+        "import net.minecraft.world.item.armortrim.*;",
+        "import net.minecraft.world.item.equipment.trim.*;",
+    )
 }
 
 
 loom {
     mods {
-        create("mob_armor_trims") {
+        create("naturally_trimmed") {
             sourceSet(sourceSets["main"])
         }
     }
 
-    if (isForge) {
-        forge.mixinConfigs("mob_armor_trims.mixins.json")
+    if (isForgeLike) {
+        if (isForge) {
+            forge.mixinConfigs("naturally_trimmed.mixins.json")
+            accessWidenerPath = rootProject.file("src/main/resources/naturally_trimmed.1_20_1.accesswidener")
+            forge.convertAccessWideners.set(true)
+        } else {
+            accessWidenerPath = rootProject.file("src/main/resources/naturally_trimmed.accesswidener")
+        }
     }
 }
 
@@ -76,6 +88,9 @@ repositories {
 
     // Neoforge
     maven("https://maven.neoforged.net/releases/")
+
+    // Quilt Parser
+    maven("https://maven.quiltmc.org/repository/release/")
 }
 
 dependencies {
@@ -85,9 +100,9 @@ dependencies {
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
-        /*optionalProp("deps.parchment_version") {
-            parchment("org.parchmentmc.data:parchment-${property("mod.mc_version")}:$it@zip")
-        }*/
+        optionalProp("deps.parchment_version") {
+            parchment("org.parchmentmc.data:parchment-${mc.version}:$it@zip")
+        }
 
     })
 
@@ -95,36 +110,34 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
         // YACL
-        modImplementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}")
+        modImplementation("dev.isxander:yet-another-config-lib:${deps.yacl}")
 
         // Fabric API - Required by Mod Menu
-        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${deps.fabricApi}")
 
         // Mod Menu
-        modImplementation("com.terraformersmc:modmenu:${deps.modmenuVersion}")
-
-        // NightConfig
-        include("com.electronwill.night-config:core:${property("deps.night_config_version")}")
-        include("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
+        modImplementation("com.terraformersmc:modmenu:${deps.modmenu}")
     } else if (loader.isNeoforge) {
         "neoForge"("net.neoforged:neoforge:${findProperty("deps.neoforge")}")
 
         // YACL
-        implementation("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
+        implementation("dev.isxander:yet-another-config-lib:${deps.yacl}") {
             isTransitive = false
         }
     } else if (loader.isForge) {
         "forge"("net.minecraftforge:forge:${property("deps.forge")}")
 
         // YACL
-        compileOnly("dev.isxander:yet-another-config-lib:${deps.yaclVersion}") {
+        compileOnly("dev.isxander:yet-another-config-lib:${deps.yacl}") {
             isTransitive = false
         }
     }
 
-    // NightConfig
-    implementation("com.electronwill.night-config:core:${property("deps.night_config_version")}")
-    implementation("com.electronwill.night-config:toml:${property("deps.night_config_version")}")
+    // Quilt Parser
+    implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
+    include("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
+    implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
+    include("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
 }
 
 loom {
@@ -154,11 +167,13 @@ tasks.processResources {
         put("description", mod.description)
         put("github_link", mod.githubLink)
         put("issues_link", mod.issuesLink)
-        put("modmenu_version", deps.modmenuVersion)
-        put("yacl_version", deps.yaclVersion)
+        put("yacl_version", deps.yacl)
 
         if (loader.isForgeLike) {
             put("forgeConstraint", findProperty("modstoml.forge_constraint"))
+        } else {
+            put("modmenu_version", deps.modmenu)
+            put("fabric_api", deps.fabricApi)
         }
         if (mc.version == "1.20.1" || mc.version == "1.20.4") {
             put("forge_id", loader.loader)
@@ -209,6 +224,7 @@ publishMods {
         minecraftVersions.addAll(mc.targets)
         optional("yacl")
         if (loader.isFabric) {
+            requires("fabric-api")
             optional("modmenu")
         }
     }
@@ -220,6 +236,7 @@ publishMods {
         serverRequired = true
         optional("yacl")
         if (loader.isFabric) {
+            requires("fabric-api")
             optional("modmenu")
         }
     }
@@ -227,7 +244,3 @@ publishMods {
 
 fun <T> optionalProp(property: String, block: (String) -> T?): T? =
     findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
-
-fun isPropDefined(property: String): Boolean {
-    return property(property)?.toString()?.isNotBlank() ?: false
-}

@@ -12,21 +12,22 @@
     "sources": "${github_link}",
     "issues": "${issues_link}"
   },
-  "license": "MIT",
-  "icon": "assets/mob_armor_trims/icon.png",
+  "license": "LGPL-3.0-only",
+  "icon": "assets/naturally_trimmed/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.majo24.mob_armor_trims.MobArmorTrims"
+      "net.majo24.naturally_trimmed.NaturallyTrimmed"
     ],
     "modmenu": [
-      "net.majo24.mob_armor_trims.config.screen.ModMenuIntegration"
+      "net.majo24.naturally_trimmed.config.screen.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "mob_armor_trims.mixins.json"
+    "naturally_trimmed.mixins.json"
   ],
   "depends": {
+    "fabric-api": ">=${fabric_api}",
     "fabricloader": ">=0.15.11",
     "minecraft": "${mcdep}"
   },
