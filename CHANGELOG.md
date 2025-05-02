@@ -40,6 +40,7 @@ Additionally, with this update, large parts of the mod have been rewritten and r
 - Removed explicit stacked armor trims support
 
 
-- Move to new name: `Naturally Trimmed`
-  - Due to the new extended functionality of the mod, the old name `Mob Armor Trims` is no longer fitting
-- Move from MIT to GNU LGPLv3 license.
+- Rename to `Naturally Trimmed` from `Mob Armor Trims`
+  - Due to the new extended functionality of the mod, the old name is misleading and no longer fitting
+- Relicense from MIT to GNU LGPLv3 license.
+- Update mod icon
