@@ -1,9 +1,7 @@
 package net.majo24.naturally_trimmed.trim_combination;
 
 import net.majo24.naturally_trimmed.config.Config;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.equipment.trim.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,16 +13,6 @@ public record TrimCombination(List<String> allowedArmorMaterials, TrimKey helmet
      */
     public List<TrimKey> trims() {
         return new ArrayList<>(List.of(this.helmetTrim, this.chestplateTrim, this.leggingsTrim, this.bootsTrim));
-    }
-
-    public void validate(RegistryAccess registryAccess, LocalPlayer player, int index) {
-        for (TrimKey trim : this.trims()) {
-            if (trim.getTrim(registryAccess) == null) {
-                player.displayClientMessage(Component.literal(
-                        "Found invalid trim: \"" + trim + "\" in trim combination " + index
-                ), false);
-            }
-        }
     }
 
     /**
