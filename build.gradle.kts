@@ -202,6 +202,12 @@ tasks.processResources {
     }
 }
 
+tasks.remapJar {
+    if (loader.isNeoforge) {
+        atAccessWideners.add("naturally_trimmed.accesswidener")
+    }
+}
+
 publishMods {
     displayName = "${mod.name} ${mod.version} for ${loader.loader.replaceFirstChar { it.uppercase() }} ${mc.version}"
     file.set(tasks.remapJar.get().archiveFile)
