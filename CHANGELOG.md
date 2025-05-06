@@ -1,2 +1,1 @@
-- Fixed crashing when joining a world on neoforge
-- Fixed dedicated server crashing
+- Fixed crash when interacting with wandering traders
