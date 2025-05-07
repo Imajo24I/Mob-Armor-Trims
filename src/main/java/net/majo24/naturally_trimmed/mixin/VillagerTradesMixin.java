@@ -39,7 +39,7 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
         *///?}
 
         int trimChance = CONFIG_MANAGER.instance().trimTrades.trimChance;
-        if (trimChance > random.nextInt(100)) return;
+        if (trimChance < random.nextInt(100)) return;
 
         ItemStack trade = merchantOffers.get(merchantOffers.size() - 1).getResult();
 

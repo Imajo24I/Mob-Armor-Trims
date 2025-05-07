@@ -55,7 +55,7 @@ public class TrimApplier {
 
         RandomSource random = entity.getRandom();
 
-        if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance <= random.nextInt(100)) {
+        if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance < random.nextInt(100)) {
             if (!armor.isEmpty()) {
                 applyTrims(entity.level().registryAccess(), random, armor);
             }
