@@ -1,1 +1,3 @@
-- Fixed crash when interacting with wandering traders
+- Fixed some trim chances being inverted/incorrect
+- Fixed banners from raid captains being trimmed
+- Fixed reset buttons in config screen not resetting to default correctly
