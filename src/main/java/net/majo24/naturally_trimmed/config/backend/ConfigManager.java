@@ -38,7 +38,7 @@ public class ConfigManager<T> {
     public ConfigManager(Class<T> configClass, Path configPath) {
         this.configPath = configPath;
         this.defaults = createDefaultInstance(configClass);
-        this.instance = defaults;
+        this.instance = createDefaultInstance(configClass);
     }
 
     public T instance() {
