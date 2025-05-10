@@ -46,7 +46,7 @@ public class TrimMobsSubConfig {
         @Entry(name = "trim_chance", comment = "Chance of each armor piece from a mob having an armor trim")
         public int trimChance = 75;
 
-        @Entry(name = "similar_trim_chance", comment = "Chance of each armor piece having a similar armor trim as the previous armor piece")
+        @Entry(name = "similar_trim_chance", comment = "Chance of each armor trim applied being similar to the previous armor piece")
         public int similarTrimChance = 75;
     }
 
