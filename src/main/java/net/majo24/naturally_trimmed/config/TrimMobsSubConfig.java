@@ -10,7 +10,7 @@ import java.util.List;
 public class TrimMobsSubConfig {
     @Entry(name = "trim_system", comment = """
             Select the system of how to select, what trims to give mobs.
-            - RANDOM_TRIMS: Randomly choosess the trim, while also considering the previous trim of the armor
+            - RANDOM_TRIMS: Randomly chooses the trim, while also considering the previous trim of the armor
             - CUSTOM_TRIM_COMBINATIONS: Chooses the trims for the armor from a list of trim combinations. You can manage the list of trim combinations yourself""")
     public TrimSystem trimSystem = TrimSystem.RANDOM_TRIMS;
 
