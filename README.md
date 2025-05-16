@@ -43,7 +43,4 @@ can be used to access the config screen.
 
 ## Issues
 
-If you have found any incompatible mod, please report the
-incompatibility [here](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=incompatibility&projects=&template=incompatibility.yml). <br>
-If you have found any other issue, please report the
-issue [here](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
+If you have found any issue, please report the issue to the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
