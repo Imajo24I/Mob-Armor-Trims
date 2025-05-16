@@ -1,6 +1,7 @@
-package net.majo24.naturally_trimmed;
+package net.majo24.naturally_trimmed.trim_application;
 
 import com.mojang.datafixers.util.Pair;
+import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

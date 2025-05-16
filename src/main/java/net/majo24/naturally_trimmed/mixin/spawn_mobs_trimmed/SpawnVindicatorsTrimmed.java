@@ -1,6 +1,6 @@
 package net.majo24.naturally_trimmed.mixin.spawn_mobs_trimmed;
 
-import net.majo24.naturally_trimmed.TrimApplier;
+import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Vindicator;

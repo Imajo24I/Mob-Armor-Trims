@@ -1,7 +1,7 @@
 package net.majo24.naturally_trimmed.mixin;
 
-import net.majo24.naturally_trimmed.ToolTrimsCompat;
-import net.majo24.naturally_trimmed.TrimApplier;
+import net.majo24.naturally_trimmed.trim_application.ToolTrimsCompat;
+import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;

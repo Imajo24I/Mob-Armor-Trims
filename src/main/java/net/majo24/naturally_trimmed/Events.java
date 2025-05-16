@@ -1,9 +1,11 @@
 package net.majo24.naturally_trimmed;
 
+import net.majo24.naturally_trimmed.trim_application.TrimLootTablesFunction;
+
 //? if fabric {
 //? if >1.20.6 {
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
- //?} else {
+//?} else {
 /*import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 *///?}
 //?} else {
@@ -23,8 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 
 public class Events {
-    private Events() {
-    }
+    private Events() {}
 
     public static void registerEvents() {
         //? if fabric {

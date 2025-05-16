@@ -1,5 +1,6 @@
-package net.majo24.naturally_trimmed;
+package net.majo24.naturally_trimmed.trim_application;
 
+import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.TrimMobsSubConfig;
 import net.majo24.naturally_trimmed.trim_combination.TrimKey;
 import net.majo24.naturally_trimmed.trim_combination.TrimCombination;

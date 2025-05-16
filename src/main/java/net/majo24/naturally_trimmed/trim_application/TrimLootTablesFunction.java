@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed;
+package net.majo24.naturally_trimmed.trim_application;
 
 //? if 1.20.4 {
 /*import com.mojang.serialization.Codec;
@@ -9,8 +9,9 @@ import com.mojang.serialization.MapCodec;
 import com.google.gson.JsonObject;
 *///?}
 
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.majo24.naturally_trimmed.RegistryHelper;
 import net.majo24.naturally_trimmed.config.Config;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
@@ -49,9 +50,9 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     @Override
     public @NotNull LootItemFunctionType getType() {
         //? if fabric {
-        return NaturallyTrimmed.TRIM_LOOT_TABLES_FUNCTION;
+        return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION;
         //?} else {
-        /*return NaturallyTrimmed.TRIM_LOOT_TABLES_FUNCTION.get();
+        /*return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();
          *///?}
     }
 
@@ -78,7 +79,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         return simpleBuilder(TrimLootTablesFunction::new);
     }
 
-    //? if 1.20.1 && (neoforge || fabric) {
+    //? if 1.20.1 {
     /*public static class Serializer extends LootItemConditionalFunction.Serializer<TrimLootTablesFunction> {
         @Override
         public @NotNull TrimLootTablesFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
