@@ -1,37 +1,38 @@
 name: Bug Report
-description: Create a Bug report to help improve this Project
-labels: [bug]
+description: Create a bug report.
+labels:
+  - bug
 body:
-  - type: textarea
+  - type: markdown
     attributes:
-      label: Describe the bug
-      description: A clear and concise description of what the bug is.
+      value: |-
+        *Before posting an issue*
+        - Make sure this and other relevant mods are up-to-date
+        - Make sure this issue hasn't already been reported
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Use this section to describe the issue you are experiencing in as
+        much depth as possible.
     validations:
       required: true
   - type: textarea
+    id: reproduction
     attributes:
-      label: Steps to reproduce
-      description: Steps to reproduce the behavior.
-      placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
-        4. See error
-    validations:
-      required: true
+      label: Reproduction Steps
+      description: Provide as much information as possible on how to reproduce this
+        bug. Make sure your instructions are as clear and concise as possible-
   - type: textarea
+    id: log
     attributes:
-      label: Expected behavior
-      description: A clear and concise description of what you expected to happen.
-    validations:
-      required: true
-  - type: textarea
-    attributes: 
-      label: Mod Setup
-      description: Add any information about the modloader and version, mod version and additional mods
-  - type: textarea
-    attributes:
-      label: Additional context
-      description: Add additional other context about the problem here. This might include logs, screenshots, etc.
+      label: Log File and Crash Report
+      description: Provide at least the log file here. If one has been created
+      value: >-
+        Drag-and-Drop the log file or crash report here.
+
+        You can find the log file inside the  `.minecraft/logs` folder. Most
+        often, you will want the `latest.log` file, since that file belongs to
+        the last played session of the game.
     validations:
       required: true
