@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |-
-        *Before posting an issue*
+        ### Before posting an issue
         - Make sure this and other relevant mods are up-to-date
         - Make sure this issue hasn't already been reported
   - type: textarea
@@ -28,7 +28,7 @@ body:
     attributes:
       label: Log File and Crash Report
       description: Provide at least the log file here. If one has been created
-      value: >-
+      placeholder: >-
         Drag-and-Drop the log file or crash report here.
 
         You can find the log file inside the  `.minecraft/logs` folder. Most
