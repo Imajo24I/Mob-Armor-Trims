@@ -1,3 +1,2 @@
-- Fixed some trim chances being inverted/incorrect
-- Fixed banners from raid captains being trimmed
-- Fixed reset buttons in config screen not resetting to default correctly
+- Fixed TrimLootTablesFunction not being registered to Registers correctly
+  - Fixes incompatiblity with advanced loot info mod
