@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a bug report.
+description: Create a bug report
 labels:
   - bug
 body:
@@ -22,12 +22,12 @@ body:
     attributes:
       label: Reproduction Steps
       description: Provide as much information as possible on how to reproduce this
-        bug. Make sure your instructions are as clear and concise as possible-
+        bug. Make sure your instructions are as clear and concise as possible.
   - type: textarea
     id: log
     attributes:
       label: Log File and Crash Report
-      description: Provide at least the log file here. If one has been created
+      description: Provide at least the log file here. If one has been created, please also provide the crash report.
       placeholder: >-
         Drag-and-Drop the log file or crash report here.
 
