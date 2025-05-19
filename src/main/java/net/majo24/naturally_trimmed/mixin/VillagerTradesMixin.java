@@ -28,15 +28,21 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
 
     @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER))
     private void trimTrades(MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
-        if (!CONFIG_MANAGER.instance().enableTrimTrades || this.getType() == EntityType.WANDERING_TRADER) return;
+        if (!CONFIG_MANAGER.instance().enableTrimTrades) return;
 
         int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;
 
-        //? if >=1.21.5 {
-        if (this.getVillagerData().level()  < minLevel) return;
-        //?} else {
-        /*if (this.getVillagerData().getLevel()  < minLevel) return;
-        *///?}
+        try {
+            //? if >=1.21.5 {
+            if (this.getVillagerData().level() < minLevel) return;
+            //?} else {
+            /*if (this.getVillagerData().getLevel()  < minLevel) return;
+             *///?}
+        } catch (AbstractMethodError e) {
+            // This AbstractVillager entity doesn't have trading levels
+            // This means the minLevel check can just be skipped and the error can be ignored
+        }
+
 
         int trimChance = CONFIG_MANAGER.instance().trimTrades.trimChance;
         if (trimChance < random.nextInt(100)) return;
