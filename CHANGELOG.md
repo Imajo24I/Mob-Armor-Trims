@@ -1,2 +1,2 @@
-- Fixed TrimLootTablesFunction not being registered to Registers correctly
-  - Fixes incompatiblity with advanced loot info mod
+- Fixed crashing when used with mods that add entities similar to wandering traders 
+  - Specifically, the crash happened when opening the trade menu for the first time
