@@ -1,0 +1,53 @@
+{
+  "naturally_trimmed.config.general": "通用",
+  "naturally_trimmed.config.general.tooltip": "此模组的通用设置",
+
+  "naturally_trimmed.config.enable_features": "启用功能",
+  "naturally_trimmed.config.enable_features.description": "启用特定功能的设置",
+  "naturally_trimmed.config.enable_features.enableTrimMobs": "启用怪物装备饰品",
+  "naturally_trimmed.config.enable_features.enableTrimMobs.description": "启用怪物装备饰品功能",
+  "naturally_trimmed.config.enable_features.enableTrimLootTables": "启用饰品掉落物表",
+  "naturally_trimmed.config.enable_features.enableTrimLootTables.description": "启用饰品掉落物表功能",
+  "naturally_trimmed.config.enable_features.enableTrimTrades": "启用饰品交易",
+  "naturally_trimmed.config.enable_features.enableTrimTrades.description": "启用村民交易饰品功能",
+
+  "naturally_trimmed.config.trimLootTables": "饰品掉落物表",
+  "naturally_trimmed.config.trimLootTables.description": "掉落物表生成物品的饰品设置",
+  "naturally_trimmed.config.trimLootTables.trimChance": "饰品概率",
+  "naturally_trimmed.config.trimLootTables.trimChance.description": "掉落物表生成的物品获得饰品的概率",
+
+  "naturally_trimmed.config.trimTrades": "饰品交易",
+  "naturally_trimmed.config.trimTrades.description": "村民交易饰品设置",
+  "naturally_trimmed.config.trimTrades.trimChance": "饰品概率",
+  "naturally_trimmed.config.trimTrades.trimChance.description": "交易物品获得饰品的概率",
+  "naturally_trimmed.config.trimTrades.minLevel": "最低交易等级",
+  "naturally_trimmed.config.trimTrades.minLevel.description": "物品需要达到的最低村民交易等级才能有机会获得饰品",
+
+  "naturally_trimmed.config.trimMobs": "怪物饰品",
+  "naturally_trimmed.config.trimMobs.tooltip": "怪物装备饰品设置",
+  "naturally_trimmed.config.trimMobs.trimSystem": "饰品系统",
+  "naturally_trimmed.config.trimMobs.trimSystem.description": "选择如何为怪物选择饰品的系统。\n- 随机饰品：随机选择饰品，但会高度考虑之前的饰品。\n- 自定义饰品：从自定义饰品列表中选择。你可以自己管理饰品",
+  "naturally_trimmed.config.trimMobs.noTrimsChance": "无饰品概率",
+  "naturally_trimmed.config.trimMobs.noTrimsChance.description": "怪物完全没有饰品的概率",
+
+  "naturally_trimmed.config.trimMobs.randomTrims.description": "随机饰品系统的设置。\n这些设置仅在启用随机饰品系统时生效。",
+  "naturally_trimmed.config.trimMobs.randomTrims.trimChance": "饰品概率",
+  "naturally_trimmed.config.trimMobs.randomTrims.trimChance.description": "怪物每件装备获得饰品的概率",
+  "naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance": "相似饰品概率",
+  "naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance.description": "每件装备获得与之前装备相似饰品的概率",
+
+  "naturally_trimmed.config.blacklist": "饰品图案黑名单",
+  "naturally_trimmed.config.blacklist.description": "这是禁用饰品图案的黑名单。\n\n使用正则表达式，这有助于减少大量重复。\n这也意味着，如果你想检查特定图案，需要使用 \"^[pattern]$\" 而不是仅仅 \"[pattern]\"\n\n默认情况下，所有来自 Trimmable Tools 模组的图案都被列入黑名单，因为它们只适用于工具而不适用于盔甲",
+
+  "naturally_trimmed.config.utils": "工具",
+  "naturally_trimmed.config.utils.tooltip": "多个实用按钮，使配置模组更容易",
+  "naturally_trimmed.config.utils.reloadConfig": "重载配置",
+  "naturally_trimmed.config.utils.reloadConfig.description": "从配置文件重载配置。\n对配置自定义饰品组合系统很有用，因为它只能通过配置文件配置",
+  "naturally_trimmed.config.utils.validateCustomTrimCombinations": "验证自定义饰品组合",
+  "naturally_trimmed.config.utils.validateCustomTrimCombinations.description": "验证自定义饰品组合并在聊天框中打印每个无效组合。\n仅在游戏中有效",
+  "naturally_trimmed.config.utils.validateBlacklist": "验证饰品黑名单",
+  "naturally_trimmed.config.utils.validateBlacklist.description": "验证饰品黑名单并在聊天框中打印每个被列入黑名单的饰品图案、每个未被列入黑名单的饰品图案和每个不必要的黑名单条目。\n仅在游戏中有效",
+
+  "naturally_trimmed.config.backup_screen.installYACL": "安装 Yet Another Config Lib 以访问配置界面",
+  "naturally_trimmed.config.backup_screen.viewOnModrinth": "在 Modrinth 上查看"
+}
