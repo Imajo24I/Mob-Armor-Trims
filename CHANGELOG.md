@@ -1,2 +1,1 @@
-- Fixed crashing when used with mods that add entities similar to wandering traders 
-  - Specifically, the crash happened when opening the trade menu for the first time
+- Fixed crashing when interacting with a wandering trader while the ClickVillagers mod is installed
