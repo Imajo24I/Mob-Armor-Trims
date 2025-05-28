@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
 @Mixin(AbstractVillager.class)
-public abstract class VillagerTradesMixin extends Mob implements VillagerDataHolder {
+public abstract class VillagerTradesMixin extends Mob {
     protected VillagerTradesMixin(EntityType<? extends Mob> arg, Level arg2) {
         super(arg, arg2);
     }
@@ -32,17 +32,13 @@ public abstract class VillagerTradesMixin extends Mob implements VillagerDataHol
 
         int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;
 
-        try {
+        if (this instanceof VillagerDataHolder dataHolder) {
             //? if >=1.21.5 {
-            if (this.getVillagerData().level() < minLevel) return;
+            if (dataHolder.getVillagerData().level() < minLevel) return;
             //?} else {
-            /*if (this.getVillagerData().getLevel()  < minLevel) return;
+            /*if (dataHolder.getVillagerData().getLevel()  < minLevel) return;
              *///?}
-        } catch (AbstractMethodError e) {
-            // This AbstractVillager entity doesn't have trading levels
-            // This means the minLevel check can just be skipped and the error can be ignored
         }
-
 
         int trimChance = CONFIG_MANAGER.instance().trimTrades.trimChance;
         if (trimChance < random.nextInt(100)) return;
