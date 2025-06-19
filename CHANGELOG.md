@@ -1,1 +1,1 @@
-- Fixed crashing when interacting with a wandering trader while the ClickVillagers mod is installed
+- Add support for 1.21.6
