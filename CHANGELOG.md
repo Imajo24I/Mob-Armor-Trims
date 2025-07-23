@@ -1,1 +1,2 @@
 - Add support for 1.21.7 and 1.21.8
+- Potentially fix ConcurrentModificationException reported by C2ME and triggered by EMI Trades + others? ([#27](https://github.com/Imajo24I/Naturally-Trimmed/issues/27))
