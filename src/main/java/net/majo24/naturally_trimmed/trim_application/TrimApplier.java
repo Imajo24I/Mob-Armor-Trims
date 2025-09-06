@@ -50,7 +50,7 @@ public class TrimApplier {
                 .toList();
         //?} else {
         /*List<ItemStack> armor = java.util.stream.StreamSupport.stream(entity.getArmorSlots().spliterator(), false)
-                .filter(armorPiece -> !armorPiece.isEmpty())
+                .filter(armorPiece -> !armorPiece.isEmpty() && armorPiece.is(ItemTags.TRIMMABLE_ARMOR))
                 .toList();
         *///?}
 
