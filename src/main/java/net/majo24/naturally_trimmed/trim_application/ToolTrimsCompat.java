@@ -48,9 +48,13 @@ public class ToolTrimsCompat {
     private static Holder.Reference<TrimPattern> getRandomToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
         List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getPatterns(patternRegistry);
 
-        // Tool Trims mod only supports trimming tools with its custom patterns,
-        // meaning other patterns should be removed
-        if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
+        if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
+            // Trimmable Tools only supports trimming tools with minecraft's patterns,
+            // meaning all other patterns should be removed
+            patterns.removeIf(pattern -> !(pattern.key().location().getNamespace().equals("minecraft")));
+        } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
+            // Tool Trims only supports trimming tools with its custom patterns,
+            // meaning all other patterns should be removed
             patterns.removeIf(pattern -> !(pattern.key().location().getNamespace().equals(TOOL_TRIMS_ID)));
         }
 
