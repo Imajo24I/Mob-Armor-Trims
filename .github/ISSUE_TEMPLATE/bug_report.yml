@@ -30,9 +30,8 @@ body:
       description: Provide at least the log file here. If one has been created, please also provide the crash report.
       placeholder: >-
         Drag-and-Drop the log file or crash report here.
+        Alternatively you can upload the log file to a site like mclo.gs and send the link here.
 
         You can find the log file inside the  `.minecraft/logs` folder. Most
         often, you will want the `latest.log` file, since that file belongs to
         the last played session of the game.
-    validations:
-      required: true
