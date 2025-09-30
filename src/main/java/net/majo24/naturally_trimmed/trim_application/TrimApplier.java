@@ -86,7 +86,7 @@ public class TrimApplier {
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
 
-        ArmorTrim lastTrim = null;
+        Pair<Holder.Reference<TrimMaterial>, Holder.Reference<TrimPattern>> lastTrim = null;
 
         for (ItemStack armorPiece : armor) {
             if (CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance >= random.nextInt(100)) {
@@ -129,6 +129,7 @@ public class TrimApplier {
 
         }
     }
+
     /**
      * Get the material of the given armor piece
      */
@@ -145,41 +146,59 @@ public class TrimApplier {
     }
 
     /**
-     * Applies the armor trim onto the itemStack
-     *
+     * Applies the given armor trim onto the given itemStack
      */
     public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-         //?} else {
+        //?} else {
         /*ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);
-        *///?}
+         *///?}
     }
 
-    /** Applies a random armor trim on the given itemStack. The random trim also considers referenceTrim and the blacklist. */
+    /**
+     * Applies an armor trim onto the given itemStack, while also taking referenceTrim and the blacklist into account
+     */
     @Nullable
-    public static ArmorTrim applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack itemStack, @Nullable ArmorTrim referenceTrim) {
+    public static Pair<Holder.Reference<TrimMaterial>, Holder.Reference<TrimPattern>> applyRandomTrim(RegistryAccess registryAccess, Registry<TrimMaterial> materialRegistry, Registry<TrimPattern> patternRegistry, RandomSource random, ItemStack itemStack, @Nullable Pair<Holder.Reference<TrimMaterial>, Holder.Reference<TrimPattern>> referenceTrim) {
         List<Holder.Reference<TrimPattern>> trimPatterns = getAndFilterPatterns(patternRegistry);
         if (trimPatterns.isEmpty()) return null;
 
-        Holder.Reference<TrimMaterial> randomTrimMaterial = materialRegistry.getRandom(random).orElseThrow();
-        Holder.Reference<TrimPattern> randomTrimPattern = Util.getRandom(trimPatterns, random);
-        ArmorTrim armorTrim = new ArmorTrim(randomTrimMaterial, randomTrimPattern);
+        boolean newMaterial = true;
+        Holder.Reference<TrimMaterial> trimMaterial = null;
+        boolean newPattern = true;
+        Holder.Reference<TrimPattern> trimPattern = null;
 
         if (referenceTrim != null) {
             int similarTrimChance = CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance;
 
             if (similarTrimChance >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(referenceTrim.material(), armorTrim.pattern());
+                trimMaterial = referenceTrim.getFirst();
+                newMaterial = false;
             }
 
             if (similarTrimChance >= random.nextInt(100)) {
-                armorTrim = new ArmorTrim(armorTrim.material(), referenceTrim.pattern());
+                trimPattern = referenceTrim.getSecond();
+                newPattern = false;
             }
         }
 
+        // Ensure at least one of the two trim parts is non-modded
+        // If both trim parts are modded, they will most times result in a missing-texture texture
+        do {
+            if (newPattern) {
+                trimPattern = Util.getRandom(trimPatterns, random);
+            }
+
+            if (newMaterial) {
+                trimMaterial = materialRegistry.getRandom(random).orElseThrow();
+            }
+        } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
+
+        ArmorTrim armorTrim = new ArmorTrim(trimMaterial, trimPattern);
+
         applyTrim(itemStack, armorTrim, registryAccess);
-        return armorTrim;
+        return new Pair<>(trimMaterial, trimPattern);
     }
 
     private static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
@@ -211,11 +230,7 @@ public class TrimApplier {
     }
 
     /**
-     * Apply a random trim to an item.
-     * Should only be used when theres only item to trim.
-     * Should not be used when theres multiple, related items that should be trimmed
-     *
-     * @param itemStack Item to apply the trim on
+     * Applies a random armor trim onto the given item
      */
     public static void applyRandomTrimToItem(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
