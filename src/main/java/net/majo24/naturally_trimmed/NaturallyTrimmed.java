@@ -44,7 +44,12 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     //? if forgeLike {
     /*public NaturallyTrimmed() {
         onInitialize();
-        if (FMLLoader.getDist().isClient()) {
+
+        //? if >=1.21.9 {
+        if (FMLLoader.getCurrent().getDist().isClient()) {
+        //?} else {
+        /^if (FMLLoader.getDist().isClient()) {
+        ^///?}
             registerConfigScreen();
         }
 
