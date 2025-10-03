@@ -52,7 +52,7 @@ public abstract class VillagerTradesMixin extends Mob {
         RegistryAccess registryAccess = level.registryAccess();
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyRandomTrimToItem(trade, registryAccess, random);
+            TrimApplier.applyRandomTrim(trade, registryAccess, random);
         } else {
             ToolTrimsCompat.toolTrimsCompat(trade, registryAccess, random);
         }

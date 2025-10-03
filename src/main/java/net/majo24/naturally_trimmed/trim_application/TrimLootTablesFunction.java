@@ -67,7 +67,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance < random.nextInt(100)) return itemStack;
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
+            TrimApplier.applyRandomTrim(itemStack, registryAccess, random);
         } else {
             ToolTrimsCompat.toolTrimsCompat(itemStack, registryAccess, random);
         }

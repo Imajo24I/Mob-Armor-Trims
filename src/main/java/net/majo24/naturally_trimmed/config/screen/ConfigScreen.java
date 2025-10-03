@@ -187,18 +187,6 @@ public class ConfigScreen {
                                 .step(1)
                                 .formatValue(percentageFormatter))
                         .build())
-
-                .option(Option.<Integer>createBuilder()
-                        .name(translatable("naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance.description")))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.similarTrimChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance,
-                                similarTrimChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance = similarTrimChance)
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, 100)
-                                .step(1)
-                                .formatValue(percentageFormatter))
-                        .build())
                 .build();
     }
 
