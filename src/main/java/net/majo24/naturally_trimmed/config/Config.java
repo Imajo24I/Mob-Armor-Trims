@@ -4,7 +4,7 @@ import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.annotations.Entry;
 import net.majo24.naturally_trimmed.config.backend.annotations.SubConfig;
-import net.majo24.naturally_trimmed.trim_combination.TrimCombination;
+import net.majo24.naturally_trimmed.TrimData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +44,9 @@ public class Config {
 
     public static class TrimMobsSubConfig {
         @Entry(name = "trim_system", comment = """
-                Select the system of how to select, what trims to give mobs.
-                - RANDOM_TRIMS: Randomly chooses the trim, while also considering the previous trim of the armor
-                - CUSTOM_TRIM_COMBINATIONS: Chooses the trims for the armor from a list of trim combinations. You can manage the list of trim combinations yourself""")
+                Select the trim system. Trim systems define how the mod chooses what trims to use.
+                - RANDOM_TRIMS: Randomly chooses the trim to apply to the mob.
+                - PREDEFINED_TRIMS: Chooses the trim from a list of predefined trims. You can manage the list of trims under the predefined_trims config entry.""")
         public TrimSystem trimSystem = TrimSystem.RANDOM_TRIMS;
 
         @Entry(name = "no_trims_chance", comment = "Chance of the mob having no trims at all")
@@ -55,31 +55,19 @@ public class Config {
         @Entry(name = "trim_chance", comment = "Chance of each individual armor piece having a trim")
         public int trimChance = 75;
 
-        @Entry(name = "trim_combinations", comment = """
-                List of custom trim combinations.
+        @Entry(name = "predefined_trims", comment = """
+                List of predefined trims.
                 
-                A trim combination consists of a list of allowed armor materials and four trims.
-                The trim combination will only be applied to armor that consists of one of the allowed armor materials.
-                The four trims consist of a helmet trim, a chestplate trim, a leggings trim and a boots trim.
-                You don't need to add the "_armor_trim_smithing_template" suffix of a pattern, it will be added automatically if its needed.
+                A predefined trim consists of a trim material and a trim pattern.
                 
-                To ease the configuration of trim combinations, theres a utils tab inside the config screen.
-                You can use the buttons inside the tab to reload the config from the config file without having to restart the game and to validate the trim combinations.
-                
-                Example of a trim combination:
-                {
-                    allowed_armor_materials: ["gold"],
-                    helmet_trim: {material: "diamond", pattern: "silence"},
-                    chestplate_trim: {material: "diamond", pattern: "silence"},
-                    leggings_trim: {material: "netherite_ingot", pattern: "vex"},
-                    boots_trim: {material: "netherite_ingot", pattern: "vex"}
-                },
+                Example of a predefined trim:
+                {material: "netherite_ingot", pattern: "silence"}
                 """)
-        public List<TrimCombination> trimCombinations = new ArrayList<>();
+        public List<TrimData> predefinedTrims = new ArrayList<>();
 
         public enum TrimSystem {
             RANDOM_TRIMS,
-            CUSTOM_TRIM_COMBINATIONS,
+            PREDEFINED_TRIMS,
         }
     }
 

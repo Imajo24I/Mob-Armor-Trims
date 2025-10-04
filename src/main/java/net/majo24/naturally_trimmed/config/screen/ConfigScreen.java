@@ -203,9 +203,9 @@ public class ConfigScreen {
                         .build())
 
                 .option(ButtonOption.createBuilder()
-                        .name(translatable("naturally_trimmed.config.utils.validateCustomTrimCombinations"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateCustomTrimCombinations.description")))
-                        .action((screen, option) -> SettingsValidation.validateTrimCombinations())
+                        .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
+                        .action((screen, option) -> SettingsValidation.validatePredefinedTrims())
                         .build())
 
                 .option(ButtonOption.createBuilder()
@@ -233,7 +233,7 @@ public class ConfigScreen {
             public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
                 return switch (selectedSystem) {
                     case RANDOM_TRIMS -> Component.literal("Random Trims");
-                    case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");
+                    case PREDEFINED_TRIMS -> Component.literal("Predefined Trims");
                 };
             }
         }
