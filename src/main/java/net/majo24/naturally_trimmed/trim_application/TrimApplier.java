@@ -1,7 +1,7 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.TrimMobsSubConfig;
+import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig;
 import net.majo24.naturally_trimmed.trim_combination.TrimKey;
 import net.majo24.naturally_trimmed.trim_combination.TrimCombination;
 
@@ -105,8 +105,8 @@ public class TrimApplier {
 
         if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance < random.nextInt(100)) {
             // Run selected trimming system
+            TrimMobsSubConfig.TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
             if (!armor.isEmpty()) {
-                TrimMobsSubConfig.TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
 
                 if (enabledSystem == TrimMobsSubConfig.TrimSystem.RANDOM_TRIMS) {
                     runRandomTrimsSystem(armor, registryAccess, random);

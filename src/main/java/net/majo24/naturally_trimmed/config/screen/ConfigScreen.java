@@ -2,7 +2,7 @@ package net.majo24.naturally_trimmed.config.screen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import net.majo24.naturally_trimmed.config.TrimMobsSubConfig;
+import net.majo24.naturally_trimmed.config.Config;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -151,14 +151,14 @@ public class ConfigScreen {
                 .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.tooltip")))
                 .collapsed(true)
 
-                .option(Option.<TrimMobsSubConfig.TrimSystem>createBuilder()
+                .option(Option.<Config.TrimMobsSubConfig.TrimSystem>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.trimSystem"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimSystem.description")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
                                 () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
                                 enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
                         .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(TrimMobsSubConfig.TrimSystem.class)
+                                .enumClass(Config.TrimMobsSubConfig.TrimSystem.class)
                                 .formatValue(trimSystemFormatter))
                         .build())
 
@@ -228,9 +228,9 @@ public class ConfigScreen {
             }
         }
 
-        public static class TrimSystem implements ValueFormatter<TrimMobsSubConfig.TrimSystem> {
+        public static class TrimSystem implements ValueFormatter<Config.TrimMobsSubConfig.TrimSystem> {
             @Override
-            public Component format(TrimMobsSubConfig.TrimSystem selectedSystem) {
+            public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
                 return switch (selectedSystem) {
                     case RANDOM_TRIMS -> Component.literal("Random Trims");
                     case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");
