@@ -232,8 +232,8 @@ public class ConfigScreen {
             @Override
             public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
                 return switch (selectedSystem) {
-                    case RANDOM_TRIMS -> Component.literal("Random Trims");
-                    case PREDEFINED_TRIMS -> Component.literal("Predefined Trims");
+                    case RANDOM_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.randomTrims");
+                    case PREDEFINED_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims");
                 };
             }
         }

@@ -27,6 +27,8 @@
   "naturally_trimmed.config.trimMobs.tooltip": "Settings for trimming a mobs equipment",
   "naturally_trimmed.config.trimMobs.trimSystem": "Trim System",
   "naturally_trimmed.config.trimMobs.trimSystem.description": "Select the System of how to select, what trims to give mobs.\n- Random Trims: Randomly choose the trim, but also take the previous trim highly into account.\n- Custom Trims: Choose the trim out of a list of custom trims. You can manage the trims yourself",
+  "naturally_trimmed.config.trimMobs.trimSystem.randomTrims": "Random Trims",
+  "naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims": "Predefined Trims",
   "naturally_trimmed.config.trimMobs.noTrimsChance": "No Trims Chance",
   "naturally_trimmed.config.trimMobs.noTrimsChance.description": "Chance of the mob having no trims at all",
   "naturally_trimmed.config.trimMobs.trimChance": "Trim Chance",
