@@ -32,7 +32,7 @@
 
   "naturally_trimmed.config.trimMobs.randomTrims.description": "Settings for the Random Trims System.\nThese settings will only make a difference, if the random trims system is enabled.",
   "naturally_trimmed.config.trimMobs.randomTrims.trimChance": "Trim Chance",
-  "naturally_trimmed.config.trimMobs.randomTrims.trimChance.description": "Chance of each armor piece of a mob having an armor trim",
+  "naturally_trimmed.config.trimMobs.randomTrims.trimChance.description": "Chance of each individual armor piece having a trim",
   "naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance": "Similar Trim Chance",
   "naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance.description": "Chance of each armor piece having a similar armor trim as the previous armor piece",
 

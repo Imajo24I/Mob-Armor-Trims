@@ -109,21 +109,21 @@ public class TrimApplier {
                 TrimMobsSubConfig.TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
 
                 if (enabledSystem == TrimMobsSubConfig.TrimSystem.RANDOM_TRIMS) {
-                    runRandomTrimsSystem(registryAccess, random, armor);
+                    runRandomTrimsSystem(armor, registryAccess, random);
                 } else {
-                    runCustomTrimCombinationsSystem(armor, registryAccess);
+                    runCustomTrimCombinationsSystem(armor, registryAccess, random);
                 }
             }
 
             // Run tool trims compatibility code
             if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
-                    && CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance >= random.nextInt(100)) {
+                    && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
                 ToolTrimsCompat.toolTrimsCompat(entity.getMainHandItem(), registryAccess, random);
             }
         }
     }
 
-    private static void runRandomTrimsSystem(RegistryAccess registryAccess, RandomSource random, Iterable<ItemStack> armor) {
+    private static void runRandomTrimsSystem(Iterable<ItemStack> armor, RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
@@ -131,13 +131,13 @@ public class TrimApplier {
         ArmorTrim trim = getRandomTrim(materialRegistry, patternRegistry, random);
 
         for (ItemStack armorPiece : armor) {
-            if (CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance >= random.nextInt(100)) {
+            if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
                 applyTrim(armorPiece, trim, registryAccess);
             }
         }
     }
 
-    private static void runCustomTrimCombinationsSystem(List<ItemStack> armor, RegistryAccess registryAccess) {
+    private static void runCustomTrimCombinationsSystem(List<ItemStack> armor, RegistryAccess registryAccess, RandomSource random) {
         String requiredMaterial = getArmorMaterial(armor.getFirst());
         if (requiredMaterial == null) return;
 
@@ -148,12 +148,14 @@ public class TrimApplier {
 
         for (TrimKey trim : trimCombination.trims().reversed()) {
             ItemStack armorPiece = armorIterator.next();
-            ArmorTrim armorTrim = TrimCombination.getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
 
-            if (armorTrim != null) {
-                applyTrim(armorPiece, armorTrim, registryAccess);
+            if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
+                ArmorTrim armorTrim = TrimCombination.getOrCreateCachedTrim(trim.material(), trim.pattern(), registryAccess);
+
+                if (armorTrim != null) {
+                    applyTrim(armorPiece, armorTrim, registryAccess);
+                }
             }
-
         }
     }
 

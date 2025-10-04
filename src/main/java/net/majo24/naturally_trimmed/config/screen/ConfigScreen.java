@@ -174,14 +174,12 @@ public class ConfigScreen {
                                 .formatValue(percentageFormatter))
                         .build())
 
-                .option(LabelOption.create(translatable("naturally_trimmed.config.trimMobs.randomTrims.description")))
-
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance.description")))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.trimChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance,
-                                trimsChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance = trimsChance)
+                        .binding(CONFIG_MANAGER.defaults().trimMobs.trimChance,
+                                () -> CONFIG_MANAGER.instance().trimMobs.trimChance,
+                                trimsChance -> CONFIG_MANAGER.instance().trimMobs.trimChance = trimsChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -216,7 +214,6 @@ public class ConfigScreen {
                         .action((screen, option) -> SettingsValidation.validateBlacklist())
                         .build()
                 )
-
                 .build();
     }
 

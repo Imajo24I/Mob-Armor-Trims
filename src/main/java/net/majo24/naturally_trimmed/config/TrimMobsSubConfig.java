@@ -1,7 +1,6 @@
 package net.majo24.naturally_trimmed.config;
 
 import net.majo24.naturally_trimmed.config.backend.annotations.Entry;
-import net.majo24.naturally_trimmed.config.backend.annotations.SubConfig;
 import net.majo24.naturally_trimmed.trim_combination.TrimCombination;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class TrimMobsSubConfig {
     @Entry(name = "no_trims_chance", comment = "Chance of the mob having no trims at all")
     public int noTrimsChance = 25;
 
-    @SubConfig(name = "random_trims", comment = "Settings for the Random Trims system.\nThese settings will only matter if the RANDOM_TRIMS system is enabled")
-    public RandomTrimsSubConfig randomTrims = new RandomTrimsSubConfig();
+    @Entry(name = "trim_chance", comment = "Chance of each individual armor piece having a trim")
+    public int trimChance = 75;
 
     @Entry(name = "trim_combinations", comment = """
             List of custom trim combinations.
@@ -41,11 +40,6 @@ public class TrimMobsSubConfig {
             },
             """)
     public List<TrimCombination> trimCombinations = new ArrayList<>();
-
-    public static class RandomTrimsSubConfig {
-        @Entry(name = "trim_chance", comment = "Chance of each armor piece from a mob having an armor trim")
-        public int trimChance = 75;
-    }
 
     public enum TrimSystem {
         RANDOM_TRIMS,
