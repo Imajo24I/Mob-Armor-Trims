@@ -9,20 +9,14 @@ resulting in a more complete gameplay experience
 
 ## Features
 
-- **Applies armor trims to mobs spawning with armor.** By default, the trims are chosen randomly with consideration of
-  the
-  previous trim applied to the armor set
-- **Applies random armor trims to armor from loot tables.** This includes chests from all structures (for example,
-  bastions
-  or end cities), piglin bartering and fishing.
-- **Applies random armor trims to armor from villager trades.** Note: By default, only trades above villager trading level 3 have a
-  chance of being trimmed
-
-
+- **Applies armor trims to armor from mob spawns.** Both completely random armor trims and predefined armor trims are
+  supported.
+- **Applies armor trims to armor from loot tables.** This includes chests from all structures (for example,
+  bastions or end cities), piglin bartering and fishing.
+- **Applies armor trims to armor from villager trades.** Note: By default, only trades above villager trading level 3
+  have a chance of being trimmed.
 - Also applies armor trims to tools like pickaxes or swords if
-  either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools)
-  or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod) is installed.
-  Note, the [Tools Trims Datapack](https://modrinth.com/mod/tool-trims-mod) is **not** supported
+  either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools) or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod) is installed.
 - Almost all features are highly configurable. See the [Configuration section](#configuration)
 
 ## Configuration
@@ -43,4 +37,5 @@ can be used to access the config screen.
 
 ## Issues
 
-If you have found any issue, please report the issue to the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
+If you have found any issue, please report the issue to
+the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
