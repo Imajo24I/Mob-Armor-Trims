@@ -11,6 +11,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,13 +49,15 @@ public abstract class VillagerTradesMixin extends Mob {
         if (!trade.is(ItemTags.TRIMMABLE_ARMOR) && !trade.is(ToolTrimsCompat.TRIMMABLE_TOOL_TAG)) return;
 
         RandomSource random = this.getRandom();
-        Level level = this.level();
-        RegistryAccess registryAccess = level.registryAccess();
+        RegistryAccess registryAccess = this.level().registryAccess();
+
+        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
+        if (trim == null) return;
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyRandomTrim(trade, registryAccess, random);
+            TrimApplier.applyTrim(trade, trim, registryAccess);
         } else {
-            ToolTrimsCompat.toolTrimsCompat(trade, registryAccess, random);
+            ToolTrimsCompat.toolTrimsCompat(trade, trim.material(), registryAccess, random);
         }
     }
 }

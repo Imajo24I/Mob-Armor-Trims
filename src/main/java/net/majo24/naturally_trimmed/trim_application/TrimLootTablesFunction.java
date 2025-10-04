@@ -16,6 +16,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -66,10 +67,13 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
         if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance < random.nextInt(100)) return itemStack;
 
+        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
+        if (trim == null) return itemStack;
+
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyRandomTrim(itemStack, registryAccess, random);
+            TrimApplier.applyTrim(itemStack, trim, registryAccess);
         } else {
-            ToolTrimsCompat.toolTrimsCompat(itemStack, registryAccess, random);
+            ToolTrimsCompat.toolTrimsCompat(itemStack, trim.material(), registryAccess, random);
         }
         return itemStack;
     }

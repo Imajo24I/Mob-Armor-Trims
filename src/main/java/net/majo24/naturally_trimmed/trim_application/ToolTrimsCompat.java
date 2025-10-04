@@ -30,14 +30,12 @@ public class ToolTrimsCompat {
     private ToolTrimsCompat() {
     }
 
-    public static void toolTrimsCompat(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
+    public static void toolTrimsCompat(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
         if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOL_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
-            Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
-            Registry<TrimMaterial> materialRegistry = registries.getFirst();
-            Registry<TrimPattern> patternRegistry = registries.getSecond();
+            Registry<TrimPattern> patternRegistry = TrimApplier.getTrimRegistries(registryAccess).getSecond();
 
             ArmorTrim trim = new ArmorTrim(
-                    materialRegistry.getRandom(random).orElseThrow(),
+                    material,
                     getRandomToolPattern(patternRegistry, random)
             );
 

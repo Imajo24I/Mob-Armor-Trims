@@ -81,7 +81,7 @@ public class TrimApplier {
     }
 
     /**
-     * Runs the selected Trim System on the armor of the entity. Also applies trims to the en tity's equipment, if possible.
+     * Runs the selected Trim System on the armor of the entity. Also applies trims to the entity's equipment, if possible.
      */
     public static void trimEquipment(LivingEntity entity) {
         if (!CONFIG_MANAGER.instance().enableTrimMobs) return;
@@ -109,7 +109,7 @@ public class TrimApplier {
 
         if (trim == null) return;
 
-        // Apply trims to the armor
+        // Apply trim to the armor
         for (ItemStack armorPiece : armor) {
             if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
                 applyTrim(armorPiece, trim, registryAccess);
@@ -119,7 +119,7 @@ public class TrimApplier {
         // Apply trim to the equipment, if possible
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                 && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
-            ToolTrimsCompat.toolTrimsCompat(entity.getMainHandItem(), registryAccess, random);
+            ToolTrimsCompat.toolTrimsCompat(entity.getMainHandItem(), trim.material(), registryAccess, random);
 
         }
     }
