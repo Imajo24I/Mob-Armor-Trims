@@ -135,7 +135,7 @@ public class TrimApplier {
      */
     @Nullable
     private static String getArmorMaterial(ItemStack armorPiece) {
-        for (String material : List.of("netherite", "diamond", "gold", "iron", "chainmail", "leather")) {
+        for (String material : List.of("netherite", "diamond", "gold", "iron", "chainmail", "copper", "leather")) {
             if (armorPiece.toString().contains(material)) {
                 return material;
             }
