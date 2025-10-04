@@ -1,6 +1,6 @@
 package net.majo24.naturally_trimmed.config.screen;
 
-import net.majo24.naturally_trimmed.TrimData;
+import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;

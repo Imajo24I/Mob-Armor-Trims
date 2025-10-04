@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed;
+package net.majo24.naturally_trimmed.trim_application;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
