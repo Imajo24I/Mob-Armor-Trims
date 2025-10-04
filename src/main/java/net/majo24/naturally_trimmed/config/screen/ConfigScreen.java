@@ -175,8 +175,8 @@ public class ConfigScreen {
                         .build())
 
                 .option(Option.<Integer>createBuilder()
-                        .name(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance.description")))
+                        .name(translatable("naturally_trimmed.config.trimMobs.trimChance"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimChance.description")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.trimChance,
                                 () -> CONFIG_MANAGER.instance().trimMobs.trimChance,
                                 trimsChance -> CONFIG_MANAGER.instance().trimMobs.trimChance = trimsChance)
