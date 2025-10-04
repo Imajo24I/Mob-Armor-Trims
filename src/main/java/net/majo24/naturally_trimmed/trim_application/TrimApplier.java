@@ -72,15 +72,6 @@ public class TrimApplier {
     }
 
     /**
-     * Applies a random non-blacklisted armor trim onto the given item.
-     * Also ensures at least one of the two trim parts is non-modded
-     */
-    public static void applyRandomTrim(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
-        ArmorTrim trim = getRandomTrim(registryAccess, random);
-        applyTrim(itemStack, trim, registryAccess);
-    }
-
-    /**
      * Runs the selected Trim System on the armor of the entity. Also applies trims to the entity's equipment, if possible.
      */
     public static void trimEquipment(LivingEntity entity) {
@@ -119,7 +110,7 @@ public class TrimApplier {
         // Apply trim to the equipment, if possible
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                 && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
-            ToolTrimsCompat.toolTrimsCompat(entity.getMainHandItem(), trim.material(), registryAccess, random);
+            ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), trim.material(), registryAccess, random);
 
         }
     }

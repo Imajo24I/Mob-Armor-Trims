@@ -1,6 +1,5 @@
 package net.majo24.naturally_trimmed.trim_application;
 
-import com.mojang.datafixers.util.Pair;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
@@ -23,15 +22,19 @@ import java.util.Objects;
  */
 public class ToolTrimsCompat {
     public static final String TRIMMABLE_TOOLS_ID = "trimmable_tools";
-
     public static final String TOOL_TRIMS_ID = "tooltrims";
-    public static final TagKey<Item> TRIMMABLE_TOOL_TAG = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild(TOOL_TRIMS_ID, TRIMMABLE_TOOLS_ID)));
+    public static final TagKey<Item> TRIMMABLE_TOOLS_TAG = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild(TOOL_TRIMS_ID, TRIMMABLE_TOOLS_ID)));
 
     private ToolTrimsCompat() {
     }
 
-    public static void toolTrimsCompat(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
-        if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOL_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
+    /**
+     * Applies an armor trim to the given tool using tooltrims or trimmable_tools.
+     * If neither project is present, no trim will be applied.
+     * The trim consists of the given material and a random, tools compatible armor trim
+     */
+    public static void applyTrimToTool(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
+        if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOLS_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
             Registry<TrimPattern> patternRegistry = TrimApplier.getTrimRegistries(registryAccess).getSecond();
 
             ArmorTrim trim = new ArmorTrim(
