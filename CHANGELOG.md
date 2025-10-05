@@ -1,2 +1,5 @@
-- Add support for 1.21.7 and 1.21.8
-- Potentially fix ConcurrentModificationException reported by C2ME and triggered by EMI Trades + others? ([#27](https://github.com/Imajo24I/Naturally-Trimmed/issues/27))
+- Add support for 1.21.9 and 1.21.10
+- Fix trimming non-trimmable items in versions below 1.21.5
+- Fix missing-texture texture on tools when using the trimmable_tools mod
+- Fix missing-texture texture on trimmed items caused by combining two incompatible modded trim parts
+- Increased fabric loader dependency
