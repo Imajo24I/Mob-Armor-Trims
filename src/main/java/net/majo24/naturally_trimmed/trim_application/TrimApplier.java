@@ -23,6 +23,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -96,7 +97,7 @@ public class TrimApplier {
         TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
         ArmorTrim trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
                 ? getRandomTrim(registryAccess, random)
-                : getPredefinedTrim(registryAccess, random);
+                : getPredefinedTrim(registryAccess);
 
         if (trim == null) return;
 
@@ -156,9 +157,9 @@ public class TrimApplier {
     }
 
     @Nullable
-    private static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess, RandomSource random) {
+    private static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess) {
         List<TrimData> predefinedTrims = CONFIG_MANAGER.instance().trimMobs.predefinedTrims;
-        Util.shuffle(predefinedTrims, random);
+        Collections.shuffle(predefinedTrims);
 
         for (TrimData predefinedTrim : predefinedTrims) {
             ArmorTrim trim = predefinedTrim.getTrim(registryAccess);
