@@ -1,7 +1,6 @@
 package net.majo24.naturally_trimmed.config.screen;
 
-import net.majo24.naturally_trimmed.trim_combination.TrimCombination;
-import net.majo24.naturally_trimmed.trim_combination.TrimKey;
+import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -24,33 +23,26 @@ public class SettingsValidation {
     private SettingsValidation() {
     }
 
-    public static void validateTrimCombinations() {
+    public static void validatePredefinedTrims() {
         LocalPlayer player = Minecraft.getInstance().player;
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level == null || player == null) return;
-
         RegistryAccess registryAccess = level.registryAccess();
 
-        player.displayClientMessage(Component.literal("Validating custom trim combinations...\n"), false);
+        player.displayClientMessage(Component.literal("Validating predefined trims...\n"), false);
 
         int index = 0;
-        for (TrimCombination trimCombination : CONFIG_MANAGER.instance().trimMobs.trimCombinations) {
-            validateTrimCombination(trimCombination, registryAccess, player, index);
+        for (TrimData trimData : CONFIG_MANAGER.instance().trimMobs.predefinedTrims) {
+            if (trimData.getTrim(registryAccess) == null) {
+                player.displayClientMessage(Component.literal(
+                        "Found invalid trim: \"" + trimData + "\" with index " + index
+                ), false);
+            }
             index++;
         }
 
-        player.displayClientMessage(Component.literal("\nDone validating custom trim combinations"), false);
-    }
-
-    private static void validateTrimCombination(TrimCombination trimCombination, RegistryAccess registryAccess, LocalPlayer player, int index) {
-        for (TrimKey trim : trimCombination.trims()) {
-            if (trim.getTrim(registryAccess) == null) {
-                player.displayClientMessage(Component.literal(
-                        "Found invalid trim: \"" + trim + "\" in trim combination " + index
-                ), false);
-            }
-        }
+        player.displayClientMessage(Component.literal("\nDone validating predefined trims"), false);
     }
 
     public static void validateBlacklist() {

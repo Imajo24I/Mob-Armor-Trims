@@ -2,7 +2,7 @@ package net.majo24.naturally_trimmed.config.screen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import net.majo24.naturally_trimmed.config.TrimMobsSubConfig;
+import net.majo24.naturally_trimmed.config.Config;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -151,14 +151,14 @@ public class ConfigScreen {
                 .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.tooltip")))
                 .collapsed(true)
 
-                .option(Option.<TrimMobsSubConfig.TrimSystem>createBuilder()
+                .option(Option.<Config.TrimMobsSubConfig.TrimSystem>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.trimSystem"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimSystem.description")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
                                 () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
                                 enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
                         .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(TrimMobsSubConfig.TrimSystem.class)
+                                .enumClass(Config.TrimMobsSubConfig.TrimSystem.class)
                                 .formatValue(trimSystemFormatter))
                         .build())
 
@@ -174,26 +174,12 @@ public class ConfigScreen {
                                 .formatValue(percentageFormatter))
                         .build())
 
-                .option(LabelOption.create(translatable("naturally_trimmed.config.trimMobs.randomTrims.description")))
-
                 .option(Option.<Integer>createBuilder()
-                        .name(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.randomTrims.trimChance.description")))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.trimChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance,
-                                trimsChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.trimChance = trimsChance)
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, 100)
-                                .step(1)
-                                .formatValue(percentageFormatter))
-                        .build())
-
-                .option(Option.<Integer>createBuilder()
-                        .name(translatable("naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.randomTrims.similarTrimChance.description")))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.randomTrims.similarTrimChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance,
-                                similarTrimChance -> CONFIG_MANAGER.instance().trimMobs.randomTrims.similarTrimChance = similarTrimChance)
+                        .name(translatable("naturally_trimmed.config.trimMobs.trimChance"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimChance.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimMobs.trimChance,
+                                () -> CONFIG_MANAGER.instance().trimMobs.trimChance,
+                                trimsChance -> CONFIG_MANAGER.instance().trimMobs.trimChance = trimsChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -217,9 +203,9 @@ public class ConfigScreen {
                         .build())
 
                 .option(ButtonOption.createBuilder()
-                        .name(translatable("naturally_trimmed.config.utils.validateCustomTrimCombinations"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateCustomTrimCombinations.description")))
-                        .action((screen, option) -> SettingsValidation.validateTrimCombinations())
+                        .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
+                        .action((screen, option) -> SettingsValidation.validatePredefinedTrims())
                         .build())
 
                 .option(ButtonOption.createBuilder()
@@ -228,7 +214,6 @@ public class ConfigScreen {
                         .action((screen, option) -> SettingsValidation.validateBlacklist())
                         .build()
                 )
-
                 .build();
     }
 
@@ -243,12 +228,12 @@ public class ConfigScreen {
             }
         }
 
-        public static class TrimSystem implements ValueFormatter<TrimMobsSubConfig.TrimSystem> {
+        public static class TrimSystem implements ValueFormatter<Config.TrimMobsSubConfig.TrimSystem> {
             @Override
-            public Component format(TrimMobsSubConfig.TrimSystem selectedSystem) {
+            public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
                 return switch (selectedSystem) {
-                    case RANDOM_TRIMS -> Component.literal("Random Trims");
-                    case CUSTOM_TRIM_COMBINATIONS -> Component.literal("Custom Trim Combinations");
+                    case RANDOM_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.randomTrims");
+                    case PREDEFINED_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims");
                 };
             }
         }

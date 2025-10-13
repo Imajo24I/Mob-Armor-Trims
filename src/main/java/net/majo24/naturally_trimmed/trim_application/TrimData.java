@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed.trim_combination;
+package net.majo24.naturally_trimmed.trim_application;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -12,12 +12,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public record TrimKey(String material, String pattern) {
+/**
+ * Record used for holding the material and pattern of an armor trim until the actual {@link ArmorTrim} object can be constructed
+ */
+public record TrimData(String material, String pattern) {
     private static final String TRIM_PATTERN_SUFFIX = "_armor_trim_smithing_template";
 
 
     /**
-     * @return an ArmorTrim created from this trim key. Null if the trim couldn't be created
+     * Constructs an {@link ArmorTrim} using the material and pattern.
+     * @return an {@link ArmorTrim} object. Null if either the material or pattern is invalid
      */
     @Nullable
     public ArmorTrim getTrim(RegistryAccess registryAccess) {

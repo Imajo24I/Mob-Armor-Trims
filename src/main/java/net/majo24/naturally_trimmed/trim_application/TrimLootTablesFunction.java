@@ -16,6 +16,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -59,17 +60,20 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
         if (!Config.CONFIG_MANAGER.instance().enableTrimLootTables) return itemStack;
-        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOL_TAG)) return itemStack;
+        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOLS_TAG)) return itemStack;
 
         RandomSource random = lootContext.getRandom();
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
         if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance < random.nextInt(100)) return itemStack;
 
+        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
+        if (trim == null) return itemStack;
+
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyRandomTrimToItem(itemStack, registryAccess, random);
+            TrimApplier.applyTrim(itemStack, trim, registryAccess);
         } else {
-            ToolTrimsCompat.toolTrimsCompat(itemStack, registryAccess, random);
+            ToolTrimsCompat.applyTrimToTool(itemStack, trim.material(), registryAccess, random);
         }
         return itemStack;
     }
