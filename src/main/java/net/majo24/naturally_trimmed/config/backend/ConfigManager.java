@@ -67,8 +67,9 @@ public class ConfigManager<T> {
             jsonReader.endObject();
 
         } catch (Exception e) {
-            NaturallyTrimmed.LOGGER.error("Failed to deserialize the Naturally Trimmed config file. Using the default config instead.", e);
+            NaturallyTrimmed.LOGGER.error("Failed to deserialize the Naturally Trimmed config file. Using and saving the default config to file.", e);
             this.instance = defaults;
+            this.saveInstance();
         }
     }
 
