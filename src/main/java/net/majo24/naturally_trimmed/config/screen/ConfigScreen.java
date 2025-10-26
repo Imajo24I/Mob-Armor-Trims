@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 /*?}*/
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
@@ -213,12 +214,15 @@ public class ConfigScreen {
 
         int index = 0;
         for (TrimData trimData : CONFIG_MANAGER.instance().trimMobs.predefinedTrims) {
-            if (trimData.getTrim(registryAccess) == null) {
+            try {
+                trimData.getTrim(registryAccess);
+            } catch (NoSuchElementException ignored) {
                 player.displayClientMessage(Component.literal(
                         "Found invalid trim: \"" + trimData + "\" with index " + index
                 ), false);
+            } finally {
+                index++;
             }
-            index++;
         }
 
         player.displayClientMessage(Component.literal("\nDone validating predefined trims"), false);

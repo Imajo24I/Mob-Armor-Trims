@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 //? >=1.20.5 {
 import net.minecraft.core.component.DataComponentPatch;
@@ -138,9 +139,10 @@ public class TrimApplier {
         Collections.shuffle(predefinedTrims);
 
         for (TrimData predefinedTrim : predefinedTrims) {
-            ArmorTrim trim = predefinedTrim.getTrim(registryAccess);
-            if (trim != null) {
-                return trim;
+            try {
+                return predefinedTrim.getTrim(registryAccess);
+            } catch (NoSuchElementException e) {
+                return null;
             }
         }
 

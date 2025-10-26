@@ -1,67 +1,42 @@
 package net.majo24.naturally_trimmed.trim_application;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.equipment.trim.*;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
+//? if <1.21 {
+/*import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+*///?}
 
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 /**
  * Record used for holding the material and pattern of an armor trim until the actual {@link ArmorTrim} object can be constructed
  */
 public record TrimData(String material, String pattern) {
-    private static final String TRIM_PATTERN_SUFFIX = "_armor_trim_smithing_template";
-
-
     /**
      * Constructs an {@link ArmorTrim} using the material and pattern.
-     * @return an {@link ArmorTrim} object. Null if either the material or pattern is invalid
+     * @return an {@link ArmorTrim} object
+     * @throws NoSuchElementException when either the material or pattern is invalid
      */
-    @Nullable
-    public ArmorTrim getTrim(RegistryAccess registryAccess) {
-        Holder<TrimMaterial> trimMaterial = getMaterial(material, registryAccess);
-        if (trimMaterial == null) return null;
+    public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException {
+        Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
 
-        Holder<TrimPattern> trimPattern = getPattern(pattern, registryAccess);
-        if (trimPattern == null) {
-            trimPattern = getPattern(pattern + TRIM_PATTERN_SUFFIX, registryAccess);
-            if (trimPattern == null) return null;
-        }
+        //? if >1.21 {
+        Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().get(ResourceLocation.parse(material)).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().get(ResourceLocation.parse(pattern)).orElseThrow();
+        //?} else if 1.21 {
+        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(ResourceLocation.parse(material)).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(ResourceLocation.parse(pattern)).orElseThrow();
+        *///?} else {
+        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new ResourceLocation(material))).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new ResourceLocation(pattern))).orElseThrow();
+        *///?}
 
         return new ArmorTrim(trimMaterial, trimPattern);
-    }
-
-    @Nullable
-    private Holder<TrimMaterial> getMaterial(String material, RegistryAccess registryAccess) {
-        try {
-            ItemStack materialItem = getItemFromId(material);
-            return TrimMaterials.getFromIngredient(registryAccess, materialItem).orElseThrow();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    private Holder<TrimPattern> getPattern(String pattern, RegistryAccess registryAccess) {
-        try {
-            ResourceLocation resourceLocation = ResourceLocation.tryParse(pattern);
-            return registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().filter(reference -> reference.key().location().equals(resourceLocation)).findFirst().orElseThrow();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private ItemStack getItemFromId(String id) {
-        return BuiltInRegistries.ITEM.get(Objects.requireNonNull(ResourceLocation.tryParse(id)))
-                //? >=1.21.2 {
-                .orElseThrow().value()
-                //?}
-                .getDefaultInstance();
     }
 }
