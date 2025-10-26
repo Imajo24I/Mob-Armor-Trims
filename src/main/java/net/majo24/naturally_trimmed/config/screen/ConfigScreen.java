@@ -4,6 +4,7 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -181,6 +182,8 @@ public class ConfigScreen {
     }
 
     private static ConfigCategory buildUtilsCategory() {
+        boolean isInWorld = Minecraft.getInstance().level != null;
+
         return ConfigCategory.createBuilder()
                 .name(translatable("naturally_trimmed.config.utils"))
                 .tooltip(translatable("naturally_trimmed.config.utils.tooltip"))
@@ -188,6 +191,7 @@ public class ConfigScreen {
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.reloadConfig"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.reloadConfig.description")))
+                        .text(translatable("naturally_trimmed.config.utils.run"))
                         .action((screen, option) -> {
                             CONFIG_MANAGER.loadInstance();
                             screen.onClose();
@@ -197,6 +201,9 @@ public class ConfigScreen {
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
+                        .text(isInWorld
+                                ? translatable("naturally_trimmed.config.utils.run")
+                                : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
                         .action((screen, option) -> validatePredefinedTrims())
                         .build())
 
