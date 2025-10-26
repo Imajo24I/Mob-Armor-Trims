@@ -88,7 +88,6 @@ public class ConfigManager<T> {
             Field field = fieldMap.get(name);
 
             if (field == null) {
-                NaturallyTrimmed.LOGGER.warn("Found unknown config field \"{}\" while deserializing config file", name);
                 jsonReader.skipValue();
                 continue;
             }

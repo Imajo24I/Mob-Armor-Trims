@@ -8,7 +8,6 @@ import net.majo24.naturally_trimmed.trim_application.TrimData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
