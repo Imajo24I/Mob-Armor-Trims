@@ -3,6 +3,7 @@ package net.majo24.naturally_trimmed.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.config.Config;
+import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,6 +11,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +25,6 @@ import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 /*?}*/
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 import static net.minecraft.network.chat.Component.translatable;
@@ -130,18 +133,6 @@ public class ConfigScreen {
                                         .step(1))
                                 .build())
                         .build())
-
-                .group(ListOption.<String>createBuilder()
-                        .name(translatable("naturally_trimmed.config.blacklist"))
-                        .collapsed(true)
-
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.blacklist.description")))
-                        .binding(CONFIG_MANAGER.defaults().blacklist.stream().map(Pattern::pattern).toList(),
-                                () -> CONFIG_MANAGER.instance().blacklist.stream().map(Pattern::pattern).toList(),
-                                blacklist -> CONFIG_MANAGER.instance().blacklist = blacklist.stream().map(Pattern::compile).toList())
-                        .controller(StringControllerBuilder::create)
-                        .initial("")
-                        .build())
                 .build();
     }
 
@@ -205,16 +196,32 @@ public class ConfigScreen {
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
-                        .action((screen, option) -> SettingsValidation.validatePredefinedTrims())
+                        .action((screen, option) -> validatePredefinedTrims())
                         .build())
 
-                .option(ButtonOption.createBuilder()
-                        .name(translatable("naturally_trimmed.config.utils.validateBlacklist"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateBlacklist.description")))
-                        .action((screen, option) -> SettingsValidation.validateBlacklist())
-                        .build()
-                )
                 .build();
+    }
+
+    public static void validatePredefinedTrims() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
+
+        if (level == null || player == null) return;
+        RegistryAccess registryAccess = level.registryAccess();
+
+        player.displayClientMessage(Component.literal("Validating predefined trims...\n"), false);
+
+        int index = 0;
+        for (TrimData trimData : CONFIG_MANAGER.instance().trimMobs.predefinedTrims) {
+            if (trimData.getTrim(registryAccess) == null) {
+                player.displayClientMessage(Component.literal(
+                        "Found invalid trim: \"" + trimData + "\" with index " + index
+                ), false);
+            }
+            index++;
+        }
+
+        player.displayClientMessage(Component.literal("\nDone validating predefined trims"), false);
     }
 
     public static class Formatters {
@@ -233,7 +240,8 @@ public class ConfigScreen {
             public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
                 return switch (selectedSystem) {
                     case RANDOM_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.randomTrims");
-                    case PREDEFINED_TRIMS -> translatable("naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims");
+                    case PREDEFINED_TRIMS ->
+                            translatable("naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims");
                 };
             }
         }

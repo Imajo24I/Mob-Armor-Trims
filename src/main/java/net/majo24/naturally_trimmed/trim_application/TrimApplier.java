@@ -5,7 +5,6 @@ import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 //? >=1.20.5 {
 import net.minecraft.core.component.DataComponentPatch;
@@ -56,16 +54,13 @@ public class TrimApplier {
         Registry<TrimMaterial> materialRegistry = registries.getFirst();
         Registry<TrimPattern> patternRegistry = registries.getSecond();
 
-        List<Holder.Reference<TrimPattern>> trimPatterns = getAndFilterPatterns(patternRegistry);
-        if (trimPatterns.isEmpty()) return null;
-
         Holder.Reference<TrimMaterial> trimMaterial;
         Holder.Reference<TrimPattern> trimPattern;
 
         // Ensure at least one of the two trim parts is non-modded
         // If both trim parts are modded, they will most times result in a missing-texture texture
         do {
-            trimPattern = Util.getRandom(trimPatterns, random);
+            trimPattern = patternRegistry.getRandom(random).orElseThrow();
             trimMaterial = materialRegistry.getRandom(random).orElseThrow();
         } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
 
@@ -126,25 +121,6 @@ public class TrimApplier {
         *///?}
 
         return new Pair<>(materialRegistry, patternRegistry);
-    }
-
-    protected static List<Holder.Reference<TrimPattern>> getAndFilterPatterns(Registry<TrimPattern> patternRegistry) {
-        List<Holder.Reference<TrimPattern>> trimPatterns = getPatterns(patternRegistry);
-
-        List<Pattern> patterns = CONFIG_MANAGER.instance().blacklist;
-
-        trimPatterns.removeIf(trimPattern -> {
-            String resourceLocation = trimPattern.key().location().toString();
-            for (Pattern pattern : patterns) {
-                if (pattern.matcher(resourceLocation).find()) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-
-        return trimPatterns;
     }
 
     protected static List<Holder.Reference<TrimPattern>> getPatterns(Registry<TrimPattern> patternRegistry) {

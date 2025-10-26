@@ -40,13 +40,11 @@
 
 
   "naturally_trimmed.config.utils": "Utils",
-  "naturally_trimmed.config.utils.tooltip": "Multiple utility buttons to make configuring the mod easier",
+  "naturally_trimmed.config.utils.tooltip": "Utility buttons to make configuring the mod easier",
   "naturally_trimmed.config.utils.reloadConfig": "Reload Config",
   "naturally_trimmed.config.utils.reloadConfig.description": "Reload the config from the config file.\nUseful for configuring the Predefined Trims System, since it is only configurable through the config file",
   "naturally_trimmed.config.utils.validatePredefinedTrims": "Validate Predefined Trims",
   "naturally_trimmed.config.utils.validatePredefinedTrims.description": "Validates all predefined trims and logs each invalid trim in chat.\nOnly works while inside a world",
-  "naturally_trimmed.config.utils.validateBlacklist": "Validate Trim Blacklist",
-  "naturally_trimmed.config.utils.validateBlacklist.description": "Validates the Trim Blacklist and logs every blacklisted trim pattern, every non-blacklisted trim pattern and every unnecessary blacklist entry in chat.\nOnly works while inside a world",
 
 
   "naturally_trimmed.config.backup_screen.installYACL": "Install Yet Another Config Lib to access the config screen",
