@@ -1,5 +1,17 @@
-- Add support for 1.21.9 and 1.21.10
-- Fix trimming non-trimmable items in versions below 1.21.5
-- Fix missing-texture texture on tools when using the trimmable_tools mod
-- Fix missing-texture texture on trimmed items caused by combining two incompatible modded trim parts
-- Increased fabric loader dependency
+- Removed individual trim applying
+  - The same trims will now be used for the whole armor, there is no longer a chance for multiple different trim materials or patterns on the same armor set
+  - From my own experience using the mod, it almost never makes sense to have different trim materials or patterns on the same armor. It only very rarely looks not bad, especially with different trim materials
+  - Replaced custom trim combinations with predefined trims
+    - The custom trim combinations system has previously been a huge time effort to fully set up, and I don't think anyone has been using it in the full extent, if at all
+    - The new predefined trims system will be, while a lot less flexible and configurable, actually viable to use
+- Use the same trim material for the mob's equipment as for the mob's armor
+- Removed pattern blacklist
+  - There is no use-case from the user side that I'm aware of. The default of blacklisting trim_tools trim patterns has now been hardcoded into the mod
+- Rewritten deserialization of predefined/custom trims
+  - Instead of first deserializing the id into an item and then using that item to get the trim material/pattern, this now deserializes the id directly into the trim material/pattern 
+  - This means the way of specifying trim materials/patterns is now exactly the same as for vanilla
+  - For example, 'minecraft:resin_brick' (previously valid) -> 'minecraft:resin' or 'resin' (now valid)
+- Strikethrough the Validate Predefined Trims config button if not currently runnable
+- Improved invalid config file handling
+- Updated lang files and made the TrimSystem config entry's values translatable
+- Quite a bit of refactoring and cleaning up the source code
