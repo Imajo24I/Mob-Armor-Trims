@@ -5,6 +5,7 @@ import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -47,13 +48,14 @@ public class TrimApplier {
     }
 
     /**
-     * Returns a random non-blacklisted armor trim. Also ensures at least one of the two trim parts is non-modded
+     * Returns a random armor trim while ensuring at least one of the two trim parts is non-modded to prevent missing-texture textures
      */
-    @Nullable
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
-        Registry<TrimMaterial> materialRegistry = registries.getFirst();
-        Registry<TrimPattern> patternRegistry = registries.getSecond();
+        List<Holder.Reference<TrimPattern>> trimPatterns = getPatterns(registries.getSecond());
+
+        // Trim Patterns from tooltrims are only compatible with tools and not with armor pieces
+        trimPatterns.removeIf(pattern -> pattern.key().location().getNamespace().equals("tooltrims"));
 
         Holder.Reference<TrimMaterial> trimMaterial;
         Holder.Reference<TrimPattern> trimPattern;
@@ -61,8 +63,8 @@ public class TrimApplier {
         // Ensure at least one of the two trim parts is non-modded
         // If both trim parts are modded, they will most times result in a missing-texture texture
         do {
-            trimPattern = patternRegistry.getRandom(random).orElseThrow();
-            trimMaterial = materialRegistry.getRandom(random).orElseThrow();
+            trimPattern = Util.getRandom(trimPatterns, random);
+            trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
         } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
 
         return new ArmorTrim(trimMaterial, trimPattern);
