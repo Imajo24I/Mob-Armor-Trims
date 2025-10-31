@@ -5,6 +5,7 @@ import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -217,13 +218,17 @@ public class ConfigScreen {
         if (level == null || player == null) return;
         RegistryAccess registryAccess = level.registryAccess();
 
-        player.displayClientMessage(Component.literal("Validating predefined trims...\n"), false);
+        player.displayClientMessage(Component.literal("\nValidating predefined trims...\n"), false);
 
+        int total = CONFIG_MANAGER.instance().trimMobs.predefinedTrims.size();
+        int valid = 0;
         int index = 0;
+
         for (TrimData trimData : CONFIG_MANAGER.instance().trimMobs.predefinedTrims) {
             try {
                 trimData.getTrim(registryAccess);
-            } catch (NoSuchElementException ignored) {
+                valid += 1;
+            } catch (NoSuchElementException | ResourceLocationException ignored) {
                 player.displayClientMessage(Component.literal(
                         "Found invalid trim: \"" + trimData + "\" with index " + index
                 ), false);
@@ -232,7 +237,8 @@ public class ConfigScreen {
             }
         }
 
-        player.displayClientMessage(Component.literal("\nDone validating predefined trims"), false);
+        player.displayClientMessage(Component.literal("\n" + valid + " out of " + total + " trims are valid."), false);
+        player.displayClientMessage(Component.literal("Done validating predefined trims"), false);
     }
 
     public static class Formatters {

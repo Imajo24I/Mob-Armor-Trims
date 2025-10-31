@@ -1,6 +1,7 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -23,7 +24,7 @@ public record TrimData(String material, String pattern) {
      * @return an {@link ArmorTrim} object
      * @throws NoSuchElementException when either the material or pattern is invalid
      */
-    public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException {
+    public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException, ResourceLocationException {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
 
         //? if >1.21 {

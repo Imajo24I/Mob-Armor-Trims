@@ -5,6 +5,7 @@ import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
+import net.minecraft.ResourceLocationException;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -143,7 +144,7 @@ public class TrimApplier {
         for (TrimData predefinedTrim : predefinedTrims) {
             try {
                 return predefinedTrim.getTrim(registryAccess);
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchElementException | ResourceLocationException e) {
                 return null;
             }
         }
