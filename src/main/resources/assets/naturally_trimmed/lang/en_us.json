@@ -26,17 +26,13 @@
   "naturally_trimmed.config.trimMobs": "Trim Mobs",
   "naturally_trimmed.config.trimMobs.tooltip": "Settings for trimming a mobs equipment",
   "naturally_trimmed.config.trimMobs.trimSystem": "Trim System",
-  "naturally_trimmed.config.trimMobs.trimSystem.description": "Select the System of how to select, what trims to give mobs.\n- Random Trims: Randomly choose the trim, but also take the previous trim highly into account.\n- Custom Trims: Choose the trim out of a list of custom trims. You can manage the trims yourself",
+  "naturally_trimmed.config.trimMobs.trimSystem.description": "Select the trim system. Trim systems define how the mod chooses what trims to use.\n\n- Random Trims: Randomly chooses the trim to apply to the mob.\n\n- Predefined Trims: Chooses the trim from a list of predefined trims. You can manage the list of trims under the predefined_trims config entry (only inside the config file)",
   "naturally_trimmed.config.trimMobs.trimSystem.randomTrims": "Random Trims",
   "naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims": "Predefined Trims",
   "naturally_trimmed.config.trimMobs.noTrimsChance": "No Trims Chance",
   "naturally_trimmed.config.trimMobs.noTrimsChance.description": "Chance of the mob having no trims at all",
   "naturally_trimmed.config.trimMobs.trimChance": "Trim Chance",
   "naturally_trimmed.config.trimMobs.trimChance.description": "Chance of each individual armor piece having a trim",
-
-
-  "naturally_trimmed.config.blacklist": "Blacklist for Trim Patterns",
-  "naturally_trimmed.config.blacklist.description": "This is a blacklist for disabling trim patterns.\n\nRegex is used, which helps reducing a lot of repetition.\nThis also means, if you want to check for a specific pattern, you need to use \"^[pattern]$\" instead of just \"[pattern]\"\n\nBy default, all patterns from the Trimmable Tools mod are blacklisted, since they only work for tools and not armor",
 
 
   "naturally_trimmed.config.utils": "Utils",

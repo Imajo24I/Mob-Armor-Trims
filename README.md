@@ -27,7 +27,7 @@ the [Dependencies section](#dependencies))
 or through the config file, which can be found under `.minecraft/config/naturally_trimmed.json5`.
 
 For explanation on individual settings, see the comments attached to the settings.  
-Note, the settings for the custom trim combinations system are only available in the config file.
+Note, the settings for the predefined trims system are only configurable in the config file.
 
 ## Dependencies
 

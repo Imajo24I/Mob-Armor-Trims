@@ -36,7 +36,7 @@ public class Config {
         @Entry(name = "trim_system", comment = """
                 Select the trim system. Trim systems define how the mod chooses what trims to use.
                 - RANDOM_TRIMS: Randomly chooses the trim to apply to the mob.
-                - PREDEFINED_TRIMS: Chooses the trim from a list of predefined trims. You can manage the list of trims under the predefined_trims config entry only inside the config file.""")
+                - PREDEFINED_TRIMS: Chooses the trim from a list of predefined trims. You can manage the list of trims under the predefined_trims config entry.""")
         public TrimSystem trimSystem = TrimSystem.RANDOM_TRIMS;
 
         @Entry(name = "no_trims_chance", comment = "Chance of the mob having no trims at all")
@@ -50,8 +50,8 @@ public class Config {
                 
                 A predefined trim consists of a trim material and a trim pattern.
                 
-                Example of a predefined trim:
-                {material: "netherite", pattern: "silence"}
+                Example-Configuration:
+                predefined_trims: [{material: "resin", pattern: "silence"}, {material: "netherite", pattern: "vex"}, {material: "minecraft:amethyst", pattern: "minecraft:silence"}]
                 """)
         public List<TrimData> predefinedTrims = new ArrayList<>();
 
