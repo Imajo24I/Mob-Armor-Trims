@@ -3,6 +3,7 @@ package net.majo24.naturally_trimmed.trim_application;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 
+import static net.majo24.naturally_trimmed.NaturallyTrimmed.isModLoaded;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
 import net.minecraft.ResourceLocationException;
@@ -64,7 +65,12 @@ public class TrimApplier {
         // Ensure at least one of the two trim parts is non-modded
         // If both trim parts are modded, they will most times result in a missing-texture texture
         do {
-            trimPattern = Util.getRandom(trimPatterns, random);
+            // Elytra Trims 4.5 adds modded patterns to the registry even though they may not be compatible with actual armor, only elytras
+            // This code ensures none of these patterns are being used
+            do {
+                trimPattern = Util.getRandom(trimPatterns, random);
+            } while ((isModLoaded("elytratrims") && !isModLoaded(trimPattern.key().location().getNamespace()) || trimPattern.key().location().getNamespace().equals("elytratrims")));
+
             trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
         } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
 
