@@ -69,7 +69,7 @@ public class TrimApplier {
             // This code ensures none of these patterns are being used
             do {
                 trimPattern = Util.getRandom(trimPatterns, random);
-            } while ((isModLoaded("elytratrims") && !isModLoaded(trimPattern.key().location().getNamespace()) || trimPattern.key().location().getNamespace().equals("elytratrims")));
+            } while (isModLoaded("elytratrims") && (!isModLoaded(trimPattern.key().location().getNamespace()) || trimPattern.key().location().getNamespace().equals("elytratrims")));
 
             trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
         } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
