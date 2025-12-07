@@ -12,17 +12,17 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.6"
+    id("dev.kikugie.stonecutter") version "0.7.11"
 }
 
 stonecutter {
     kotlinController = true
     centralScript = "build.gradle.kts"
 
-    shared {
+    create(rootProject) {
         fun mc(mcVersion: String, loaders: Iterable<String>) {
             for (loader in loaders) {
-                vers("$mcVersion-$loader", mcVersion)
+                version("$mcVersion-$loader", mcVersion)
             }
         }
 
@@ -36,8 +36,6 @@ stonecutter {
 
         vcsVersion = "1.21.9-fabric"
     }
-
-    create(rootProject)
 }
 
 rootProject.name = "Naturally Trimmed"

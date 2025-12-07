@@ -1,6 +1,7 @@
 plugins {
+    id("dev.kikugie.stonecutter")
     id("dev.architectury.loom") version "1.11.+"
-    id("me.modmuss50.mod-publish-plugin") version "0.5.1"
+    id("me.modmuss50.mod-publish-plugin")
 }
 
 class ModData {
@@ -43,15 +44,20 @@ group = mod.group
 base { archivesName.set(mod.id) }
 
 stonecutter {
-    const("fabric", loader.isFabric)
-    const("neoforge", loader.isNeoforge)
-    const("forge", loader.isForge)
-    const("forgeLike", loader.isForgeLike)
-    replacement(
-        eval(current.version, ">=1.21.2"),
-        "import net.minecraft.world.item.armortrim.*;",
-        "import net.minecraft.world.item.equipment.trim.*;",
-    )
+    constants {
+        match(loader.loader, "fabric", "neoforge", "forge")
+        put("forgeLike", loader.isForgeLike)
+    }
+
+    replacements {
+        string {
+            direction = eval(current.version, ">=1.21.2")
+            replace(
+                "import net.minecraft.world.item.armortrim.*;",
+                "import net.minecraft.world.item.equipment.trim.*;"
+            )
+        }
+    }
 }
 
 
