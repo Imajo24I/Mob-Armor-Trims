@@ -54,13 +54,13 @@ public class TrimApplier {
      */
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
-        List<Holder.Reference<TrimPattern>> trimPatterns = getPatterns(registries.getSecond());
-
-        // Trim Patterns from tooltrims are only compatible with tools and not with armor pieces
-        trimPatterns.removeIf(pattern -> pattern.key().location().getNamespace().equals("tooltrims"));
+        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registries.getSecond());
 
         Holder.Reference<TrimMaterial> trimMaterial;
         Holder.Reference<TrimPattern> trimPattern;
+
+        // Trim Patterns from tooltrims are only compatible with tools and not with armor pieces
+        trimPatterns.removeIf(pattern -> pattern.key().location().getNamespace().equals("tooltrims"));
 
         // Ensure at least one of the two trim parts is non-modded
         // If both trim parts are modded, they will most times result in a missing-texture texture
@@ -133,13 +133,12 @@ public class TrimApplier {
         return new Pair<>(materialRegistry, patternRegistry);
     }
 
-    protected static List<Holder.Reference<TrimPattern>> getPatterns(Registry<TrimPattern> patternRegistry) {
+    protected static List<Holder.Reference<TrimPattern>> getTrimPatterns(Registry<TrimPattern> patternRegistry) {
         //? if >=1.21.2 {
         return new ArrayList<>(patternRegistry.listElements().toList());
         //?} else {
         /*return new ArrayList<>(patternRegistry.holders().toList());
          *///?}
-
     }
 
     @Nullable
@@ -148,6 +147,7 @@ public class TrimApplier {
         Collections.shuffle(predefinedTrims);
 
         for (TrimData predefinedTrim : predefinedTrims) {
+            //TODO: Should this immediately return after failing instead of logging and trying a different trim?
             try {
                 return predefinedTrim.getTrim(registryAccess);
             } catch (NoSuchElementException | ResourceLocationException e) {

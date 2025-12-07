@@ -39,15 +39,15 @@ public class ToolTrimsCompat {
 
             ArmorTrim trim = new ArmorTrim(
                     material,
-                    getRandomToolPattern(patternRegistry, random)
+                    getFilteredToolPattern(patternRegistry, random)
             );
 
             TrimApplier.applyTrim(itemStack, trim, registryAccess);
         }
     }
 
-    private static Holder.Reference<TrimPattern> getRandomToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
-        List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getPatterns(patternRegistry);
+    private static Holder.Reference<TrimPattern> getFilteredToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
+        List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(patternRegistry);
 
         if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
             // Trimmable Tools only supports trimming tools with minecraft's patterns,
