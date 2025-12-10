@@ -6,8 +6,8 @@ import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.isModLoaded;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
-import net.minecraft.ResourceLocationException;
-import net.minecraft.Util;
+import net.minecraft.IdentifierException;
+import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -60,7 +60,7 @@ public class TrimApplier {
         Holder.Reference<TrimPattern> trimPattern;
 
         // Trim Patterns from tooltrims are only compatible with tools and not with armor pieces
-        trimPatterns.removeIf(pattern -> pattern.key().location().getNamespace().equals("tooltrims"));
+        trimPatterns.removeIf(pattern -> pattern.key().identifier().getNamespace().equals("tooltrims"));
 
         // Ensure at least one of the two trim parts is non-modded
         // If both trim parts are modded, they will most times result in a missing-texture texture
@@ -69,10 +69,10 @@ public class TrimApplier {
             // This code ensures none of these patterns are being used
             do {
                 trimPattern = Util.getRandom(trimPatterns, random);
-            } while (isModLoaded("elytratrims") && (!isModLoaded(trimPattern.key().location().getNamespace()) || trimPattern.key().location().getNamespace().equals("elytratrims")));
+            } while (isModLoaded("elytratrims") && (!isModLoaded(trimPattern.key().identifier().getNamespace()) || trimPattern.key().identifier().getNamespace().equals("elytratrims")));
 
             trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
-        } while (!trimMaterial.key().location().getNamespace().equals("minecraft") && !trimPattern.key().location().getNamespace().equals("minecraft"));
+        } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft") && !trimPattern.key().identifier().getNamespace().equals("minecraft"));
 
         return new ArmorTrim(trimMaterial, trimPattern);
     }
@@ -150,7 +150,7 @@ public class TrimApplier {
             //TODO: Should this immediately return after failing instead of logging and trying a different trim?
             try {
                 return predefinedTrim.getTrim(registryAccess);
-            } catch (NoSuchElementException | ResourceLocationException e) {
+            } catch (NoSuchElementException | IdentifierException e) {
                 return null;
             }
         }

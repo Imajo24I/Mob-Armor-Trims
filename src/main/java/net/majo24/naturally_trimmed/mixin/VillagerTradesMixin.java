@@ -3,13 +3,14 @@ package net.majo24.naturally_trimmed.mixin;
 import net.majo24.naturally_trimmed.trim_application.ToolTrimsCompat;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.VillagerDataHolder;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.npc.villager.VillagerDataHolder;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -28,7 +29,7 @@ public abstract class VillagerTradesMixin extends Mob {
     }
 
     @Inject(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER))
-    private void trimTrades(MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
+    private void trimTrades(/*? >=1.21.11 {*/ServerLevel level,/*?}*/ MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
         if (!CONFIG_MANAGER.instance().enableTrimTrades) return;
 
         int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;

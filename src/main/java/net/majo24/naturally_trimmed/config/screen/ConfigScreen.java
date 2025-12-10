@@ -5,8 +5,8 @@ import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.Util;
+import net.minecraft.IdentifierException;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -228,7 +228,7 @@ public class ConfigScreen {
             try {
                 trimData.getTrim(registryAccess);
                 valid += 1;
-            } catch (NoSuchElementException | ResourceLocationException ignored) {
+            } catch (NoSuchElementException | IdentifierException ignored) {
                 player.displayClientMessage(Component.literal(
                         "Found invalid trim: \"" + trimData + "\" with index " + index
                 ), false);

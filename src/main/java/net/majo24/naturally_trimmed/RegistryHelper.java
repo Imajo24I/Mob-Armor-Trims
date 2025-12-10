@@ -6,7 +6,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 //? if fabric {
 import net.minecraft.core.Registry;
 import java.util.Objects;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 //?} else if neoforge {
 /*import net.neoforged.neoforge.registries.DeferredHolder;
@@ -26,7 +26,7 @@ public class RegistryHelper {
     //? if fabric {
     public static final LootItemFunctionType TRIM_LOOT_TABLES_FUNCTION = Registry.register(
             BuiltInRegistries.LOOT_FUNCTION_TYPE,
-            Objects.requireNonNull(ResourceLocation.tryBuild(NaturallyTrimmed.MOD_ID, "trim_loot_tables_function")),
+            Objects.requireNonNull(Identifier.tryBuild(NaturallyTrimmed.MOD_ID, "trim_loot_tables_function")),
             //? if >1.20.1 {
             new LootItemFunctionType(TrimLootTablesFunction.CODEC));
             //?} else {

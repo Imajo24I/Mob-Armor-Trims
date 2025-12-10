@@ -3,13 +3,18 @@ package net.majo24.naturally_trimmed.mixin.spawn_mobs_trimmed;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+//? >=1.21.11 {
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+//?} else {
+/*import net.minecraft.world.entity.monster.AbstractSkeleton;
+*///?}
 
 @Mixin(AbstractSkeleton.class)
 public abstract class SpawnSkeletonsTrimmed extends LivingEntity {

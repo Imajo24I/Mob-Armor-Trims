@@ -49,13 +49,33 @@ stonecutter {
         put("forgeLike", loader.isForgeLike)
     }
 
+
     replacements {
         string {
             direction = eval(current.version, ">=1.21.2")
-            replace(
-                "import net.minecraft.world.item.armortrim.*;",
-                "import net.minecraft.world.item.equipment.trim.*;"
-            )
+            replace("item.armortrim.*;", "item.equipment.trim.*;")
+        }
+
+        string {
+            direction = eval(current.version, ">=1.21.11")
+            replace("ResourceLocation", "Identifier")
+        }
+
+        string {
+            direction = eval(current.version, ">=1.21.11")
+            replace(".location()", ".identifier()")
+        }
+
+        string {
+            direction = eval(current.version, ">=1.21.11")
+            replace("minecraft.Util;", "minecraft.util.Util;")
+        }
+
+        for (movedClass in listOf("AbstractVillager", "VillagerDataHolder", "VillagerTrades")) {
+            string {
+                direction = eval(current.version, ">=1.21.11")
+                replace("npc.${movedClass}", "npc.villager.${movedClass}")
+            }
         }
     }
 }

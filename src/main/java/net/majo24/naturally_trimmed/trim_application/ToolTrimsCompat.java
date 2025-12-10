@@ -1,12 +1,12 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class ToolTrimsCompat {
     public static final String TRIMMABLE_TOOLS_ID = "trimmable_tools";
     public static final String TOOL_TRIMS_ID = "tooltrims";
-    public static final TagKey<Item> TRIMMABLE_TOOLS_TAG = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild(TOOL_TRIMS_ID, TRIMMABLE_TOOLS_ID)));
+    public static final TagKey<Item> TRIMMABLE_TOOLS_TAG = TagKey.create(Registries.ITEM, Objects.requireNonNull(Identifier.tryBuild(TOOL_TRIMS_ID, TRIMMABLE_TOOLS_ID)));
 
     private ToolTrimsCompat() {
     }
@@ -52,11 +52,11 @@ public class ToolTrimsCompat {
         if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
             // Trimmable Tools only supports trimming tools with minecraft's patterns,
             // meaning all other patterns should be removed
-            patterns.removeIf(pattern -> !(pattern.key().location().getNamespace().equals("minecraft")));
+            patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals("minecraft")));
         } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
             // Tool Trims only supports trimming tools with its custom patterns,
             // meaning all other patterns should be removed
-            patterns.removeIf(pattern -> !(pattern.key().location().getNamespace().equals(TOOL_TRIMS_ID)));
+            patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals(TOOL_TRIMS_ID)));
         }
 
         return Util.getRandom(patterns, random);

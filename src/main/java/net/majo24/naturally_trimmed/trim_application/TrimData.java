@@ -1,11 +1,11 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.equipment.trim.*;
 
 //? if <1.21 {
@@ -24,18 +24,18 @@ public record TrimData(String material, String pattern) {
      * @return an {@link ArmorTrim} object
      * @throws NoSuchElementException when either the material or pattern is invalid
      */
-    public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException, ResourceLocationException {
+    public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException, IdentifierException {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);
 
         //? if >1.21 {
-        Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().get(ResourceLocation.parse(material)).orElseThrow();
-        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().get(ResourceLocation.parse(pattern)).orElseThrow();
+        Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().get(Identifier.parse(material)).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().get(Identifier.parse(pattern)).orElseThrow();
         //?} else if 1.21 {
-        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(ResourceLocation.parse(material)).orElseThrow();
-        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(ResourceLocation.parse(pattern)).orElseThrow();
+        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(Identifier.parse(material)).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(Identifier.parse(pattern)).orElseThrow();
         *///?} else {
-        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new ResourceLocation(material))).orElseThrow();
-        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new ResourceLocation(pattern))).orElseThrow();
+        /*Holder.Reference<TrimMaterial> trimMaterial = registries.getFirst().getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new Identifier(material))).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = registries.getSecond().getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new Identifier(pattern))).orElseThrow();
         *///?}
 
         return new ArmorTrim(trimMaterial, trimPattern);
