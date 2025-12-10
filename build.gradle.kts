@@ -1,6 +1,6 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    id("dev.architectury.loom") version "1.11.+"
+    id("dev.architectury.loom") version "1.13.+"
     id("me.modmuss50.mod-publish-plugin")
 }
 
