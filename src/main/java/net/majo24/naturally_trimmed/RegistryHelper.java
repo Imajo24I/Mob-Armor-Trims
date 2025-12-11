@@ -29,9 +29,8 @@ public class RegistryHelper {
             Objects.requireNonNull(Identifier.tryBuild(NaturallyTrimmed.MOD_ID, "trim_loot_tables_function")),
             //? if >1.20.1 {
             new LootItemFunctionType(TrimLootTablesFunction.CODEC));
-            //?} else {
-            /*new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));
-            *///?}
+            //?} else
+            /*new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));*/
 
     //?} else if neoforge {
     /*//? if >1.20.4 {

@@ -44,13 +44,17 @@ public class TrimApplier {
     public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim, RegistryAccess registryAccess) {
         //? >=1.20.5 {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-        //?} else {
-        /*ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);
-         *///?}
+        //?} else
+        /*ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);*/
     }
 
     /**
-     * Returns a random armor trim while ensuring at least one of the two trim parts is non-modded to prevent missing-texture textures
+     * Returns a random but filtered armor trim. The filter is to avoid missing-texture textures:
+     * <ul>
+     *   <li>Ensures no trim patterns only compatible with tools are used (these patterns are added by tooltrims)</li>
+     *   <li>Ensures at least one of the two trim parts is non-modded (a mod's trim parts are only rarely compatible with another mod's trim parts)</li>
+     *   <li>Ensures the trim pattern isn't added by the elytra trims mod, as elytra trims 4.5 adds patterns from some other mods to the registry even though these mods may not be loaded. This causes the missing-texture texture since elytra trims only adds an elytra-compatible version of the trim.</li>
+     * </ul>
      */
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random) {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
@@ -59,18 +63,15 @@ public class TrimApplier {
         Holder.Reference<TrimMaterial> trimMaterial;
         Holder.Reference<TrimPattern> trimPattern;
 
-        // Trim Patterns from tooltrims are only compatible with tools and not with armor pieces
+        // Ensure no tool trim patterns are used
         trimPatterns.removeIf(pattern -> pattern.key().identifier().getNamespace().equals("tooltrims"));
 
-        // Ensure at least one of the two trim parts is non-modded
-        // If both trim parts are modded, they will most times result in a missing-texture texture
-        do {
-            // Elytra Trims 4.5 adds modded patterns to the registry even though they may not be compatible with actual armor, only elytras
-            // This code ensures none of these patterns are being used
-            do {
-                trimPattern = Util.getRandom(trimPatterns, random);
-            } while (isModLoaded("elytratrims") && (!isModLoaded(trimPattern.key().identifier().getNamespace()) || trimPattern.key().identifier().getNamespace().equals("elytratrims")));
+        // Ensure no trim patterns added by elytra trims are used
+        trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
+        // Ensure at least one of the two trim parts is non-modded
+        do {
+            trimPattern = Util.getRandom(trimPatterns, random);
             trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
         } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft") && !trimPattern.key().identifier().getNamespace().equals("minecraft"));
 
@@ -98,7 +99,6 @@ public class TrimApplier {
         RandomSource random = entity.getRandom();
         RegistryAccess registryAccess = entity.level().registryAccess();
 
-
         TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
         ArmorTrim trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
                 ? getRandomTrim(registryAccess, random)
@@ -117,7 +117,6 @@ public class TrimApplier {
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                 && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
             ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), trim.material(), registryAccess, random);
-
         }
     }
 
@@ -136,9 +135,8 @@ public class TrimApplier {
     protected static List<Holder.Reference<TrimPattern>> getTrimPatterns(Registry<TrimPattern> patternRegistry) {
         //? if >=1.21.2 {
         return new ArrayList<>(patternRegistry.listElements().toList());
-        //?} else {
-        /*return new ArrayList<>(patternRegistry.holders().toList());
-         *///?}
+        //?} else
+        /*return new ArrayList<>(patternRegistry.holders().toList());*/
     }
 
     @Nullable
@@ -147,11 +145,10 @@ public class TrimApplier {
         Collections.shuffle(predefinedTrims);
 
         for (TrimData predefinedTrim : predefinedTrims) {
-            //TODO: Should this immediately return after failing instead of logging and trying a different trim?
             try {
                 return predefinedTrim.getTrim(registryAccess);
             } catch (NoSuchElementException | IdentifierException e) {
-                return null;
+                NaturallyTrimmed.LOGGER.error("Failed to load predefined trim '{}' - '{}'. Please ensure this is a valid trim.", predefinedTrim.material(), predefinedTrim.pattern(), e);
             }
         }
 

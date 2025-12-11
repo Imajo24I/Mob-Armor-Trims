@@ -30,7 +30,7 @@ public class ToolTrimsCompat {
 
     /**
      * Applies an armor trim to the given tool using tooltrims or trimmable_tools.
-     * If neither project is present, no trim will be applied.
+     * If neither is present, no trim will be applied.
      * The trim consists of the given material and a random, tools compatible armor trim
      */
     public static void applyTrimToTool(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
@@ -39,23 +39,23 @@ public class ToolTrimsCompat {
 
             ArmorTrim trim = new ArmorTrim(
                     material,
-                    getFilteredToolPattern(patternRegistry, random)
+                    getToolPattern(patternRegistry, random)
             );
 
             TrimApplier.applyTrim(itemStack, trim, registryAccess);
         }
     }
 
-    private static Holder.Reference<TrimPattern> getFilteredToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
+    private static Holder.Reference<TrimPattern> getToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
         List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(patternRegistry);
 
         if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
             // Trimmable Tools only supports trimming tools with minecraft's patterns,
-            // meaning all other patterns should be removed
+            // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals("minecraft")));
         } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
             // Tool Trims only supports trimming tools with its custom patterns,
-            // meaning all other patterns should be removed
+            // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals(TOOL_TRIMS_ID)));
         }
 

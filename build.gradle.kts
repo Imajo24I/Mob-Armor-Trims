@@ -49,7 +49,6 @@ stonecutter {
         put("forgeLike", loader.isForgeLike)
     }
 
-
     replacements {
         string {
             direction = eval(current.version, ">=1.21.2")
@@ -138,7 +137,7 @@ dependencies {
         // YACL
         modImplementation("dev.isxander:yet-another-config-lib:${deps.yacl}")
 
-        // Fabric API - Required by Mod Menu
+        // Fabric API
         modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${deps.fabricApi}")
 
         // Mod Menu

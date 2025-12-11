@@ -12,6 +12,8 @@ import java.util.List;
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
 
+    // -- Config Entries --
+
     @Entry(name = "enable_trim_mobs", comment = "Enables the equipment from mobs to be trimmed")
     public boolean enableTrimMobs = true;
 

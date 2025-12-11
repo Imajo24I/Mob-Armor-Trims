@@ -14,7 +14,6 @@ import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -22,7 +21,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class ConfigManager<T> {
     private T instance;
@@ -30,7 +28,6 @@ public class ConfigManager<T> {
     private final Path configPath;
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls().setPrettyPrinting()
             .create();
@@ -92,7 +89,7 @@ public class ConfigManager<T> {
                 continue;
             }
             fieldMap.remove(name);
-            ensureFieldIsPublic(field);
+            assertPublicField(field);
 
             if (field.isAnnotationPresent(Entry.class)) {
                 JsonElement element = this.gson.fromJson(gsonReader, JsonElement.class);
@@ -132,17 +129,16 @@ public class ConfigManager<T> {
         }
     }
 
-    private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalAccessException {
+    private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalStateException, IllegalAccessException {
         for (Field field : config.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Entry.class)) {
-                ensureFieldIsPublic(field);
+                assertPublicField(field);
 
                 Entry entry = field.getAnnotation(Entry.class);
-
                 jsonWriter.name(Objects.requireNonNull(entry).name());
                 jsonWriter.comment(Objects.requireNonNull(entry).comment());
-                JsonElement element;
 
+                JsonElement element;
                 try {
                     element = this.gson.toJsonTree(field.get(config), field.getType());
                 } catch (Exception e) {
@@ -153,7 +149,7 @@ public class ConfigManager<T> {
 
                 this.gson.toJson(element, gsonWriter);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
-                ensureFieldIsPublic(field);
+                assertPublicField(field);
                 SubConfig subConfig = Objects.requireNonNull(field.getAnnotation(SubConfig.class));
 
                 jsonWriter.name(subConfig.name());
@@ -166,7 +162,8 @@ public class ConfigManager<T> {
         }
     }
 
-    private void ensureFieldIsPublic(Field field) {
+    /** Asserts that the given field is public */
+    private void assertPublicField(Field field) throws IllegalStateException {
         if (!Modifier.isPublic(field.getModifiers())) {
             throw new IllegalStateException("Config field " + field.getName() + " located in " + field.getDeclaringClass().getName() + " is not public.");
         }
@@ -184,18 +181,6 @@ public class ConfigManager<T> {
             return noArgsConstructor.newInstance();
         } catch (Exception e) {
             throw new ClassFormatError("Failed to load default config for class " + noArgsConstructor.getDeclaringClass().getName() + "\n" + e);
-        }
-    }
-
-    public static class PatternTypeAdapter implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
-        @Override
-        public JsonElement serialize(Pattern src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.pattern());
-        }
-
-        @Override
-        public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return Pattern.compile(json.getAsString());
         }
     }
 }

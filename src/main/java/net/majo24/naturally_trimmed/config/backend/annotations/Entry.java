@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface Entry {
     String name();
-    String comment() default "";
+    String comment();
 }

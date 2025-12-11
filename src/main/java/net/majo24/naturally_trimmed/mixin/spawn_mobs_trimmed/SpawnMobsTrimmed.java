@@ -24,7 +24,6 @@ public abstract class SpawnMobsTrimmed extends LivingEntity {
     *///?} else {
     /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, net.minecraft.nbt.CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
     *///?}
-
         TrimApplier.trimEquipment(this);
     }
 }

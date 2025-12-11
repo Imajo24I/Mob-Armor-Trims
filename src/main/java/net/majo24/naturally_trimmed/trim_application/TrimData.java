@@ -22,7 +22,8 @@ public record TrimData(String material, String pattern) {
     /**
      * Constructs an {@link ArmorTrim} using the material and pattern.
      * @return an {@link ArmorTrim} object
-     * @throws NoSuchElementException when either the material or pattern is invalid
+     * @throws IdentifierException when either the material or pattern is invalid
+     * @throws NoSuchElementException same as above
      */
     public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException, IdentifierException {
         Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = TrimApplier.getTrimRegistries(registryAccess);

@@ -13,7 +13,7 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //?} else {
 /^import net.neoforged.neoforge.client.ConfigScreenHandler;
- ^///?}
+^///?}
 *///?} else {
 /*import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -24,10 +24,8 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
 *///?}
 
-//? if forgeLike {
-/*import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;
-*///?} else {
-//?}
+//? if forgeLike
+/*import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;*/
 
 import net.majo24.naturally_trimmed.config.Config;
 import org.slf4j.Logger;
@@ -70,32 +68,23 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     }
 
     public static boolean isModLoaded(String modId) {
-        boolean isModLoaded;
-
         //? if fabric {
-        isModLoaded = FabricLoader.getInstance().isModLoaded(modId);
-         //?} else {
-        /*isModLoaded = ModList.get().isLoaded(modId);
-        *///?}
-
-        return isModLoaded;
+        return FabricLoader.getInstance().isModLoaded(modId);
+         //?} else
+        /*return ModList.get().isLoaded(modId);*/
     }
 
     public static Path getConfigPath() {
-        Path configDirPath;
-
         //? if fabric {
-        configDirPath = FabricLoader.getInstance().getConfigDir();
-         //?} else {
-        /*configDirPath = FMLPaths.CONFIGDIR.get();
-        *///?}
+        Path configDirPath = FabricLoader.getInstance().getConfigDir();
+        //?} else
+        /*Path configDirPath = FMLPaths.CONFIGDIR.get();*/
 
         return configDirPath.resolve(MOD_ID + ".json5");
     }
 
     //? if forgeLike {
-    /*public static void registerConfigScreen(
-    ) {
+    /*public static void registerConfigScreen() {
         //? <1.20.5 {
         /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));

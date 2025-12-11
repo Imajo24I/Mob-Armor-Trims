@@ -22,9 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 /*? <1.21 {*/
 /*import net.minecraft.client.gui.screens.OptionsSubScreen;
- *//*?} else {*/
+ *///?} else
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
-/*?}*/
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -248,7 +247,7 @@ public class ConfigScreen {
         public static class Percentage implements ValueFormatter<Integer> {
             @Override
             public Component format(Integer value) {
-                return Component.literal(value.toString() + "%");
+                return Component.literal(value + "%");
             }
         }
 

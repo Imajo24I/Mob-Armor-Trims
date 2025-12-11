@@ -27,24 +27,16 @@ import java.util.List;
 
 
 public class TrimLootTablesFunction extends LootItemConditionalFunction {
-    protected TrimLootTablesFunction(
-            //? if >1.20.1 {
-            List<LootItemCondition>
-                    //?} else {
-                    /*LootItemCondition[]
-                     *///?}
-                    predicates) {
+    protected TrimLootTablesFunction(/*? >1.20.1 {*/List<LootItemCondition>/*?} else {*//*LootItemCondition[]*//*?}*/ predicates) {
         super(predicates);
     }
 
     //? if >1.20.1 {
     //? if 1.20.4 {
     /*public static final Codec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.create(
-    *///?} else {
+     *///?} else
     public static final MapCodec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.mapCodec(
-    //?}
-            instance -> commonFields(instance)
-                    .apply(instance, TrimLootTablesFunction::new)
+            instance -> commonFields(instance).apply(instance, TrimLootTablesFunction::new)
     );
     //?}
 
@@ -52,23 +44,23 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     public @NotNull LootItemFunctionType getType() {
         //? if fabric {
         return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION;
-        //?} else {
-        /*return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();
-         *///?}
+        //?} else
+        /*return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();*/
     }
 
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
+        // === Check if a trim should be applied ===
         if (!Config.CONFIG_MANAGER.instance().enableTrimLootTables) return itemStack;
-        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOLS_TAG)) return itemStack;
+        if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOLS_TAG))
+            return itemStack;
 
         RandomSource random = lootContext.getRandom();
-        RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
-
         if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance < random.nextInt(100)) return itemStack;
 
+        // === Apply a trim ===
+        RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
         ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
-        if (trim == null) return itemStack;
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(itemStack, trim, registryAccess);

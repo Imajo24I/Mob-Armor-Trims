@@ -34,7 +34,6 @@ public class Events {
         /*NeoForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);
         *///?} else
         /*MinecraftForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);*/
-        ///?}
     }
 
     //? if fabric {
@@ -43,9 +42,8 @@ public class Events {
         LootTableEvents.MODIFY.register((key, builder, source, registries) -> builder.apply(TrimLootTablesFunction.builder().build()));
         //?} else if 1.20.6 {
         /*LootTableEvents.MODIFY.register((key, builder, source) -> builder.apply(TrimLootTablesFunction.builder().build()));
-        *///?} else {
-        /*LootTableEvents.MODIFY.register((resourceManager, lootDataManager, resourceLocation, builder, registryAccess) -> builder.apply(TrimLootTablesFunction.builder().build()));
-        *///?}
+        *///?} else
+        /*LootTableEvents.MODIFY.register((resourceManager, lootDataManager, resourceLocation, builder, registryAccess) -> builder.apply(TrimLootTablesFunction.builder().build()));*/
     }
     //?} else if neoforge {
     /*public static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
