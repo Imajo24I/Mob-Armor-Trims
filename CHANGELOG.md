@@ -1,1 +1,2 @@
-- Fix missing-texture texture appearing when used together with elytratrims 4.5
+- Add support for fabric 1.21.11 (no neoforge yet due to yacl not yet supporting neoforge 1.21.11)
+- Lower the trim_chance config default in trim_loot_tables and trim_trades
