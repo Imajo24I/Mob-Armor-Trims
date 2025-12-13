@@ -5,9 +5,8 @@ import net.majo24.naturally_trimmed.trim_application.TrimLootTablesFunction;
 //? if fabric {
 //? if >1.20.6 {
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-//?} else {
-/*import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-*///?}
+//?} else
+/*import net.fabricmc.fabric.api.loot.v2.LootTableEvents;*/
 //?} else {
 /*import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;

@@ -35,18 +35,16 @@ public class RegistryHelper {
     //?} else if neoforge {
     /*//? if >1.20.4 {
     public static final DeferredRegister<LootItemFunctionType<?>> FUNCTION_REGISTER =
-    //?} else {
-    /^public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER =
-     ^///?}
+    //?} else
+    /^public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER =^/
             DeferredRegister.create(
                     BuiltInRegistries.LOOT_FUNCTION_TYPE,
                     NaturallyTrimmed.MOD_ID
             );
     //? if >1.20.4 {
     public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION =
-    //?} else {
-    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION =
-     ^///?}
+    //?} else
+    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION =^/
             FUNCTION_REGISTER.register(
                     "trim_loot_tables_function",
                     () -> new LootItemFunctionType(TrimLootTablesFunction.CODEC)
@@ -65,8 +63,9 @@ public class RegistryHelper {
 
 
     /**
-     * Call this method to make java initialize this class.
-     * Used to register to Registries before they are frozen
+     * Method used to have java initialize this class.
+     * This needs to be done when the mod is initialized,
+     * since the Registries will be frozen later on and can't be registered to anymore
      */
     public static void initClass() {
     }
