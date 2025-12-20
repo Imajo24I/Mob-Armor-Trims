@@ -51,28 +51,28 @@ stonecutter {
 
     replacements {
         string {
-            direction = eval(current.version, ">=1.21.2")
+            direction = sc.current.parsed >= "1.21.2"
             replace("item.armortrim.*;", "item.equipment.trim.*;")
         }
 
         string {
-            direction = eval(current.version, ">=1.21.11")
+            direction = sc.current.parsed >= "1.21.11"
             replace("ResourceLocation", "Identifier")
         }
 
         string {
-            direction = eval(current.version, ">=1.21.11")
+            direction = sc.current.parsed >= "1.21.11"
             replace(".location()", ".identifier()")
         }
 
         string {
-            direction = eval(current.version, ">=1.21.11")
+            direction = sc.current.parsed >= "1.21.11"
             replace("minecraft.Util;", "minecraft.util.Util;")
         }
 
         for (movedClass in listOf("AbstractVillager", "VillagerDataHolder", "VillagerTrades")) {
             string {
-                direction = eval(current.version, ">=1.21.11")
+                direction = sc.current.parsed >= "1.21.11"
                 replace("npc.${movedClass}", "npc.villager.${movedClass}")
             }
         }
@@ -179,11 +179,7 @@ loom {
 }
 
 java {
-    val java = if (stonecutter.eval(
-            stonecutter.current.version,
-            ">=1.20.6"
-        )
-    ) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val java = if (sc.current.parsed >= "1.20.6") JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = java
     targetCompatibility = java
     withSourcesJar()
