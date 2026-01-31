@@ -9,7 +9,6 @@ import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 import net.minecraft.IdentifierException;
 import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
@@ -17,7 +16,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.datafixers.util.Pair;
 
 //? >=1.21.5
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -45,34 +43,35 @@ public class TrimApplier {
         //? >=1.20.5 {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
         //?} else
-        /*ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);*/
+        //ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);
     }
 
     /**
      * Returns a random but filtered armor trim. The filter is to avoid missing-texture textures:
      * <ul>
-     *   <li>Ensures no trim patterns only compatible with tools are used (these patterns are added by tooltrims)</li>
      *   <li>Ensures at least one of the two trim parts is non-modded (a mod's trim parts are only rarely compatible with another mod's trim parts)</li>
      *   <li>Ensures the trim pattern isn't added by the elytra trims mod, as elytra trims 4.5 adds patterns from some other mods to the registry even though these mods may not be loaded. This causes the missing-texture texture since elytra trims only adds an elytra-compatible version of the trim.</li>
+     *   <li>Ensures the trim material and pattern aren't blacklisted by the mods blacklists (default is blacklisting tooltrims patterns, as they're only compatible with tools)</li>
      * </ul>
      */
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random) {
-        Pair<Registry<TrimMaterial>, Registry<TrimPattern>> registries = getTrimRegistries(registryAccess);
-        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registries.getSecond());
+        List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
+        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
         Holder.Reference<TrimMaterial> trimMaterial;
         Holder.Reference<TrimPattern> trimPattern;
 
-        // Ensure no tool trim patterns are used
-        trimPatterns.removeIf(pattern -> pattern.key().identifier().getNamespace().equals("tooltrims"));
+        // Blacklists
+        trimMaterials.removeIf(material -> CONFIG_MANAGER.instance().materialBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(material.key().identifier().toString()).find()));
+        trimPatterns.removeIf(pattern -> CONFIG_MANAGER.instance().patternBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(pattern.key().identifier().toString()).find()));
 
         // Ensure no trim patterns added by elytra trims are used
         trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
         // Ensure at least one of the two trim parts is non-modded
         do {
+            trimMaterial = Util.getRandom(trimMaterials, random);
             trimPattern = Util.getRandom(trimPatterns, random);
-            trimMaterial = registries.getFirst().getRandom(random).orElseThrow();
         } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft") && !trimPattern.key().identifier().getNamespace().equals("minecraft"));
 
         return new ArmorTrim(trimMaterial, trimPattern);
@@ -120,23 +119,18 @@ public class TrimApplier {
         }
     }
 
-    protected static Pair<Registry<TrimMaterial>, Registry<TrimPattern>> getTrimRegistries(RegistryAccess registryAccess) {
-        //? >=1.21.2 {
-        Registry<TrimMaterial> materialRegistry = registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL);
-        Registry<TrimPattern> patternRegistry = registryAccess.lookupOrThrow(Registries.TRIM_PATTERN);
-        //?} else {
-        /*Registry<TrimMaterial> materialRegistry = registryAccess.registryOrThrow(Registries.TRIM_MATERIAL);
-        Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(Registries.TRIM_PATTERN);
-        *///?}
-
-        return new Pair<>(materialRegistry, patternRegistry);
+    public static List<Holder.Reference<TrimPattern>> getTrimPatterns(RegistryAccess registryAccess) {
+        //? if >=1.21.2 {
+        return new ArrayList<>(registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().toList());
+        //?} else
+        //return new ArrayList<>(registryAccess.registryOrThrow(Registries.TRIM_PATTERN).holders().toList());
     }
 
-    protected static List<Holder.Reference<TrimPattern>> getTrimPatterns(Registry<TrimPattern> patternRegistry) {
+    public static List<Holder.Reference<TrimMaterial>> getTrimMaterials(RegistryAccess registryAccess) {
         //? if >=1.21.2 {
-        return new ArrayList<>(patternRegistry.listElements().toList());
+        return new ArrayList<>(registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL).listElements().toList());
         //?} else
-        /*return new ArrayList<>(patternRegistry.holders().toList());*/
+        //return new ArrayList<>(registryAccess.registryOrThrow(Registries.TRIM_MATERIAL).holders().toList());
     }
 
     @Nullable

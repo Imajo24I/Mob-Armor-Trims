@@ -3,6 +3,7 @@ package net.majo24.naturally_trimmed.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.config.Config;
+import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.IdentifierException;
@@ -25,8 +26,12 @@ import org.jetbrains.annotations.NotNull;
  *///?} else
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 import static net.minecraft.network.chat.Component.translatable;
@@ -135,6 +140,28 @@ public class ConfigScreen {
                                         .step(1))
                                 .build())
                         .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.materialBlacklist"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.materialBlacklist.description")))
+                        .binding(CONFIG_MANAGER.defaults().materialBlacklist.stream().map(Pattern::pattern).toList(),
+                                () -> CONFIG_MANAGER.instance().materialBlacklist.stream().map(Pattern::pattern).toList(),
+                                materialBlacklist -> CONFIG_MANAGER.instance().materialBlacklist = materialBlacklist.stream().map(Pattern::compile).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .collapsed(true)
+                        .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.patternBlacklist"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.patternBlacklist.description")))
+                        .binding(CONFIG_MANAGER.defaults().patternBlacklist.stream().map(Pattern::pattern).toList(),
+                                () -> CONFIG_MANAGER.instance().patternBlacklist.stream().map(Pattern::pattern).toList(),
+                                patternBlacklist -> CONFIG_MANAGER.instance().patternBlacklist = patternBlacklist.stream().map(Pattern::compile).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .collapsed(true)
+                        .build())
                 .build();
     }
 
@@ -201,12 +228,16 @@ public class ConfigScreen {
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
-                        .text(isInWorld
-                                ? translatable("naturally_trimmed.config.utils.run")
-                                : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
+                        .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
                         .action((screen, option) -> validatePredefinedTrims())
                         .build())
 
+                .option(ButtonOption.createBuilder()
+                        .name(translatable("naturally_trimmed.config.utils.validateBlacklists"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateBlacklists.description")))
+                        .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
+                        .action((screen, option) -> validateBlacklists())
+                        .build())
                 .build();
     }
 
@@ -240,6 +271,60 @@ public class ConfigScreen {
         player.displayClientMessage(Component.literal("Done validating predefined trims"), false);
     }
 
+    public static void validateBlacklists() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
+
+        if (level == null || player == null) return;
+        RegistryAccess registryAccess = level.registryAccess();
+
+        player.displayClientMessage(Component.literal("\nValidating material blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD), false);
+        validateBlacklist(TrimApplier.getTrimMaterials(registryAccess).stream().map(material -> material.key().identifier().toString()).toList(), CONFIG_MANAGER.instance().materialBlacklist, player);
+        player.displayClientMessage(Component.literal("\nDone validating material blacklist"), false);
+
+        player.displayClientMessage(Component.literal("\nValidating pattern blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD), false);
+        validateBlacklist(TrimApplier.getTrimPatterns(registryAccess).stream().map(pattern -> pattern.key().identifier().toString()).toList(), CONFIG_MANAGER.instance().patternBlacklist, player);
+        player.displayClientMessage(Component.literal("\nDone validating pattern blacklist"), false);
+    }
+
+    private static void validateBlacklist(List<String> trims, List<Pattern> patterns, LocalPlayer player) {
+        // Trim Identifier, Is Trim Blacklisted
+        Map<String, Boolean> trimsStatus = trims.stream().collect(Collectors.toMap(pattern -> pattern, pattern -> false));
+
+        // Regex Pattern, Does the Pattern blacklist a trim
+        Map<Pattern, Boolean> patternsStatus = patterns.stream().collect(Collectors.toMap(pattern -> pattern, pattern -> false));
+
+        player.displayClientMessage(Component.literal("Checking for blacklisted trim parts...").withStyle(ChatFormatting.UNDERLINE), false);
+
+        for (Map.Entry<Pattern, Boolean> pattern : patternsStatus.entrySet()) {
+            for (Map.Entry<String, Boolean> trim : trimsStatus.entrySet()) {
+                if (pattern.getKey().matcher(trim.getKey()).find()) {
+                    player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" blacklists trim part \"" + trim.getKey() + "\""), false);
+                    pattern.setValue(true);
+                    trim.setValue(true);
+                }
+            }
+        }
+
+        player.displayClientMessage(Component.literal("\nChecking for not blacklisted trim parts...\n").withStyle(ChatFormatting.UNDERLINE), false);
+
+        for (Map.Entry<String, Boolean> trim : trimsStatus.entrySet()) {
+            if (!trim.getValue()) {
+                player.displayClientMessage(Component.literal("Trim part \"" + trim.getKey() + "\" isn't blacklisted by any regex pattern"), false);
+            }
+        }
+
+        player.displayClientMessage(Component.literal("\nChecking for unnecessary regex patterns...\n").withStyle(ChatFormatting.UNDERLINE), false);
+
+
+        for (Map.Entry<Pattern, Boolean> pattern : patternsStatus.entrySet()) {
+            if (!pattern.getValue()) {
+                player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" does not blacklist any registered trim patterns."), false);
+            }
+        }
+    }
+
+    
     public static class Formatters {
         private Formatters() {
         }
@@ -306,7 +391,7 @@ public class ConfigScreen {
         @Override
         public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             //? <=1.20.1
-            /*renderDirtBackground(graphics);*/
+            //renderDirtBackground(graphics);
             super.render(graphics, mouseX, mouseY, delta);
             graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
         }

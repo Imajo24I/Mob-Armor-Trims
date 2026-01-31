@@ -8,6 +8,7 @@ import net.majo24.naturally_trimmed.trim_application.TrimData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
@@ -22,6 +23,34 @@ public class Config {
 
     @Entry(name = "enable_trim_trades", comment = "Enables the equipment from villager trades to be trimmed")
     public boolean enableTrimTrades = true;
+
+    @Entry(name = "material_blacklist", comment = """
+            Blacklist for trim materials.
+            
+            The intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in missing-texture trims.
+            For example, combining newer elytra trims versions with an older version of this mod, results in frequent missing-texture trims.
+            This and the other blacklist allows blacklisting all the problematic materials/patterns in order to get rid of the missing-texture trims.
+            However, please also report the edge-cases, causing the missing-texture trims, to the mods issue tracker,
+            so that the edge-cases can potentially be fixed directly inside this mod and can be fixed it for once and for all/for all users.
+            
+            This uses regex, allowing for more advanced configuration.
+            To ease the configuration of the blacklist, theres a util tab inside the config screen, which contains a button to validate the blacklist.
+            
+            Example configuration, blacklisting the amethyst and all of biomes_o_plenty's materials:
+            material_blacklist: ["minecraft:amethyst", "biomes_o_plenty:"],
+            """)
+    public List<Pattern> materialBlacklist = new ArrayList<>();
+
+    @Entry(name = "pattern_blacklist", comment = """
+            Blacklist for trim patterns.
+            
+            Read material_blacklist's comment for more context and information.
+            
+            Example configuration, blacklisting the wild trim pattern and all of more_armor_trims's patterns:
+            patterns_blacklist: ["minecraft:wild", "more_armor_trims:"],
+            """)
+    public List<Pattern> patternBlacklist = List.of(Pattern.compile("tooltrims"));
+
 
     @SubConfig(name = "trim_mobs", comment = "Settings for trimming a mob's equipment")
     public TrimMobsSubConfig trimMobs = new TrimMobsSubConfig();

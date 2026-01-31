@@ -30,7 +30,7 @@ public class RegistryHelper {
             //? if >1.20.1 {
             new LootItemFunctionType(TrimLootTablesFunction.CODEC));
             //?} else
-            /*new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));*/
+            //new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));
 
     //?} else if neoforge {
     /*//? if >1.20.4 {

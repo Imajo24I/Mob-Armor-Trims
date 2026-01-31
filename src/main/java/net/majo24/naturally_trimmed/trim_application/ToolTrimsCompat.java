@@ -3,7 +3,6 @@ package net.majo24.naturally_trimmed.trim_application;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -35,19 +34,13 @@ public class ToolTrimsCompat {
      */
     public static void applyTrimToTool(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
         if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOLS_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
-            Registry<TrimPattern> patternRegistry = TrimApplier.getTrimRegistries(registryAccess).getSecond();
-
-            ArmorTrim trim = new ArmorTrim(
-                    material,
-                    getToolPattern(patternRegistry, random)
-            );
-
+            ArmorTrim trim = new ArmorTrim(material, getToolPattern(registryAccess, random));
             TrimApplier.applyTrim(itemStack, trim, registryAccess);
         }
     }
 
-    private static Holder.Reference<TrimPattern> getToolPattern(Registry<TrimPattern> patternRegistry, RandomSource random) {
-        List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(patternRegistry);
+    private static Holder.Reference<TrimPattern> getToolPattern(RegistryAccess registryAccess, RandomSource random) {
+        List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(registryAccess);
 
         if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
             // Trimmable Tools only supports trimming tools with minecraft's patterns,

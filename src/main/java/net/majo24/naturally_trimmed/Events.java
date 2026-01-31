@@ -6,7 +6,7 @@ import net.majo24.naturally_trimmed.trim_application.TrimLootTablesFunction;
 //? if >1.20.6 {
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 //?} else
-/*import net.fabricmc.fabric.api.loot.v2.LootTableEvents;*/
+//import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 //?} else {
 /*import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
@@ -42,7 +42,7 @@ public class Events {
         //?} else if 1.20.6 {
         /*LootTableEvents.MODIFY.register((key, builder, source) -> builder.apply(TrimLootTablesFunction.builder().build()));
         *///?} else
-        /*LootTableEvents.MODIFY.register((resourceManager, lootDataManager, resourceLocation, builder, registryAccess) -> builder.apply(TrimLootTablesFunction.builder().build()));*/
+        //LootTableEvents.MODIFY.register((resourceManager, lootDataManager, resourceLocation, builder, registryAccess) -> builder.apply(TrimLootTablesFunction.builder().build()));
     }
     //?} else if neoforge {
     /*public static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
