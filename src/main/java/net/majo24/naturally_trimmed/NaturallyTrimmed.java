@@ -25,7 +25,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 *///?}
 
 //? if forgeLike
-/*import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;*/
+//import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;
 
 import net.majo24.naturally_trimmed.config.Config;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 
 //? if forgeLike
-/*@Mod("naturally_trimmed")*/
+//@Mod("naturally_trimmed")
 public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static final String MOD_ID = "naturally_trimmed";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -71,14 +71,14 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
         //? if fabric {
         return FabricLoader.getInstance().isModLoaded(modId);
          //?} else
-        /*return ModList.get().isLoaded(modId);*/
+        //return ModList.get().isLoaded(modId);
     }
 
     public static Path getConfigPath() {
         //? if fabric {
         Path configDirPath = FabricLoader.getInstance().getConfigDir();
         //?} else
-        /*Path configDirPath = FMLPaths.CONFIGDIR.get();*/
+        //Path configDirPath = FMLPaths.CONFIGDIR.get();
 
         return configDirPath.resolve(MOD_ID + ".json5");
     }

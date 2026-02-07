@@ -54,6 +54,7 @@ public class TrimApplier {
      *   <li>Ensures the trim material and pattern aren't blacklisted by the mods blacklists (default is blacklisting tooltrims patterns, as they're only compatible with tools)</li>
      * </ul>
      */
+    @Nullable
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random) {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
@@ -67,6 +68,8 @@ public class TrimApplier {
 
         // Ensure no trim patterns added by elytra trims are used
         trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
+
+        if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) return null;
 
         // Ensure at least one of the two trim parts is non-modded
         do {

@@ -32,7 +32,7 @@ public class Events {
         //?} else if neoforge {
         /*NeoForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);
         *///?} else
-        /*MinecraftForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);*/
+        //MinecraftForge.EVENT_BUS.addListener(Events::addTrimFunctionToLootTables);
     }
 
     //? if fabric {

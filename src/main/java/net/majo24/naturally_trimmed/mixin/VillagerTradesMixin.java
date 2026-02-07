@@ -46,6 +46,7 @@ public abstract class VillagerTradesMixin extends Mob {
         // === Apply a trim to the trade ===
         RegistryAccess registryAccess = this.level().registryAccess();
         ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random);
+        if (trim == null) return offer;
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(trade, trim, registryAccess);

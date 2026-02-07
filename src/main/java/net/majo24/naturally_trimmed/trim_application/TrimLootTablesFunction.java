@@ -45,7 +45,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         //? if fabric {
         return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION;
         //?} else
-        /*return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();*/
+        //return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();
     }
 
     @Override
@@ -61,6 +61,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         // === Apply a trim ===
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
         ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
+        if (trim == null) return itemStack;
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(itemStack, trim, registryAccess);
