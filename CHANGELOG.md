@@ -1,2 +1,4 @@
-- Add support for fabric 1.21.11 (no neoforge yet due to yacl not yet supporting neoforge 1.21.11)
-- Lower the trim_chance config default in trim_loot_tables and trim_trades
+- Add material and pattern blacklists
+  - Intended use is to work around edge-cases caused by other mods, that result in missing-texture trims
+  - By default, patterns by the tools trim mod are blacklisted
+  - The Respective config settings and validation buttons have been added to the config screen
