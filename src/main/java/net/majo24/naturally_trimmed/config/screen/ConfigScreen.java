@@ -2,6 +2,7 @@ package net.majo24.naturally_trimmed.config.screen;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
+import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
@@ -230,6 +231,13 @@ public class ConfigScreen {
         return ConfigCategory.createBuilder()
                 .name(translatable("naturally_trimmed.config.utils"))
                 .tooltip(translatable("naturally_trimmed.config.utils.tooltip"))
+
+                .option(ButtonOption.createBuilder()
+                        .name((translatable("naturally_trimmed.config.utils.openFile")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.openFile")))
+                        .text(translatable("naturally_trimmed.config.utils.run"))
+                        .action((screen, option) -> Util.getPlatform().openPath(NaturallyTrimmed.getConfigPath()))
+                        .build())
 
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.reloadConfig"))
