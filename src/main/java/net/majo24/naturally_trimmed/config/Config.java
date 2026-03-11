@@ -24,12 +24,22 @@ public class Config {
     @Entry(name = "enable_trim_trades", comment = "Enables the equipment from villager trades to be trimmed")
     public boolean enableTrimTrades = true;
 
+    @Entry(name = "vanilla_only", comment = """
+            Use vanilla-only trim materials and patterns.
+            
+            The intended use for this is to easily work around edge-cases caused by other mods' trims, that result in missing-texture trims.
+            For more advanced workarounds, without having to blacklist all non-vanilla trims, see material_blacklist and pattern_blacklist.
+            """)
+    public boolean vanillaOnly = false;
+
     @Entry(name = "material_blacklist", comment = """
             Blacklist for trim materials.
             
             The intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in missing-texture trims.
+            For an easier workaround, see vanilla_only.
+            
             For example, combining newer elytra trims versions with an older version of this mod, results in frequent missing-texture trims.
-            This and the other blacklist allows blacklisting all the problematic materials/patterns in order to get rid of the missing-texture trims.
+            This and the other blacklist allows blacklisting all the individual problematic materials/patterns in order to get rid of the missing-texture trims.
             However, please also report the edge-cases, causing the missing-texture trims, to the mods issue tracker,
             so that the edge-cases can potentially be fixed directly inside this mod and can be fixed it for once and for all/for all users.
             

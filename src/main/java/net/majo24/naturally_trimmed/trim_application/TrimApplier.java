@@ -66,6 +66,14 @@ public class TrimApplier {
         trimMaterials.removeIf(material -> CONFIG_MANAGER.instance().materialBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(material.key().identifier().toString()).find()));
         trimPatterns.removeIf(pattern -> CONFIG_MANAGER.instance().patternBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(pattern.key().identifier().toString()).find()));
 
+        if (CONFIG_MANAGER.instance().vanillaOnly) {
+            trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+            trimPatterns.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+
+            // Return early, as the rest of the filtering is already covered by removing non-vanilla trims
+            return new ArmorTrim(Util.getRandom(trimMaterials, random), Util.getRandom(trimPatterns, random));
+        }
+
         // Ensure no trim patterns added by elytra trims are used
         trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 

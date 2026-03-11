@@ -141,26 +141,42 @@ public class ConfigScreen {
                                 .build())
                         .build())
 
+                // This is intentionally in a group,
+                // as the option would be put at the top of the other groups, if it wasn't a group
+                .group(OptionGroup.createBuilder()
+                    .name(translatable("naturally_trimmed.config.vanillaOnly"))
+                    .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
+                        .collapsed(true)
+                    .option(Option.<Boolean>createBuilder()
+                        .name(translatable("naturally_trimmed.config.vanillaOnly"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
+                        .binding(CONFIG_MANAGER.defaults().vanillaOnly,
+                                () -> CONFIG_MANAGER.instance().vanillaOnly,
+                                vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
+                        .controller(BooleanControllerBuilder::create)
+                        .build())
+                    .build())
+
                 .group(ListOption.<String>createBuilder()
                         .name(translatable("naturally_trimmed.config.materialBlacklist"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.materialBlacklist.description")))
+                        .collapsed(true)
                         .binding(CONFIG_MANAGER.defaults().materialBlacklist.stream().map(Pattern::pattern).toList(),
                                 () -> CONFIG_MANAGER.instance().materialBlacklist.stream().map(Pattern::pattern).toList(),
                                 materialBlacklist -> CONFIG_MANAGER.instance().materialBlacklist = materialBlacklist.stream().map(Pattern::compile).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
-                        .collapsed(true)
                         .build())
 
                 .group(ListOption.<String>createBuilder()
                         .name(translatable("naturally_trimmed.config.patternBlacklist"))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.patternBlacklist.description")))
+                        .collapsed(true)
                         .binding(CONFIG_MANAGER.defaults().patternBlacklist.stream().map(Pattern::pattern).toList(),
                                 () -> CONFIG_MANAGER.instance().patternBlacklist.stream().map(Pattern::pattern).toList(),
                                 patternBlacklist -> CONFIG_MANAGER.instance().patternBlacklist = patternBlacklist.stream().map(Pattern::compile).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
-                        .collapsed(true)
                         .build())
                 .build();
     }
@@ -285,6 +301,10 @@ public class ConfigScreen {
         player.displayClientMessage(Component.literal("\nValidating pattern blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD), false);
         validateBlacklist(TrimApplier.getTrimPatterns(registryAccess).stream().map(pattern -> pattern.key().identifier().toString()).toList(), CONFIG_MANAGER.instance().patternBlacklist, player);
         player.displayClientMessage(Component.literal("\nDone validating pattern blacklist"), false);
+
+        if (CONFIG_MANAGER.instance().vanillaOnly) {
+            player.displayClientMessage(Component.literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"), false);
+        }
     }
 
     private static void validateBlacklist(List<String> trims, List<Pattern> patterns, LocalPlayer player) {
