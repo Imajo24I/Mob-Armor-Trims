@@ -71,6 +71,7 @@ public class TrimApplier {
             trimPatterns.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
 
             // Return early, as the rest of the filtering is already covered by removing non-vanilla trims
+            if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) return null;
             return new ArmorTrim(Util.getRandom(trimMaterials, random), Util.getRandom(trimPatterns, random));
         }
 
