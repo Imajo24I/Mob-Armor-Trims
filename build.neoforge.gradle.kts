@@ -71,11 +71,10 @@ stonecutter {
 
 neoForge {
     version = deps.neoforge as String
+    validateAccessTransformers = true
 
     //TODO: parchment
 
-
-    accessTransformers { file("src/main/resources/META-INF/accesstransformer.cfg") }
 
     runs {
         register("client") {
@@ -129,9 +128,9 @@ dependencies {
 
     // Quilt Parser
     implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
-    //include("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
+    jarJar("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
     implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
-    //include("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
+    jarJar("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
 }
 
 java {
@@ -169,9 +168,11 @@ tasks.processResources {
     }
 }
 
-/*tasks.remapJar {
-    atAccessWideners.add("naturally_trimmed.accesswidener")
-}*/
+tasks {
+    named("createMinecraftArtifacts") {
+        dependsOn("stonecutterGenerate")
+    }
+}
 
 /*publishMods {
     displayName = "${mod.name} ${mod.version} for Neoforge ${mc.version}"
