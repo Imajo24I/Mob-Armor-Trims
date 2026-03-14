@@ -1,6 +1,7 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    id("net.neoforged.moddev")
+    id("net.minecraftforge.gradle")
+    id("net.minecraftforge.jarjar") version "0.2.3"
     id("me.modmuss50.mod-publish-plugin")
 }
 
@@ -16,7 +17,7 @@ class ModData {
 
 class ModDependencies {
     val yacl = property("deps.yacl_version")
-    val neoforge = property("deps.neoforge")
+    val forge = property("deps.forge")
 }
 
 class McData {
@@ -29,13 +30,13 @@ val mc = McData()
 val mod = ModData()
 val deps = ModDependencies()
 
-version = "${mod.version}+${mc.version}-neoforge"
+version = "${mod.version}+${mc.version}-forge"
 group = mod.group
 base.archivesName = mod.id
 
 stonecutter {
     constants {
-        match("neoforge", "fabric", "neoforge", "forge")
+        match("forge", "fabric", "neoforge", "forge")
         put("forgeLike", true)
     }
 
@@ -69,34 +70,27 @@ stonecutter {
     }
 }
 
-neoForge {
-    version = deps.neoforge as String
-    validateAccessTransformers = true
+minecraft {
+    version = deps.forge as String
+    mappings("official", "1.20.1")
 
-    // Parchment
-    if (hasProperty("deps.parchment_version")) parchment {
-        mappingsVersion = property("deps.parchment_version") as String
-        minecraftVersion = mc.version as String
-    }
 
 
     runs {
         register("client") {
-            gameDirectory = file("../../run/")
-            client()
+            workingDir = file("../../run/")
+            sourceSets.add(sourceSets["main"])
         }
 
         register("server") {
-            gameDirectory = file("../../run/")
-            server()
+            workingDir = file("../../run/")
+            sourceSets.add(sourceSets["main"])
         }
     }
+}
 
-    mods {
-        register(mod.id) {
-            sourceSet(sourceSets["main"])
-        }
-    }
+jarJar.register {
+    archiveClassifier = null
 }
 
 repositories {
@@ -119,6 +113,8 @@ repositories {
     maven("https://maven.quiltmc.org/repository/release/")
 }
 
+
+
 dependencies {
     // YACL
     implementation("dev.isxander:yet-another-config-lib:${deps.yacl}") {
@@ -127,9 +123,9 @@ dependencies {
 
     // Quilt Parser
     implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
-    jarJar("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
+    "jarJar"("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
     implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
-    jarJar("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
+    "jarJar"("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
 }
 
 java {
@@ -151,30 +147,23 @@ tasks.processResources {
         put("yacl_version", deps.yacl)
 
         put("forgeConstraint", findProperty("modstoml.forge_constraint"))
-        if (mc.version == "1.20.4") {
-            put("forge_id", "neoforge")
-        }
+        put("forge_id", "forge")
     }
 
     props.forEach(inputs::property)
 
-    if (mc.version == "1.20.4") {
-        filesMatching("META-INF/mods.toml") { expand(props) }
-        exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
-    } else {
-        filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
-        exclude("fabric.mod.json", "META-INF/mods.toml")
-    }
+    filesMatching("META-INF/mods.toml") { expand(props) }
+    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
 }
 
-tasks {
+/*tasks {
     named("createMinecraftArtifacts") {
         dependsOn("stonecutterGenerate")
     }
-}
+}*/
 
 publishMods {
-    displayName = "${mod.name} ${mod.version} for Neoforge ${mc.version}"
+    displayName = "${mod.name} ${mod.version} for Forge ${mc.version}"
     file = tasks.jar.map { it.archiveFile.get() }
     version = mod.version.toString()
     changelog.set(
@@ -184,7 +173,7 @@ publishMods {
             ?: "No changelog provided."
     )
     type = STABLE
-    modLoaders.add("neoforge")
+    modLoaders.add("forge")
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
