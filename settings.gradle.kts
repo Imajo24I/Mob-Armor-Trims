@@ -36,5 +36,4 @@ stonecutter {
     }
 }
 
-//TODO: remove or readd
-// rootProject.name = "Naturally Trimmed"
+rootProject.name = "Naturally Trimmed"
