@@ -73,7 +73,11 @@ neoForge {
     version = deps.neoforge as String
     validateAccessTransformers = true
 
-    //TODO: parchment
+    // Parchment
+    if (hasProperty("deps.parchment_version")) parchment {
+        mappingsVersion = property("deps.parchment_version") as String
+        minecraftVersion = mc.version as String
+    }
 
 
     runs {
@@ -94,11 +98,6 @@ neoForge {
         }
     }
 }
-
-//TODO: AW
-/*loom {
-    accessWidenerPath = rootProject.file("src/main/resources/naturally_trimmed.accesswidener")
-}*/
 
 repositories {
     // Parchment mappings
@@ -174,9 +173,9 @@ tasks {
     }
 }
 
-/*publishMods {
+publishMods {
     displayName = "${mod.name} ${mod.version} for Neoforge ${mc.version}"
-    file.set(tasks.remapJar.get().archiveFile)
+    file = tasks.jar.map { it.archiveFile.get() }
     version = mod.version.toString()
     changelog.set(
         rootProject.file("CHANGELOG.md")
@@ -205,6 +204,3 @@ tasks {
         optional("yacl")
     }
 }
-*/
-fun <T> optionalProp(property: String, block: (String) -> T?): T? =
-    findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)

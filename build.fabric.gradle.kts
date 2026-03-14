@@ -112,9 +112,8 @@ dependencies {
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
-        optionalProp("deps.parchment_version") {
-            parchment("org.parchmentmc.data:parchment-${mc.version}:$it@zip")
-        }
+        if (hasProperty("deps.parchment_version"))
+            parchment("org.parchmentmc.data:parchment-${mc.version}:${property("deps.parchment_version")}@zip")
 
     })
 
@@ -205,6 +204,3 @@ publishMods {
         optional("modmenu")
     }
 }
-
-fun <T> optionalProp(property: String, block: (String) -> T?): T? =
-    findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
