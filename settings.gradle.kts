@@ -2,12 +2,11 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven("https://maven.fabricmc.net/")
-        maven("https://maven.neoforged.net/releases/")
-        maven("https://maven.minecraftforge.net/")
-        maven("https://maven.architectury.dev")
-        maven("https://maven.kikugie.dev/snapshots")
-        maven("https://maven.kikugie.dev/releases")
+        maven("https://maven.fabricmc.net/") { name = "Fabric"}
+        maven("https://maven.neoforged.net/releases/") { name = "NeoForged" }
+        maven("https://maven.minecraftforge.net/") { name = "Forge" }
+        maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie" }
+        maven("https://maven.kikugie.dev/releases") { name = "KikuGie" }
     }
 }
 
@@ -16,19 +15,17 @@ plugins {
 }
 
 stonecutter {
-    kotlinController = true
-    centralScript = "build.gradle.kts"
-
     create(rootProject) {
         fun mc(mcVersion: String, loaders: Iterable<String>) {
             for (loader in loaders) {
-                version("$mcVersion-$loader", mcVersion)
+                version("$mcVersion-$loader", mcVersion).buildscript = "build.$loader.gradle.kts"
             }
         }
 
-        mc("1.20.1", listOf("fabric", "forge"))
-        mc("1.20.4", listOf("fabric", "neoforge"))
-        mc("1.20.6", listOf("fabric", "neoforge"))
+        //TODO: readd support
+        // mc("1.20.1", listOf("fabric", "forge"))
+        // mc("1.20.4", listOf("fabric", "neoforge"))
+        // mc("1.20.6", listOf("fabric", "neoforge"))
         mc("1.21", listOf("fabric", "neoforge"))
         mc("1.21.2", listOf("fabric", "neoforge"))
         mc("1.21.5", listOf("fabric", "neoforge"))
@@ -39,4 +36,5 @@ stonecutter {
     }
 }
 
-rootProject.name = "Naturally Trimmed"
+//TODO: remove or readd
+// rootProject.name = "Naturally Trimmed"
