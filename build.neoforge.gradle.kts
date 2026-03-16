@@ -109,9 +109,6 @@ repositories {
     // Kotlin for Forge - required by YACL
     maven("https://thedarkcolour.github.io/KotlinForForge/")
 
-    // Mod Menu
-    maven("https://maven.terraformersmc.com/")
-
     // Neoforge
     maven("https://maven.neoforged.net/releases/")
 

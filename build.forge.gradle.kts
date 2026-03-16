@@ -73,8 +73,9 @@ stonecutter {
 minecraft {
     version = deps.forge as String
     mappings("official", "1.20.1")
-
-
+    // rootProject is for some reason set to `D:\Projekte\Minecraft Modding\Naturally-Trimmed\versions\1.20.1-forge\src\main\resources\`
+    // Since everything else works fine, just do some relative pathing to the actual access transformer
+    setAccessTransformer("..\\..\\..\\..\\..\\src\\main\\resources\\META-INF\\accesstransformer.cfg")
 
     runs {
         register("client") {
@@ -94,6 +95,13 @@ jarJar.register {
 }
 
 repositories {
+    // Minecraft
+    minecraft.mavenizer(this)
+    maven(fg.minecraftLibsMaven)
+
+    // Forge
+    maven(fg.forgeMaven)
+
     // Parchment mappings
     maven("https://maven.parchmentmc.org")
 
@@ -103,12 +111,6 @@ repositories {
     // Kotlin for Forge - required by YACL
     maven("https://thedarkcolour.github.io/KotlinForForge/")
 
-    // Mod Menu
-    maven("https://maven.terraformersmc.com/")
-
-    // Neoforge
-    maven("https://maven.neoforged.net/releases/")
-
     // Quilt Parser
     maven("https://maven.quiltmc.org/repository/release/")
 }
@@ -116,6 +118,8 @@ repositories {
 
 
 dependencies {
+    implementation(minecraft.dependency("net.minecraftforge:forge:${deps.forge}"))
+
     // YACL
     implementation("dev.isxander:yet-another-config-lib:${deps.yacl}") {
         isTransitive = false
@@ -155,12 +159,6 @@ tasks.processResources {
     filesMatching("META-INF/mods.toml") { expand(props) }
     exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
 }
-
-/*tasks {
-    named("createMinecraftArtifacts") {
-        dependsOn("stonecutterGenerate")
-    }
-}*/
 
 publishMods {
     displayName = "${mod.name} ${mod.version} for Forge ${mc.version}"
