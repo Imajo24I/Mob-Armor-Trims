@@ -1,13 +1,11 @@
 package net.majo24.naturally_trimmed.trim_application;
 
-//? if 1.20.4 {
-/*import com.mojang.serialization.Codec;
-*///?} else if >1.20.4 {
-import com.mojang.serialization.MapCodec;
-//?} else {
+//? if 1.20.1 {
 /*import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-*///?}
+*///?} else {
+import com.mojang.serialization.MapCodec;
+//?}
 
 import net.majo24.naturally_trimmed.RegistryHelper;
 import net.majo24.naturally_trimmed.config.Config;
@@ -31,10 +29,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         super(predicates);
     }
 
-    //? if >1.20.1 {
-    //? if 1.20.4 {
-    /*public static final Codec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.create(
-     *///?} else
+    //? if >=1.21 {
     public static final MapCodec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).apply(instance, TrimLootTablesFunction::new)
     );

@@ -148,20 +148,12 @@ tasks.processResources {
         put("yacl_version", deps.yacl)
 
         put("forgeConstraint", findProperty("modstoml.forge_constraint"))
-        if (mc.version == "1.20.4") {
-            put("forge_id", "neoforge")
-        }
     }
 
     props.forEach(inputs::property)
 
-    if (mc.version == "1.20.4") {
-        filesMatching("META-INF/mods.toml") { expand(props) }
-        exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
-    } else {
-        filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
-        exclude("fabric.mod.json", "META-INF/mods.toml")
-    }
+    filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
+    exclude("fabric.mod.json", "META-INF/mods.toml")
 }
 
 tasks {

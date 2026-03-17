@@ -9,11 +9,11 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
-//? >1.20.4 {
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-//?} else {
+//? if 1.20.1 {
 /^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^///?}
+^///?} else {
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+//?}
 *///?} else {
 /*import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -85,7 +85,7 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
 
     //? if forgeLike {
     /*public static void registerConfigScreen() {
-        //? <1.20.5 {
+        //? if 1.20.1 {
         /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
         ^//^?} else {^/

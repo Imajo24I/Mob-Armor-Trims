@@ -75,7 +75,7 @@ minecraft {
     mappings("official", "1.20.1")
     // rootProject is for some reason set to `D:\Projekte\Minecraft Modding\Naturally-Trimmed\versions\1.20.1-forge\src\main\resources\`
     // Since everything else works fine, just do some relative pathing to the actual access transformer
-    setAccessTransformer("..\\..\\..\\..\\..\\src\\main\\resources\\META-INF\\accesstransformer.cfg")
+    setAccessTransformer("../../../../../src/main/resources/META-INF/accesstransformer.cfg")
 
     runs {
         register("client") {
@@ -133,9 +133,8 @@ dependencies {
 }
 
 java {
-    val java = if (sc.current.parsed >= "1.20.6") JavaVersion.VERSION_21 else JavaVersion.VERSION_17
-    sourceCompatibility = java
-    targetCompatibility = java
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
 }
 

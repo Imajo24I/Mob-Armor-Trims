@@ -22,10 +22,7 @@ stonecutter {
             }
         }
 
-        //TODO: readd support for 1.20.1, drop 1.20.4-1.20.6
         mc("1.20.1", listOf("fabric", "forge"))
-        // mc("1.20.4", listOf("fabric", "neoforge"))
-        // mc("1.20.6", listOf("fabric", "neoforge"))
         mc("1.21", listOf("fabric", "neoforge"))
         mc("1.21.2", listOf("fabric", "neoforge"))
         mc("1.21.5", listOf("fabric", "neoforge"))

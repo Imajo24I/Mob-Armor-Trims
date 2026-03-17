@@ -33,18 +33,18 @@ public class RegistryHelper {
             //new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));
 
     //?} else if neoforge {
-    /*//? if >1.20.4 {
-    public static final DeferredRegister<LootItemFunctionType<?>> FUNCTION_REGISTER =
-    //?} else
+    /*//? if 1.20.1 {
     /^public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER =^/
+    //?} else
+    public static final DeferredRegister<LootItemFunctionType<?>> FUNCTION_REGISTER =
             DeferredRegister.create(
                     BuiltInRegistries.LOOT_FUNCTION_TYPE,
                     NaturallyTrimmed.MOD_ID
             );
-    //? if >1.20.4 {
-    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION =
-    //?} else
+    //? if 1.20.1 {
     /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION =^/
+    //?} else
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION =
             FUNCTION_REGISTER.register(
                     "trim_loot_tables_function",
                     () -> new LootItemFunctionType(TrimLootTablesFunction.CODEC)
