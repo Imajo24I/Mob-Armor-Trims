@@ -5,34 +5,12 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-class ModData {
-    val id = property("mod.id").toString()
-    val name = property("mod.name")
-    val version = property("mod.version")
-    val group = property("mod.group").toString()
-    val description = property("mod.description")
-    val githubLink = property("mod.github_link")
-    val issuesLink = property("mod.issues_link")
-}
+val mcVersion = sc.current.project.split("-").first()
+stonecutter.properties.tags(mcVersion)
 
-class ModDependencies {
-    val yacl = property("deps.yacl_version")
-    val forge = property("deps.forge")
-}
-
-class McData {
-    val version = property("mod.mc_version")
-    val dep = property("mod.mc_dep")
-    val targets = property("mod.mc_targets").toString().split(", ")
-}
-
-val mc = McData()
-val mod = ModData()
-val deps = ModDependencies()
-
-version = "${mod.version}+${mc.version}-forge"
-group = mod.group
-base.archivesName = mod.id
+version = "${property("mod.version")}+${mcVersion}-forge"
+group = property("mod.group") as String
+base.archivesName = property("mod.id") as String
 
 stonecutter {
     constants {
@@ -71,7 +49,7 @@ stonecutter {
 }
 
 minecraft {
-    version = deps.forge as String
+    version = property("deps.forge") as String
     mappings("official", "1.20.1")
     // rootProject is for some reason set to `D:\Projekte\Minecraft Modding\Naturally-Trimmed\versions\1.20.1-forge\src\main\resources\`
     // Since everything else works fine, just do some relative pathing to the actual access transformer
@@ -118,10 +96,10 @@ repositories {
 
 
 dependencies {
-    implementation(minecraft.dependency("net.minecraftforge:forge:${deps.forge}"))
+    implementation(minecraft.dependency("net.minecraftforge:forge:${property("deps.forge")}"))
 
     // YACL
-    implementation("dev.isxander:yet-another-config-lib:${deps.yacl}") {
+    implementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-forge") {
         isTransitive = false
     }
 
@@ -139,18 +117,20 @@ java {
 }
 
 tasks.processResources {
-    val props = buildMap {
-        put("id", mod.id)
-        put("name", mod.name)
-        put("version", mod.version)
-        put("mcdep", mc.dep)
-        put("description", mod.description)
-        put("github_link", mod.githubLink)
-        put("issues_link", mod.issuesLink)
-        put("yacl_version", deps.yacl)
+    // For some reason just property() isn't actually able to find the properties in this task,
+    // so a shorthand for project.property() is used
+    fun property(name: String): Any? = project.property(name)
 
-        put("forgeConstraint", findProperty("modstoml.forge_constraint"))
-        put("forge_id", "forge")
+    val props = buildMap {
+        put("id", property("mod.id"))
+        put("name", property("mod.name"))
+        put("version", property("mod.version"))
+        put("mc", property("mc.dep"))
+        put("description", property("mod.description"))
+        put("github_link", property("mod.github_link"))
+        put("issues_link", property("mod.issues_link"))
+        put("yacl", property("deps.yacl"))
+        put("forge_constraint", property("deps.forge_constraint"))
     }
 
     props.forEach(inputs::property)
@@ -160,9 +140,9 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${mod.name} ${mod.version} for Forge ${mc.version}"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Forge $mcVersion"
     file = tasks.jar.map { it.archiveFile.get() }
-    version = mod.version.toString()
+    version = property("mod.version").toString()
     changelog.set(
         rootProject.file("CHANGELOG.md")
             .takeIf { it.exists() }
@@ -175,17 +155,19 @@ publishMods {
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
+    val targets = property("mc.targets").toString().split(", ")
+
     modrinth {
         projectId.set("hHVaPgFK")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.addAll(mc.targets)
+        minecraftVersions.addAll(targets)
         optional("yacl")
     }
 
     curseforge {
         projectId.set("1005441")
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.addAll(mc.targets)
+        minecraftVersions.addAll(targets)
         serverRequired = true
         optional("yacl")
     }

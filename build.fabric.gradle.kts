@@ -3,35 +3,12 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-class ModData {
-    val id = property("mod.id").toString()
-    val name = property("mod.name")
-    val version = property("mod.version")
-    val group = property("mod.group").toString()
-    val description = property("mod.description")
-    val githubLink = property("mod.github_link")
-    val issuesLink = property("mod.issues_link")
-}
+val mcVersion = sc.current.project.split("-").first()
+stonecutter.properties.tags(mcVersion)
 
-class ModDependencies {
-    val yacl = property("deps.yacl_version")
-    val modmenu = findProperty("deps.modmenu_version")
-    val fabricApi = findProperty("deps.fabric_api")
-}
-
-class McData {
-    val version = property("mod.mc_version")
-    val dep = property("mod.mc_dep")
-    val targets = property("mod.mc_targets").toString().split(", ")
-}
-
-val mc = McData()
-val mod = ModData()
-val deps = ModDependencies()
-
-version = "${mod.version}+${mc.version}-fabric"
-group = mod.group
-base.archivesName = mod.id
+version = "${property("mod.version")}+${mcVersion}-fabric"
+group = property("mod.group") as String
+base.archivesName = property("mod.id") as String
 
 stonecutter {
     constants {
@@ -100,27 +77,27 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${mc.version}")
+    minecraft("com.mojang:minecraft:${mcVersion}")
     mappings(loom.layered {
         // Mojmap mappings
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
-        if (hasProperty("deps.parchment_version"))
-            parchment("org.parchmentmc.data:parchment-${mc.version}:${property("deps.parchment_version")}@zip")
+        if (hasProperty("deps.parchment"))
+            parchment("org.parchmentmc.data:parchment-${mcVersion}:${property("deps.parchment")}@zip")
 
     })
 
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
     // YACL
-    modImplementation("dev.isxander:yet-another-config-lib:${deps.yacl}")
+    modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
 
     // Fabric API
-    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${deps.fabricApi}")
+    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
     // Mod Menu
-    modImplementation("com.terraformersmc:modmenu:${deps.modmenu}")
+    modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
 
     // Quilt Parser
     implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
@@ -144,17 +121,21 @@ java {
 }
 
 tasks.processResources {
+    // For some reason just property() isn't actually able to find the properties in this task,
+    // so a shorthand for project.property() is used
+    fun property(name: String): Any? = project.property(name)
+
     val props = buildMap {
-        put("id", mod.id)
-        put("name", mod.name)
-        put("version", mod.version)
-        put("mcdep", mc.dep)
-        put("description", mod.description)
-        put("github_link", mod.githubLink)
-        put("issues_link", mod.issuesLink)
-        put("yacl_version", deps.yacl)
-        put("modmenu_version", deps.modmenu)
-        put("fabric_api", deps.fabricApi)
+        put("id", property("mod.id"))
+        put("name", property("mod.name"))
+        put("version", property("mod.version"))
+        put("description", property("mod.description"))
+        put("github_link", property("mod.github_link"))
+        put("issues_link", property("mod.issues_link"))
+        put("mc", property("mc.dep"))
+        put("yacl", property("deps.yacl"))
+        put("modmenu", property("deps.modmenu"))
+        put("fabric_api", property("deps.fabric_api"))
     }
 
     props.forEach(inputs::property)
@@ -164,9 +145,9 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${mod.name} ${mod.version} for Fabric ${mc.version}"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Fabric $mcVersion"
     file.set(tasks.remapJar.get().archiveFile)
-    version = mod.version.toString()
+    version = property("mod.version").toString()
     changelog.set(
         rootProject.file("CHANGELOG.md")
             .takeIf { it.exists() }
@@ -179,10 +160,12 @@ publishMods {
     dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null ||
             providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
+    val targets = property("mc.targets").toString().split(", ")
+
     modrinth {
         projectId.set("hHVaPgFK")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.addAll(mc.targets)
+        minecraftVersions.addAll(targets)
         optional("yacl")
         requires("fabric-api")
         optional("modmenu")
@@ -191,7 +174,7 @@ publishMods {
     curseforge {
         projectId.set("1005441")
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.addAll(mc.targets)
+        minecraftVersions.addAll(targets)
         serverRequired = true
         optional("yacl")
         requires("fabric-api")

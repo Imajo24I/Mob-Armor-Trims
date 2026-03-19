@@ -14,14 +14,14 @@ logoFile = "assets/naturally_trimmed/icon.png"
 [["dependencies.{id}"]]
 modId = "neoforge"
 type = "required"
-versionRange = "[${forgeConstraint}"
+versionRange = "[${neoforge_constraint}"
 ordering = "NONE"
 side = "BOTH"
 
 [["dependencies.{id}"]]
 modId = "minecraft"
 type = "required"
-versionRange = "${mcdep}"
+versionRange = "${mc}"
 ordering = "NONE"
 side = "BOTH"
 
@@ -29,7 +29,7 @@ side = "BOTH"
 modId = "yet_another_config_lib_v3"
 type = "optional"
 reason = "Yet Another Config Lib is highly recommended, as it is required to configure this mod through the Config Menu of Neoforge."
-versionRange = "[${yacl_version},)"
+versionRange = "[${yacl},)"
 ordering = "AFTER"
 side = "CLIENT"
 
