@@ -53,13 +53,6 @@ loom {
             sourceSet(sourceSets["main"])
         }
     }
-
-    //TODO: Update to newest and remove this
-    // Loom 1.13 no longer uses the legacy mixin stuff by default,
-    // which for some reason breaks the VillagerTradesMixin on fabric
-    // This probably is a bad solution to the problem, but it works for now.
-    // Once mc versions are unobfuscated, this will probably no longer be a problem and can be removed.
-    mixin.useLegacyMixinAp = true
 }
 
 repositories {
