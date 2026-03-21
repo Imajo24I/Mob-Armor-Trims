@@ -4,48 +4,10 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-val mcVersion = sc.current.project.split("-").first()
-stonecutter.properties.tags(mcVersion)
-
-version = "${property("mod.version")}+${mcVersion}-neoforge"
+stonecutter.properties.tags(sc.current.version)
+version = "${property("mod.version")}+${sc.current.version}-neoforge"
 group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
-
-stonecutter {
-    constants {
-        match("neoforge", "fabric", "neoforge", "forge")
-        put("forgeLike", true)
-    }
-
-    replacements {
-        string {
-            direction = sc.current.parsed >= "1.21.2"
-            replace("item.armortrim.*;", "item.equipment.trim.*;")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace("ResourceLocation", "Identifier")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace(".location()", ".identifier()")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace("minecraft.Util;", "minecraft.util.Util;")
-        }
-
-        for (movedClass in listOf("AbstractVillager", "VillagerDataHolder", "VillagerTrades")) {
-            string {
-                direction = sc.current.parsed >= "1.21.11"
-                replace("npc.${movedClass}", "npc.villager.${movedClass}")
-            }
-        }
-    }
-}
 
 neoForge {
     version = property("deps.neoforge") as String
@@ -54,7 +16,7 @@ neoForge {
     // Parchment
     if (hasProperty("deps.parchment")) parchment {
         mappingsVersion = property("deps.parchment") as String
-        minecraftVersion = mcVersion
+        minecraftVersion = sc.current.version
     }
 
 
@@ -145,7 +107,7 @@ tasks {
 }
 
 publishMods {
-    displayName = "${property("mod.name")} ${property("mod.version")} for Neoforge $mcVersion"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Neoforge $sc.current.version"
     file = tasks.jar.map { it.archiveFile.get() }
     version = property("mod.version") as String
     changelog.set(

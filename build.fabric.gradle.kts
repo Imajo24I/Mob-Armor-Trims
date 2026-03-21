@@ -3,49 +3,10 @@ plugins {
     id("me.modmuss50.mod-publish-plugin")
 }
 
-val mcVersion = sc.current.project.split("-").first()
-stonecutter.properties.tags(mcVersion)
-
-version = "${property("mod.version")}+${mcVersion}-fabric"
+stonecutter.properties.tags(sc.current.version)
+version = "${property("mod.version")}+${sc.current.version}-fabric"
 group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
-
-stonecutter {
-    constants {
-        match("fabric", "fabric", "neoforge", "forge")
-        put("forgeLike", false)
-    }
-
-    replacements {
-        string {
-            direction = sc.current.parsed >= "1.21.2"
-            replace("item.armortrim.*;", "item.equipment.trim.*;")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace("ResourceLocation", "Identifier")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace(".location()", ".identifier()")
-        }
-
-        string {
-            direction = sc.current.parsed >= "1.21.11"
-            replace("minecraft.Util;", "minecraft.util.Util;")
-        }
-
-        for (movedClass in listOf("AbstractVillager", "VillagerDataHolder", "VillagerTrades")) {
-            string {
-                direction = sc.current.parsed >= "1.21.11"
-                replace("npc.${movedClass}", "npc.villager.${movedClass}")
-            }
-        }
-    }
-}
-
 
 loom {
     mods {
@@ -70,14 +31,14 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${mcVersion}")
+    minecraft("com.mojang:minecraft:${sc.current.version}")
     mappings(loom.layered {
         // Mojmap mappings
         officialMojangMappings()
 
         // Parchment mappings (it adds parameter mappings & javadoc)
         if (hasProperty("deps.parchment"))
-            parchment("org.parchmentmc.data:parchment-${mcVersion}:${property("deps.parchment")}@zip")
+            parchment("org.parchmentmc.data:parchment-${sc.current.version}:${property("deps.parchment")}@zip")
 
     })
 
@@ -138,7 +99,7 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${property("mod.name")} ${property("mod.version")} for Fabric $mcVersion"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Fabric $sc.current.version"
     file.set(tasks.remapJar.get().archiveFile)
     version = property("mod.version").toString()
     changelog.set(
