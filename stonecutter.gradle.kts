@@ -7,10 +7,10 @@ plugins {
     id("net.neoforged.moddev") version "2.0.140" apply false
     id("net.minecraftforge.gradle") version "7.0.15" apply false
 }
-stonecutter active "1.21.11-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "26.1-fabric" /* [SC] DO NOT EDIT */
 
 stonecutter parameters {
-    var mcVersion = ParsedVersion(node.metadata.project.substringBefore("-"))
+    var mcVersion = ParsedVersion(node.metadata.project.substringBeforeLast("-"))
     var loader = node.metadata.project.substringAfterLast("-")
 
     constants {
@@ -27,15 +27,7 @@ stonecutter parameters {
         string {
             direction = mcVersion >= "1.21.11"
             replace("ResourceLocation", "Identifier")
-        }
-
-        string {
-            direction = mcVersion >= "1.21.11"
             replace(".location()", ".identifier()")
-        }
-
-        string {
-            direction = mcVersion >= "1.21.11"
             replace("minecraft.Util;", "minecraft.util.Util;")
         }
 

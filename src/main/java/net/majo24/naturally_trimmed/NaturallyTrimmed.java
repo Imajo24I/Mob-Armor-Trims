@@ -63,8 +63,10 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     @Override
     public void onInitialize() {
         Config.CONFIG_MANAGER.loadInstance();
-        RegistryHelper.initClass();
         Events.registerEvents();
+
+        //? if <26.1
+        //RegistryHelper.initClass();
     }
 
     public static boolean isModLoaded(String modId) {

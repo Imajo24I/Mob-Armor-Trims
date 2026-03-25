@@ -41,8 +41,8 @@ public record TrimData(String material, String pattern) {
         /*Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.getHolder(Identifier.parse(material)).orElseThrow();
         Holder.Reference<TrimPattern> trimPattern = patternRegistry.getHolder(Identifier.parse(pattern)).orElseThrow();
         *///?} else {
-        /*Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new ResourceLocation(material))).orElseThrow();
-        Holder.Reference<TrimPattern> trimPattern = patternRegistry.getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new ResourceLocation(pattern))).orElseThrow();
+        /*Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new Identifier(material))).orElseThrow();
+        Holder.Reference<TrimPattern> trimPattern = patternRegistry.getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new Identifier(pattern))).orElseThrow();
         *///?}
 
         return new ArmorTrim(trimMaterial, trimPattern);

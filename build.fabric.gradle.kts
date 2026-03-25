@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     id("me.modmuss50.mod-publish-plugin")
 }
 
@@ -32,26 +32,17 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${sc.current.version}")
-    mappings(loom.layered {
-        // Mojmap mappings
-        officialMojangMappings()
 
-        // Parchment mappings (it adds parameter mappings & javadoc)
-        if (hasProperty("deps.parchment"))
-            parchment("org.parchmentmc.data:parchment-${sc.current.version}:${property("deps.parchment")}@zip")
-
-    })
-
-    modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
+    implementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
     // YACL
-    modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
+    implementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
 
     // Fabric API
-    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    runtimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
     // Mod Menu
-    modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
 
     // Quilt Parser
     implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
@@ -68,9 +59,8 @@ loom {
 }
 
 java {
-    val java = if (sc.current.parsed >= "1.20.6") JavaVersion.VERSION_21 else JavaVersion.VERSION_17
-    sourceCompatibility = java
-    targetCompatibility = java
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
     withSourcesJar()
 }
 
@@ -100,7 +90,7 @@ tasks.processResources {
 
 publishMods {
     displayName = "${property("mod.name")} ${property("mod.version")} for Fabric $sc.current.version"
-    file.set(tasks.remapJar.get().archiveFile)
+    file.set(tasks.jar.get().archiveFile)
     version = property("mod.version").toString()
     changelog.set(
         rootProject.file("CHANGELOG.md")

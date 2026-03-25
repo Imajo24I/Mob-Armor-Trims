@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.MapCodec;
 //?}
 
-import net.majo24.naturally_trimmed.RegistryHelper;
 import net.majo24.naturally_trimmed.config.Config;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
@@ -17,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,13 +33,18 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     );
     //?}
 
+    //? if >=26.1 {
     @Override
-    public @NotNull LootItemFunctionType getType() {
+    public @NotNull MapCodec<TrimLootTablesFunction> codec() { return CODEC; }
+    //?} else {
+    /*@Override
+    public @NotNull net.minecraft.world.level.storage.loot.functions.LootItemFunctionType getType() {
         //? if fabric {
-        return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION;
+        return net.majo24.naturally_trimmed.RegistryHelper.TRIM_LOOT_TABLES_FUNCTION;
         //?} else
-        //return RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();
+        //return net.majo24.naturally_trimmed.RegistryHelper.TRIM_LOOT_TABLES_FUNCTION.get();
     }
+    *///?}
 
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {

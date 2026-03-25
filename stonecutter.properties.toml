@@ -1,3 +1,18 @@
+["26.1"]
+mc.dep = ">=26.1 <=26.1"
+mc.targets = "26.1"
+
+#deps.parchment | No version available
+deps.yacl = "3.9.0+26.1"
+
+["26.1-fabric"]
+deps.fabric_api = "0.143.12+26.1"
+deps.modmenu = "18.0.0-alpha.6"
+
+["26.1-neoforge"]
+deps.neoforge = "26.1.0.1-beta"
+deps.neoforge_constraint = "[26.1.0.1-beta,)"
+
 ["1.21.11"]
 mc.dep = ">=1.21.11 <=1.21.11"
 mc.targets = "1.21.11"
