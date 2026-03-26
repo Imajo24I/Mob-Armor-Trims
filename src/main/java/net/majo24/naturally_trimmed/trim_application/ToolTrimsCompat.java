@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Objects;
 
+import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
+
 /**
  * Contains code for supporting both the Tool Trims mod and the Trimmable Tools mod
  */
@@ -32,26 +34,34 @@ public class ToolTrimsCompat {
      * If neither is present, no trim will be applied.
      * The trim consists of the given material and a random, tools compatible armor trim
      */
-    public static void applyTrimToTool(ItemStack itemStack, Holder<TrimMaterial> material, RegistryAccess registryAccess, RandomSource random) {
+    public static void applyTrimToTool(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
         if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOLS_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
-            ArmorTrim trim = new ArmorTrim(material, getToolPattern(registryAccess, random));
-            TrimApplier.applyTrim(itemStack, trim, registryAccess);
+            TrimApplier.applyTrim(itemStack, getToolTrim(registryAccess, random), registryAccess);
         }
     }
 
-    private static Holder.Reference<TrimPattern> getToolPattern(RegistryAccess registryAccess, RandomSource random) {
+    private static ArmorTrim getToolTrim(RegistryAccess registryAccess, RandomSource random) {
+        List<Holder.Reference<TrimMaterial>> materials = TrimApplier.getTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(registryAccess);
 
         if (NaturallyTrimmed.isModLoaded(TRIMMABLE_TOOLS_ID)) {
             // Trimmable Tools only supports trimming tools with minecraft's patterns,
             // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals("minecraft")));
+
+            if (CONFIG_MANAGER.instance().vanillaOnly) {
+                materials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+            }
         } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
             // Tool Trims only supports trimming tools with its custom patterns,
             // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals(TOOL_TRIMS_ID)));
+
+            // Remove every non-vanilla trim material,
+            // since two modded trim parts will likely result in a missing-texture texture
+            materials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
         }
 
-        return Util.getRandom(patterns, random);
+        return new ArmorTrim(Util.getRandom(materials, random), Util.getRandom(patterns, random));
     }
 }
