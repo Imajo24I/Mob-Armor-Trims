@@ -22,9 +22,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 //?} else {
-import net.minecraft.world.item.trading.MerchantOffer;
+/*import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-//?}
+*///?}
 
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 

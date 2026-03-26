@@ -3,7 +3,7 @@ mc.dep = ">=26.1 <=26.1"
 mc.targets = "26.1"
 
 #deps.parchment | No version available
-deps.yacl = "3.9.0+26.1"
+deps.yacl = "3.9.1+26.1"
 
 ["26.1-fabric"]
 deps.fabric_api = "0.143.12+26.1"

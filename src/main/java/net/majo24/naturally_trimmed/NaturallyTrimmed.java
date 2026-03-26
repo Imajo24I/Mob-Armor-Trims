@@ -51,11 +51,13 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
             registerConfigScreen();
         }
 
-        //? if neoforge {
-        /^RegistryHelper.FUNCTION_REGISTER.register(ModLoadingContext.get().getActiveContainer().getEventBus());
-        ^///?} else {
+        //? if <26.1 {
+        /^//? if neoforge{
+        /^¹RegistryHelper.FUNCTION_REGISTER.register(ModLoadingContext.get().getActiveContainer().getEventBus());
+        ¹^///?} else {
         RegistryHelper.FUNCTION_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
         //?}
+        ^///?}
     }
     *///?}
 
