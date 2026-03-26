@@ -1,6 +1,7 @@
 package net.majo24.naturally_trimmed;
 
-import net.majo24.naturally_trimmed.trim_application.TrimLootTablesFunction;
+//? if <26.1 {
+/*import net.majo24.naturally_trimmed.trim_application.TrimLootTablesFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 //? if fabric {
@@ -9,14 +10,14 @@ import java.util.Objects;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 //?} else if neoforge {
-/*import net.neoforged.neoforge.registries.DeferredHolder;
+/^import net.neoforged.neoforge.registries.DeferredHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
-*///?} else {
-/*import net.minecraft.core.registries.Registries;
+^///?} else {
+/^import net.minecraft.core.registries.Registries;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-*///?}
+^///?}
 
 
 
@@ -33,24 +34,24 @@ public class RegistryHelper {
             //new LootItemFunctionType(new TrimLootTablesFunction.Serializer()));
 
     //?} else if neoforge {
-    /*//? if >1.20.4 {
-    public static final DeferredRegister<LootItemFunctionType<?>> FUNCTION_REGISTER =
+    /^//? if 1.20.1 {
+    /^¹public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER =¹^/
     //?} else
-    /^public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER =^/
+    public static final DeferredRegister<LootItemFunctionType<?>> FUNCTION_REGISTER =
             DeferredRegister.create(
                     BuiltInRegistries.LOOT_FUNCTION_TYPE,
                     NaturallyTrimmed.MOD_ID
             );
-    //? if >1.20.4 {
-    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION =
+    //? if 1.20.1 {
+    /^¹public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION =¹^/
     //?} else
-    /^public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> TRIM_LOOT_TABLES_FUNCTION =^/
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> TRIM_LOOT_TABLES_FUNCTION =
             FUNCTION_REGISTER.register(
                     "trim_loot_tables_function",
                     () -> new LootItemFunctionType(TrimLootTablesFunction.CODEC)
             );
-    *///?} else {
-    /*public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER = DeferredRegister.create(
+    ^///?} else {
+    /^public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER = DeferredRegister.create(
             Registries.LOOT_FUNCTION_TYPE,
             NaturallyTrimmed.MOD_ID
     );
@@ -59,14 +60,15 @@ public class RegistryHelper {
             "trim_loot_tables_function",
             () -> new LootItemFunctionType(new TrimLootTablesFunction.Serializer())
     );
-    *///?}
+    ^///?}
 
 
-    /**
+    /^*
      * Method used to have java initialize this class.
      * This needs to be done when the mod is initialized,
      * since the Registries will be frozen later on and can't be registered to anymore
-     */
+     ^/
     public static void initClass() {
     }
 }
+*///?}

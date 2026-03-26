@@ -9,11 +9,11 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
-//? >1.20.4 {
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-//?} else {
+//? if 1.20.1 {
 /^import net.neoforged.neoforge.client.ConfigScreenHandler;
-^///?}
+^///?} else {
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+//?}
 *///?} else {
 /*import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -51,11 +51,13 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
             registerConfigScreen();
         }
 
-        //? if neoforge {
-        /^RegistryHelper.FUNCTION_REGISTER.register(ModLoadingContext.get().getActiveContainer().getEventBus());
-        ^///?} else {
+        //? if <26.1 {
+        /^//? if neoforge{
+        /^¹RegistryHelper.FUNCTION_REGISTER.register(ModLoadingContext.get().getActiveContainer().getEventBus());
+        ¹^///?} else {
         RegistryHelper.FUNCTION_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
         //?}
+        ^///?}
     }
     *///?}
 
@@ -63,8 +65,10 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     @Override
     public void onInitialize() {
         Config.CONFIG_MANAGER.loadInstance();
-        RegistryHelper.initClass();
         Events.registerEvents();
+
+        //? if <26.1
+        //RegistryHelper.initClass();
     }
 
     public static boolean isModLoaded(String modId) {
@@ -85,7 +89,7 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
 
     //? if forgeLike {
     /*public static void registerConfigScreen() {
-        //? <1.20.5 {
+        //? if 1.20.1 {
         /^ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ConfigScreenProvider.getConfigScreen(parent)));
         ^//^?} else {^/

@@ -29,10 +29,10 @@
   "depends": {
     "fabric-api": ">=${fabric_api}",
     "fabricloader": ">=0.15.11",
-    "minecraft": "${mcdep}"
+    "minecraft": "${mc}"
   },
   "recommends": {
-    "modmenu": ">=${modmenu_version}",
-    "yet_another_config_lib_v3": ">=${yacl_version}"
+    "modmenu": ">=${modmenu}",
+    "yet_another_config_lib_v3": ">=${yacl}"
   }
 }

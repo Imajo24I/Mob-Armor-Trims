@@ -12,23 +12,23 @@ description = "${description}"
 logoFile = "assets/naturally_trimmed/icon.png"
 
 [["dependencies.${id}"]]
-modId = "${forge_id}"
+modId = "forge"
 mandatory = true
-versionRange = "${forgeConstraint}"
+versionRange = "${forge_constraint}"
 ordering = "NONE"
 side = "BOTH"
 
 [["dependencies.${id}"]]
 modId = "minecraft"
 mandatory = true
-versionRange = "${mcdep}"
+versionRange = "${mc}"
 ordering = "NONE"
 side = "BOTH"
 
 [["dependencies.${id}"]]
 modId = "yet_another_config_lib_v3"
 mandatory = false
-versionRange = "[${yacl_version},)"
+versionRange = "[${yacl},)"
 ordering = "AFTER"
 side = "CLIENT"
 

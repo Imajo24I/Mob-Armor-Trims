@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-//? >=1.20.5 {
+//? >=1.21 {
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 //?}
@@ -40,7 +40,7 @@ public class TrimApplier {
      * Applies the given armor trim onto the given itemStack
      */
     public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim, RegistryAccess registryAccess) {
-        //? >=1.20.5 {
+        //? if >=1.21 {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
         //?} else
         //ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);

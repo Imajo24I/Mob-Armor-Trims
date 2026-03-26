@@ -10,7 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.IdentifierException;
 import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
@@ -236,7 +235,7 @@ public class ConfigScreen {
                         .name((translatable("naturally_trimmed.config.utils.openFile")))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.openFile")))
                         .text(translatable("naturally_trimmed.config.utils.run"))
-                        //? if <=1.20.6 {
+                        //? if 1.20.1 {
                         /*.action((screen, option) -> Util.getPlatform().openUri(NaturallyTrimmed.getConfigPath().toUri()))
                         *///?} else
                         .action((screen, option) -> Util.getPlatform().openPath(NaturallyTrimmed.getConfigPath()))
@@ -275,7 +274,7 @@ public class ConfigScreen {
         if (level == null || player == null) return;
         RegistryAccess registryAccess = level.registryAccess();
 
-        player.displayClientMessage(Component.literal("\nValidating predefined trims...\n"), false);
+        message(player, Component.literal("\nValidating predefined trims...\n"));
 
         int total = CONFIG_MANAGER.instance().trimMobs.predefinedTrims.size();
         int valid = 0;
@@ -286,16 +285,14 @@ public class ConfigScreen {
                 trimData.getTrim(registryAccess);
                 valid += 1;
             } catch (NoSuchElementException | IdentifierException ignored) {
-                player.displayClientMessage(Component.literal(
-                        "Found invalid trim: \"" + trimData + "\" with index " + index
-                ), false);
+                message(player, Component.literal("Found invalid trim: \"" + trimData + "\" with index " + index));
             } finally {
                 index++;
             }
         }
 
-        player.displayClientMessage(Component.literal("\n" + valid + " out of " + total + " trims are valid."), false);
-        player.displayClientMessage(Component.literal("Done validating predefined trims"), false);
+        message(player, Component.literal("\n" + valid + " out of " + total + " trims are valid."));
+        message(player, Component.literal("Done validating predefined trims"));
     }
 
     public static void validateBlacklists() {
@@ -305,16 +302,16 @@ public class ConfigScreen {
         if (level == null || player == null) return;
         RegistryAccess registryAccess = level.registryAccess();
 
-        player.displayClientMessage(Component.literal("\nValidating material blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD), false);
+        message(player, Component.literal("\nValidating material blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
         validateBlacklist(TrimApplier.getTrimMaterials(registryAccess).stream().map(material -> material.key().identifier().toString()).toList(), CONFIG_MANAGER.instance().materialBlacklist, player);
-        player.displayClientMessage(Component.literal("\nDone validating material blacklist"), false);
+        message(player, Component.literal("\nDone validating material blacklist"));
 
-        player.displayClientMessage(Component.literal("\nValidating pattern blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD), false);
+        message(player, Component.literal("\nValidating pattern blacklist:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
         validateBlacklist(TrimApplier.getTrimPatterns(registryAccess).stream().map(pattern -> pattern.key().identifier().toString()).toList(), CONFIG_MANAGER.instance().patternBlacklist, player);
-        player.displayClientMessage(Component.literal("\nDone validating pattern blacklist"), false);
+        message(player, Component.literal("\nDone validating pattern blacklist"));
 
         if (CONFIG_MANAGER.instance().vanillaOnly) {
-            player.displayClientMessage(Component.literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"), false);
+            message(player, Component.literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"));
         }
     }
 
@@ -325,37 +322,37 @@ public class ConfigScreen {
         // Regex Pattern, Does the Pattern blacklist a trim
         Map<Pattern, Boolean> patternsStatus = patterns.stream().collect(Collectors.toMap(pattern -> pattern, pattern -> false));
 
-        player.displayClientMessage(Component.literal("Checking for blacklisted trim parts...").withStyle(ChatFormatting.UNDERLINE), false);
+        message(player, Component.literal("Checking for blacklisted trim parts...").withStyle(ChatFormatting.UNDERLINE));
 
         for (Map.Entry<Pattern, Boolean> pattern : patternsStatus.entrySet()) {
             for (Map.Entry<String, Boolean> trim : trimsStatus.entrySet()) {
                 if (pattern.getKey().matcher(trim.getKey()).find()) {
-                    player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" blacklists trim part \"" + trim.getKey() + "\""), false);
+                    message(player, Component.literal("Regex pattern \"" + pattern.getKey() + "\" blacklists trim part \"" + trim.getKey() + "\""));
                     pattern.setValue(true);
                     trim.setValue(true);
                 }
             }
         }
 
-        player.displayClientMessage(Component.literal("\nChecking for not blacklisted trim parts...\n").withStyle(ChatFormatting.UNDERLINE), false);
+        message(player, Component.literal("\nChecking for not blacklisted trim parts...\n").withStyle(ChatFormatting.UNDERLINE));
 
         for (Map.Entry<String, Boolean> trim : trimsStatus.entrySet()) {
             if (!trim.getValue()) {
-                player.displayClientMessage(Component.literal("Trim part \"" + trim.getKey() + "\" isn't blacklisted by any regex pattern"), false);
+                message(player, Component.literal("Trim part \"" + trim.getKey() + "\" isn't blacklisted by any regex pattern"));
             }
         }
 
-        player.displayClientMessage(Component.literal("\nChecking for unnecessary regex patterns...\n").withStyle(ChatFormatting.UNDERLINE), false);
+        message(player, Component.literal("\nChecking for unnecessary regex patterns...\n").withStyle(ChatFormatting.UNDERLINE));
 
 
         for (Map.Entry<Pattern, Boolean> pattern : patternsStatus.entrySet()) {
             if (!pattern.getValue()) {
-                player.displayClientMessage(Component.literal("Regex pattern \"" + pattern.getKey() + "\" does not blacklist any registered trim patterns."), false);
+                message(player, Component.literal("Regex pattern \"" + pattern.getKey() + "\" does not blacklist any registered trim patterns."));
             }
         }
     }
 
-    
+
     public static class Formatters {
         private Formatters() {
         }
@@ -420,11 +417,27 @@ public class ConfigScreen {
         //?}
 
         @Override
-        public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            //? <=1.20.1
+        //? if >=26.1 {
+        public void extractRenderState(@NotNull net.minecraft.client.gui.GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        //?} else
+        //public void render(@NotNull net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+            //? if <=1.20.1
             //renderDirtBackground(graphics);
-            super.render(graphics, mouseX, mouseY, delta);
+
+            //? if >=26.1 {
+            super.extractRenderState(graphics, mouseX, mouseY, delta);
+            graphics.centeredText(font, title, width / 2, 5, 0xffffff);
+            //?} else {
+            /*super.render(graphics, mouseX, mouseY, delta);
             graphics.drawCenteredString(font, title, width / 2, 5, 0xffffff);
+            *///?}
         }
+    }
+
+    private static void message(LocalPlayer player, Component message) {
+        //? if >=26.1 {
+        player.sendSystemMessage(message);
+        //?} else
+        //player.displayClientMessage(message, false);
     }
 }
