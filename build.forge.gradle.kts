@@ -11,7 +11,6 @@ group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
 
 minecraft {
-    version = property("deps.forge") as String
     mappings("official", "1.20.1")
     // rootProject is for some reason set to `D:\Projekte\Minecraft Modding\Naturally-Trimmed\versions\1.20.1-forge\src\main\resources\`
     // Since everything else works fine, just do some relative pathing to the actual access transformer
