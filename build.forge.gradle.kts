@@ -12,7 +12,7 @@ base.archivesName = property("mod.id") as String
 
 minecraft {
     mappings("official", "1.20.1")
-    // rootProject is for some reason set to `D:\Projekte\Minecraft Modding\Naturally-Trimmed\versions\1.20.1-forge\src\main\resources\`
+    // rootProject is for some reason set to `.\versions\1.20.1-forge\src\main\resources\`
     // Since everything else works fine, just do some relative pathing to the actual access transformer
     setAccessTransformer("../../../../../src/main/resources/META-INF/accesstransformer.cfg")
 
