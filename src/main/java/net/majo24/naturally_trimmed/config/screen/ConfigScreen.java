@@ -236,6 +236,9 @@ public class ConfigScreen {
                         .name((translatable("naturally_trimmed.config.utils.openFile")))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.openFile")))
                         .text(translatable("naturally_trimmed.config.utils.run"))
+                        //? if <=1.20.6 {
+                        /*.action((screen, option) -> Util.getPlatform().openUri(NaturallyTrimmed.getConfigPath().toUri()))
+                        *///?} else
                         .action((screen, option) -> Util.getPlatform().openPath(NaturallyTrimmed.getConfigPath()))
                         .build())
 
