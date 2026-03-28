@@ -107,7 +107,7 @@ tasks {
 }
 
 publishMods {
-    displayName = "${property("mod.name")} ${property("mod.version")} for Neoforge $sc.current.version"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Neoforge ${sc.current.version}"
     file = tasks.jar.map { it.archiveFile.get() }
     version = property("mod.version") as String
     changelog.set(

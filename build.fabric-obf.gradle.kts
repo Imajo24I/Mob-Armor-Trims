@@ -100,7 +100,7 @@ tasks.processResources {
 }
 
 publishMods {
-    displayName = "${property("mod.name")} ${property("mod.version")} for Fabric $sc.current.version"
+    displayName = "${property("mod.name")} ${property("mod.version")} for Fabric ${sc.current.version}"
     file.set(tasks.remapJar.get().archiveFile)
     version = property("mod.version").toString()
     changelog.set(
