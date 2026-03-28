@@ -3,10 +3,10 @@
   "package": "net.majo24.naturally_trimmed.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "spawn_mobs_trimmed.SpawnMobsTrimmed",
-    "spawn_mobs_trimmed.SpawnSkeletonsTrimmed",
-    "spawn_mobs_trimmed.SpawnVindicatorsTrimmed",
-    "spawn_mobs_trimmed.SpawnZombiesTrimmed",
+    "trim_mobs.SpawnMobsTrimmed",
+    "trim_mobs.SpawnSkeletonsTrimmed",
+    "trim_mobs.SpawnVindicatorsTrimmed",
+    "trim_mobs.SpawnZombiesTrimmed",
     "VillagerTradesMixin"
   ],
   "injectors": {

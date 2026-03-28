@@ -2,8 +2,6 @@ package net.majo24.naturally_trimmed.config.backend;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.backend.annotations.Entry;
-import net.majo24.naturally_trimmed.config.backend.annotations.SubConfig;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;

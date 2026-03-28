@@ -14,7 +14,7 @@ logoFile = "assets/naturally_trimmed/icon.png"
 [["dependencies.{id}"]]
 modId = "neoforge"
 type = "required"
-versionRange = "[${neoforge_constraint}"
+versionRange = "[${neoforge},)"
 ordering = "NONE"
 side = "BOTH"
 

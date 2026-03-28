@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed.mixin.spawn_mobs_trimmed;
+package net.majo24.naturally_trimmed.mixin.trim_mobs;
 
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.world.DifficultyInstance;
@@ -10,14 +10,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//? >=1.21.11 {
-import net.minecraft.world.entity.monster.zombie.Zombie;
-//?} else
-//import net.minecraft.world.entity.monster.Zombie;
-
-@Mixin(Zombie.class)
-public abstract class SpawnZombiesTrimmed extends LivingEntity {
-    protected SpawnZombiesTrimmed(EntityType<? extends LivingEntity> entityType, Level world) {
+@Mixin(Mob.class)
+public abstract class SpawnMobsTrimmed extends LivingEntity {
+    protected SpawnMobsTrimmed(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 

@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed.mixin.spawn_mobs_trimmed;
+package net.majo24.naturally_trimmed.mixin.trim_mobs;
 
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.world.DifficultyInstance;
@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? >=1.21.11 {
-import net.minecraft.world.entity.monster.illager.Vindicator;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
 //?} else
-//import net.minecraft.world.entity.monster.Vindicator;
+//import net.minecraft.world.entity.monster.AbstractSkeleton;
 
-@Mixin(Vindicator.class)
-public abstract class SpawnVindicatorsTrimmed extends LivingEntity {
-    protected SpawnVindicatorsTrimmed(EntityType<? extends LivingEntity> entityType, Level level) {
+@Mixin(AbstractSkeleton.class)
+public abstract class SpawnSkeletonsTrimmed extends LivingEntity {
+    protected SpawnSkeletonsTrimmed(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
     }
 

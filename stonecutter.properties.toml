@@ -11,7 +11,6 @@ deps.modmenu = "18.0.0-alpha.6"
 
 ["26.1-neoforge"]
 deps.neoforge = "26.1.0.1-beta"
-deps.neoforge_constraint = "[26.1.0.1-beta,)"
 
 ["1.21.11"]
 mc.dep = ">=1.21.11 <=1.21.11"
@@ -26,7 +25,6 @@ deps.modmenu = "17.0.0-alpha.1"
 
 ["1.21.11-neoforge"]
 deps.neoforge = "21.11.0-beta"
-deps.neoforge_constraint = "[21.11.0-beta,)"
 
 ["1.21.9"]
 mc.dep = ">=1.21.9 <=1.21.10"
@@ -39,10 +37,8 @@ deps.yacl = "3.8.0+1.21.9"
 deps.fabric_api = "0.134.0+1.21.9"
 deps.modmenu = "16.0.0-rc.1"
 
-
 ["1.21.9-neoforge"]
 deps.neoforge = "21.9.14-beta"
-deps.neoforge_constraint = "[21.9.14-beta,)"
 
 ["1.21.5"]
 mc.dep = ">=1.21.5 <=1.21.8"
@@ -57,7 +53,6 @@ deps.modmenu = "14.0.0-rc.1"
 
 ["1.21.5-neoforge"]
 deps.neoforge = "21.5.25-beta"
-deps.neoforge_constraint = "[21.5.25-beta,)"
 
 ["1.21.2"]
 mc.dep = ">=1.21.2 <=1.21.4"
@@ -72,7 +67,6 @@ deps.modmenu = "12.0.0-beta.1"
 
 ["1.21.2-neoforge"]
 deps.neoforge = "21.2.1-beta"
-deps.neoforge_constraint = "[21.2.1-beta,)"
 
 ["1.21"]
 mc.dep = ">=1.21 <=1.21.1"
@@ -87,4 +81,3 @@ deps.modmenu = "11.0.3"
 
 ["1.21-neoforge"]
 deps.neoforge = "21.0.147"
-deps.neoforge_constraint = "[21.0.147,)"

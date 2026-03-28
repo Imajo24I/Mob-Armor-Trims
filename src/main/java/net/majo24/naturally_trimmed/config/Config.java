@@ -2,8 +2,8 @@ package net.majo24.naturally_trimmed.config;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.backend.ConfigManager;
-import net.majo24.naturally_trimmed.config.backend.annotations.Entry;
-import net.majo24.naturally_trimmed.config.backend.annotations.SubConfig;
+import net.majo24.naturally_trimmed.config.backend.Entry;
+import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 
 import java.util.ArrayList;

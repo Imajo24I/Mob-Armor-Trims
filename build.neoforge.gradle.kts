@@ -90,8 +90,7 @@ tasks.processResources {
         put("github_link", property("mod.github_link"))
         put("issues_link", property("mod.issues_link"))
         put("yacl", property("deps.yacl"))
-
-        put("neoforge_constraint", property("deps.neoforge_constraint"))
+        put("neoforge", property("deps.neoforge"))
     }
 
     props.forEach(inputs::property)

@@ -32,7 +32,7 @@ public class ToolTrimsCompat {
     /**
      * Applies an armor trim to the given tool using tooltrims or trimmable_tools.
      * If neither is present, no trim will be applied.
-     * The trim consists of the given material and a random, tools compatible armor trim
+     * The trim consists of a random material and a random, tools compatible armor trim
      */
     public static void applyTrimToTool(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
         if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOLS_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
