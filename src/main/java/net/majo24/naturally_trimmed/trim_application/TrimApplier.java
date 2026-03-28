@@ -127,7 +127,7 @@ public class TrimApplier {
         // Apply trim to the equipment, if possible
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
                 && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
-            ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), trim.material(), registryAccess, random);
+            ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), registryAccess, random);
         }
     }
 

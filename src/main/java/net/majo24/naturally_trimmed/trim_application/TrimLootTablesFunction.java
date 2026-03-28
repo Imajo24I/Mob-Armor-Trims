@@ -66,7 +66,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(itemStack, trim, registryAccess);
         } else {
-            ToolTrimsCompat.applyTrimToTool(itemStack, trim.material(), registryAccess, random);
+            ToolTrimsCompat.applyTrimToTool(itemStack, registryAccess, random);
         }
         return itemStack;
     }
