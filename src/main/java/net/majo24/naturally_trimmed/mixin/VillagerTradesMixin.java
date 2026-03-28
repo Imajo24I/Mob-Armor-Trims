@@ -45,7 +45,7 @@ public abstract class VillagerTradesMixin extends Mob {
         if (trim == null) return;
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyTrim(trade, trim, registryAccess);
+            TrimApplier.applyTrim(trade, trim);
         } else {
             ToolTrimsCompat.applyTrimToTool(trade, registryAccess, this.random);
         }

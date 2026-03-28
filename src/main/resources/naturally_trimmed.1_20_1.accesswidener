@@ -1,7 +1,0 @@
-accessWidener v2 named
-
-accessible field net/minecraft/world/level/storage/loot/LootTable functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
-mutable field net/minecraft/world/level/storage/loot/LootTable functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
-
-accessible field net/minecraft/world/level/storage/loot/LootTable compositeFunction Ljava/util/function/BiFunction;
-mutable field net/minecraft/world/level/storage/loot/LootTable compositeFunction Ljava/util/function/BiFunction;

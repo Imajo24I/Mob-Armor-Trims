@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
 
-    // -- Config Entries --
+    // === Config Entries ===
 
     @Entry(name = "enable_trim_mobs", comment = "Enables the equipment from mobs to be trimmed")
     public boolean enableTrimMobs = true;
@@ -71,7 +71,7 @@ public class Config {
     @SubConfig(name = "trim_trades", comment = "Settings for trimming equipment from villager trades")
     public TrimTradesSubConfig trimTrades = new TrimTradesSubConfig();
 
-    // -- Sub Configs --
+    // === Sub Configs ===
 
     public static class TrimMobsSubConfig {
         @Entry(name = "trim_system", comment = """

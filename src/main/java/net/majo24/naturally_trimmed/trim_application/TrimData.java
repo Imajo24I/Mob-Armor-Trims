@@ -8,11 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.equipment.trim.*;
 
-//? if <1.21 {
-/*import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-*///?}
-
 import java.util.NoSuchElementException;
 
 /**
@@ -34,15 +29,12 @@ public record TrimData(String material, String pattern) {
         Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(Registries.TRIM_PATTERN);
         *///?}
 
-        //? if >1.21 {
+        //? if >=1.21.2 {
         Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.get(Identifier.parse(material)).orElseThrow();
         Holder.Reference<TrimPattern> trimPattern = patternRegistry.get(Identifier.parse(pattern)).orElseThrow();
-        //?} else if 1.21 {
+        //?} else {
         /*Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.getHolder(Identifier.parse(material)).orElseThrow();
         Holder.Reference<TrimPattern> trimPattern = patternRegistry.getHolder(Identifier.parse(pattern)).orElseThrow();
-        *///?} else {
-        /*Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.getHolder(ResourceKey.create(Registries.TRIM_MATERIAL, new Identifier(material))).orElseThrow();
-        Holder.Reference<TrimPattern> trimPattern = patternRegistry.getHolder(ResourceKey.create(Registries.TRIM_PATTERN, new Identifier(pattern))).orElseThrow();
         *///?}
 
         return new ArmorTrim(trimMaterial, trimPattern);

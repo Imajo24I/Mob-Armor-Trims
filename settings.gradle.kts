@@ -4,7 +4,6 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/") { name = "Fabric"}
         maven("https://maven.neoforged.net/releases/") { name = "NeoForged" }
-        maven("https://maven.minecraftforge.net/") { name = "Forge" }
         maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
         maven("https://maven.kikugie.dev/releases") { name = "KikuGie" }
     }
@@ -28,7 +27,6 @@ stonecutter {
             }
         }
 
-        create("1.20.1", listOf("fabric", "forge"), true)
         create("1.21", listOf("fabric", "neoforge"), true)
         create("1.21.2", listOf("fabric", "neoforge"), true)
         create("1.21.5", listOf("fabric", "neoforge"), true)

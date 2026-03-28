@@ -70,7 +70,7 @@ dependencies {
 }
 
 java {
-    val java = if (sc.current.parsed > "1.21.11") JavaVersion.VERSION_25 else JavaVersion.VERSION_21
+    val java = if (sc.current.parsed >= "26.1") JavaVersion.VERSION_25 else JavaVersion.VERSION_21
     sourceCompatibility = java
     targetCompatibility = java
     withSourcesJar()

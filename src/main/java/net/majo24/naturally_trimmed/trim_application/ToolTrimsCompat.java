@@ -36,7 +36,7 @@ public class ToolTrimsCompat {
      */
     public static void applyTrimToTool(ItemStack itemStack, RegistryAccess registryAccess, RandomSource random) {
         if (!itemStack.isEmpty() && (itemStack.is(TRIMMABLE_TOOLS_TAG) || itemStack.is(ItemTags.TRIMMABLE_ARMOR))) {
-            TrimApplier.applyTrim(itemStack, getToolTrim(registryAccess, random), registryAccess);
+            TrimApplier.applyTrim(itemStack, getToolTrim(registryAccess, random));
         }
     }
 

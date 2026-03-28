@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
 
-//? >=1.21.5
+//? if >=1.21.5
 import net.minecraft.world.entity.EquipmentSlotGroup;
 
 import org.jetbrains.annotations.Nullable;
@@ -27,10 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-//? >=1.21 {
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-//?}
 
 public class TrimApplier {
     private TrimApplier() {
@@ -39,11 +37,8 @@ public class TrimApplier {
     /**
      * Applies the given armor trim onto the given itemStack
      */
-    public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim, RegistryAccess registryAccess) {
-        //? if >=1.21 {
+    public static void applyTrim(ItemStack itemStack, ArmorTrim armorTrim) {
         itemStack.applyComponents(DataComponentPatch.builder().set(DataComponents.TRIM, armorTrim).build());
-        //?} else
-        //ArmorTrim.setTrim(registryAccess, itemStack, armorTrim);
     }
 
     /**
@@ -120,7 +115,7 @@ public class TrimApplier {
         // Apply trim to the armor
         for (ItemStack armorPiece : armor) {
             if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
-                applyTrim(armorPiece, trim, registryAccess);
+                applyTrim(armorPiece, trim);
             }
         }
 

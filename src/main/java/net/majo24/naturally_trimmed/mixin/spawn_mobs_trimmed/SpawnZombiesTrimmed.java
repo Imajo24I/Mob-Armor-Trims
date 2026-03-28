@@ -12,9 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? >=1.21.11 {
 import net.minecraft.world.entity.monster.zombie.Zombie;
-//?} else {
-/*import net.minecraft.world.entity.monster.Zombie;
-*///?}
+//?} else
+//import net.minecraft.world.entity.monster.Zombie;
 
 @Mixin(Zombie.class)
 public abstract class SpawnZombiesTrimmed extends LivingEntity {
@@ -25,11 +24,8 @@ public abstract class SpawnZombiesTrimmed extends LivingEntity {
     @Inject(method = "finalizeSpawn", at = @At("RETURN"))
     //? if >=1.21.2 {
     private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, EntitySpawnReason entitySpawnReason, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
-    //?} else if 1.21 {
-    /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
-    *///?} else {
-    /*private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, net.minecraft.nbt.CompoundTag compoundTag, CallbackInfoReturnable<SpawnGroupData> cir) {
-    *///?}
+    //?} else
+    //private void trimEquipment(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
         TrimApplier.trimEquipment(this);
     }
 }

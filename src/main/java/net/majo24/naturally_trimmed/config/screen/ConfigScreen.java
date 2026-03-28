@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;
@@ -21,10 +22,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-/*? <1.21 {*/
-/*import net.minecraft.client.gui.screens.OptionsSubScreen;
- *///?} else
-import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 
 import java.util.List;
 import java.util.Map;
@@ -142,7 +139,7 @@ public class ConfigScreen {
                         .build())
 
                 // This is intentionally in a group,
-                // as the option would be put at the top of the other groups, if it wasn't a group
+                // as the option would otherwise be put at the top of the screen, messing up the ordering
                 .group(OptionGroup.createBuilder()
                     .name(translatable("naturally_trimmed.config.vanillaOnly"))
                     .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
@@ -235,9 +232,6 @@ public class ConfigScreen {
                         .name((translatable("naturally_trimmed.config.utils.openFile")))
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.openFile")))
                         .text(translatable("naturally_trimmed.config.utils.run"))
-                        //? if 1.20.1 {
-                        /*.action((screen, option) -> Util.getPlatform().openUri(NaturallyTrimmed.getConfigPath().toUri()))
-                        *///?} else
                         .action((screen, option) -> Util.getPlatform().openPath(NaturallyTrimmed.getConfigPath()))
                         .build())
 
@@ -421,9 +415,6 @@ public class ConfigScreen {
         public void extractRenderState(@NotNull net.minecraft.client.gui.GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         //?} else
         //public void render(@NotNull net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            //? if <=1.20.1
-            //renderDirtBackground(graphics);
-
             //? if >=26.1 {
             super.extractRenderState(graphics, mouseX, mouseY, delta);
             graphics.centeredText(font, title, width / 2, 5, 0xffffff);

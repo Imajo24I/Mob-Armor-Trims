@@ -70,16 +70,8 @@ loom {
 }
 
 java {
-    val java = if (sc.current.parsed > "1.21.11") {
-        JavaVersion.VERSION_25
-    } else if (sc.current.parsed >= "1.20.6") {
-        JavaVersion.VERSION_21
-    } else {
-        JavaVersion.VERSION_17
-    }
-
-    sourceCompatibility = java
-    targetCompatibility = java
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
 }
 

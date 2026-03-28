@@ -1,13 +1,7 @@
 package net.majo24.naturally_trimmed.trim_application;
 
-//? if 1.20.1 {
-/*import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-*///?} else {
-import com.mojang.serialization.MapCodec;
-//?}
-
 import net.majo24.naturally_trimmed.config.Config;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.ItemTags;
@@ -23,15 +17,13 @@ import java.util.List;
 
 
 public class TrimLootTablesFunction extends LootItemConditionalFunction {
-    protected TrimLootTablesFunction(/*? >1.20.1 {*/List<LootItemCondition>/*?} else {*//*LootItemCondition[]*//*?}*/ predicates) {
+    protected TrimLootTablesFunction(List<LootItemCondition> predicates) {
         super(predicates);
     }
 
-    //? if >=1.21 {
     public static final MapCodec<TrimLootTablesFunction> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).apply(instance, TrimLootTablesFunction::new)
     );
-    //?}
 
     //? if >=26.1 {
     @Override
@@ -62,7 +54,7 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         if (trim == null) return itemStack;
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
-            TrimApplier.applyTrim(itemStack, trim, registryAccess);
+            TrimApplier.applyTrim(itemStack, trim);
         } else {
             ToolTrimsCompat.applyTrimToTool(itemStack, registryAccess, random);
         }
@@ -73,13 +65,4 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     public static LootItemConditionalFunction.Builder<?> builder() {
         return simpleBuilder(TrimLootTablesFunction::new);
     }
-
-    //? if 1.20.1 {
-    /*public static class Serializer extends LootItemConditionalFunction.Serializer<TrimLootTablesFunction> {
-        @Override
-        public @NotNull TrimLootTablesFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
-            return new TrimLootTablesFunction(conditions);
-        }
-    }
-    *///?}
 }
