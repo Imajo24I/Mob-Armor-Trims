@@ -27,7 +27,7 @@ deps.modmenu = "17.0.0-alpha.1"
 deps.neoforge = "21.11.0-beta"
 
 ["1.21.1"]
-mc.dep = "1.21.1
+mc.dep = "1.21.1"
 mc.targets = "1.21.1"
 
 deps.parchment = "2024.11.17"
