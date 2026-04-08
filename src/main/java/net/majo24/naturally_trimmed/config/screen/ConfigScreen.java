@@ -404,11 +404,9 @@ public class ConfigScreen {
             addRenderableWidget(exitButton);
         }
 
-        //? >=1.21 {
         @Override
         protected void addOptions() {
         }
-        //?}
 
         @Override
         //? if >=26.1 {

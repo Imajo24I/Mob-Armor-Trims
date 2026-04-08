@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.item.ItemStack;
 
-//? if >=1.21.5
+//? if >=1.21.11
 import net.minecraft.world.entity.EquipmentSlotGroup;
 
 import org.jetbrains.annotations.Nullable;
@@ -91,7 +91,7 @@ public class TrimApplier {
         if (!CONFIG_MANAGER.instance().enableTrimMobs) return;
         if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance >= entity.getRandom().nextInt(100)) return;
 
-        //? if >=1.21.5 {
+        //? if >=1.21.11 {
         List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
                 .map(entity::getItemBySlot)
                 .filter(armorPiece -> !armorPiece.isEmpty() && armorPiece.is(ItemTags.TRIMMABLE_ARMOR))
@@ -127,14 +127,14 @@ public class TrimApplier {
     }
 
     public static List<Holder.Reference<TrimPattern>> getTrimPatterns(RegistryAccess registryAccess) {
-        //? if >=1.21.2 {
+        //? if >=1.21.11 {
         return new ArrayList<>(registryAccess.lookupOrThrow(Registries.TRIM_PATTERN).listElements().toList());
         //?} else
         //return new ArrayList<>(registryAccess.registryOrThrow(Registries.TRIM_PATTERN).holders().toList());
     }
 
     public static List<Holder.Reference<TrimMaterial>> getTrimMaterials(RegistryAccess registryAccess) {
-        //? if >=1.21.2 {
+        //? if >=1.21.11 {
         return new ArrayList<>(registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL).listElements().toList());
         //?} else
         //return new ArrayList<>(registryAccess.registryOrThrow(Registries.TRIM_MATERIAL).holders().toList());

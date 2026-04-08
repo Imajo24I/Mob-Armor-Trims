@@ -30,7 +30,7 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     /*public NaturallyTrimmed() {
         onInitialize();
 
-        //? if >=1.21.9 {
+        //? if >=1.21.11 {
         if (FMLLoader.getCurrent().getDist().isClient()) {
         //?} else
         //if (FMLLoader.getDist().isClient()) {

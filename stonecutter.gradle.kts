@@ -18,12 +18,8 @@ stonecutter parameters {
 
     replacements {
         string {
-            direction = mcVersion >= "1.21.2"
-            replace("item.armortrim.*;", "item.equipment.trim.*;")
-        }
-
-        string {
             direction = mcVersion >= "1.21.11"
+            replace("item.armortrim.*;", "item.equipment.trim.*;")
             replace("ResourceLocation", "Identifier")
             replace(".location()", ".identifier()")
             replace("minecraft.Util;", "minecraft.util.Util;")

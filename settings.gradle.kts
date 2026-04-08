@@ -27,10 +27,7 @@ stonecutter {
             }
         }
 
-        create("1.21", listOf("fabric", "neoforge"), true)
-        create("1.21.2", listOf("fabric", "neoforge"), true)
-        create("1.21.5", listOf("fabric", "neoforge"), true)
-        create("1.21.9", listOf("fabric", "neoforge"), true)
+        create("1.21.1", listOf("fabric", "neoforge"), true)
         create("1.21.11", listOf("fabric", "neoforge"), true)
         create("26.1", listOf("fabric", "neoforge"))
 

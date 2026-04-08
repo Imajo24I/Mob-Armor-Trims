@@ -21,7 +21,7 @@ public record TrimData(String material, String pattern) {
      * @throws NoSuchElementException same as above
      */
     public ArmorTrim getTrim(RegistryAccess registryAccess) throws NoSuchElementException, IdentifierException {
-        //? >=1.21.2 {
+        //? if >=1.21.11 {
         Registry<TrimMaterial> materialRegistry = registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL);
         Registry<TrimPattern> patternRegistry = registryAccess.lookupOrThrow(Registries.TRIM_PATTERN);
         //?} else {
@@ -29,7 +29,7 @@ public record TrimData(String material, String pattern) {
         Registry<TrimPattern> patternRegistry = registryAccess.registryOrThrow(Registries.TRIM_PATTERN);
         *///?}
 
-        //? if >=1.21.2 {
+        //? if >=1.21.11 {
         Holder.Reference<TrimMaterial> trimMaterial = materialRegistry.get(Identifier.parse(material)).orElseThrow();
         Holder.Reference<TrimPattern> trimPattern = patternRegistry.get(Identifier.parse(pattern)).orElseThrow();
         //?} else {

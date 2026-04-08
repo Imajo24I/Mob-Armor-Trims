@@ -84,10 +84,10 @@ public abstract class VillagerTradesMixin extends Mob {
 
         int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;
         if (this instanceof VillagerDataHolder dataHolder) {
-            //? if >=1.21.5 {
-            if (dataHolder.getVillagerData().level() < minLevel) return offer;
-            //?} else
-            //if (dataHolder.getVillagerData().getLevel()  < minLevel) return offer;
+            //? if 1.21.11 {
+            /^if (dataHolder.getVillagerData().level() < minLevel) return offer;
+            ^///?} else
+            if (dataHolder.getVillagerData().getLevel() < minLevel) return offer;
         }
 
         trimTrade(((MerchantOffer) offer).getResult());
