@@ -46,6 +46,7 @@ public class ConfigScreen {
                 .save(CONFIG_MANAGER::saveInstance)
 
                 .category(buildGeneralCategory())
+                .category(buildFilteringCategory())
                 .category(buildUtilsCategory());
 
         return configScreen.build().generateScreen(parent);
@@ -137,60 +138,6 @@ public class ConfigScreen {
                                         .step(1))
                                 .build())
                         .build())
-
-                // This is intentionally in a group,
-                // as the option would otherwise be put at the top of the screen, messing up the ordering
-                .group(OptionGroup.createBuilder()
-                    .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
-                    .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
-                        .collapsed(true)
-                    .option(Option.<Boolean>createBuilder()
-                        .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
-                        .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
-                                () -> CONFIG_MANAGER.instance().textureValidationFiltering,
-                                textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
-                        .controller(BooleanControllerBuilder::create)
-                        .build())
-                    .build())
-
-                // This is intentionally in a group,
-                // as the option would otherwise be put at the top of the screen, messing up the ordering
-                .group(OptionGroup.createBuilder()
-                    .name(translatable("naturally_trimmed.config.vanillaOnly"))
-                    .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
-                        .collapsed(true)
-                    .option(Option.<Boolean>createBuilder()
-                        .name(translatable("naturally_trimmed.config.vanillaOnly"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
-                        .binding(CONFIG_MANAGER.defaults().vanillaOnly,
-                                () -> CONFIG_MANAGER.instance().vanillaOnly,
-                                vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
-                        .controller(BooleanControllerBuilder::create)
-                        .build())
-                    .build())
-
-                .group(ListOption.<String>createBuilder()
-                        .name(translatable("naturally_trimmed.config.materialBlacklist"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.materialBlacklist.description")))
-                        .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().materialBlacklist.stream().map(Pattern::pattern).toList(),
-                                () -> CONFIG_MANAGER.instance().materialBlacklist.stream().map(Pattern::pattern).toList(),
-                                materialBlacklist -> CONFIG_MANAGER.instance().materialBlacklist = materialBlacklist.stream().map(Pattern::compile).toList())
-                        .controller(StringControllerBuilder::create)
-                        .initial("")
-                        .build())
-
-                .group(ListOption.<String>createBuilder()
-                        .name(translatable("naturally_trimmed.config.patternBlacklist"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.patternBlacklist.description")))
-                        .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().patternBlacklist.stream().map(Pattern::pattern).toList(),
-                                () -> CONFIG_MANAGER.instance().patternBlacklist.stream().map(Pattern::pattern).toList(),
-                                patternBlacklist -> CONFIG_MANAGER.instance().patternBlacklist = patternBlacklist.stream().map(Pattern::compile).toList())
-                        .controller(StringControllerBuilder::create)
-                        .initial("")
-                        .build())
                 .build();
     }
 
@@ -233,6 +180,53 @@ public class ConfigScreen {
                                 .range(0, 100)
                                 .step(1)
                                 .formatValue(percentageFormatter))
+                        .build())
+                .build();
+    }
+
+    private static ConfigCategory buildFilteringCategory() {
+        return ConfigCategory.createBuilder()
+                .name(translatable("naturally_trimmed.config.filtering"))
+                .tooltip(translatable("naturally_trimmed.config.filtering.tooltip"))
+
+                .option(Option.<Boolean>createBuilder()
+                    .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
+                    .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
+                    .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
+                            () -> CONFIG_MANAGER.instance().textureValidationFiltering,
+                            textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
+                    .controller(BooleanControllerBuilder::create)
+                    .build())
+
+                .option(Option.<Boolean>createBuilder()
+                    .name(translatable("naturally_trimmed.config.vanillaOnly"))
+                    .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
+                    .binding(CONFIG_MANAGER.defaults().vanillaOnly,
+                            () -> CONFIG_MANAGER.instance().vanillaOnly,
+                            vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
+                    .controller(BooleanControllerBuilder::create)
+                    .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.materialBlacklist"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.materialBlacklist.description")))
+                        .collapsed(true)
+                        .binding(CONFIG_MANAGER.defaults().materialBlacklist.stream().map(Pattern::pattern).toList(),
+                                () -> CONFIG_MANAGER.instance().materialBlacklist.stream().map(Pattern::pattern).toList(),
+                                materialBlacklist -> CONFIG_MANAGER.instance().materialBlacklist = materialBlacklist.stream().map(Pattern::compile).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.patternBlacklist"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.patternBlacklist.description")))
+                        .collapsed(true)
+                        .binding(CONFIG_MANAGER.defaults().patternBlacklist.stream().map(Pattern::pattern).toList(),
+                                () -> CONFIG_MANAGER.instance().patternBlacklist.stream().map(Pattern::pattern).toList(),
+                                patternBlacklist -> CONFIG_MANAGER.instance().patternBlacklist = patternBlacklist.stream().map(Pattern::compile).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
                         .build())
                 .build();
     }
