@@ -26,6 +26,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 *///?}
 
+import java.util.List;
+
+import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
 @Mixin(AbstractVillager.class)
@@ -41,8 +44,12 @@ public abstract class VillagerTradesMixin extends Mob {
 
         // === Apply a trim to the trade ===
         RegistryAccess registryAccess = this.level().registryAccess();
-        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random);
-        if (trim == null) return;
+        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
+
+        if (trim == null) {
+            LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+            return;
+        }
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(trade, trim);

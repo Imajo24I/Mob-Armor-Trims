@@ -9,10 +9,18 @@ group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
 
 loom {
+    if (sc.current.version == "1.21.11") {
+        accessWidenerPath.set(rootProject.file("src/main/resources/naturally_trimmed-21.11.accesswidener"))
+    }
     mods {
         create("naturally_trimmed") {
             sourceSet(sourceSets["main"])
         }
+    }
+
+    runConfigs.all {
+        ideConfigGenerated(stonecutter.current.isActive)
+        runDir = "../../run"
     }
 }
 
@@ -60,13 +68,6 @@ dependencies {
     include("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")
     implementation("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
     include("org.quiltmc.parsers:gson:${property("deps.quilt_parser")}")
-}
-
-loom {
-    runConfigs.all {
-        ideConfigGenerated(stonecutter.current.isActive)
-        runDir = "../../run"
-    }
 }
 
 java {

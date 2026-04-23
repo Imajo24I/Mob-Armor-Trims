@@ -15,6 +15,7 @@ import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;
 *///?}
 
 import net.majo24.naturally_trimmed.config.Config;
+import net.minecraft.client.Minecraft;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ {
     public static final String MOD_ID = "naturally_trimmed";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static boolean isClientAvailable = false;
 
     //? if neoforge {
     /*public NaturallyTrimmed() {
@@ -47,6 +49,7 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     public void onInitialize() {
         Config.CONFIG_MANAGER.loadInstance();
         Events.registerEvents();
+        setIsClientAvailable();
 
         //? if <26.1
         //RegistryHelper.initClass();
@@ -57,6 +60,15 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
         return FabricLoader.getInstance().isModLoaded(modId);
          //?} else
         //return ModList.get().isLoaded(modId);
+    }
+
+    private static void setIsClientAvailable() {
+        try {
+            Minecraft mc = Minecraft.getInstance();
+            isClientAvailable = mc != null;
+        } catch (Exception e) {
+            isClientAvailable = false;
+        }
     }
 
     public static Path getConfigPath() {

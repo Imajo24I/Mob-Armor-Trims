@@ -141,6 +141,22 @@ public class ConfigScreen {
                 // This is intentionally in a group,
                 // as the option would otherwise be put at the top of the screen, messing up the ordering
                 .group(OptionGroup.createBuilder()
+                    .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
+                    .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
+                        .collapsed(true)
+                    .option(Option.<Boolean>createBuilder()
+                        .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
+                        .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
+                                () -> CONFIG_MANAGER.instance().textureValidationFiltering,
+                                textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
+                        .controller(BooleanControllerBuilder::create)
+                        .build())
+                    .build())
+
+                // This is intentionally in a group,
+                // as the option would otherwise be put at the top of the screen, messing up the ordering
+                .group(OptionGroup.createBuilder()
                     .name(translatable("naturally_trimmed.config.vanillaOnly"))
                     .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
                         .collapsed(true)

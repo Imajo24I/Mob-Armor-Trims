@@ -25,11 +25,11 @@ public class Events {
     }
 
     //? if fabric {
-    public static void addTrimFunctionToLootTables() {
+    private static void addTrimFunctionToLootTables() {
         LootTableEvents.MODIFY.register((key, builder, source, registries) -> builder.apply(TrimLootTablesFunction.builder().build()));
     }
     //?} else {
-    /*public static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
+    /*private static void addTrimFunctionToLootTables(LootTableLoadEvent event) {
         LootTable table = event.getTable();
 
         table.functions = ImmutableList.<LootItemFunction>builder()

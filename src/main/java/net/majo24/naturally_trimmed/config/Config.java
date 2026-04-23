@@ -24,6 +24,15 @@ public class Config {
     @Entry(name = "enable_trim_trades", comment = "Enables the equipment from villager trades to be trimmed")
     public boolean enableTrimTrades = true;
 
+    @Entry(name = "texture_validation_filtering", comment = """
+            Enables filtering trims by checking for the corresponding textures of the trim.
+            
+            This only works on the client, it will be not be applied on dedicated servers, due to textures not being available on serverside.
+            When this setting *is* applied (on client + enabled), it will override all other filtering,
+            including the vanillaOnly setting, the blacklists and the built-in trim filtering, as these will become unnecessary.
+            """)
+    public boolean textureValidationFiltering = true;
+
     @Entry(name = "vanilla_only", comment = """
             Use vanilla-only trim materials and patterns.
             

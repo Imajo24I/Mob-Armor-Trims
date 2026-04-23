@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
+
 
 public class TrimLootTablesFunction extends LootItemConditionalFunction {
     protected TrimLootTablesFunction(List<LootItemCondition> predicates) {
@@ -50,9 +52,12 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
         // === Apply a trim ===
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
-        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random);
-        if (trim == null) return itemStack;
+        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(itemStack));
 
+        if (trim == null) {
+            LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+            return itemStack;
+        }
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
             TrimApplier.applyTrim(itemStack, trim);
         } else {

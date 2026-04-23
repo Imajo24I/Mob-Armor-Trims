@@ -13,6 +13,12 @@ neoForge {
     version = property("deps.neoforge") as String
     validateAccessTransformers = true
 
+    if (sc.current.version == "1.21.1") {
+        setAccessTransformers(rootProject.file("src/main/resources/META-INF/accesstransformer_21.1.cfg"))
+    } else {
+        setAccessTransformers(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
+    }
+
     // Parchment
     if (hasProperty("deps.parchment")) parchment {
         mappingsVersion = property("deps.parchment") as String
