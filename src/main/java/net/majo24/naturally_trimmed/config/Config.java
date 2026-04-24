@@ -26,17 +26,20 @@ public class Config {
 
     @Entry(name = "texture_validation_filtering", comment = """
             Enables filtering trims by checking for the corresponding textures of the trim.
+            This is the best filtering method, since it directly checks for the textures.
+            For more info about missing-texture trims, see the mods description.
             
-            This only works on the client, it will be not be applied on dedicated servers, due to textures not being available on serverside.
+            However, this only works on the client, it will be not be applied on dedicated servers, due to textures not being available on serverside.
             When this setting *is* applied (on client + enabled), it will override all other filtering,
             including the vanillaOnly setting, the blacklists and the built-in trim filtering, as these will become unnecessary.
             """)
     public boolean textureValidationFiltering = true;
 
     @Entry(name = "vanilla_only", comment = """
-            Use vanilla-only trim materials and patterns.
+            Use and filter for vanilla-only trim materials and patterns.
             
-            The intended use for this is to easily work around edge-cases caused by other mods' trims, that result in missing-texture trims.
+            The intended use for this is to easily filter no-texture trims, when the texture_validation_filtering isn't available.
+            For more info about missing-texture trims, see the mods description.
             For more advanced workarounds, without having to blacklist all non-vanilla trims, see material_blacklist and pattern_blacklist.
             """)
     public boolean vanillaOnly = false;
@@ -44,13 +47,14 @@ public class Config {
     @Entry(name = "material_blacklist", comment = """
             Blacklist for trim materials.
             
-            The intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in missing-texture trims.
+            The intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in trims with no texture.
             For an easier workaround, see vanilla_only.
             
             For example, combining newer elytra trims versions with an older version of this mod, results in frequent missing-texture trims.
             This and the other blacklist allows blacklisting all the individual problematic materials/patterns in order to get rid of the missing-texture trims.
             However, please also report the edge-cases, causing the missing-texture trims, to the mods issue tracker,
             so that the edge-cases can potentially be fixed directly inside this mod and can be fixed it for once and for all/for all users.
+            For more info about missing-texture trims, see the mods description.
             
             This uses regex, allowing for more advanced configuration.
             To ease the configuration of the blacklist, theres a util tab inside the config screen, which contains a button to validate the blacklist.

@@ -5,7 +5,7 @@
 # Naturally Trimmed
 
 This mod applies armor trims to naturally generated armor and equipment from mobs, loot tables and trades,
-resulting in a more complete gameplay experience
+resulting in a more complete gameplay experience and making armor you find in the wild much more interesting
 
 ## Features
 
@@ -32,8 +32,27 @@ Note, the settings for the predefined trims system are only configurable in the 
 ## Dependencies
 
 This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used with Fabric.  
-Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) and [Mod Menu](https://modrinth.com/mod/modmenu)
+Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) (+ [Mod Menu](https://modrinth.com/mod/modmenu) on  Fabric)
 can be used to access the config screen.
+
+## Mod Dependencies
+
+Although this mod should work with almost all mods, there is one long-term issue: Trims with no texture
+
+These trims with no textures most often appear when a modded trim material is combined with another mods trim pattern, and they aren't explicitly compatible with each other.
+While missing textures on trims aren't an issue caused by this mod, they are often triggered by it.
+
+To prevent these trims, this mod has several filtering options to filter these trims out.
+
+These are:
+- `texture_validation_filtering`: This filters out the trims by directly checking if they have no texture. This is the best filtering option, but only available on the client
+- `vanilla_only`: This filters out any trims that aren't vanilla, which should prevent almost all trims with no texture, since they are most often seen from modded trims.
+- `material_blacklist` and `pattern_blacklist`: These are more advanced filtering options, which allow you to filter out specific trims by their material or pattern.
+
+For more info about these options specifically, see the comments in the config file or config screen.
+
+If you happen to come across a trim with no texture,
+please create an issue report to the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
 
 ## Issues
 
