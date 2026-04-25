@@ -35,9 +35,9 @@ This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used wi
 Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) (+ [Mod Menu](https://modrinth.com/mod/modmenu) on  Fabric)
 can be used to access the config screen.
 
-## Mod Dependencies
+## Mod Compatibility
 
-Although this mod should work with almost all mods, there is one long-term issue: Trims with no texture
+Although this mod should work with most other mods, there is one long-standing issue: Trims with no texture
 
 These trims with no textures most often appear when a modded trim material is combined with another mods trim pattern, and they aren't explicitly compatible with each other.
 While missing textures on trims aren't an issue caused by this mod, they are often triggered by it.
