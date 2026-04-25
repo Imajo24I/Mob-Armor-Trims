@@ -42,14 +42,14 @@ Although this mod should work with most other mods, there is one long-standing i
 These trims with no textures most often appear when a modded trim material is combined with another mods trim pattern, and they aren't explicitly compatible with each other.
 While missing textures on trims aren't an issue caused by this mod, they are often triggered by it.
 
-To prevent these trims, this mod has several filtering options to filter these trims out.
+To prevent these trims, this mod has several filtering config entries (and built-in filtering) to filter these trims out.
 
 These are:
 - `texture_validation_filtering`: This filters out the trims by directly checking if they have no texture. This is the best filtering option, but only available on the client
 - `vanilla_only`: This filters out any trims that aren't vanilla, which should prevent almost all trims with no texture, since they are most often seen from modded trims.
 - `material_blacklist` and `pattern_blacklist`: These are more advanced filtering options, which allow you to filter out specific trims by their material or pattern.
 
-For more info about these options specifically, see the comments in the config file or config screen.
+For more info about these config entries specifically, see the comments in the config file or config screen.
 
 If you happen to come across a trim with no texture,
 please create an issue report to the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
