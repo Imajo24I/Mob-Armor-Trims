@@ -1,9 +1,1 @@
-- Dropped support for 1.21 and 1.21.2 - 1.21.10
-  - The remaining versions are 1.21.1, 1.21.11 and 26.1 (all for fabric and neoforge)
-- Add new `texture_validation_filtering` config entry
-  - A long-standing issue with this mod is missing-texture trims. These aren't caused by this mod, but are used by this mod
-  - While this mod already addresses this with multiple other filtering options and built-in filtering, these are all mostly just workarounds
-  - `texture_validation_filtering` is a new config entry that addresses this issue by concretely checking if the trim has a texture
-  - Other filtering options have only been precautiously filtering, this will only filter out trims that truly have no texture
-  - However, due to textures only being available being on the client, this also is only available on the client. On a dedicated server, the mod will fall back to other filtering options
-- Updated the mod description and config entry descriptions to talk more about the missing-texture trims issue
+- Fix startup crash on dedicated servers
