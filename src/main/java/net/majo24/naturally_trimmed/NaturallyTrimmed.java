@@ -1,12 +1,15 @@
 package net.majo24.naturally_trimmed;
 
 //? if fabric {
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 //?} else {
-/*import net.neoforged.fml.ModList;
+/*import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -15,7 +18,6 @@ import net.majo24.naturally_trimmed.config.screen.ConfigScreenProvider;
 *///?}
 
 import net.majo24.naturally_trimmed.config.Config;
-import net.minecraft.client.Minecraft;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +65,12 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     }
 
     private static void setIsClientAvailable() {
-        try {
-            Minecraft mc = Minecraft.getInstance();
-            isClientAvailable = mc != null;
-        } catch (Exception e) {
-            isClientAvailable = false;
-        }
+        //? if fabric {
+        isClientAvailable =  (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT);
+        //?} else if >= 1.21.11 {
+        //isClientAvailable = (FMLEnvironment.getDist() == Dist.CLIENT);
+        //?} else
+        //isClientAvailable = (FMLEnvironment.dist == Dist.CLIENT);
     }
 
     public static Path getConfigPath() {
