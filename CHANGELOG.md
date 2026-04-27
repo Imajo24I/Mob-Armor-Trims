@@ -1,1 +1,1 @@
-- Fix startup crash on dedicated servers
+- Fix crash in loot table and villager trade trimming when used with trimmable trims
