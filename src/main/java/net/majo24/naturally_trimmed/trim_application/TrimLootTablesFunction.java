@@ -52,13 +52,14 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
 
         // === Apply a trim ===
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
-        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(itemStack));
 
-        if (trim == null) {
-            LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
-            return itemStack;
-        }
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
+            ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(itemStack));
+            if (trim == null) {
+                LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+                return itemStack;
+            }
+
             TrimApplier.applyTrim(itemStack, trim);
         } else {
             ToolTrimsCompat.applyTrimToTool(itemStack, registryAccess, random);

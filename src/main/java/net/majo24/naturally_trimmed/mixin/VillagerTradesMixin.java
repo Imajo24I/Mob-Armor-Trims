@@ -44,14 +44,14 @@ public abstract class VillagerTradesMixin extends Mob {
 
         // === Apply a trim to the trade ===
         RegistryAccess registryAccess = this.level().registryAccess();
-        ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
-
-        if (trim == null) {
-            LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
-            return;
-        }
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
+            ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
+            if (trim == null) {
+                LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+                return;
+            }
+
             TrimApplier.applyTrim(trade, trim);
         } else {
             ToolTrimsCompat.applyTrimToTool(trade, registryAccess, this.random);
