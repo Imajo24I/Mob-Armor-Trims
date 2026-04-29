@@ -1,1 +1,1 @@
-- Fix crash in loot table and villager trade trimming when used with trimmable trims
+- Fix accesswideners not being applied in prod
