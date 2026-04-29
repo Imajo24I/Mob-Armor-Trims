@@ -76,6 +76,7 @@ tasks.processResources {
         put("description", property("mod.description"))
         put("github_link", property("mod.github_link"))
         put("issues_link", property("mod.issues_link"))
+        put("aw_path", "naturally_trimmed.accesswidener")
         put("mc", property("mc.dep"))
         put("yacl", property("deps.yacl"))
         put("modmenu", property("deps.modmenu"))

@@ -92,6 +92,12 @@ tasks.processResources {
         put("yacl", property("deps.yacl"))
         put("modmenu", property("deps.modmenu"))
         put("fabric_api", property("deps.fabric_api"))
+
+        if (sc.current.version == "1.21.11") {
+            put("aw_path", "naturally_trimmed-21.11.accesswidener")
+        } else {
+            put("aw_path", "naturally_trimmed-21.1.accesswidener")
+        }
     }
 
     props.forEach(inputs::property)
