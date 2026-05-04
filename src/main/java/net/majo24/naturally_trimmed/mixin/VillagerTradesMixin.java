@@ -14,6 +14,12 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+
+//? if >=1.21.11 {
+import net.minecraft.core.component.DataComponents;
+//?} else
+//import net.minecraft.world.item.ArmorItem;
+
 //? if >=26.1 {
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.core.HolderSet;
@@ -46,15 +52,22 @@ public abstract class VillagerTradesMixin extends Mob {
         RegistryAccess registryAccess = this.level().registryAccess();
 
         if (trade.is(ItemTags.TRIMMABLE_ARMOR)) {
-            ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
-            if (trim == null) {
-                LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
-                return;
-            }
+            //? if >=1.21.11 {
+            if (trade.has(DataComponents.EQUIPPABLE)) {
+            //?} else
+            //if (trade.getItem() instanceof ArmorItem) {
+                ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(trade));
+                if (trim == null) {
+                    LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+                    return;
+                }
 
-            TrimApplier.applyTrim(trade, trim);
+                TrimApplier.applyTrim(trade, trim);
+            } else {
+                ToolTrimsCompat.applyTrimToTool(trade, registryAccess, random);
+            }
         } else {
-            ToolTrimsCompat.applyTrimToTool(trade, registryAccess, this.random);
+            ToolTrimsCompat.applyTrimToTool(trade, registryAccess, random);
         }
     }
 

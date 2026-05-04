@@ -1,5 +1,10 @@
 package net.majo24.naturally_trimmed.trim_application;
 
+//? if >=1.21.11 {
+import net.minecraft.core.component.DataComponents;
+//?} else
+//import net.minecraft.world.item.ArmorItem;
+
 import net.majo24.naturally_trimmed.config.Config;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -54,13 +59,20 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();
 
         if (itemStack.is(ItemTags.TRIMMABLE_ARMOR)) {
-            ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(itemStack));
-            if (trim == null) {
-                LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
-                return itemStack;
-            }
+            //? if >=1.21.11 {
+            if (itemStack.has(DataComponents.EQUIPPABLE)) {
+            //?} else
+            //if (itemStack.getItem() instanceof ArmorItem) {
+                ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, random, List.of(itemStack));
+                if (trim == null) {
+                    LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+                    return itemStack;
+                }
 
-            TrimApplier.applyTrim(itemStack, trim);
+                TrimApplier.applyTrim(itemStack, trim);
+            } else {
+                ToolTrimsCompat.applyTrimToTool(itemStack, registryAccess, random);
+            }
         } else {
             ToolTrimsCompat.applyTrimToTool(itemStack, registryAccess, random);
         }
