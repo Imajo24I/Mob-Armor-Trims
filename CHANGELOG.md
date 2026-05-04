@@ -1,1 +1,1 @@
-- Fix accesswideners not being applied in prod
+- Fix compat with trimmable tools in loot tables
