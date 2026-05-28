@@ -40,9 +40,8 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
@@ -82,11 +81,11 @@ public class TrimApplier {
             //? if 1.21.1 {
             /*TextureAtlas atlas = Minecraft.getInstance().getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET);
             TextureAtlasSprite missingSprite = atlas.getSprite(Identifier.tryBuild("naturally_trimmed", "placeholder"));
-            List<Holder<ArmorMaterial>> material = armorPieces.stream().map(piece -> ((ArmorItem) piece.getItem()).getMaterial()).toList();
+            Set<Holder<ArmorMaterial>> material = armorPieces.stream().map(piece -> ((ArmorItem) piece.getItem()).getMaterial()).collect(Collectors.toSet());
             *///?} else {
             TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS);
             TextureAtlasSprite missingSprite = atlas.missingSprite();
-            List<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().get()).toList();
+            Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().get()).collect(Collectors.toSet());
             //?}
 
             for (ArmorTrim trim : trims) {
@@ -194,7 +193,7 @@ public class TrimApplier {
      * @return True if trim is valid
      */
     //? if 1.21.1 {
-    /*private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, List<Holder<ArmorMaterial>> materials) {
+    /*private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, Set<Holder<ArmorMaterial>> materials) {
         for (Holder<ArmorMaterial> material : materials) {
             TextureAtlasSprite innerTexture = atlas.getSprite(trim.innerTexture(material));
             TextureAtlasSprite outerTexture = atlas.getSprite(trim.outerTexture(material));
@@ -207,7 +206,7 @@ public class TrimApplier {
         return true;
     }
     *///?} else {
-    private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, List<ResourceKey<EquipmentAsset>> equipmentAssets) {
+    private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, Set<ResourceKey<EquipmentAsset>> equipmentAssets) {
         for (EquipmentClientInfo.LayerType layer: List.of(EquipmentClientInfo.LayerType.HUMANOID, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
             for (ResourceKey<EquipmentAsset> equipmentAsset : equipmentAssets) {
                 EquipmentLayerRenderer.TrimSpriteKey spriteKey = new EquipmentLayerRenderer.TrimSpriteKey(trim, layer, equipmentAsset);
