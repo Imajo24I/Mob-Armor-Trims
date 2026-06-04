@@ -33,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 *///?}
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
@@ -56,9 +57,11 @@ public abstract class VillagerTradesMixin extends Mob {
             if (trade.has(DataComponents.EQUIPPABLE)) {
             //?} else
             //if (trade.getItem() instanceof ArmorItem) {
-                ArmorTrim trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
-                if (trim == null) {
-                    LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+                ArmorTrim trim;
+                try {
+                    trim = TrimApplier.getRandomTrim(registryAccess, this.random, List.of(trade));
+                } catch (NoSuchElementException err) {
+                    LOGGER.warn(err.getMessage());
                     return;
                 }
 

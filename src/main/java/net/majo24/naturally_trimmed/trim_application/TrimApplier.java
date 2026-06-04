@@ -38,8 +38,6 @@ import net.minecraft.world.item.ItemStack;
 //? if >=1.21.11
 import net.minecraft.world.entity.EquipmentSlotGroup;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,6 +47,8 @@ import net.minecraft.core.component.DataComponents;
 public class TrimApplier {
     private TrimApplier() {
     }
+
+    private static final NoSuchElementException noViableTrim = new NoSuchElementException("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
 
     /**
      * Applies the given armor trim onto the given itemStack
@@ -70,8 +70,7 @@ public class TrimApplier {
      *   <li>Ensures the trim material and pattern aren't blacklisted by the mods blacklists (default is blacklisting tooltrims patterns, as they're only compatible with tools)</li>
      * </ul>
      */
-    @Nullable
-    public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armorPieces) {
+    public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armorPieces) throws NoSuchElementException {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
@@ -94,7 +93,7 @@ public class TrimApplier {
             *///?} else {
             TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS);
             TextureAtlasSprite missingSprite = atlas.missingSprite();
-            Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().get()).collect(Collectors.toSet());
+            Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().orElseThrow(() -> noViableTrim)).collect(Collectors.toSet());
             //?}
 
             for (ArmorTrim trim : trims) {
@@ -103,7 +102,7 @@ public class TrimApplier {
                 }
             }
 
-            return null;
+            throw noViableTrim;
 
         } else {
             // === Alternate Trim Filtering ===
@@ -119,14 +118,14 @@ public class TrimApplier {
                 trimPatterns.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
 
                 // Return early, as the rest of the filtering is already covered by removing non-vanilla trims
-                if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) return null;
+                if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
                 return new ArmorTrim(Util.getRandom(trimMaterials, random), Util.getRandom(trimPatterns, random));
             }
 
             // Ensure no trim patterns added by elytra trims are used
             trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
-            if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) return null;
+            if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
 
             // Ensure at least one of the two trim parts is non-modded
             do {
@@ -162,14 +161,17 @@ public class TrimApplier {
         RegistryAccess registryAccess = entity.level().registryAccess();
 
         TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
-        ArmorTrim trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
+
+        ArmorTrim trim;
+        try {
+            trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
                 ? getRandomTrim(registryAccess, random, armor)
                 : getPredefinedTrim(registryAccess, random);
-
-        if (trim == null) {
-            LOGGER.warn("Couldn't find viable armor trim. Please check configuration (mods, datapacks and Naturally Trimmed config settings) for potential issues. Skipping trim application.");
+        } catch (NoSuchElementException err) {
+            LOGGER.warn(err.getMessage());
             return;
         }
+
         // Apply trim to the armor
         for (ItemStack armorPiece : armor) {
             if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
@@ -232,8 +234,7 @@ public class TrimApplier {
     }
     //?}
 
-    @Nullable
-    public static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess, RandomSource random) {
+    public static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess, RandomSource random) throws NoSuchElementException {
         List<TrimData> predefinedTrims = CONFIG_MANAGER.instance().trimMobs.predefinedTrims;
         Util.shuffle(predefinedTrims, random);
 
@@ -245,6 +246,6 @@ public class TrimApplier {
             }
         }
 
-        return null;
+        throw noViableTrim;
     }
 }
