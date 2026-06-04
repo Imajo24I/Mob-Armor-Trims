@@ -2,6 +2,9 @@ package net.majo24.naturally_trimmed.config.backend;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;
@@ -29,6 +32,7 @@ public class ConfigManager<T> {
 
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
+            .registerTypeAdapter(TagKey.class, new TagKeyTypeAdapter())
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls().setPrettyPrinting()
             .create();
@@ -194,6 +198,26 @@ public class ConfigManager<T> {
         @Override
         public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return Pattern.compile(json.getAsString());
+        }
+    }
+
+    public static class TagKeyTypeAdapter implements JsonSerializer<TagKey<?>>, JsonDeserializer<TagKey<?>> {
+        @Override
+        public JsonElement serialize(TagKey<?> src, Type typeOfSrc, JsonSerializationContext context) {
+            //~ if >=1.21.11 '.identifier()' -> '.location()' { *mojank forgott to rename this to identifier() :<( -> needed due to the global replacement*
+            //~ if >=1.21.11 '.location()' -> '.location()' {
+            return new JsonPrimitive(src.location().toString());
+            //~}
+            //~}
+        }
+
+        @Override
+        public TagKey<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            if (typeOfT.getTypeName().equals("net.minecraft.tags.TagKey<net.minecraft.world.item.armortrim.TrimMaterial>")) {
+                return TagKey.create(Registries.TRIM_MATERIAL, Identifier.parse(json.getAsString()));
+            } else{
+                return TagKey.create(Registries.TRIM_PATTERN, Identifier.parse(json.getAsString()));
+            }
         }
     }
 }

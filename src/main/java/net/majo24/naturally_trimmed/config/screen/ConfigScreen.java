@@ -17,9 +17,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -190,22 +194,22 @@ public class ConfigScreen {
                 .tooltip(translatable("naturally_trimmed.config.filtering.tooltip"))
 
                 .option(Option.<Boolean>createBuilder()
-                    .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
-                    .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
-                    .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
-                            () -> CONFIG_MANAGER.instance().textureValidationFiltering,
-                            textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
-                    .controller(BooleanControllerBuilder::create)
-                    .build())
+                        .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
+                        .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
+                                () -> CONFIG_MANAGER.instance().textureValidationFiltering,
+                                textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
+                        .controller(BooleanControllerBuilder::create)
+                        .build())
 
                 .option(Option.<Boolean>createBuilder()
-                    .name(translatable("naturally_trimmed.config.vanillaOnly"))
-                    .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
-                    .binding(CONFIG_MANAGER.defaults().vanillaOnly,
-                            () -> CONFIG_MANAGER.instance().vanillaOnly,
-                            vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
-                    .controller(BooleanControllerBuilder::create)
-                    .build())
+                        .name(translatable("naturally_trimmed.config.vanillaOnly"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
+                        .binding(CONFIG_MANAGER.defaults().vanillaOnly,
+                                () -> CONFIG_MANAGER.instance().vanillaOnly,
+                                vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
+                        .controller(BooleanControllerBuilder::create)
+                        .build())
 
                 .group(ListOption.<String>createBuilder()
                         .name(translatable("naturally_trimmed.config.materialBlacklist"))
@@ -228,6 +232,32 @@ public class ConfigScreen {
                         .controller(StringControllerBuilder::create)
                         .initial("")
                         .build())
+
+                //~ if >=1.21.11 '.identifier()' -> '.location()' {
+                //~ if >=1.21.11 '.location()' -> '.location()' {
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.tagWhitelistMaterial"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.tagWhitelistMaterial.description")))
+                        .collapsed(true)
+                        .binding(CONFIG_MANAGER.defaults().tagWhitelistMaterial.stream().map(tag -> tag.location().toString()).toList(),
+                                () -> CONFIG_MANAGER.instance().tagWhitelistMaterial.stream().map(tag -> tag.location().toString()).toList(),
+                                whitelist -> CONFIG_MANAGER.instance().tagWhitelistMaterial = whitelist.stream().map(tag -> TagKey.create(Registries.TRIM_MATERIAL, Identifier.parse(tag))).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .build())
+
+                .group(ListOption.<String>createBuilder()
+                        .name(translatable("naturally_trimmed.config.tagWhitelistPattern"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.tagWhitelistPattern.description")))
+                        .collapsed(true)
+                        .binding(CONFIG_MANAGER.defaults().tagWhitelistPattern.stream().map(tag -> tag.location().toString()).toList(),
+                                () -> CONFIG_MANAGER.instance().tagWhitelistPattern.stream().map(tag -> tag.location().toString()).toList(),
+                                whitelist -> CONFIG_MANAGER.instance().tagWhitelistPattern = whitelist.stream().map(tag -> TagKey.create(Registries.TRIM_PATTERN, Identifier.parse(tag))).toList())
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .build())
+                //~}
+                //~}
                 .build();
     }
 
@@ -267,6 +297,13 @@ public class ConfigScreen {
                         .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateBlacklists.description")))
                         .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
                         .action((screen, option) -> validateBlacklists())
+                        .build())
+
+                .option(ButtonOption.createBuilder()
+                        .name(translatable("naturally_trimmed.config.utils.validateTagWhitelists"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateTagWhitelists.description")))
+                        .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
+                        .action((screen, option) -> validateTagWhitelists())
                         .build())
                 .build();
     }
@@ -356,6 +393,72 @@ public class ConfigScreen {
         }
     }
 
+    private static void validateTagWhitelists() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
+
+        if (level == null || player == null) return;
+        RegistryAccess registryAccess = level.registryAccess();
+
+        message(player, Component.literal("\nValidating material tag-whitelist:").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
+        validateTagWhitelist(TrimApplier.getTrimMaterials(registryAccess), CONFIG_MANAGER.instance().tagWhitelistMaterial, player);
+        message(player, Component.literal("\nDone validating material tag-whitelist"));
+
+        message(player, Component.literal("\nValidating pattern tag-whitelist:").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
+        validateTagWhitelist(TrimApplier.getTrimPatterns(registryAccess), CONFIG_MANAGER.instance().tagWhitelistPattern, player);
+        message(player, Component.literal("\nDone validating pattern tag-whitelist"));
+    }
+
+    private static <T> void validateTagWhitelist(List<Holder.Reference<T>> trims, List<TagKey<T>> tags, LocalPlayer player) {
+        if (tags.isEmpty()) {
+            message(player, Component.literal("Note that this whitelist is inactive due to being empty"));
+        }
+
+        // Trim Part, Is Trim Part Blacklisted
+        Map<Holder.Reference<T>, Boolean> trimPartsStatus = trims.stream().collect(Collectors.toMap(pattern -> pattern, pattern -> false));
+
+        // Tag, Does the Tag whitelist a trim
+        Map<TagKey<T>, Boolean> tagsStatus = tags.stream().collect(Collectors.toMap(pattern -> pattern, pattern -> false));
+
+        message(player, Component.literal("\nChecking for whitelisted trim parts...").withStyle(ChatFormatting.UNDERLINE));
+
+        for (Map.Entry<TagKey<T>, Boolean> tag : tagsStatus.entrySet()) {
+            for (Map.Entry<Holder.Reference<T>, Boolean> trimPart : trimPartsStatus.entrySet()) {
+                if (trimPart.getKey().is(tag.getKey())) {
+                //~ if >=1.21.11 '.identifier()' -> '.location()' {
+                //~ if >=1.21.11 '.location()' -> '.location()' {
+                    message(player, Component.literal("Tag \"" + tag.getKey().location()
+                //~}
+                //~}
+                            + "\" whitelists trim part \"" + trimPart.getKey().key().identifier() + "\""));
+                    tag.setValue(true);
+                    trimPart.setValue(true);
+                }
+            }
+        }
+
+        message(player, Component.literal("\nChecking for not whitelisted trim parts...\n").withStyle(ChatFormatting.UNDERLINE));
+
+        for (Map.Entry<Holder.Reference<T>, Boolean> trimPart : trimPartsStatus.entrySet()) {
+            if (!trimPart.getValue()) {
+                message(player, Component.literal("Trim part \"" + trimPart.getKey().key().identifier() + "\" isn't whitelisted by any tags"));
+            }
+        }
+
+        message(player, Component.literal("\nChecking for unnecessary tags...\n").withStyle(ChatFormatting.UNDERLINE));
+
+
+        for (Map.Entry<TagKey<T>, Boolean> tag : tagsStatus.entrySet()) {
+            if (!tag.getValue()) {
+                //~ if >=1.21.11 '.identifier()' -> '.location()' { *mojank forgott to rename this to identifier() :<( -> needed due to the global replacement*
+                //~ if >=1.21.11 '.location()' -> '.location()' {
+                message(player, Component.literal("Tag \"" + tag.getKey().location() + "\" does not whitelist any registered trim parts."));
+                //~}
+                //~}
+            }
+        }
+    }
+
 
     public static class Formatters {
         private Formatters() {
@@ -419,9 +522,9 @@ public class ConfigScreen {
         }
 
         @Override
-        //? if >=26.1 {
+                //? if >=26.1 {
         public void extractRenderState(@NotNull net.minecraft.client.gui.GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
-        //?} else
+         //?} else
         //public void render(@NotNull net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             //? if >=26.1 {
             super.extractRenderState(graphics, mouseX, mouseY, delta);
@@ -436,7 +539,7 @@ public class ConfigScreen {
     private static void message(LocalPlayer player, Component message) {
         //? if >=26.1 {
         player.sendSystemMessage(message);
-        //?} else
+         //?} else
         //player.displayClientMessage(message, false);
     }
 }

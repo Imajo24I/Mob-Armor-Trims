@@ -5,6 +5,8 @@ import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.Entry;
 import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.equipment.trim.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,21 @@ public class Config {
             """)
     public List<Pattern> patternBlacklist = List.of(Pattern.compile("tooltrims"));
 
+    @Entry(name = "tag_whitelist_material", comment = """
+            Trim Material whitelist using tags.
+            The material must have one of the specified tags attached in order to be valid.
+            This whitelist is only active, when not empty.
+            Example: tag_whitelist_material: ["bettertrims:pattern_effect_strength", "c:gold"]
+            """)
+    public List<TagKey<TrimMaterial>> tagWhitelistMaterial = new ArrayList<>();
+
+    @Entry(name = "tag_whitelist_pattern", comment = """
+            Trim Pattern whitelist using tags.
+            The pattern must have one of the specified tags attached in order to be valid.
+            This whitelist is only active, when not empty.
+            Example: tag_whitelist_pattern: ["bettertrims:pattern_effect_strength", "c:gold"]
+            """)
+    public List<TagKey<TrimPattern>> tagWhitelistPattern = new ArrayList<>();
 
     @SubConfig(name = "trim_mobs", comment = "Settings for trimming a mob's equipment")
     public TrimMobsSubConfig trimMobs = new TrimMobsSubConfig();

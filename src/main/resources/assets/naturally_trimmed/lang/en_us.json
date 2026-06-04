@@ -49,6 +49,11 @@
   "naturally_trimmed.config.patternBlacklist": "Trim Pattern Blacklist",
   "naturally_trimmed.config.patternBlacklist.description": "Blacklist for trim patterns.\n\nRead Material Blacklists' description for more context and information.\n\nExample configuration, blacklisting the wild trim pattern and all of more_armor_trims's patterns:\npatterns_blacklist: [\"minecraft:wild\", \"more_armor_trims:\"],",
 
+  "naturally_trimmed.config.tagWhitelistMaterial": "Trim Material Tag-Whitelist",
+  "naturally_trimmed.config.tagWhitelistMaterial.description": "Trim Material whitelist using tags.\nThe material must have one of the specified tags attached in order to be valid.\nThis whitelist is only active, when not empty.\nExample: tag_whitelist_material: [\"bettertrims:pattern_effect_strength\", \"c:gold\"]",
+  "naturally_trimmed.config.tagWhitelistPattern": "Trim Pattern Tag-Whitelist",
+  "naturally_trimmed.config.tagWhitelistPattern.description": "Trim Pattern whitelist using tags.\nThe pattern must have one of the specified tags attached in order to be valid.\nThis whitelist is only active, when not empty.\nExample: tag_whitelist_pattern: [\"bettertrims:pattern_effect_strength\", \"c:gold\"]",
+
 
   "naturally_trimmed.config.utils": "Utils",
   "naturally_trimmed.config.utils.tooltip": "Utility buttons to make configuring the mod easier",
@@ -61,6 +66,8 @@
   "naturally_trimmed.config.utils.validatePredefinedTrims.description": "Validates all predefined trims and logs relevant information in chat.\nOnly works while inside a world",
   "naturally_trimmed.config.utils.validateBlacklists": "Validate Backlists",
   "naturally_trimmed.config.utils.validateBlacklists.description": "Validates both blacklists and logs relevant information in chat.\nOnly works while inside a world",
+  "naturally_trimmed.config.utils.validateTagWhitelists": "Validate Tag-Whitelists",
+  "naturally_trimmed.config.utils.validateTagWhitelists.description": "Validates both tag whitelists and logs relevant information in chat.\nOnly works while inside a world",
 
   "naturally_trimmed.config.backup_screen.installYACL": "Install Yet Another Config Lib to access the config screen",
   "naturally_trimmed.config.backup_screen.viewOnModrinth": "View on Modrinth"

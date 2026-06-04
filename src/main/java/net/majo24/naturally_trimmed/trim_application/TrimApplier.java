@@ -75,11 +75,21 @@ public class TrimApplier {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
+        // === Tag Whitelist ===
+        if (!CONFIG_MANAGER.instance().tagWhitelistMaterial.isEmpty()) {
+            trimMaterials.removeIf(material -> CONFIG_MANAGER.instance().tagWhitelistMaterial.stream().noneMatch(material::is));
+        }
+        if (!CONFIG_MANAGER.instance().tagWhitelistPattern.isEmpty()) {
+            trimPatterns.removeIf(pattern -> CONFIG_MANAGER.instance().tagWhitelistPattern.stream().noneMatch(pattern::is));
+        }
+
         if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().textureValidationFiltering) {
+            // === Texture Validation ===
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
 
             //? if 1.21.1 {
             /*TextureAtlas atlas = Minecraft.getInstance().getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET);
+            //TODO: potential performance improvement - pass null directly
             TextureAtlasSprite missingSprite = atlas.getSprite(Identifier.tryBuild("naturally_trimmed", "placeholder"));
             Set<Holder<ArmorMaterial>> material = armorPieces.stream().map(piece -> ((ArmorItem) piece.getItem()).getMaterial()).collect(Collectors.toSet());
             *///?} else {
@@ -97,6 +107,7 @@ public class TrimApplier {
             return null;
 
         } else {
+            // === Alternate Trim Filtering ===
             Holder.Reference<TrimMaterial> trimMaterial;
             Holder.Reference<TrimPattern> trimPattern;
 
