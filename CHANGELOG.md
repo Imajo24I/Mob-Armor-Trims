@@ -1,1 +1,7 @@
-- Fix compat with trimmable tools in loot tables
+- Add material & pattern trim tag-whitelist ([#48](https://github.com/Imajo24I/Naturally-Trimmed/issues/48))
+  - Two whitelists that filter out all trim materials / patterns that don't have any of the given tags
+  - If a trim part has only one of the tags, it will be included
+  - Only enabled if not empty
+  - Config Screen entries and utility buttons have been added for this
+- Fix potential crash while trying to load equipment asset for armor pieces ([#45](https://github.com/Imajo24I/Naturally-Trimmed/issues/45))
+- Small performance improvement in texture validation filtering
