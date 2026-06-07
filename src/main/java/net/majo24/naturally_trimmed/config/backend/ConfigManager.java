@@ -69,9 +69,8 @@ public class ConfigManager<T> {
             jsonReader.endObject();
 
         } catch (Exception e) {
-            NaturallyTrimmed.LOGGER.error("Failed to deserialize the Naturally Trimmed config file. Using and saving the default config to file.", e);
+            NaturallyTrimmed.LOGGER.error("Failed to deserialize the Naturally Trimmed config file. Using the default config to file for this session. To restore to the default config file, delete or rename the current one and restart the game.", e);
             this.instance = defaults;
-            this.saveInstance();
         }
     }
 
