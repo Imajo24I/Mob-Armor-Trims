@@ -44,16 +44,10 @@
   "naturally_trimmed.config.vanillaOnly": "Vanilla Only",
   "naturally_trimmed.config.vanillaOnly.description": "Use and filter for vanilla-only trim materials and patterns.\n\nThe intended use for this is to easily filter no-texture trims, when the texture_validation_filtering isn't available.\nFor more info about missing-texture trims, see the mods description.\nFor more advanced workarounds, without having to blacklist all non-vanilla trims, see material_blacklist and pattern_blacklist",
 
-  "naturally_trimmed.config.materialBlacklist": "Trim Material Blacklist",
-  "naturally_trimmed.config.materialBlacklist.description": "Blacklist for trim materials.\n\nThe intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in missing-texture trims with no texture.\nFor an easier workaround, see vanilla_only.\n\nFor example, combining newer elytra trims versions with an older version of this mod, results in frequent missing-texture trims.\nThis and the other blacklist allows blacklisting all the individual problematic materials/patterns in order to get rid of the missing-texture trims.\nHowever, please also report the edge-cases, causing the missing-texture trims, to the mods issue tracker,\nso that the edge-cases can potentially be fixed directly inside this mod and can be fixed it for once and for all/for all users.\nFor more info about missing-texture trims, see the mods description.\n\nThis uses regex, allowing for more advanced configuration.\nTo ease the configuration of the blacklist, theres a util tab inside the config screen, which contains a button to validate the blacklist.\n\nExample configuration, blacklisting the amethyst and all of biomes_o_plenty's materials:\nmaterial_blacklist: [\"minecraft:amethyst\", \"biomes_o_plenty:\"],",
-  "naturally_trimmed.config.patternBlacklist": "Trim Pattern Blacklist",
-  "naturally_trimmed.config.patternBlacklist.description": "Blacklist for trim patterns.\n\nRead Material Blacklists' description for more context and information.\n\nExample configuration, blacklisting the wild trim pattern and all of more_armor_trims's patterns:\npatterns_blacklist: [\"minecraft:wild\", \"more_armor_trims:\"],",
-
-  "naturally_trimmed.config.tagWhitelistMaterial": "Trim Material Tag-Whitelist",
-  "naturally_trimmed.config.tagWhitelistMaterial.description": "Trim Material whitelist using tags.\nThe material must have one of the specified tags attached in order to be valid.\nThis whitelist is only active, when not empty.\nExample: tag_whitelist_material: [\"bettertrims:pattern_effect_strength\", \"c:gold\"]",
-  "naturally_trimmed.config.tagWhitelistPattern": "Trim Pattern Tag-Whitelist",
-  "naturally_trimmed.config.tagWhitelistPattern.description": "Trim Pattern whitelist using tags.\nThe pattern must have one of the specified tags attached in order to be valid.\nThis whitelist is only active, when not empty.\nExample: tag_whitelist_pattern: [\"bettertrims:pattern_effect_strength\", \"c:gold\"]",
-
+  "naturally_trimmed.config.materialFilter": "Trim Material Filter",
+  "naturally_trimmed.config.materialFilter.description": "Filter trim materials.\n\nSee https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-material-filter--material_filter for documentation on this.\n\nExample configuration, blacklisting everything but biomes_o_plenty's trim materials and all trim materials that have the c:gold tag:\nmaterial_filter: [\"+biomes_o_plenty:.*\", \"+#c:gold\", \"-.*\"],",
+  "naturally_trimmed.config.patternFilter": "Trim Pattern Filter",
+  "naturally_trimmed.config.patternFilter.description": "Filter trim patterns.\n\nSee https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-pattern-filter--pattern_filter for documentation on this.\n\nExample configuration, blacklisting everything but the silence trim pattern\npattern_filter: [\"+minecraft:silence\", \"-.*\"],",
 
   "naturally_trimmed.config.utils": "Utils",
   "naturally_trimmed.config.utils.tooltip": "Utility buttons to make configuring the mod easier",

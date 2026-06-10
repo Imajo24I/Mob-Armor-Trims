@@ -37,7 +37,7 @@ can be used to access the config screen.
 
 ## Mod Compatibility
 
-Although this mod should work with most other mods, there is one long-standing issue: Trims with no texture
+Although this mod should work with most other mods, there is one rare, but long-standing issue: Trims with no texture
 
 These trims with no textures most often appear when a modded trim material is combined with another mods trim pattern, and they aren't explicitly compatible with each other.
 While missing textures on trims aren't an issue caused by this mod, they are often triggered by it.

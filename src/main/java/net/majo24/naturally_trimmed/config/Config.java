@@ -5,12 +5,10 @@ import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.Entry;
 import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.equipment.trim.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class Config {
     public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
@@ -40,57 +38,31 @@ public class Config {
     @Entry(name = "vanilla_only", comment = """
             Use and filter for vanilla-only trim materials and patterns.
             
-            The intended use for this is to easily filter no-texture trims, when the texture_validation_filtering isn't available.
+            Other than mod customization, this can also be used as to easily filter no-texture trims, when the texture_validation_filtering isn't available.
             For more info about missing-texture trims, see the mods description.
-            For more advanced workarounds, without having to blacklist all non-vanilla trims, see material_blacklist and pattern_blacklist.
+            For more advanced workarounds and customization, without having to blacklist all non-vanilla trims, see material_blacklist and pattern_blacklist.
             """)
     public boolean vanillaOnly = false;
 
-    @Entry(name = "material_blacklist", comment = """
-            Blacklist for trim materials.
+    @Entry(name = "material_filter", comment = """
+            Filter trim materials.
             
-            The intended use for this and the other blacklist is to work around edge-cases caused by other mods, that result in trims with no texture.
-            For an easier workaround, see vanilla_only.
+            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-material-filter--material_filter for documentation on this.
             
-            For example, combining newer elytra trims versions with an older version of this mod, results in frequent missing-texture trims.
-            This and the other blacklist allows blacklisting all the individual problematic materials/patterns in order to get rid of the missing-texture trims.
-            However, please also report the edge-cases, causing the missing-texture trims, to the mods issue tracker,
-            so that the edge-cases can potentially be fixed directly inside this mod and can be fixed it for once and for all/for all users.
-            For more info about missing-texture trims, see the mods description.
-            
-            This uses regex, allowing for more advanced configuration.
-            To ease the configuration of the blacklist, theres a util tab inside the config screen, which contains a button to validate the blacklist.
-            
-            Example configuration, blacklisting the amethyst and all of biomes_o_plenty's materials:
-            material_blacklist: ["minecraft:amethyst", "biomes_o_plenty:"],
+            Example configuration, blacklisting everything but biomes_o_plenty's trim materials and all trim materials that have the c:gold tag:
+            material_filter: ["+biomes_o_plenty:.*", "+#c:gold", "-.*"],
             """)
-    public List<Pattern> materialBlacklist = new ArrayList<>();
+    public List<FilterRule<TrimMaterial>> materialFilter = new ArrayList<>();
 
-    @Entry(name = "pattern_blacklist", comment = """
-            Blacklist for trim patterns.
+    @Entry(name = "pattern_filter", comment = """
+            Filter trim patterns.
             
-            Read material_blacklist's comment for more context and information.
+            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-pattern-filter--pattern_filter for documentation on this.
             
-            Example configuration, blacklisting the wild trim pattern and all of more_armor_trims's patterns:
-            patterns_blacklist: ["minecraft:wild", "more_armor_trims:"],
+            Example configuration, blacklisting everything but the silence trim pattern
+            pattern_filter: ["+minecraft:silence", "-.*"],
             """)
-    public List<Pattern> patternBlacklist = List.of(Pattern.compile("tooltrims"));
-
-    @Entry(name = "tag_whitelist_material", comment = """
-            Trim Material whitelist using tags.
-            The material must have one of the specified tags attached in order to be valid.
-            This whitelist is only active, when not empty.
-            Example: tag_whitelist_material: ["bettertrims:pattern_effect_strength", "c:gold"]
-            """)
-    public List<TagKey<TrimMaterial>> tagWhitelistMaterial = new ArrayList<>();
-
-    @Entry(name = "tag_whitelist_pattern", comment = """
-            Trim Pattern whitelist using tags.
-            The pattern must have one of the specified tags attached in order to be valid.
-            This whitelist is only active, when not empty.
-            Example: tag_whitelist_pattern: ["bettertrims:pattern_effect_strength", "c:gold"]
-            """)
-    public List<TagKey<TrimPattern>> tagWhitelistPattern = new ArrayList<>();
+    public List<FilterRule<TrimPattern>> patternFilter = List.of(FilterRule.construct("-tooltrims:.*", false));
 
     @SubConfig(name = "trim_mobs", comment = "Settings for trimming a mob's equipment")
     public TrimMobsSubConfig trimMobs = new TrimMobsSubConfig();
@@ -121,7 +93,7 @@ public class Config {
                 
                 A predefined trim consists of a trim material and a trim pattern.
                 
-                Example-Configuration:
+                Example configuration:
                 predefined_trims: [{material: "resin", pattern: "silence"}, {material: "netherite", pattern: "vex"}, {material: "minecraft:amethyst", pattern: "minecraft:silence"}]
                 """)
         public List<TrimData> predefinedTrims = new ArrayList<>();
