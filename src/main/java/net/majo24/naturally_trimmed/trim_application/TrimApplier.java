@@ -101,15 +101,6 @@ public class TrimApplier {
             Holder.Reference<TrimMaterial> trimMaterial;
             Holder.Reference<TrimPattern> trimPattern;
 
-            if (CONFIG_MANAGER.instance().vanillaOnly) {
-                trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
-                trimPatterns.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
-
-                // Return early, as the rest of the filtering is already covered by removing non-vanilla trims
-                if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
-                return new ArmorTrim(Util.getRandom(trimMaterials, random), Util.getRandom(trimPatterns, random));
-            }
-
             // Ensure no trim patterns added by elytra trims are used
             trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
@@ -180,6 +171,12 @@ public class TrimApplier {
         // === Pattern Filters ===
         List<FilterRule<TrimPattern>> filter = CONFIG_MANAGER.instance().patternFilter;
         trimPatterns.removeIf(pattern -> FilterRule.resolveFilterForBlacklisted(filter, pattern));
+
+        // === Vanilla Only ===
+        if (CONFIG_MANAGER.instance().vanillaOnly) {
+            trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
+        }
+
         return trimPatterns;
     }
 
@@ -189,6 +186,12 @@ public class TrimApplier {
         // === Material Filters ===
         List<FilterRule<TrimMaterial>> filter = CONFIG_MANAGER.instance().materialFilter;
         trimMaterials.removeIf(material -> FilterRule.resolveFilterForBlacklisted(filter, material));
+
+        // === Vanilla Only ===
+        if (CONFIG_MANAGER.instance().vanillaOnly) {
+            trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+        }
+
         return trimMaterials;
     }
 

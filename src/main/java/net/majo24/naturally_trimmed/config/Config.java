@@ -26,7 +26,7 @@ public class Config {
 
     @Entry(name = "texture_validation_filtering", comment = """
             Enables filtering trims by checking for the corresponding textures of the trim.
-            This is the best filtering method, since it directly checks for the textures.
+            This is the best method for avoiding missing-texture trims, since it directly checks for the textures.
             For more info about missing-texture trims, see the mods description.
             
             However, this only works on the client, it will be not be applied on dedicated servers, due to textures not being available on serverside.
@@ -47,7 +47,7 @@ public class Config {
     @Entry(name = "material_filter", comment = """
             Filter trim materials.
             
-            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-material-filter--material_filter for documentation on this.
+            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-‐-3.5.0#trim-material-filter--material_filter for documentation on this.
             
             Example configuration, blacklisting everything but biomes_o_plenty's trim materials and all trim materials that have the c:gold tag:
             material_filter: ["+biomes_o_plenty:.*", "+#c:gold", "-.*"],
@@ -57,7 +57,7 @@ public class Config {
     @Entry(name = "pattern_filter", comment = """
             Filter trim patterns.
             
-            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config#trim-pattern-filter--pattern_filter for documentation on this.
+            See https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-‐-3.5.0#trim-pattern-filter--pattern_filter for documentation on this.
             
             Example configuration, blacklisting everything but the silence trim pattern
             pattern_filter: ["+minecraft:silence", "-.*"],
