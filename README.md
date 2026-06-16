@@ -9,52 +9,28 @@ resulting in a more complete gameplay experience and making armor you find in th
 
 ## Features
 
-- **Applies armor trims to armor from mob spawns.** Both completely random armor trims and predefined armor trims are
-  supported.
-- **Applies armor trims to armor from loot tables.** This includes chests from all structures (for example,
-  bastions or end cities), piglin bartering and fishing.
-- **Applies armor trims to armor from villager trades.** Note: By default, only trades above villager trading level 3
-  have a chance of being trimmed.
-- Also applies armor trims to tools like pickaxes or swords if
-  either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools) or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod) is installed.
-- Almost all features are highly configurable. See the [Configuration section](#configuration)
+- **Applies armor trims to equipment from mob spawns.** Newly spawned mobs will have their equipment trimmed.
+- **Applies armor trims to equipment from loot tables.** This includes chests from all structures (for example
+  blacksmiths, bastions or end cities), piglin bartering and more.
+- **Applies armor trims to equipment from villager trades.** All traders, including villagers, wandering traders and modded traders, are supported.
+- Supports trimming tools like pickaxes or sword through
+  either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools) or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod)
+- All features are configurable. See the [Configuration section](#configuration)
 
 ## Configuration
 
-Almost all features of this mod are highly configurable.  
-You can configure them through either the in-game config screen (This requires other mods, see
-the [Dependencies section](#dependencies))
-or through the config file, which can be found under `.minecraft/config/naturally_trimmed.json5`.
-
-For explanation on individual settings, see the comments attached to the settings.  
-Note, the settings for the predefined trims system are only configurable in the config file.
+All features of this mod have configuration options.\
+See the [config wiki page](https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-%E2%80%90-3.5.0) for more information.
 
 ## Dependencies
 
-This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used with Fabric.  
-Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) (+ [Mod Menu](https://modrinth.com/mod/modmenu) on  Fabric)
+This mod requires [Fabric API](https://modrinth.com/mod/fabric-api) when used with Fabric.\
+Optionally, [Yet Another Config Lib](https://modrinth.com/mod/yacl) (+ [Mod Menu](https://modrinth.com/mod/modmenu) on Fabric)
 can be used to access the config screen.
 
-## Mod Compatibility
+## Issues and Mod Compatibility
 
-Although this mod should work with most other mods, there is one rare, but long-standing issue: Trims with no texture
-
-These trims with no textures most often appear when a modded trim material is combined with another mods trim pattern, and they aren't explicitly compatible with each other.
-While missing textures on trims aren't an issue caused by this mod, they are often triggered by it.
-
-To prevent these trims, this mod has several filtering config entries (and built-in filtering) to filter these trims out.
-
-These are:
-- `texture_validation_filtering`: This filters out the trims by directly checking if they have no texture. This is the best filtering option, but only available on the client
-- `vanilla_only`: This filters out any trims that aren't vanilla, which should prevent almost all trims with no texture, since they are most often seen from modded trims.
-- `material_blacklist` and `pattern_blacklist`: These are more advanced filtering options, which allow you to filter out specific trims by their material or pattern.
-
-For more info about these config entries specifically, see the comments in the config file or config screen.
-
-If you happen to come across a trim with no texture,
-please create an issue report to the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).
-
-## Issues
+This mod should work with basically all mods.
 
 If you have found any issue, please report the issue to
 the [project's issue tracker](https://github.com/Imajo24I/Naturally-Trimmed/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml).

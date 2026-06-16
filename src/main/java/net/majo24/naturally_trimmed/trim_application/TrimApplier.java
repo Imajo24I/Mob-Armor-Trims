@@ -74,8 +74,8 @@ public class TrimApplier {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getFilteredTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getFilteredTrimPatterns(registryAccess);
 
-        if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().textureValidationFiltering) {
-            // === Texture Validation ===
+        if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering) {
+            // === Texture Validation Filtering ===
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
 
             //? if 1.21.1 {
@@ -97,7 +97,7 @@ public class TrimApplier {
             throw noViableTrim;
 
         } else {
-            // === Alternate Trim Filtering ===
+            // === Precautionary Trim Filtering ===
             Holder.Reference<TrimMaterial> trimMaterial;
             Holder.Reference<TrimPattern> trimPattern;
 
@@ -169,11 +169,11 @@ public class TrimApplier {
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
         // === Pattern Filters ===
-        List<FilterRule<TrimPattern>> filter = CONFIG_MANAGER.instance().patternFilter;
+        List<FilterRule<TrimPattern>> filter = CONFIG_MANAGER.instance().trimFiltering.patternFilter;
         trimPatterns.removeIf(pattern -> FilterRule.resolveFilterForBlacklisted(filter, pattern));
 
         // === Vanilla Only ===
-        if (CONFIG_MANAGER.instance().vanillaOnly) {
+        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
             trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
         }
 
@@ -184,11 +184,11 @@ public class TrimApplier {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
 
         // === Material Filters ===
-        List<FilterRule<TrimMaterial>> filter = CONFIG_MANAGER.instance().materialFilter;
+        List<FilterRule<TrimMaterial>> filter = CONFIG_MANAGER.instance().trimFiltering.materialFilter;
         trimMaterials.removeIf(material -> FilterRule.resolveFilterForBlacklisted(filter, material));
 
         // === Vanilla Only ===
-        if (CONFIG_MANAGER.instance().vanillaOnly) {
+        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
             trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
         }
 

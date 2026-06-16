@@ -189,41 +189,41 @@ public class ConfigScreen {
                 .tooltip(translatable("naturally_trimmed.config.filtering.tooltip"))
 
                 .option(Option.<Boolean>createBuilder()
-                        .name(translatable("naturally_trimmed.config.textureValidationFiltering"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.textureValidationFiltering.description")))
-                        .binding(CONFIG_MANAGER.defaults().textureValidationFiltering,
-                                () -> CONFIG_MANAGER.instance().textureValidationFiltering,
-                                textureValidationFiltering -> CONFIG_MANAGER.instance().textureValidationFiltering = textureValidationFiltering)
+                        .name(translatable("naturally_trimmed.config.filtering.textureValidationFiltering"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.textureValidationFiltering.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimFiltering.textureValidationFiltering,
+                                () -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering,
+                                textureValidationFiltering -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering = textureValidationFiltering)
                         .controller(BooleanControllerBuilder::create)
                         .build())
 
                 .option(Option.<Boolean>createBuilder()
-                        .name(translatable("naturally_trimmed.config.vanillaOnly"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.vanillaOnly.description")))
-                        .binding(CONFIG_MANAGER.defaults().vanillaOnly,
-                                () -> CONFIG_MANAGER.instance().vanillaOnly,
-                                vanillaOnly -> CONFIG_MANAGER.instance().vanillaOnly = vanillaOnly)
+                        .name(translatable("naturally_trimmed.config.filtering.vanillaOnly"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.vanillaOnly.description")))
+                        .binding(CONFIG_MANAGER.defaults().trimFiltering.vanillaOnly,
+                                () -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly,
+                                vanillaOnly -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly = vanillaOnly)
                         .controller(BooleanControllerBuilder::create)
                         .build())
 
                 .group(ListOption.<String>createBuilder()
-                        .name(translatable("naturally_trimmed.config.materialFilter"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.materialFilter.description")))
+                        .name(translatable("naturally_trimmed.config.filtering.materialFilter"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.materialFilter.description")))
                         .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().materialFilter.stream().map(FilterRule::toString).toList(),
-                                () -> CONFIG_MANAGER.instance().materialFilter.stream().map(FilterRule::toString).toList(),
-                                materialFilters -> CONFIG_MANAGER.instance().materialFilter = materialFilters.stream().map(filter -> FilterRule.<TrimMaterial>construct(filter, true)).toList())
+                        .binding(CONFIG_MANAGER.defaults().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
+                                () -> CONFIG_MANAGER.instance().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
+                                materialFilters -> CONFIG_MANAGER.instance().trimFiltering.materialFilter = materialFilters.stream().map(filter -> FilterRule.<TrimMaterial>construct(filter, true)).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
                         .build())
 
                 .group(ListOption.<String>createBuilder()
-                        .name(translatable("naturally_trimmed.config.patternFilter"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.patternFilter.description")))
+                        .name(translatable("naturally_trimmed.config.filtering.patternFilter"))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.patternFilter.description")))
                         .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().patternFilter.stream().map(FilterRule::toString).toList(),
-                                () -> CONFIG_MANAGER.instance().patternFilter.stream().map(FilterRule::toString).toList(),
-                                patternFilters -> CONFIG_MANAGER.instance().patternFilter = patternFilters.stream().map(pattern -> FilterRule.<TrimPattern>construct(pattern, false)).toList())
+                        .binding(CONFIG_MANAGER.defaults().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
+                                () -> CONFIG_MANAGER.instance().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
+                                patternFilters -> CONFIG_MANAGER.instance().trimFiltering.patternFilter = patternFilters.stream().map(pattern -> FilterRule.<TrimPattern>construct(pattern, false)).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
                         .build())
@@ -306,14 +306,14 @@ public class ConfigScreen {
         RegistryAccess registryAccess = level.registryAccess();
 
         message(player, literal("\nValidating material filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimMaterials(registryAccess).stream().toList(), CONFIG_MANAGER.instance().materialFilter, player);
+        validateFilterList(TrimApplier.getTrimMaterials(registryAccess).stream().toList(), CONFIG_MANAGER.instance().trimFiltering.materialFilter, player);
         message(player, literal("\nDone validating material filter").withStyle(ChatFormatting.UNDERLINE));
 
         message(player, literal("\nValidating pattern filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimPatterns(registryAccess).stream().toList(), CONFIG_MANAGER.instance().patternFilter, player);
+        validateFilterList(TrimApplier.getTrimPatterns(registryAccess).stream().toList(), CONFIG_MANAGER.instance().trimFiltering.patternFilter, player);
         message(player, literal("\nDone validating pattern filter").withStyle(ChatFormatting.UNDERLINE));
 
-        if (CONFIG_MANAGER.instance().vanillaOnly) {
+        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
             message(player, literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"));
         }
     }
