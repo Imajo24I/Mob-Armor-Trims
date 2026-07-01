@@ -2,6 +2,7 @@ package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
+import net.majo24.naturally_trimmed.config.FilterRule;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.isModLoaded;
@@ -19,7 +20,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 *///?}
-
 
 import net.minecraft.IdentifierException;
 import net.minecraft.client.Minecraft;
@@ -71,19 +71,11 @@ public class TrimApplier {
      * </ul>
      */
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armorPieces) throws NoSuchElementException {
-        List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
-        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
+        List<Holder.Reference<TrimMaterial>> trimMaterials = getFilteredTrimMaterials(registryAccess);
+        List<Holder.Reference<TrimPattern>> trimPatterns = getFilteredTrimPatterns(registryAccess);
 
-        // === Tag Whitelist ===
-        if (!CONFIG_MANAGER.instance().tagWhitelistMaterial.isEmpty()) {
-            trimMaterials.removeIf(material -> CONFIG_MANAGER.instance().tagWhitelistMaterial.stream().noneMatch(material::is));
-        }
-        if (!CONFIG_MANAGER.instance().tagWhitelistPattern.isEmpty()) {
-            trimPatterns.removeIf(pattern -> CONFIG_MANAGER.instance().tagWhitelistPattern.stream().noneMatch(pattern::is));
-        }
-
-        if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().textureValidationFiltering) {
-            // === Texture Validation ===
+        if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering) {
+            // === Texture Validation Filtering ===
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
 
             //? if 1.21.1 {
@@ -105,22 +97,9 @@ public class TrimApplier {
             throw noViableTrim;
 
         } else {
-            // === Alternate Trim Filtering ===
+            // === Precautionary Trim Filtering ===
             Holder.Reference<TrimMaterial> trimMaterial;
             Holder.Reference<TrimPattern> trimPattern;
-
-            // Blacklists
-            trimMaterials.removeIf(material -> CONFIG_MANAGER.instance().materialBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(material.key().identifier().toString()).find()));
-            trimPatterns.removeIf(pattern -> CONFIG_MANAGER.instance().patternBlacklist.stream().anyMatch(regexPattern -> regexPattern.matcher(pattern.key().identifier().toString()).find()));
-
-            if (CONFIG_MANAGER.instance().vanillaOnly) {
-                trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
-                trimPatterns.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
-
-                // Return early, as the rest of the filtering is already covered by removing non-vanilla trims
-                if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
-                return new ArmorTrim(Util.getRandom(trimMaterials, random), Util.getRandom(trimPatterns, random));
-            }
 
             // Ensure no trim patterns added by elytra trims are used
             trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
@@ -165,8 +144,8 @@ public class TrimApplier {
         ArmorTrim trim;
         try {
             trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
-                ? getRandomTrim(registryAccess, random, armor)
-                : getPredefinedTrim(registryAccess, random);
+                    ? getRandomTrim(registryAccess, random, armor)
+                    : getPredefinedTrim(registryAccess, random);
         } catch (NoSuchElementException err) {
             LOGGER.warn(err.getMessage());
             return;
@@ -184,6 +163,36 @@ public class TrimApplier {
                 && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
             ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), entity.level().registryAccess(), random);
         }
+    }
+
+    public static List<Holder.Reference<TrimPattern>> getFilteredTrimPatterns(RegistryAccess registryAccess) {
+        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
+
+        // === Pattern Filters ===
+        List<FilterRule<TrimPattern>> filter = CONFIG_MANAGER.instance().trimFiltering.patternFilter;
+        trimPatterns.removeIf(pattern -> FilterRule.resolveFilterForBlacklisted(filter, pattern));
+
+        // === Vanilla Only ===
+        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+            trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
+        }
+
+        return trimPatterns;
+    }
+
+    public static List<Holder.Reference<TrimMaterial>> getFilteredTrimMaterials(RegistryAccess registryAccess) {
+        List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
+
+        // === Material Filters ===
+        List<FilterRule<TrimMaterial>> filter = CONFIG_MANAGER.instance().trimFiltering.materialFilter;
+        trimMaterials.removeIf(material -> FilterRule.resolveFilterForBlacklisted(filter, material));
+
+        // === Vanilla Only ===
+        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+            trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+        }
+
+        return trimMaterials;
     }
 
     public static List<Holder.Reference<TrimPattern>> getTrimPatterns(RegistryAccess registryAccess) {
@@ -219,7 +228,7 @@ public class TrimApplier {
     }
     *///?} else {
     private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, Set<ResourceKey<EquipmentAsset>> equipmentAssets) {
-        for (EquipmentClientInfo.LayerType layer: List.of(EquipmentClientInfo.LayerType.HUMANOID, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
+        for (EquipmentClientInfo.LayerType layer : List.of(EquipmentClientInfo.LayerType.HUMANOID, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
             for (ResourceKey<EquipmentAsset> equipmentAsset : equipmentAssets) {
                 EquipmentLayerRenderer.TrimSpriteKey spriteKey = new EquipmentLayerRenderer.TrimSpriteKey(trim, layer, equipmentAsset);
                 TextureAtlasSprite texture = atlas.getSprite(spriteKey.spriteId());

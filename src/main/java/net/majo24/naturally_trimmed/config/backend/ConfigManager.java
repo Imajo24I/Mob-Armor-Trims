@@ -2,9 +2,8 @@ package net.majo24.naturally_trimmed.config.backend;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
+import net.majo24.naturally_trimmed.config.FilterRule;
+import net.minecraft.world.item.equipment.trim.*;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;
@@ -12,18 +11,11 @@ import org.quiltmc.parsers.json.gson.GsonWriter;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.*;
 
 public class ConfigManager<T> {
     private T instance;
@@ -31,8 +23,7 @@ public class ConfigManager<T> {
     private final Path configPath;
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
-            .registerTypeAdapter(TagKey.class, new TagKeyTypeAdapter())
+            .registerTypeAdapter(FilterRule.class, new FilterRuleTypeAdapter<>())
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls().setPrettyPrinting()
             .create();
@@ -188,35 +179,15 @@ public class ConfigManager<T> {
         }
     }
 
-    public static class PatternTypeAdapter implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
+    public static class FilterRuleTypeAdapter<T> implements JsonSerializer<FilterRule<T>>, JsonDeserializer<FilterRule<T>> {
         @Override
-        public JsonElement serialize(Pattern src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.pattern());
+        public JsonElement serialize(FilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
+            return new JsonPrimitive(src.toString());
         }
 
         @Override
-        public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return Pattern.compile(json.getAsString());
-        }
-    }
-
-    public static class TagKeyTypeAdapter implements JsonSerializer<TagKey<?>>, JsonDeserializer<TagKey<?>> {
-        @Override
-        public JsonElement serialize(TagKey<?> src, Type typeOfSrc, JsonSerializationContext context) {
-            //~ if >=1.21.11 '.identifier()' -> '.location()' { *mojank forgott to rename this to identifier() :<( -> needed due to the global replacement*
-            //~ if >=1.21.11 '.location()' -> '.location()' {
-            return new JsonPrimitive(src.location().toString());
-            //~}
-            //~}
-        }
-
-        @Override
-        public TagKey<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            if (typeOfT.getTypeName().equals("net.minecraft.tags.TagKey<net.minecraft.world.item.armortrim.TrimMaterial>")) {
-                return TagKey.create(Registries.TRIM_MATERIAL, Identifier.parse(json.getAsString()));
-            } else{
-                return TagKey.create(Registries.TRIM_PATTERN, Identifier.parse(json.getAsString()));
-            }
+        public FilterRule<T> deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            return FilterRule.construct(json.getAsString(), ((ParameterizedType) type).getActualTypeArguments()[0] == TrimMaterial.class);
         }
     }
 }

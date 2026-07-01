@@ -49,7 +49,7 @@ public class ToolTrimsCompat {
             // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals("minecraft")));
 
-            if (CONFIG_MANAGER.instance().vanillaOnly) {
+            if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
                 materials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
             }
         } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
