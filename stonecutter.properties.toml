@@ -1,6 +1,6 @@
 ["26.1"]
-mc.dep = "~26.1"
-mc.targets = "26.1, 26.1.1, 26.1.2"
+mc.dep = ">=26.1.0 <26.3.0"
+mc.targets = "26.1, 26.1.1, 26.1.2, 26.2"
 
 #deps.parchment | No version available
 deps.yacl = "3.9.1+26.1"

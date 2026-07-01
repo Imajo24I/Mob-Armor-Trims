@@ -60,7 +60,7 @@ public class ConfigManager<T> {
             jsonReader.endObject();
 
         } catch (Exception e) {
-            NaturallyTrimmed.LOGGER.error("Failed to deserialize the Naturally Trimmed config file. Using the default config to file for this session. To restore to the default config file, delete or rename the current one and restart the game.", e);
+            NaturallyTrimmed.LOGGER.error("Failed to load the Naturally Trimmed config file. Using the default config for this session. To reset to the default config file, delete or rename the current one and restart the game.", e);
             this.instance = defaults;
         }
     }
@@ -90,7 +90,7 @@ public class ConfigManager<T> {
                 JsonElement element = this.gson.fromJson(gsonReader, JsonElement.class);
 
                 if (element.isJsonNull()) {
-                    NaturallyTrimmed.LOGGER.warn("Found null value for config field {} while deserializing config file. Using default instead.", name);
+                    NaturallyTrimmed.LOGGER.warn("Found null value for config field {} while deserializing config file. Using default value instead for this session", name);
                 } else {
                     field.set(config, this.gson.fromJson(element, field.getGenericType()));
                 }
@@ -120,7 +120,7 @@ public class ConfigManager<T> {
 
             Files.writeString(this.configPath, stringWriter.toString(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
         } catch (Exception e) {
-            NaturallyTrimmed.LOGGER.error("Failed to serialize and save Naturally Trimmed config to config file", e);
+            NaturallyTrimmed.LOGGER.error("Failed to save Naturally Trimmed config to file", e);
         }
     }
 
