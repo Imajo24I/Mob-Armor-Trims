@@ -1,7 +1,15 @@
-- Add material & pattern trim tag-whitelist ([#48](https://github.com/Imajo24I/Naturally-Trimmed/issues/48))
-  - Two whitelists that filter out all trim materials / patterns that don't have any of the given tags
-  - If a trim part has only one of the tags, it will be included
-  - Only enabled if not empty
-  - Config Screen entries and utility buttons have been added for this
-- Fix potential crash while trying to load equipment asset for armor pieces ([#45](https://github.com/Imajo24I/Naturally-Trimmed/issues/45))
-- Small performance improvement in texture validation filtering
+- Combined `material_blacklist` and `tag_whitelist_material` into a single `material_filter` config entry (same thing with the entries for trim patterns)
+  - These filter entries now combine the respective regex blacklist and tag whitelist into one config entry while adding some more capabilities 
+  - These config entries support advanced configuration, including blacklisting and whitelisting and matching for regex patterns and minecraft tags. 
+  - See the respective entry in the new wiki's config page for complete documentation 
+- `vanilla_only` config entry now applies independently of precautionary-filtering 
+- Restructured config file format
+  - Trim filtering config entries are now into their own config category, similar to as already in the config screen 
+- Created a wiki 
+  - https://github.com/Imajo24I/Naturally-Trimmed/wiki
+  - Acts as a place for central user-facing documentation
+  - Centralizes documentation between the config file and config screen
+  - Structured in a versioned approach, see the [home page](https://github.com/Imajo24I/Naturally-Trimmed/wiki) for more info on this
+- Cleaned up the README.md and added links to the new wiki where appropriate
+- Updated the documentation for lots of config entries 
+  - Generally improved the documentation and added links to the new wiki where appropriate 

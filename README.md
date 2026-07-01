@@ -13,7 +13,7 @@ resulting in a more complete gameplay experience and making armor you find in th
 - **Applies armor trims to equipment from loot tables.** This includes chests from all structures (for example
   blacksmiths, bastions or end cities), piglin bartering and more.
 - **Applies armor trims to equipment from villager trades.** All traders, including villagers, wandering traders and modded traders, are supported.
-- Supports trimming tools like pickaxes or sword through
+- Supports trimming tools like pickaxes or swords through
   either [Trimmable Tools](https://modrinth.com/datapack/trimmable-tools) or [Tool Trims Mod](https://modrinth.com/mod/tool-trims-mod)
 - All features are configurable. See the [Configuration section](#configuration)
 
