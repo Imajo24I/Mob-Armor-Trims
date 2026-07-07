@@ -1,3 +1,14 @@
+["26.3-snapshot-1"]
+mc.dep = "~26.3.0"
+mc.targets = "26.3-snapshot-1"
+
+#deps.parchment | No version available
+deps.yacl = "3.9.5+26.3"
+
+["26.3-snapshot-1-fabric"]
+deps.fabric_api = "0.153.1+26.3"
+deps.modmenu = "18.0.0-alpha.6"
+
 ["26.1"]
 mc.dep = ">=26.1.0 <26.3.0"
 mc.targets = "26.1, 26.1.1, 26.1.2, 26.2"

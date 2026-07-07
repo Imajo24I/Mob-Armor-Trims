@@ -396,10 +396,10 @@ public class ConfigScreen {
             addRenderableWidget(messageWidget);
 
             Button openLinkButton = Button.builder(translatable("naturally_trimmed.config.backup_screen.viewOnModrinth"),
-                            button -> minecraft.setScreen(new ConfirmLinkScreen(
+                            button -> minecraft.gui.setScreen(new ConfirmLinkScreen(
                                     open -> {
                                         if (open) Util.getPlatform().openUri("https://modrinth.com/mod/yacl");
-                                        minecraft.setScreen(lastScreen);
+                                        minecraft.gui.setScreen(lastScreen);
                                     }, "https://modrinth.com/mod/yacl", true)))
                     .pos(width / 2 - 120, height / 2)
                     .size(115, 20)

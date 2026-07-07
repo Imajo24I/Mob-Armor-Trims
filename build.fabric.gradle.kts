@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     id("net.fabricmc.fabric-loom")
     id("me.modmuss50.mod-publish-plugin")
@@ -35,6 +37,20 @@ repositories {
 
     // Quilt Parser
     maven("https://maven.quiltmc.org/repository/release/")
+
+    mavenCentral()
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = URI.create("https://api.modrinth.com/maven")
+            }
+        }
+        filter {
+            includeGroup("maven.modrinth")
+        }
+    }
 }
 
 dependencies {
@@ -43,13 +59,14 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
     // YACL
-    implementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
+    implementation("maven.modrinth:1eAoo2KR:zjZChhNt")
+    //implementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
 
     // Fabric API
-    runtimeOnly("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
     // Mod Menu
-    implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+    //implementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
 
     // Quilt Parser
     implementation("org.quiltmc.parsers:json:${property("deps.quilt_parser")}")

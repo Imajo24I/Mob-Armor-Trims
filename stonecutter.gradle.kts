@@ -6,7 +6,7 @@ plugins {
     id("fabric-loom") version "1.15-SNAPSHOT" apply false
     id("net.neoforged.moddev") version "2.0.140" apply false
 }
-stonecutter active "26.1-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "26.3-snapshot-1-fabric" /* [SC] DO NOT EDIT */
 
 stonecutter parameters {
     var mcVersion = ParsedVersion(node.metadata.project.substringBeforeLast("-"))

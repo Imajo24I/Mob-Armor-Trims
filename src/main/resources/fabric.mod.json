@@ -29,8 +29,7 @@
   "accessWidener": "${aw_path}",
   "depends": {
     "fabric-api": ">=${fabric_api}",
-    "fabricloader": ">=0.15.11",
-    "minecraft": "${mc}"
+    "fabricloader": ">=0.15.11"
   },
   "recommends": {
     "modmenu": ">=${modmenu}",

@@ -30,6 +30,7 @@ stonecutter {
         create("1.21.1", listOf("fabric", "neoforge"), true)
         create("1.21.11", listOf("fabric", "neoforge"), true)
         create("26.1", listOf("fabric", "neoforge"))
+        create("26.3-snapshot-1", listOf("fabric"))
 
         vcsVersion = "26.1-fabric"
     }

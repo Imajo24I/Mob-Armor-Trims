@@ -2,13 +2,15 @@ package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
-import net.majo24.naturally_trimmed.config.FilterRule;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.isModLoaded;
 import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
 
 //? if >=1.21.11 {
+import net.majo24.naturally_trimmed.config.FilterRule;
+import net.minecraft.client.resources.model.EquipmentAssetManager;
+import net.minecraft.client.resources.palette.PalettedTextureManager;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
@@ -20,6 +22,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 *///?}
+
 
 import net.minecraft.IdentifierException;
 import net.minecraft.client.Minecraft;
@@ -83,14 +86,21 @@ public class TrimApplier {
             TextureAtlasSprite missingSprite = atlas.getSprite(Identifier.tryBuild("naturally_trimmed", "placeholder"));
             Set<Holder<ArmorMaterial>> material = armorPieces.stream().map(piece -> ((ArmorItem) piece.getItem()).getMaterial()).collect(Collectors.toSet());
             *///?} else {
-            TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS);
-            TextureAtlasSprite missingSprite = atlas.missingSprite();
+            //TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS);
+            //TextureAtlasSprite missingSprite = atlas.missingSprite();
             Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().orElseThrow(() -> noViableTrim)).collect(Collectors.toSet());
             //?}
 
+            PalettedTextureManager textureManager = Minecraft.getInstance().getPalettedTextureManager();
+            PalettedTextureManager.Handle missing = textureManager.missingHandle;
+            EquipmentAssetManager equipmentAssets = Minecraft.getInstance().getEntityRenderDispatcher().equipmentAssets;
+
             for (ArmorTrim trim : trims) {
-                if (isValidTrim(atlas, missingSprite, trim, material)) {
+                if (isValidTrim(textureManager, trim, missing, equipmentAssets, material)) {
+                    System.out.println("Found Match");
                     return trim;
+                } else {
+                    System.out.println("No Match");
                 }
             }
 
@@ -227,13 +237,19 @@ public class TrimApplier {
         return true;
     }
     *///?} else {
-    private static boolean isValidTrim(TextureAtlas atlas, TextureAtlasSprite missingSprite, ArmorTrim trim, Set<ResourceKey<EquipmentAsset>> equipmentAssets) {
+    private static boolean isValidTrim(PalettedTextureManager textureManager, ArmorTrim trim, PalettedTextureManager.Handle missing, EquipmentAssetManager equipmentAssetManager, Set<ResourceKey<EquipmentAsset>> equipmentAssets) {
         for (EquipmentClientInfo.LayerType layer : List.of(EquipmentClientInfo.LayerType.HUMANOID, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
             for (ResourceKey<EquipmentAsset> equipmentAsset : equipmentAssets) {
-                EquipmentLayerRenderer.TrimSpriteKey spriteKey = new EquipmentLayerRenderer.TrimSpriteKey(trim, layer, equipmentAsset);
-                TextureAtlasSprite texture = atlas.getSprite(spriteKey.spriteId());
+                EquipmentLayerRenderer.TrimTextureKey spriteKey = new EquipmentLayerRenderer.TrimTextureKey(trim, layer, equipmentAssetManager.get(equipmentAsset));
+                PalettedTextureManager.Handle handle = textureManager.handles.get(new PalettedTextureManager.SlotKey(spriteKey.baseTexture(), spriteKey.paletteId()));
+                if (handle != null) {
+                    if (handle.textureLocation().equals(missing.textureLocation())) {
+                        return false;
+                    }
+                }
 
-                if (texture.contents().equals(missingSprite.contents())) {
+                Optional<PalettedTextureManager.BaseTexture> maybeBaseTexture = textureManager.baseTextureCache.getUnchecked(spriteKey.baseTexture());
+                if (maybeBaseTexture.isEmpty()) {
                     return false;
                 }
             }

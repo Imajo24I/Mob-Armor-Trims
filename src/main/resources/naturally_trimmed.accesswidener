@@ -1,3 +1,9 @@
 accessWidener v2 official
 
-accessible class net/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer$TrimSpriteKey
+accessible class net/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer$TrimTextureKey
+accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher equipmentAssets Lnet/minecraft/client/resources/model/EquipmentAssetManager;
+accessible field net/minecraft/client/resources/palette/PalettedTextureManager missingHandle Lnet/minecraft/client/resources/palette/PalettedTextureManager$Handle;
+accessible class net/minecraft/client/resources/palette/PalettedTextureManager$SlotKey
+accessible class net/minecraft/client/resources/palette/PalettedTextureManager$BaseTexture
+accessible field net/minecraft/client/resources/palette/PalettedTextureManager handles Ljava/util/Map;
+accessible field net/minecraft/client/resources/palette/PalettedTextureManager baseTextureCache Lcom/google/common/cache/LoadingCache;
