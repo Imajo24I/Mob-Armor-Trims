@@ -2,7 +2,6 @@ package net.majo24.naturally_trimmed.config.backend;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.FilterRule;
 import net.minecraft.world.item.equipment.trim.*;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
@@ -22,16 +21,22 @@ public class ConfigManager<T> {
     private final T defaults;
     private final Path configPath;
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(FilterRule.class, new FilterRuleTypeAdapter<>())
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .serializeNulls().setPrettyPrinting()
-            .create();
+    private final Gson gson;
 
-    public ConfigManager(Class<T> configClass, Path configPath) {
+    public ConfigManager(Class<T> configClass, Path configPath, Map<Type, Object> typeAdapters) {
         this.configPath = configPath;
         this.defaults = createDefaultInstance(configClass);
         this.instance = createDefaultInstance(configClass);
+
+        GsonBuilder builder = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .serializeNulls()
+                .setPrettyPrinting();
+        for (Map.Entry<Type, Object> typeAdapter : typeAdapters.entrySet()) {
+            builder.registerTypeAdapter(typeAdapter.getKey(), typeAdapter.getValue());
+            System.out.println(typeAdapter);
+        }
+        this.gson = builder.create();
     }
 
     public T instance() {
@@ -176,18 +181,6 @@ public class ConfigManager<T> {
             return noArgsConstructor.newInstance();
         } catch (Exception e) {
             throw new ClassFormatError("Failed to load default config for class " + noArgsConstructor.getDeclaringClass().getName() + "\n" + e);
-        }
-    }
-
-    public static class FilterRuleTypeAdapter<T> implements JsonSerializer<FilterRule<T>>, JsonDeserializer<FilterRule<T>> {
-        @Override
-        public JsonElement serialize(FilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
-            return new JsonPrimitive(src.toString());
-        }
-
-        @Override
-        public FilterRule<T> deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            return FilterRule.construct(json.getAsString(), ((ParameterizedType) type).getActualTypeArguments()[0] == TrimMaterial.class);
         }
     }
 }

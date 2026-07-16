@@ -1,5 +1,6 @@
 package net.majo24.naturally_trimmed.config;
 
+import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.Entry;
@@ -7,11 +8,17 @@ import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.world.item.equipment.trim.*;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Config {
-    public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath());
+    public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath(), new HashMap<>() {{
+        put(FilterRule.class, new FilterRuleTypeAdapter<>());
+    }});
+
 
     // === Config Entries ===
 
@@ -121,5 +128,17 @@ public class Config {
 
         @Entry(name = "min_level", comment = "The minimum villager trading level an item needs to be in, to be considered of being trimmed")
         public int minLevel = 3;
+    }
+
+    public static class FilterRuleTypeAdapter<T> implements JsonSerializer<FilterRule<T>>, JsonDeserializer<FilterRule<T>> {
+        @Override
+        public JsonElement serialize(FilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
+            return new JsonPrimitive(src.toString());
+        }
+
+        @Override
+        public FilterRule<T> deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            return FilterRule.construct(json.getAsString(), ((ParameterizedType) type).getActualTypeArguments()[0] == TrimMaterial.class);
+        }
     }
 }
