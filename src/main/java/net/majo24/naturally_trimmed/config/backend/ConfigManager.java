@@ -3,7 +3,6 @@ package net.majo24.naturally_trimmed.config.backend;
 import com.google.common.base.CaseFormat;
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.minecraft.world.item.equipment.trim.*;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;
@@ -74,9 +73,9 @@ public class ConfigManager<T> {
         Map<String, Field> fieldMap = new HashMap<>();
         Arrays.stream(config.getClass().getDeclaredFields()).forEach(field -> {
             if (field.isAnnotationPresent(Entry.class)) {
-                fieldMap.put(Objects.requireNonNull(field.getAnnotation(Entry.class)).name(), field);
+                fieldMap.put(annotationOrField(field.getAnnotation(Entry.class), field), field);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
-                fieldMap.put(Objects.requireNonNull(field.getAnnotation(SubConfig.class)).name(), field);
+                fieldMap.put(annotationOrField(field.getAnnotation(SubConfig.class), field), field);
             }
         });
 
@@ -171,6 +170,14 @@ public class ConfigManager<T> {
         if (!Modifier.isPublic(field.getModifiers())) {
             throw new IllegalStateException("Config field " + field.getName() + " located in " + field.getDeclaringClass().getName() + " is not public.");
         }
+    }
+
+    private String annotationOrField(Entry entry, Field field) {
+        return (entry.name().isEmpty()) ? field.getName() : entry.name();
+    }
+
+    private String annotationOrField(SubConfig subConfig, Field field) {
+        return (subConfig.name().isEmpty()) ? field.getName() : subConfig.name();
     }
 
     private T createDefaultInstance(Class<T> configClass) {
