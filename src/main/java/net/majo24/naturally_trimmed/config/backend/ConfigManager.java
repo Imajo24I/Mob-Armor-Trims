@@ -1,5 +1,6 @@
 package net.majo24.naturally_trimmed.config.backend;
 
+import com.google.common.base.CaseFormat;
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.minecraft.world.item.equipment.trim.*;
@@ -34,7 +35,6 @@ public class ConfigManager<T> {
                 .setPrettyPrinting();
         for (Map.Entry<Type, Object> typeAdapter : typeAdapters.entrySet()) {
             builder.registerTypeAdapter(typeAdapter.getKey(), typeAdapter.getValue());
-            System.out.println(typeAdapter);
         }
         this.gson = builder.create();
     }
@@ -85,8 +85,12 @@ public class ConfigManager<T> {
             Field field = fieldMap.get(name);
 
             if (field == null) {
-                jsonReader.skipValue();
-                continue;
+                // Also check for an entry with snake_case
+                field = fieldMap.get(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name));
+                if (field == null) {
+                    jsonReader.skipValue();
+                    continue;
+                }
             }
             fieldMap.remove(name);
             assertPublicField(field);
