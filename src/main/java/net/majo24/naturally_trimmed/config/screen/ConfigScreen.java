@@ -54,16 +54,16 @@ public class ConfigScreen {
     private static ConfigCategory buildGeneralCategory() {
         return ConfigCategory.createBuilder()
                 .name(translatable("naturally_trimmed.config.general"))
-                .tooltip(translatable("naturally_trimmed.config.general.tooltip"))
+                .tooltip(translatable("naturally_trimmed.config.general.desc"))
 
                 .group(OptionGroup.createBuilder()
                         .name(translatable("naturally_trimmed.config.enable_features"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.desc")))
                         .collapsed(true)
 
                         .option(Option.<Boolean>createBuilder()
                                 .name(translatable("naturally_trimmed.config.enable_features.enableTrimMobs"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimMobs.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimMobs.desc")))
                                 .binding(CONFIG_MANAGER.defaults().enableTrimMobs,
                                         () -> CONFIG_MANAGER.instance().enableTrimMobs,
                                         enableTrimMobs -> CONFIG_MANAGER.instance().enableTrimMobs = enableTrimMobs)
@@ -72,7 +72,7 @@ public class ConfigScreen {
 
                         .option(Option.<Boolean>createBuilder()
                                 .name(translatable("naturally_trimmed.config.enable_features.enableTrimLootTables"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimLootTables.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimLootTables.desc")))
                                 .binding(CONFIG_MANAGER.defaults().enableTrimLootTables,
                                         () -> CONFIG_MANAGER.instance().enableTrimLootTables,
                                         enableTrimLootTables -> CONFIG_MANAGER.instance().enableTrimLootTables = enableTrimLootTables)
@@ -81,7 +81,7 @@ public class ConfigScreen {
 
                         .option(Option.<Boolean>createBuilder()
                                 .name(translatable("naturally_trimmed.config.enable_features.enableTrimTrades"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimTrades.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.enable_features.enableTrimTrades.desc")))
                                 .binding(CONFIG_MANAGER.defaults().enableTrimTrades,
                                         () -> CONFIG_MANAGER.instance().enableTrimTrades,
                                         enableTrimTrades -> CONFIG_MANAGER.instance().enableTrimTrades = enableTrimTrades)
@@ -93,12 +93,12 @@ public class ConfigScreen {
 
                 .group(OptionGroup.createBuilder()
                         .name(translatable("naturally_trimmed.config.trimLootTables"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimLootTables.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimLootTables.desc")))
                         .collapsed(true)
 
                         .option(Option.<Integer>createBuilder()
                                 .name(translatable("naturally_trimmed.config.trimLootTables.trimChance"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimLootTables.trimChance.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimLootTables.trimChance.desc")))
                                 .binding(CONFIG_MANAGER.defaults().trimLootTables.trimChance,
                                         () -> CONFIG_MANAGER.instance().trimLootTables.trimChance,
                                         trimChance -> CONFIG_MANAGER.instance().trimLootTables.trimChance = trimChance)
@@ -111,12 +111,12 @@ public class ConfigScreen {
 
                 .group(OptionGroup.createBuilder()
                         .name(translatable("naturally_trimmed.config.trimTrades"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.desc")))
                         .collapsed(true)
 
                         .option(Option.<Integer>createBuilder()
                                 .name(translatable("naturally_trimmed.config.trimTrades.trimChance"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.trimChance.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.trimChance.desc")))
                                 .binding(CONFIG_MANAGER.defaults().trimTrades.trimChance,
                                         () -> CONFIG_MANAGER.instance().trimTrades.trimChance,
                                         trimChance -> CONFIG_MANAGER.instance().trimTrades.trimChance = trimChance)
@@ -128,7 +128,7 @@ public class ConfigScreen {
 
                         .option(Option.<Integer>createBuilder()
                                 .name(translatable("naturally_trimmed.config.trimTrades.minLevel"))
-                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.minLevel.description")))
+                                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimTrades.minLevel.desc")))
                                 .binding(CONFIG_MANAGER.defaults().trimTrades.minLevel,
                                         () -> CONFIG_MANAGER.instance().trimTrades.minLevel,
                                         minLevel -> CONFIG_MANAGER.instance().trimTrades.minLevel = minLevel)
@@ -143,12 +143,12 @@ public class ConfigScreen {
     private static OptionGroup buildTrimMobsGroup() {
         return OptionGroup.createBuilder()
                 .name(translatable("naturally_trimmed.config.trimMobs"))
-                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.tooltip")))
+                .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.desc")))
                 .collapsed(true)
 
                 .option(Option.<Config.TrimMobsSubConfig.TrimSystem>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.trimSystem"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimSystem.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimSystem.desc")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
                                 () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
                                 enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
@@ -159,7 +159,7 @@ public class ConfigScreen {
 
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.noTrimsChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.noTrimsChance.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.noTrimsChance.desc")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.noTrimsChance,
                                 () -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance,
                                 noTrimsChance -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance = noTrimsChance)
@@ -171,7 +171,7 @@ public class ConfigScreen {
 
                 .option(Option.<Integer>createBuilder()
                         .name(translatable("naturally_trimmed.config.trimMobs.trimChance"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimChance.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.trimMobs.trimChance.desc")))
                         .binding(CONFIG_MANAGER.defaults().trimMobs.trimChance,
                                 () -> CONFIG_MANAGER.instance().trimMobs.trimChance,
                                 trimsChance -> CONFIG_MANAGER.instance().trimMobs.trimChance = trimsChance)
@@ -186,11 +186,11 @@ public class ConfigScreen {
     private static ConfigCategory buildFilteringCategory() {
         return ConfigCategory.createBuilder()
                 .name(translatable("naturally_trimmed.config.filtering"))
-                .tooltip(translatable("naturally_trimmed.config.filtering.tooltip"))
+                .tooltip(translatable("naturally_trimmed.config.filtering.desc"))
 
                 .option(Option.<Boolean>createBuilder()
                         .name(translatable("naturally_trimmed.config.filtering.textureValidationFiltering"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.textureValidationFiltering.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.textureValidationFiltering.desc")))
                         .binding(CONFIG_MANAGER.defaults().trimFiltering.textureValidationFiltering,
                                 () -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering,
                                 textureValidationFiltering -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering = textureValidationFiltering)
@@ -199,7 +199,7 @@ public class ConfigScreen {
 
                 .option(Option.<Boolean>createBuilder()
                         .name(translatable("naturally_trimmed.config.filtering.vanillaOnly"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.vanillaOnly.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.vanillaOnly.desc")))
                         .binding(CONFIG_MANAGER.defaults().trimFiltering.vanillaOnly,
                                 () -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly,
                                 vanillaOnly -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly = vanillaOnly)
@@ -208,7 +208,7 @@ public class ConfigScreen {
 
                 .group(ListOption.<String>createBuilder()
                         .name(translatable("naturally_trimmed.config.filtering.materialFilter"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.materialFilter.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.materialFilter.desc")))
                         .collapsed(true)
                         .binding(CONFIG_MANAGER.defaults().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
                                 () -> CONFIG_MANAGER.instance().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
@@ -219,7 +219,7 @@ public class ConfigScreen {
 
                 .group(ListOption.<String>createBuilder()
                         .name(translatable("naturally_trimmed.config.filtering.patternFilter"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.patternFilter.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.filtering.patternFilter.desc")))
                         .collapsed(true)
                         .binding(CONFIG_MANAGER.defaults().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
                                 () -> CONFIG_MANAGER.instance().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
@@ -235,7 +235,7 @@ public class ConfigScreen {
 
         return ConfigCategory.createBuilder()
                 .name(translatable("naturally_trimmed.config.utils"))
-                .tooltip(translatable("naturally_trimmed.config.utils.tooltip"))
+                .tooltip(translatable("naturally_trimmed.config.utils.desc"))
 
                 .option(ButtonOption.createBuilder()
                         .name((translatable("naturally_trimmed.config.utils.openFile")))
@@ -246,7 +246,7 @@ public class ConfigScreen {
 
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.reloadConfig"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.reloadConfig.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.reloadConfig.desc")))
                         .text(translatable("naturally_trimmed.config.utils.run"))
                         .action((screen, option) -> {
                             CONFIG_MANAGER.loadInstance();
@@ -256,14 +256,14 @@ public class ConfigScreen {
 
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.validatePredefinedTrims"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validatePredefinedTrims.desc")))
                         .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
                         .action((screen, option) -> validatePredefinedTrims())
                         .build())
 
                 .option(ButtonOption.createBuilder()
                         .name(translatable("naturally_trimmed.config.utils.validateBlacklists"))
-                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateBlacklists.description")))
+                        .description(OptionDescription.of(translatable("naturally_trimmed.config.utils.validateBlacklists.desc")))
                         .text(isInWorld ? translatable("naturally_trimmed.config.utils.run") : translatable("naturally_trimmed.config.utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
                         .action((screen, option) -> validateFilters())
                         .build())
