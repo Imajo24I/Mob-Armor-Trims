@@ -138,7 +138,7 @@ public class ConfigManager<T> {
                 assertPublicField(field);
 
                 Entry entry = field.getAnnotation(Entry.class);
-                jsonWriter.name(Objects.requireNonNull(entry).name());
+                jsonWriter.name(annotationOrField(entry, field));
                 jsonWriter.comment(Objects.requireNonNull(entry).comment());
 
                 JsonElement element;
@@ -155,7 +155,7 @@ public class ConfigManager<T> {
                 assertPublicField(field);
                 SubConfig subConfig = Objects.requireNonNull(field.getAnnotation(SubConfig.class));
 
-                jsonWriter.name(subConfig.name());
+                jsonWriter.name(annotationOrField(subConfig, field));
                 jsonWriter.comment(subConfig.comment());
 
                 jsonWriter.beginObject();
