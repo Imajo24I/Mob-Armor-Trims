@@ -49,12 +49,12 @@ public class TrimLootTablesFunction extends LootItemConditionalFunction {
     @Override
     protected @NotNull ItemStack run(ItemStack itemStack, @NotNull LootContext lootContext) {
         // === Check if a trim should be applied ===
-        if (!Config.CONFIG_MANAGER.instance().enableTrimLootTables) return itemStack;
+        if (!Config.INSTANCE.enableTrimLootTables) return itemStack;
         if (!itemStack.is(ItemTags.TRIMMABLE_ARMOR) && !itemStack.is(ToolTrimsCompat.TRIMMABLE_TOOLS_TAG))
             return itemStack;
 
         RandomSource random = lootContext.getRandom();
-        if (Config.CONFIG_MANAGER.instance().trimLootTables.trimChance < random.nextInt(100)) return itemStack;
+        if (Config.INSTANCE.trimLootTables.trimChance < random.nextInt(100)) return itemStack;
 
         // === Apply a trim ===
         RegistryAccess registryAccess = lootContext.getLevel().registryAccess();

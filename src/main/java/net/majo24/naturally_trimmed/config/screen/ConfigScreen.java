@@ -29,7 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
+import static net.majo24.naturally_trimmed.config.Config.INSTANCE;
+import static net.majo24.naturally_trimmed.config.Config.DEFAULT;
 import static net.minecraft.network.chat.Component.translatable;
 import static net.minecraft.network.chat.Component.literal;
 
@@ -46,7 +47,7 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parent) {
         YetAnotherConfigLib.Builder configScreen = YetAnotherConfigLib.createBuilder()
                 .title(literal("Naturally Trimmed"))
-                .save(CONFIG_MANAGER::saveInstance)
+                .save(INSTANCE::saveToFile)
 
                 .category(buildGeneralCategory())
                 .category(buildFilteringCategory())
@@ -68,27 +69,27 @@ public class ConfigScreen {
                         .option(Option.<Boolean>createBuilder()
                                 .name(prefixed("enable_features.enableTrimMobs"))
                                 .description(optionDesc("enable_features.enableTrimMobs"))
-                                .binding(CONFIG_MANAGER.defaults().enableTrimMobs,
-                                        () -> CONFIG_MANAGER.instance().enableTrimMobs,
-                                        enableTrimMobs -> CONFIG_MANAGER.instance().enableTrimMobs = enableTrimMobs)
+                                .binding(DEFAULT.enableTrimMobs,
+                                        () -> INSTANCE.enableTrimMobs,
+                                        enableTrimMobs -> INSTANCE.enableTrimMobs = enableTrimMobs)
                                 .controller(BooleanControllerBuilder::create)
                                 .build())
 
                         .option(Option.<Boolean>createBuilder()
                                 .name(prefixed("enable_features.enableTrimLootTables"))
                                 .description(optionDesc("enable_features.enableTrimLootTables"))
-                                .binding(CONFIG_MANAGER.defaults().enableTrimLootTables,
-                                        () -> CONFIG_MANAGER.instance().enableTrimLootTables,
-                                        enableTrimLootTables -> CONFIG_MANAGER.instance().enableTrimLootTables = enableTrimLootTables)
+                                .binding(DEFAULT.enableTrimLootTables,
+                                        () -> INSTANCE.enableTrimLootTables,
+                                        enableTrimLootTables -> INSTANCE.enableTrimLootTables = enableTrimLootTables)
                                 .controller(BooleanControllerBuilder::create)
                                 .build())
 
                         .option(Option.<Boolean>createBuilder()
                                 .name(prefixed("enable_features.enableTrimTrades"))
                                 .description(optionDesc("enable_features.enableTrimTrades"))
-                                .binding(CONFIG_MANAGER.defaults().enableTrimTrades,
-                                        () -> CONFIG_MANAGER.instance().enableTrimTrades,
-                                        enableTrimTrades -> CONFIG_MANAGER.instance().enableTrimTrades = enableTrimTrades)
+                                .binding(DEFAULT.enableTrimTrades,
+                                        () -> INSTANCE.enableTrimTrades,
+                                        enableTrimTrades -> INSTANCE.enableTrimTrades = enableTrimTrades)
                                 .controller(BooleanControllerBuilder::create)
                                 .build())
                         .build())
@@ -103,9 +104,9 @@ public class ConfigScreen {
                         .option(Option.<Integer>createBuilder()
                                 .name(prefixed("trimLootTables.trimChance"))
                                 .description(optionDesc("trimLootTables.trimChance"))
-                                .binding(CONFIG_MANAGER.defaults().trimLootTables.trimChance,
-                                        () -> CONFIG_MANAGER.instance().trimLootTables.trimChance,
-                                        trimChance -> CONFIG_MANAGER.instance().trimLootTables.trimChance = trimChance)
+                                .binding(DEFAULT.trimLootTables.trimChance,
+                                        () -> INSTANCE.trimLootTables.trimChance,
+                                        trimChance -> INSTANCE.trimLootTables.trimChance = trimChance)
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
@@ -121,9 +122,9 @@ public class ConfigScreen {
                         .option(Option.<Integer>createBuilder()
                                 .name(prefixed("trimTrades.trimChance"))
                                 .description(optionDesc("trimTrades.trimChance"))
-                                .binding(CONFIG_MANAGER.defaults().trimTrades.trimChance,
-                                        () -> CONFIG_MANAGER.instance().trimTrades.trimChance,
-                                        trimChance -> CONFIG_MANAGER.instance().trimTrades.trimChance = trimChance)
+                                .binding(DEFAULT.trimTrades.trimChance,
+                                        () -> INSTANCE.trimTrades.trimChance,
+                                        trimChance -> INSTANCE.trimTrades.trimChance = trimChance)
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(0, 100)
                                         .step(1)
@@ -133,9 +134,9 @@ public class ConfigScreen {
                         .option(Option.<Integer>createBuilder()
                                 .name(prefixed("trimTrades.minLevel"))
                                 .description(optionDesc("trimTrades.minLevel"))
-                                .binding(CONFIG_MANAGER.defaults().trimTrades.minLevel,
-                                        () -> CONFIG_MANAGER.instance().trimTrades.minLevel,
-                                        minLevel -> CONFIG_MANAGER.instance().trimTrades.minLevel = minLevel)
+                                .binding(DEFAULT.trimTrades.minLevel,
+                                        () -> INSTANCE.trimTrades.minLevel,
+                                        minLevel -> INSTANCE.trimTrades.minLevel = minLevel)
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                         .range(1, 5)
                                         .step(1))
@@ -153,9 +154,9 @@ public class ConfigScreen {
                 .option(Option.<Config.TrimMobsSubConfig.TrimSystem>createBuilder()
                         .name(prefixed("trimMobs.trimSystem"))
                         .description(optionDesc("trimMobs.trimSystem"))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.trimSystem,
-                                () -> CONFIG_MANAGER.instance().trimMobs.trimSystem,
-                                enabledSystem -> CONFIG_MANAGER.instance().trimMobs.trimSystem = enabledSystem)
+                        .binding(DEFAULT.trimMobs.trimSystem,
+                                () -> INSTANCE.trimMobs.trimSystem,
+                                enabledSystem -> INSTANCE.trimMobs.trimSystem = enabledSystem)
                         .controller(opt -> EnumControllerBuilder.create(opt)
                                 .enumClass(Config.TrimMobsSubConfig.TrimSystem.class)
                                 .formatValue(trimSystemFormatter))
@@ -164,9 +165,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(prefixed("trimMobs.noTrimsChance"))
                         .description(optionDesc("trimMobs.noTrimsChance"))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.noTrimsChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance,
-                                noTrimsChance -> CONFIG_MANAGER.instance().trimMobs.noTrimsChance = noTrimsChance)
+                        .binding(DEFAULT.trimMobs.noTrimsChance,
+                                () -> INSTANCE.trimMobs.noTrimsChance,
+                                noTrimsChance -> INSTANCE.trimMobs.noTrimsChance = noTrimsChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -176,9 +177,9 @@ public class ConfigScreen {
                 .option(Option.<Integer>createBuilder()
                         .name(prefixed("trimMobs.trimChance"))
                         .description(optionDesc("trimMobs.trimChance"))
-                        .binding(CONFIG_MANAGER.defaults().trimMobs.trimChance,
-                                () -> CONFIG_MANAGER.instance().trimMobs.trimChance,
-                                trimsChance -> CONFIG_MANAGER.instance().trimMobs.trimChance = trimsChance)
+                        .binding(DEFAULT.trimMobs.trimChance,
+                                () -> INSTANCE.trimMobs.trimChance,
+                                trimsChance -> INSTANCE.trimMobs.trimChance = trimsChance)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -195,18 +196,18 @@ public class ConfigScreen {
                 .option(Option.<Boolean>createBuilder()
                         .name(prefixed("filtering.textureValidationFiltering"))
                         .description(optionDesc("filtering.textureValidationFiltering"))
-                        .binding(CONFIG_MANAGER.defaults().trimFiltering.textureValidationFiltering,
-                                () -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering,
-                                textureValidationFiltering -> CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering = textureValidationFiltering)
+                        .binding(DEFAULT.trimFiltering.textureValidationFiltering,
+                                () -> INSTANCE.trimFiltering.textureValidationFiltering,
+                                textureValidationFiltering -> INSTANCE.trimFiltering.textureValidationFiltering = textureValidationFiltering)
                         .controller(BooleanControllerBuilder::create)
                         .build())
 
                 .option(Option.<Boolean>createBuilder()
                         .name(prefixed("filtering.vanillaOnly"))
                         .description(optionDesc("filtering.vanillaOnly"))
-                        .binding(CONFIG_MANAGER.defaults().trimFiltering.vanillaOnly,
-                                () -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly,
-                                vanillaOnly -> CONFIG_MANAGER.instance().trimFiltering.vanillaOnly = vanillaOnly)
+                        .binding(DEFAULT.trimFiltering.vanillaOnly,
+                                () -> INSTANCE.trimFiltering.vanillaOnly,
+                                vanillaOnly -> INSTANCE.trimFiltering.vanillaOnly = vanillaOnly)
                         .controller(BooleanControllerBuilder::create)
                         .build())
 
@@ -214,9 +215,9 @@ public class ConfigScreen {
                         .name(prefixed("filtering.materialFilter"))
                         .description(optionDesc("filtering.materialFilter"))
                         .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
-                                () -> CONFIG_MANAGER.instance().trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
-                                materialFilters -> CONFIG_MANAGER.instance().trimFiltering.materialFilter = materialFilters.stream().map(filter -> FilterRule.<TrimMaterial>construct(filter, true)).toList())
+                        .binding(DEFAULT.trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
+                                () -> INSTANCE.trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
+                                materialFilters -> INSTANCE.trimFiltering.materialFilter = materialFilters.stream().map(filter -> FilterRule.<TrimMaterial>construct(filter, true)).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
                         .build())
@@ -225,9 +226,9 @@ public class ConfigScreen {
                         .name(prefixed("filtering.patternFilter"))
                         .description(optionDesc("filtering.patternFilter"))
                         .collapsed(true)
-                        .binding(CONFIG_MANAGER.defaults().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
-                                () -> CONFIG_MANAGER.instance().trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
-                                patternFilters -> CONFIG_MANAGER.instance().trimFiltering.patternFilter = patternFilters.stream().map(pattern -> FilterRule.<TrimPattern>construct(pattern, false)).toList())
+                        .binding(DEFAULT.trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
+                                () -> INSTANCE.trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
+                                patternFilters -> INSTANCE.trimFiltering.patternFilter = patternFilters.stream().map(pattern -> FilterRule.<TrimPattern>construct(pattern, false)).toList())
                         .controller(StringControllerBuilder::create)
                         .initial("")
                         .build())
@@ -253,7 +254,7 @@ public class ConfigScreen {
                         .description(optionDesc("utils.reloadConfig"))
                         .text(prefixed("utils.run"))
                         .action((screen, option) -> {
-                            CONFIG_MANAGER.loadInstance();
+                            INSTANCE.loadFromFile();
                             screen.onClose();
                         })
                         .build())
@@ -295,11 +296,11 @@ public class ConfigScreen {
 
         message(player, literal("\nValidating predefined trims...\n"));
 
-        int total = CONFIG_MANAGER.instance().trimMobs.predefinedTrims.size();
+        int total = INSTANCE.trimMobs.predefinedTrims.size();
         int valid = 0;
         int index = 0;
 
-        for (TrimData trimData : CONFIG_MANAGER.instance().trimMobs.predefinedTrims) {
+        for (TrimData trimData : INSTANCE.trimMobs.predefinedTrims) {
             try {
                 trimData.getTrim(registryAccess);
                 valid += 1;
@@ -322,14 +323,14 @@ public class ConfigScreen {
         RegistryAccess registryAccess = level.registryAccess();
 
         message(player, literal("\nValidating material filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimMaterials(registryAccess).stream().toList(), CONFIG_MANAGER.instance().trimFiltering.materialFilter, player);
+        validateFilterList(TrimApplier.getTrimMaterials(registryAccess).stream().toList(), INSTANCE.trimFiltering.materialFilter, player);
         message(player, literal("\nDone validating material filter").withStyle(ChatFormatting.UNDERLINE));
 
         message(player, literal("\nValidating pattern filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimPatterns(registryAccess).stream().toList(), CONFIG_MANAGER.instance().trimFiltering.patternFilter, player);
+        validateFilterList(TrimApplier.getTrimPatterns(registryAccess).stream().toList(), INSTANCE.trimFiltering.patternFilter, player);
         message(player, literal("\nDone validating pattern filter").withStyle(ChatFormatting.UNDERLINE));
 
-        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+        if (INSTANCE.trimFiltering.vanillaOnly) {
             message(player, literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"));
         }
     }

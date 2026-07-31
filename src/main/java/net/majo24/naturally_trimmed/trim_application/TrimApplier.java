@@ -6,7 +6,7 @@ import net.majo24.naturally_trimmed.config.FilterRule;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.isModLoaded;
-import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
+import static net.majo24.naturally_trimmed.config.Config.INSTANCE;
 
 //? if >=1.21.11 {
 import net.minecraft.world.item.equipment.EquipmentAsset;
@@ -74,7 +74,7 @@ public class TrimApplier {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getFilteredTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getFilteredTrimPatterns(registryAccess);
 
-        if (NaturallyTrimmed.isClientAvailable && CONFIG_MANAGER.instance().trimFiltering.textureValidationFiltering) {
+        if (NaturallyTrimmed.isClientAvailable && INSTANCE.trimFiltering.textureValidationFiltering) {
             // === Texture Validation Filtering ===
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
 
@@ -120,8 +120,8 @@ public class TrimApplier {
      * Runs the selected Trim System on the armor of the entity. Also applies trims to the entity's equipment, if possible.
      */
     public static void trimEquipment(LivingEntity entity) {
-        if (!CONFIG_MANAGER.instance().enableTrimMobs) return;
-        if (CONFIG_MANAGER.instance().trimMobs.noTrimsChance >= entity.getRandom().nextInt(100)) return;
+        if (!INSTANCE.enableTrimMobs) return;
+        if (INSTANCE.trimMobs.noTrimsChance >= entity.getRandom().nextInt(100)) return;
 
         //? if >=1.21.11 {
         List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
@@ -139,7 +139,7 @@ public class TrimApplier {
         RandomSource random = entity.getRandom();
         RegistryAccess registryAccess = entity.level().registryAccess();
 
-        TrimSystem enabledSystem = CONFIG_MANAGER.instance().trimMobs.trimSystem;
+        TrimSystem enabledSystem = INSTANCE.trimMobs.trimSystem;
 
         ArmorTrim trim;
         try {
@@ -153,14 +153,14 @@ public class TrimApplier {
 
         // Apply trim to the armor
         for (ItemStack armorPiece : armor) {
-            if (CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
+            if (INSTANCE.trimMobs.trimChance >= random.nextInt(100)) {
                 applyTrim(armorPiece, trim);
             }
         }
 
         // Apply trim to the equipment, if possible
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
-                && CONFIG_MANAGER.instance().trimMobs.trimChance >= random.nextInt(100)) {
+                && INSTANCE.trimMobs.trimChance >= random.nextInt(100)) {
             ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), entity.level().registryAccess(), random);
         }
     }
@@ -169,11 +169,11 @@ public class TrimApplier {
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
         // === Pattern Filters ===
-        List<FilterRule<TrimPattern>> filter = CONFIG_MANAGER.instance().trimFiltering.patternFilter;
+        List<FilterRule<TrimPattern>> filter = INSTANCE.trimFiltering.patternFilter;
         trimPatterns.removeIf(pattern -> FilterRule.resolveFilterForBlacklisted(filter, pattern));
 
         // === Vanilla Only ===
-        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+        if (INSTANCE.trimFiltering.vanillaOnly) {
             trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
         }
 
@@ -184,11 +184,11 @@ public class TrimApplier {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
 
         // === Material Filters ===
-        List<FilterRule<TrimMaterial>> filter = CONFIG_MANAGER.instance().trimFiltering.materialFilter;
+        List<FilterRule<TrimMaterial>> filter = INSTANCE.trimFiltering.materialFilter;
         trimMaterials.removeIf(material -> FilterRule.resolveFilterForBlacklisted(filter, material));
 
         // === Vanilla Only ===
-        if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+        if (INSTANCE.trimFiltering.vanillaOnly) {
             trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
         }
 
@@ -244,7 +244,7 @@ public class TrimApplier {
     //?}
 
     public static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess, RandomSource random) throws NoSuchElementException {
-        List<TrimData> predefinedTrims = CONFIG_MANAGER.instance().trimMobs.predefinedTrims;
+        List<TrimData> predefinedTrims = INSTANCE.trimMobs.predefinedTrims;
         Util.shuffle(predefinedTrims, random);
 
         for (TrimData predefinedTrim : predefinedTrims) {

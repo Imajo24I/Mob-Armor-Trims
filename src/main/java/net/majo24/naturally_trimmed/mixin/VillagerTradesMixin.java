@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
-import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
+import static net.majo24.naturally_trimmed.config.Config.INSTANCE;
 
 @Mixin(AbstractVillager.class)
 public abstract class VillagerTradesMixin extends Mob {
@@ -46,7 +46,7 @@ public abstract class VillagerTradesMixin extends Mob {
 
     @Unique
     private void trimTrade(ItemStack trade) {
-        if (CONFIG_MANAGER.instance().trimTrades.trimChance < this.random.nextInt(100)) return;
+        if (INSTANCE.trimTrades.trimChance < this.random.nextInt(100)) return;
         if (!trade.is(ItemTags.TRIMMABLE_ARMOR) && !trade.is(ToolTrimsCompat.TRIMMABLE_TOOLS_TAG)) return;
 
         // === Apply a trim to the trade ===
@@ -79,8 +79,8 @@ public abstract class VillagerTradesMixin extends Mob {
     private void trimTrades(LootContext lootContext, MerchantOffers offers, HolderSet<VillagerTrade> potentialOffers, int numberOfOffers, Operation<Object> operation) {
         operation.call(lootContext, offers, potentialOffers, numberOfOffers);
 
-        if (!CONFIG_MANAGER.instance().enableTrimTrades) return;
-        if (this instanceof VillagerDataHolder dataHolder && dataHolder.getVillagerData().level() < CONFIG_MANAGER.instance().trimTrades.minLevel) return;
+        if (!INSTANCE.enableTrimTrades) return;
+        if (this instanceof VillagerDataHolder dataHolder && dataHolder.getVillagerData().level() < INSTANCE.trimTrades.minLevel) return;
 
         offers.subList(offers.size() - numberOfOffers, offers.size()).forEach(offer -> {
             trimTrade(offer.getResult());
@@ -91,8 +91,8 @@ public abstract class VillagerTradesMixin extends Mob {
     private void trimTradesWithoutDuplicates(LootContext lootContext, MerchantOffers offers, HolderSet<VillagerTrade> potentialOffers, int numberOfOffers, Operation<Object> operation) {
         operation.call(lootContext, offers, potentialOffers, numberOfOffers);
 
-        if (!CONFIG_MANAGER.instance().enableTrimTrades) return;
-        if (this instanceof VillagerDataHolder dataHolder && dataHolder.getVillagerData().level() < CONFIG_MANAGER.instance().trimTrades.minLevel) return;
+        if (!INSTANCE.enableTrimTrades) return;
+        if (this instanceof VillagerDataHolder dataHolder && dataHolder.getVillagerData().level() < INSTANCE.trimTrades.minLevel) return;
 
         offers.subList(offers.size() - numberOfOffers, offers.size()).forEach(offer -> {
             trimTrade(offer.getResult());
@@ -102,10 +102,10 @@ public abstract class VillagerTradesMixin extends Mob {
     /*@ModifyArg(method = "addOffersFromItemListings", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/trading/MerchantOffers;add(Ljava/lang/Object;)Z"))
     private Object trimTrades(Object offer) {
         // === Check if a trim should be applied to the trade ===
-        if (!CONFIG_MANAGER.instance().enableTrimTrades) return offer;
-        if (CONFIG_MANAGER.instance().trimTrades.trimChance < this.random.nextInt(100)) return offer;
+        if (!INSTANCE.enableTrimTrades) return offer;
+        if (INSTANCE.trimTrades.trimChance < this.random.nextInt(100)) return offer;
 
-        int minLevel = CONFIG_MANAGER.instance().trimTrades.minLevel;
+        int minLevel = INSTANCE.trimTrades.minLevel;
         if (this instanceof VillagerDataHolder dataHolder) {
             //? if 1.21.11 {
             /^if (dataHolder.getVillagerData().level() < minLevel) return offer;

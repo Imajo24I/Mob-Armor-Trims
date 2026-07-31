@@ -2,8 +2,8 @@ package net.majo24.naturally_trimmed.config;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.backend.ConfigManager;
 import net.majo24.naturally_trimmed.config.backend.Entry;
+import net.majo24.naturally_trimmed.config.backend.ManagedConfig;
 import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.world.item.equipment.trim.*;
@@ -13,12 +13,26 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-public class Config {
-    public static final ConfigManager<Config> CONFIG_MANAGER = new ConfigManager<>(Config.class, NaturallyTrimmed.getConfigPath(), new HashMap<>() {{
+public class Config extends ManagedConfig<Config> {
+    private static final Map<Type, Object> typeAdapters = new HashMap<>() {{
         put(FilterRule.class, new FilterRuleTypeAdapter<>());
-    }});
+    }};
 
+    public static final Config DEFAULT;
+    public static final Config INSTANCE;
+
+    static {
+        DEFAULT = new Config(null);
+        DEFAULT.setDefaultGetter(() -> DEFAULT);
+        INSTANCE = new Config(() -> DEFAULT);
+    }
+
+    public Config(Supplier<Config> defaults) {
+        super(NaturallyTrimmed.getConfigPath(), defaults, typeAdapters);
+    }
 
     // === Config Entries ===
 

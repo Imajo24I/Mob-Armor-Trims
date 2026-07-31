@@ -1,7 +1,10 @@
 package net.majo24.naturally_trimmed.config.backend;
 
 import com.google.common.base.CaseFormat;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
@@ -10,23 +13,27 @@ import org.quiltmc.parsers.json.gson.GsonWriter;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
 
-public class ConfigManager<T> {
-    private T instance;
-    private final T defaults;
+public abstract class ManagedConfig<T> {
     private final Path configPath;
+    private Supplier<T> defaultsGetter;
 
     private final Gson gson;
 
-    public ConfigManager(Class<T> configClass, Path configPath, Map<Type, Object> typeAdapters) {
+    public ManagedConfig(Path configPath, Supplier<T> defaultsGetter, Map<Type, Object> typeAdapters) {
         this.configPath = configPath;
-        this.defaults = createDefaultInstance(configClass);
-        this.instance = createDefaultInstance(configClass);
+        this.defaultsGetter = defaultsGetter;
 
         GsonBuilder builder = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -38,34 +45,50 @@ public class ConfigManager<T> {
         this.gson = builder.create();
     }
 
-    public T instance() {
-        return instance;
+    public void setDefaultGetter(Supplier<T> defaultsGetter) {
+        this.defaultsGetter = defaultsGetter;
     }
 
     public T defaults() {
-        return defaults;
+        return this.defaultsGetter.get();
+    }
+
+    private <C> void recursivelyResetToDefaults(C instance, C defaults) throws IllegalAccessException {
+        for (Field field : instance.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(Entry.class)) {
+                assertPublicField(field);
+                field.set(instance, field.get(defaults));
+            } else if (field.isAnnotationPresent(SubConfig.class)) {
+                assertPublicField(field);
+                recursivelyResetToDefaults(field.get(instance), field.get(defaults));
+            }
+        }
     }
 
     /**
      * Deserializes the config file and loads the instance
      */
-    public void loadInstance() {
+    public void loadFromFile() {
         NaturallyTrimmed.LOGGER.info("Loading Naturally Trimmed config from config file");
         if (!Files.exists(configPath)) {
             NaturallyTrimmed.LOGGER.info("Creating new Naturally Trimmed config file with default values.");
-            saveInstance();
+            saveToFile();
             return;
         }
 
         try (JsonReader jsonReader = JsonReader.json5(configPath)) {
             GsonReader gsonReader = new GsonReader(jsonReader);
             jsonReader.beginObject();
-            recursivelyDeserialize(jsonReader, gsonReader, instance);
+            recursivelyDeserialize(jsonReader, gsonReader, this);
             jsonReader.endObject();
 
         } catch (Exception e) {
             NaturallyTrimmed.LOGGER.error("Failed to load the Naturally Trimmed config file. Using the default config for this session. To reset to the default config file, delete or rename the current one and restart the game.", e);
-            this.instance = defaults;
+            try {
+                this.recursivelyResetToDefaults(this, this.defaults());
+            } catch (IllegalAccessException err) {
+                throw new RuntimeException(err);
+            }
         }
     }
 
@@ -113,7 +136,7 @@ public class ConfigManager<T> {
     /**
      * Serializes the instance and saves it to the config file
      */
-    public void saveInstance() {
+    public void saveToFile() {
         NaturallyTrimmed.LOGGER.info("Saving Naturally Trimmed config to file");
 
         try (StringWriter stringWriter = new StringWriter()) {
@@ -121,7 +144,7 @@ public class ConfigManager<T> {
             GsonWriter gsonWriter = new GsonWriter(jsonWriter);
             jsonWriter.beginObject();
 
-            recursivelySerialize(jsonWriter, gsonWriter, instance);
+            recursivelySerialize(jsonWriter, gsonWriter, this);
 
             jsonWriter.endObject();
             jsonWriter.flush();
@@ -178,20 +201,5 @@ public class ConfigManager<T> {
 
     private String annotationOrField(SubConfig subConfig, Field field) {
         return (subConfig.name().isEmpty()) ? field.getName() : subConfig.name();
-    }
-
-    private T createDefaultInstance(Class<T> configClass) {
-        Constructor<T> noArgsConstructor;
-        try {
-            noArgsConstructor = configClass.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new ClassFormatError("Failed to find no-args constructor for config class " + configClass.getName() + "\n" + e);
-        }
-
-        try {
-            return noArgsConstructor.newInstance();
-        } catch (Exception e) {
-            throw new ClassFormatError("Failed to load default config for class " + noArgsConstructor.getDeclaringClass().getName() + "\n" + e);
-        }
     }
 }
