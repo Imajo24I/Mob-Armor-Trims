@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed.config.backend;
+package net.majo24.naturally_trimmed.config.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface SubConfig {
+public @interface Entry {
     String name() default "";
     String comment();
 }

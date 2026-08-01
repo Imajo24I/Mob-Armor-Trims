@@ -2,10 +2,10 @@ package net.majo24.naturally_trimmed.config;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.backend.Entry;
-import net.majo24.naturally_trimmed.config.backend.ManagedConfig;
-import net.majo24.naturally_trimmed.config.backend.Schema;
-import net.majo24.naturally_trimmed.config.backend.SubConfig;
+import net.majo24.naturally_trimmed.config.core.Entry;
+import net.majo24.naturally_trimmed.config.core.ManagedConfig;
+import net.majo24.naturally_trimmed.config.core.Schema;
+import net.majo24.naturally_trimmed.config.core.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.world.item.equipment.trim.*;
 

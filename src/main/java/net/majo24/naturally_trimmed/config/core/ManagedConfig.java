@@ -1,4 +1,4 @@
-package net.majo24.naturally_trimmed.config.backend;
+package net.majo24.naturally_trimmed.config.core;
 
 import com.google.common.base.CaseFormat;
 import com.google.gson.FieldNamingPolicy;
