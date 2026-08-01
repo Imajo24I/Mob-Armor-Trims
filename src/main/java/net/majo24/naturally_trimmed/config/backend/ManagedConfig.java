@@ -31,7 +31,7 @@ public abstract class ManagedConfig<T> {
 
     private final Gson gson;
 
-    /// Default value is -1, to indicate unknown version
+    // Default value is -1, to indicate unknown version
     @Entry(comment = "Do not modify! Schema version of this config")
     public int _version = -1;
 
@@ -52,6 +52,9 @@ public abstract class ManagedConfig<T> {
             this._version = this.getClass().getAnnotation(Schema.class).value();
         }
     }
+
+    /// Will be triggered for schema version migration after any successful load from file
+    public abstract void migrateSchema();
 
     public void setDefaultGetter(Supplier<T> defaultsGetter) {
         this.defaultsGetter = defaultsGetter;
@@ -98,11 +101,13 @@ public abstract class ManagedConfig<T> {
             jsonReader.beginObject();
             recursivelyDeserialize(jsonReader, gsonReader, this);
             jsonReader.endObject();
-
         } catch (Exception e) {
             NaturallyTrimmed.LOGGER.error("Failed to load the Naturally Trimmed config file. Using the default config for this session. To reset to the default config file, delete or rename the current one and restart the game.", e);
             this.recursivelyResetToDefaults(this, this.defaults());
+            return;
         }
+
+        migrateSchema();
     }
 
     private void recursivelyDeserialize(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {

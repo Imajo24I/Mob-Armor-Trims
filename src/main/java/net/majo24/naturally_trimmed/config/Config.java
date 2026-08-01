@@ -146,6 +146,21 @@ public class Config extends ManagedConfig<Config> {
         public int minLevel = 3;
     }
 
+    // === Misc Stuff ===
+
+    /// Will be triggered for schema version migration after any successful load from file
+    public void migrateSchema() {
+        boolean saveAfter = this._version != DEFAULT._version;
+
+        if (this._version < 1) {
+            this._version = 1;
+        }
+
+        if (saveAfter) {
+            this.saveToFile();
+        }
+    }
+
     public static class FilterRuleTypeAdapter<T> implements JsonSerializer<FilterRule<T>>, JsonDeserializer<FilterRule<T>> {
         @Override
         public JsonElement serialize(FilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
