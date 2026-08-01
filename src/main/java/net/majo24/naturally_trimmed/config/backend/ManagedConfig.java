@@ -169,8 +169,11 @@ public abstract class ManagedConfig<T> {
     }
 
     private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalStateException, IllegalAccessException {
-        for (Field field : config.getClass().getFields
-                ()) {
+        for (Field field : config.getClass().getFields()) {
+            if (field.isAnnotationPresent(Deprecated.class)) {
+                continue;
+            }
+
             if (field.isAnnotationPresent(Entry.class)) {
                 assertPublicField(field);
 
