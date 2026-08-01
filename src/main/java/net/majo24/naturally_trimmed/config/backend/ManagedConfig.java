@@ -36,7 +36,7 @@ public abstract class ManagedConfig<T> {
         this.defaultsGetter = defaultsGetter;
 
         GsonBuilder builder = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .serializeNulls()
                 .setPrettyPrinting();
         for (Map.Entry<Type, Object> typeAdapter : typeAdapters.entrySet()) {
