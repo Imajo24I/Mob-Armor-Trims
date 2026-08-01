@@ -4,6 +4,7 @@ import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.backend.Entry;
 import net.majo24.naturally_trimmed.config.backend.ManagedConfig;
+import net.majo24.naturally_trimmed.config.backend.Schema;
 import net.majo24.naturally_trimmed.config.backend.SubConfig;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.world.item.equipment.trim.*;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@Schema(1)
 public class Config extends ManagedConfig<Config> {
     private static final Map<Type, Object> typeAdapters = new HashMap<>() {{
         put(FilterRule.class, new FilterRuleTypeAdapter<>());

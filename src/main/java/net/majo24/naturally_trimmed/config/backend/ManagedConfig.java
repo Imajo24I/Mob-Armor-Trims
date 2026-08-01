@@ -31,6 +31,10 @@ public abstract class ManagedConfig<T> {
 
     private final Gson gson;
 
+    /// Default value is -1, to indicate unknown version
+    @Entry(comment = "Do not modify! Schema version of this config")
+    public int _version = -1;
+
     public ManagedConfig(Path configPath, Supplier<T> defaultsGetter, Map<Type, Object> typeAdapters) {
         this.configPath = configPath;
         this.defaultsGetter = defaultsGetter;
@@ -43,6 +47,10 @@ public abstract class ManagedConfig<T> {
             builder.registerTypeAdapter(typeAdapter.getKey(), typeAdapter.getValue());
         }
         this.gson = builder.create();
+
+        if (this.getClass().isAnnotationPresent(Schema.class)) {
+            this._version = this.getClass().getAnnotation(Schema.class).value();
+        }
     }
 
     public void setDefaultGetter(Supplier<T> defaultsGetter) {
@@ -53,15 +61,19 @@ public abstract class ManagedConfig<T> {
         return this.defaultsGetter.get();
     }
 
-    private <C> void recursivelyResetToDefaults(C instance, C defaults) throws IllegalAccessException {
-        for (Field field : instance.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(Entry.class)) {
-                assertPublicField(field);
-                field.set(instance, field.get(defaults));
-            } else if (field.isAnnotationPresent(SubConfig.class)) {
-                assertPublicField(field);
-                recursivelyResetToDefaults(field.get(instance), field.get(defaults));
+    private <C> void recursivelyResetToDefaults(C instance, C defaults) {
+        try {
+            for (Field field : instance.getClass().getFields()) {
+                if (field.isAnnotationPresent(Entry.class)) {
+                    assertPublicField(field);
+                    field.set(instance, field.get(defaults));
+                } else if (field.isAnnotationPresent(SubConfig.class)) {
+                    assertPublicField(field);
+                    recursivelyResetToDefaults(field.get(instance), field.get(defaults));
+                }
             }
+        } catch (IllegalAccessException err) {
+            throw new RuntimeException(err);
         }
     }
 
@@ -72,9 +84,14 @@ public abstract class ManagedConfig<T> {
         NaturallyTrimmed.LOGGER.info("Loading Naturally Trimmed config from config file");
         if (!Files.exists(configPath)) {
             NaturallyTrimmed.LOGGER.info("Creating new Naturally Trimmed config file with default values.");
-            saveToFile();
+            this.recursivelyResetToDefaults(this, this.defaults());
+            this.saveToFile();
             return;
         }
+
+        // Set to -1 to indicate unknown version. This will get overridden in the deserialization process,
+        // unless no _version entry is present, in which case the -1 should indicate this
+        this._version = -1;
 
         try (JsonReader jsonReader = JsonReader.json5(configPath)) {
             GsonReader gsonReader = new GsonReader(jsonReader);
@@ -84,17 +101,13 @@ public abstract class ManagedConfig<T> {
 
         } catch (Exception e) {
             NaturallyTrimmed.LOGGER.error("Failed to load the Naturally Trimmed config file. Using the default config for this session. To reset to the default config file, delete or rename the current one and restart the game.", e);
-            try {
-                this.recursivelyResetToDefaults(this, this.defaults());
-            } catch (IllegalAccessException err) {
-                throw new RuntimeException(err);
-            }
+            this.recursivelyResetToDefaults(this, this.defaults());
         }
     }
 
     private void recursivelyDeserialize(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {
         Map<String, Field> fieldMap = new HashMap<>();
-        Arrays.stream(config.getClass().getDeclaredFields()).forEach(field -> {
+        Arrays.stream(config.getClass().getFields()).forEach(field -> {
             if (field.isAnnotationPresent(Entry.class)) {
                 fieldMap.put(annotationOrField(field.getAnnotation(Entry.class), field), field);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
@@ -156,7 +169,8 @@ public abstract class ManagedConfig<T> {
     }
 
     private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalStateException, IllegalAccessException {
-        for (Field field : config.getClass().getDeclaredFields()) {
+        for (Field field : config.getClass().getFields
+                ()) {
             if (field.isAnnotationPresent(Entry.class)) {
                 assertPublicField(field);
 
