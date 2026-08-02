@@ -1,8 +1,11 @@
-package net.majo24.naturally_trimmed.config.backend;
+package net.majo24.naturally_trimmed.config.core;
 
-import com.google.gson.*;
+import com.google.common.base.CaseFormat;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.minecraft.world.item.equipment.trim.*;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonWriter;
 import org.quiltmc.parsers.json.gson.GsonReader;
@@ -10,73 +13,110 @@ import org.quiltmc.parsers.json.gson.GsonWriter;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
 
-public class ConfigManager<T> {
-    private T instance;
-    private final T defaults;
+public abstract class ManagedConfig<T> {
     private final Path configPath;
+    private Supplier<T> defaultsGetter;
 
     private final Gson gson;
 
-    public ConfigManager(Class<T> configClass, Path configPath, Map<Type, Object> typeAdapters) {
+    // Default value is -1, to indicate unknown version
+    @Entry(comment = "Do not modify! Schema version of this config")
+    public int _version = -1;
+
+    public ManagedConfig(Path configPath, Supplier<T> defaultsGetter, Map<Type, Object> typeAdapters) {
         this.configPath = configPath;
-        this.defaults = createDefaultInstance(configClass);
-        this.instance = createDefaultInstance(configClass);
+        this.defaultsGetter = defaultsGetter;
 
         GsonBuilder builder = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .serializeNulls()
                 .setPrettyPrinting();
         for (Map.Entry<Type, Object> typeAdapter : typeAdapters.entrySet()) {
             builder.registerTypeAdapter(typeAdapter.getKey(), typeAdapter.getValue());
-            System.out.println(typeAdapter);
         }
         this.gson = builder.create();
+
+        if (this.getClass().isAnnotationPresent(Schema.class)) {
+            this._version = this.getClass().getAnnotation(Schema.class).value();
+        }
     }
 
-    public T instance() {
-        return instance;
+    /// Will be triggered for schema version migration after any successful load from file
+    public abstract void migrateSchema();
+
+    public void setDefaultGetter(Supplier<T> defaultsGetter) {
+        this.defaultsGetter = defaultsGetter;
     }
 
     public T defaults() {
-        return defaults;
+        return this.defaultsGetter.get();
+    }
+
+    private <C> void recursivelyResetToDefaults(C instance, C defaults) {
+        try {
+            for (Field field : instance.getClass().getFields()) {
+                if (field.isAnnotationPresent(Entry.class)) {
+                    assertPublicField(field);
+                    field.set(instance, field.get(defaults));
+                } else if (field.isAnnotationPresent(SubConfig.class)) {
+                    assertPublicField(field);
+                    recursivelyResetToDefaults(field.get(instance), field.get(defaults));
+                }
+            }
+        } catch (IllegalAccessException err) {
+            throw new RuntimeException(err);
+        }
     }
 
     /**
      * Deserializes the config file and loads the instance
      */
-    public void loadInstance() {
+    public void loadFromFile() {
         NaturallyTrimmed.LOGGER.info("Loading Naturally Trimmed config from config file");
         if (!Files.exists(configPath)) {
             NaturallyTrimmed.LOGGER.info("Creating new Naturally Trimmed config file with default values.");
-            saveInstance();
+            this.recursivelyResetToDefaults(this, this.defaults());
+            this.saveToFile();
             return;
         }
+
+        // Set to -1 to indicate unknown version. This will get overridden in the deserialization process,
+        // unless no _version entry is present, in which case the -1 should indicate this
+        this._version = -1;
 
         try (JsonReader jsonReader = JsonReader.json5(configPath)) {
             GsonReader gsonReader = new GsonReader(jsonReader);
             jsonReader.beginObject();
-            recursivelyDeserialize(jsonReader, gsonReader, instance);
+            recursivelyDeserialize(jsonReader, gsonReader, this);
             jsonReader.endObject();
-
         } catch (Exception e) {
             NaturallyTrimmed.LOGGER.error("Failed to load the Naturally Trimmed config file. Using the default config for this session. To reset to the default config file, delete or rename the current one and restart the game.", e);
-            this.instance = defaults;
+            this.recursivelyResetToDefaults(this, this.defaults());
+            return;
         }
+
+        migrateSchema();
     }
 
     private void recursivelyDeserialize(JsonReader jsonReader, GsonReader gsonReader, Object config) throws Exception {
         Map<String, Field> fieldMap = new HashMap<>();
-        Arrays.stream(config.getClass().getDeclaredFields()).forEach(field -> {
+        Arrays.stream(config.getClass().getFields()).forEach(field -> {
             if (field.isAnnotationPresent(Entry.class)) {
-                fieldMap.put(Objects.requireNonNull(field.getAnnotation(Entry.class)).name(), field);
+                fieldMap.put(annotationOrField(field.getAnnotation(Entry.class), field), field);
             } else if (field.isAnnotationPresent(SubConfig.class)) {
-                fieldMap.put(Objects.requireNonNull(field.getAnnotation(SubConfig.class)).name(), field);
+                fieldMap.put(annotationOrField(field.getAnnotation(SubConfig.class), field), field);
             }
         });
 
@@ -85,8 +125,12 @@ public class ConfigManager<T> {
             Field field = fieldMap.get(name);
 
             if (field == null) {
-                jsonReader.skipValue();
-                continue;
+                // Also check for an entry with snake_case
+                field = fieldMap.get(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name));
+                if (field == null) {
+                    jsonReader.skipValue();
+                    continue;
+                }
             }
             fieldMap.remove(name);
             assertPublicField(field);
@@ -110,7 +154,7 @@ public class ConfigManager<T> {
     /**
      * Serializes the instance and saves it to the config file
      */
-    public void saveInstance() {
+    public void saveToFile() {
         NaturallyTrimmed.LOGGER.info("Saving Naturally Trimmed config to file");
 
         try (StringWriter stringWriter = new StringWriter()) {
@@ -118,7 +162,7 @@ public class ConfigManager<T> {
             GsonWriter gsonWriter = new GsonWriter(jsonWriter);
             jsonWriter.beginObject();
 
-            recursivelySerialize(jsonWriter, gsonWriter, instance);
+            recursivelySerialize(jsonWriter, gsonWriter, this);
 
             jsonWriter.endObject();
             jsonWriter.flush();
@@ -130,12 +174,16 @@ public class ConfigManager<T> {
     }
 
     private void recursivelySerialize(JsonWriter jsonWriter, GsonWriter gsonWriter, Object config) throws IOException, IllegalStateException, IllegalAccessException {
-        for (Field field : config.getClass().getDeclaredFields()) {
+        for (Field field : config.getClass().getFields()) {
+            if (field.isAnnotationPresent(Deprecated.class)) {
+                continue;
+            }
+
             if (field.isAnnotationPresent(Entry.class)) {
                 assertPublicField(field);
 
                 Entry entry = field.getAnnotation(Entry.class);
-                jsonWriter.name(Objects.requireNonNull(entry).name());
+                jsonWriter.name(annotationOrField(entry, field));
                 jsonWriter.comment(Objects.requireNonNull(entry).comment());
 
                 JsonElement element;
@@ -152,7 +200,7 @@ public class ConfigManager<T> {
                 assertPublicField(field);
                 SubConfig subConfig = Objects.requireNonNull(field.getAnnotation(SubConfig.class));
 
-                jsonWriter.name(subConfig.name());
+                jsonWriter.name(annotationOrField(subConfig, field));
                 jsonWriter.comment(subConfig.comment());
 
                 jsonWriter.beginObject();
@@ -169,18 +217,11 @@ public class ConfigManager<T> {
         }
     }
 
-    private T createDefaultInstance(Class<T> configClass) {
-        Constructor<T> noArgsConstructor;
-        try {
-            noArgsConstructor = configClass.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new ClassFormatError("Failed to find no-args constructor for config class " + configClass.getName() + "\n" + e);
-        }
+    private String annotationOrField(Entry entry, Field field) {
+        return (entry.name().isEmpty()) ? field.getName() : entry.name();
+    }
 
-        try {
-            return noArgsConstructor.newInstance();
-        } catch (Exception e) {
-            throw new ClassFormatError("Failed to load default config for class " + noArgsConstructor.getDeclaringClass().getName() + "\n" + e);
-        }
+    private String annotationOrField(SubConfig subConfig, Field field) {
+        return (subConfig.name().isEmpty()) ? field.getName() : subConfig.name();
     }
 }

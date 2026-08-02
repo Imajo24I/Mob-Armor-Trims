@@ -49,7 +49,7 @@ public class NaturallyTrimmed /*? if fabric {*/ implements ModInitializer/*?}*/ 
     //? if fabric
     @Override
     public void onInitialize() {
-        Config.CONFIG_MANAGER.loadInstance();
+        Config.INSTANCE.loadFromFile();
         Events.registerEvents();
         setIsClientAvailable();
 

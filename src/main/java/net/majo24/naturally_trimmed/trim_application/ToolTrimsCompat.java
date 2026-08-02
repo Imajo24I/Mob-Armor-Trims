@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Objects;
 
-import static net.majo24.naturally_trimmed.config.Config.CONFIG_MANAGER;
+import static net.majo24.naturally_trimmed.config.Config.INSTANCE;
 
 /**
  * Contains code for supporting both the Tool Trims mod and the Trimmable Tools mod
@@ -49,7 +49,7 @@ public class ToolTrimsCompat {
             // meaning all other patterns shouldn't be used
             patterns.removeIf(pattern -> !(pattern.key().identifier().getNamespace().equals("minecraft")));
 
-            if (CONFIG_MANAGER.instance().trimFiltering.vanillaOnly) {
+            if (INSTANCE.trimFiltering.vanillaOnly) {
                 materials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
             }
         } else if (NaturallyTrimmed.isModLoaded(TOOL_TRIMS_ID)) {
