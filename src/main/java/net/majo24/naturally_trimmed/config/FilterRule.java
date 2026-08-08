@@ -1,66 +1,43 @@
 package net.majo24.naturally_trimmed.config;
 
 import com.mojang.datafixers.util.Either;
-import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.equipment.trim.*;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class FilterRule<T> {
-    private final Either<Pattern, TagKey> source;
-    public final FilterDirection filterDirection;
-
-    private FilterRule(FilterDirection filterDirection, Either<Pattern, TagKey> source) {
-        this.source = source;
-        this.filterDirection = filterDirection;
+public record FilterRule(Direction direction, Either<Pattern, TagKey<TrimMaterial>> materialSource, Either<Pattern, TagKey<TrimPattern>> patternSource) {
+    public FilterRule(Direction direction, String materialSource, String patternSource) {
+        this(direction, stringToSource(materialSource, Registries.TRIM_MATERIAL), stringToSource(patternSource, Registries.TRIM_PATTERN));
     }
 
-    public static <T> FilterRule<T> construct(String src, boolean isMaterial) {
-        FilterDirection direction = FilterDirection.Blacklist;
-        if (src.startsWith(FilterDirection.Whitelist.encoding)) {
-            direction = FilterDirection.Whitelist;
-            src = src.substring(1);
-        } else if (src.startsWith(FilterDirection.Blacklist.encoding)) {
-            src = src.substring(1);
+    public static <T> Either<Pattern, TagKey<T>> stringToSource(String source, ResourceKey<? extends Registry<T>> sourceRegistry) {
+        if (source.startsWith("#")) {
+            Identifier id = Identifier.parse(source.substring(1));
+            return Either.right(TagKey.create(sourceRegistry, id));
         } else {
-            NaturallyTrimmed.LOGGER.warn("Missing white-/blacklist encoding (-/+ prefix) for a Trim {} Filter Config Entry. Defaulting to '-'. This might cause an YetAnotherConfigLib error, which can be ignored.", isMaterial ? "Material" : "Pattern");
-        }
-
-        return new FilterRule<>(direction, getFilter(src, isMaterial));
-    }
-
-    private static Either<Pattern, TagKey> getFilter(String src, boolean isMaterial) {
-        if (src.startsWith("#")) {
-            Identifier id = Identifier.parse(src.substring(1));
-
-            if (isMaterial) {
-                return Either.right(TagKey.create(Registries.TRIM_MATERIAL, id));
-            } else {
-                return Either.right(TagKey.create(Registries.TRIM_PATTERN, id));
-            }
-        } else {
-            return Either.left(Pattern.compile(src));
+            return Either.left(Pattern.compile(source));
         }
     }
 
-    @Override
-    public String toString() {
+    public static <T> String sourceToString(Either<Pattern, TagKey<T>> source) {
         //~ if >=1.21.11 '.identifier()' -> '.location()' { *mojank forgott to rename this to identifier() :<( -> needed due to the global replacement*
         //~ if >=1.21.11 '.location()' -> '.location()' {
-        return this.filterDirection.encoding + this.source.left().map(Pattern::pattern)
-                .orElseGet(() -> "#" + this.source.right().get().location());
+        return source.map(Pattern::pattern, tag -> "#" + tag.location());
         //~}
         //~}
     }
 
-    public static <T> boolean resolveFilterForBlacklisted(List<FilterRule<T>> filter, Holder.Reference<?> trimPart) {
+    public static boolean isTrimBlacklistedByFilter(List<FilterRule> filter, ArmorTrim armorTrim) {
         // Find the first trim filter that matches and handle blacklisted/whitelisted
-        for (FilterRule<T> rule : filter) {
-            switch (rule.matches(trimPart)) {
+        for (FilterRule rule : filter) {
+            switch (rule.matches(armorTrim)) {
                 case Blacklisted -> {
                     return true;
                 }
@@ -72,39 +49,35 @@ public class FilterRule<T> {
         return false;
     }
 
-    public FilterResult matches(Holder.Reference<?> trimPart) {
-        return this.source.map(
-                pattern -> {
-                    if (pattern.matcher(trimPart.key().identifier().toString()).matches()) {
-                        return this.filterDirection.matchResult;
-                    }
+    public Result matches(ArmorTrim armorTrim) {
+        Holder.Reference<TrimMaterial> trimMaterial = (Holder.Reference<TrimMaterial>) armorTrim.material();
+        Holder.Reference<TrimPattern> trimPattern = (Holder.Reference<TrimPattern>) armorTrim.pattern();
 
-                    return FilterResult.Irrelevant;
-                },
-                tag -> {
-                    if (trimPart.is(tag)) {
-                        return this.filterDirection.matchResult;
-                    }
+        if (this.materialSource.map(
+                pattern -> pattern.matcher(trimMaterial.key().identifier().toString()).matches(),
+                trimMaterial::is
+        ) && this.patternSource.map(
+                pattern -> pattern.matcher(trimPattern.key().identifier().toString()).matches(),
+                trimPattern::is
+        )) {
+            return this.direction.matchResult;
+        }
 
-                    return FilterResult.Irrelevant;
-                }
-        );
+        return Result.Irrelevant;
     }
 
-    public enum FilterDirection {
-        Whitelist("+", FilterResult.Whitelisted),
-        Blacklist("-", FilterResult.Blacklisted);
+    public enum Direction {
+        Whitelist(Result.Whitelisted),
+        Blacklist(Result.Blacklisted);
 
-        public final String encoding;
-        public final FilterResult matchResult;
+        public final Result matchResult;
 
-        FilterDirection(String encoding, FilterResult matchResult) {
-            this.encoding = encoding;
+        Direction(Result matchResult) {
             this.matchResult = matchResult;
         }
     }
 
-    public enum FilterResult {
+    public enum Result {
         Whitelisted,
         Blacklisted,
         Irrelevant

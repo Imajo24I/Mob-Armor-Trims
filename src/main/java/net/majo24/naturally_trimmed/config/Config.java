@@ -2,6 +2,7 @@ package net.majo24.naturally_trimmed.config;
 
 import com.google.gson.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
+import net.majo24.naturally_trimmed.config.core.Deprecated;
 import net.majo24.naturally_trimmed.config.core.Entry;
 import net.majo24.naturally_trimmed.config.core.ManagedConfig;
 import net.majo24.naturally_trimmed.config.core.Schema;
@@ -17,10 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@Schema(1)
+@Schema(2)
 public class Config extends ManagedConfig<Config> {
     private static final Map<Type, Object> typeAdapters = new HashMap<>() {{
-        put(FilterRule.class, new FilterRuleTypeAdapter<>());
+        put(FilterRule.class, new FilterRuleTypeAdapter());
+        put(DisjointedFilterRule.class, new DisjointedFilterRuleTypeAdapter<>());
     }};
 
     public static final Config DEFAULT;
@@ -81,6 +83,14 @@ public class Config extends ManagedConfig<Config> {
         @Entry(comment = "Use only vanilla trim materials and patterns")
         public boolean vanillaOnly = false;
 
+        // Wrap init in `new ArrayList<>()', as List.of() returns immutably. Mutability is required for the migration code
+        @Entry(comment = """
+                Filter trims.
+                See 'https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-‐-3.6.0#trim-filter'
+                """)
+        public List<FilterRule> trimFilter = new ArrayList<>(List.of(new FilterRule(FilterRule.Direction.Blacklist, ".*", "tooltrims:.*")));
+
+        @Deprecated
         @Entry(comment = """
                 Filter trim materials.
                 
@@ -89,8 +99,9 @@ public class Config extends ManagedConfig<Config> {
                 Example configuration, blacklisting everything but biomes_o_plenty's trim materials and all trim materials that have the c:gold tag:
                 materialFilter: ["+biomes_o_plenty:.*", "+#c:gold", "-.*"]
                 """)
-        public List<FilterRule<TrimMaterial>> materialFilter = new ArrayList<>();
+        public List<DisjointedFilterRule<TrimMaterial>> materialFilter = new ArrayList<>();
 
+        @Deprecated
         @Entry(comment = """
                 Filter trim patterns.
                 
@@ -99,7 +110,7 @@ public class Config extends ManagedConfig<Config> {
                 Example configuration, blacklisting everything but the silence trim pattern
                 patternFilter: ["+minecraft:silence", "-.*"]
                 """)
-        public List<FilterRule<TrimPattern>> patternFilter = List.of(FilterRule.construct("-tooltrims:.*", false));
+        public List<DisjointedFilterRule<TrimPattern>> patternFilter = List.of(DisjointedFilterRule.construct("-tooltrims:.*", false));
     }
 
     public static class TrimMobsSubConfig {
@@ -156,20 +167,53 @@ public class Config extends ManagedConfig<Config> {
             this._version = 1;
         }
 
+        if (this._version == 1) {
+            this._version = 2;
+            this.trimFiltering.materialFilter.forEach(
+                    filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
+                            FilterRule.Direction.valueOf(filter.filterDirection().name()),
+                            filter.toString().substring(1), ".*"
+                    ))
+            );
+            this.trimFiltering.patternFilter.forEach(
+                    filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
+                            FilterRule.Direction.valueOf(filter.filterDirection().name()),
+                            ".*", filter.toString().substring(1)
+                    ))
+            );
+        }
+
         if (saveAfter) {
             this.saveToFile();
         }
     }
 
-    public static class FilterRuleTypeAdapter<T> implements JsonSerializer<FilterRule<T>>, JsonDeserializer<FilterRule<T>> {
+    public static class DisjointedFilterRuleTypeAdapter<T> implements JsonSerializer<DisjointedFilterRule<T>>, JsonDeserializer<DisjointedFilterRule<T>> {
         @Override
-        public JsonElement serialize(FilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(DisjointedFilterRule src, Type type, JsonSerializationContext jsonSerializationContext) {
             return new JsonPrimitive(src.toString());
         }
 
         @Override
-        public FilterRule<T> deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            return FilterRule.construct(json.getAsString(), ((ParameterizedType) type).getActualTypeArguments()[0] == TrimMaterial.class);
+        public DisjointedFilterRule<T> deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            return DisjointedFilterRule.construct(json.getAsString(), ((ParameterizedType) type).getActualTypeArguments()[0] == TrimMaterial.class);
+        }
+    }
+
+    public static class FilterRuleTypeAdapter implements JsonSerializer<FilterRule>, JsonDeserializer<FilterRule> {
+        @Override
+        public JsonElement serialize(FilterRule src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject element = new JsonObject();
+            element.add("direction", new JsonPrimitive(src.direction().toString()));
+            element.add("materialSource", new JsonPrimitive(FilterRule.sourceToString(src.materialSource())));
+            element.add("patternSource", new JsonPrimitive(FilterRule.sourceToString(src.patternSource())));
+            return element;
+        }
+
+        @Override
+        public FilterRule deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject element = json.getAsJsonObject();
+            return new FilterRule(context.deserialize(element.get("direction"), FilterRule.Direction.class), element.get("materialSource").getAsString(), element.get("patternSource").getAsString());
         }
     }
 }

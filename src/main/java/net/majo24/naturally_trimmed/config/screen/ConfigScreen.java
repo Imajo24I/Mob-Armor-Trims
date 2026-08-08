@@ -4,9 +4,9 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
 import net.majo24.naturally_trimmed.config.Config;
+import net.majo24.naturally_trimmed.config.FilterRule;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.majo24.naturally_trimmed.trim_application.TrimData;
-import net.majo24.naturally_trimmed.config.FilterRule;
 import net.minecraft.ChatFormatting;
 import net.minecraft.IdentifierException;
 import net.minecraft.core.Holder;
@@ -211,26 +211,11 @@ public class ConfigScreen {
                         .controller(BooleanControllerBuilder::create)
                         .build())
 
-                .group(ListOption.<String>createBuilder()
-                        .name(prefixed("filtering.materialFilter"))
-                        .description(optionDesc("filtering.materialFilter"))
-                        .collapsed(true)
-                        .binding(DEFAULT.trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
-                                () -> INSTANCE.trimFiltering.materialFilter.stream().map(FilterRule::toString).toList(),
-                                materialFilters -> INSTANCE.trimFiltering.materialFilter = materialFilters.stream().map(filter -> FilterRule.<TrimMaterial>construct(filter, true)).toList())
-                        .controller(StringControllerBuilder::create)
-                        .initial("")
-                        .build())
-
-                .group(ListOption.<String>createBuilder()
-                        .name(prefixed("filtering.patternFilter"))
-                        .description(optionDesc("filtering.patternFilter"))
-                        .collapsed(true)
-                        .binding(DEFAULT.trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
-                                () -> INSTANCE.trimFiltering.patternFilter.stream().map(FilterRule::toString).toList(),
-                                patternFilters -> INSTANCE.trimFiltering.patternFilter = patternFilters.stream().map(pattern -> FilterRule.<TrimPattern>construct(pattern, false)).toList())
-                        .controller(StringControllerBuilder::create)
-                        .initial("")
+                .option(ButtonOption.createBuilder()
+                        .name((prefixed("filtering.trimFilter")))
+                        .description(optionDesc("filtering.trimFilter"))
+                        .text(prefixed("utils.run"))
+                        .action((screen, option) -> Util.getPlatform().openPath(NaturallyTrimmed.getConfigPath()))
                         .build())
                 .build();
     }
@@ -267,10 +252,10 @@ public class ConfigScreen {
                         .build())
 
                 .option(ButtonOption.createBuilder()
-                        .name(prefixed("utils.validateBlacklists"))
-                        .description(optionDesc("utils.validateBlacklists"))
+                        .name(prefixed("utils.validateTrimFilter"))
+                        .description(optionDesc("utils.validateTrimFilter"))
                         .text(isInWorld ? prefixed("utils.run") : prefixed("utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
-                        .action((screen, option) -> validateFilters())
+                        .action((screen, option) -> validateFilter())
                         .build())
                 .build();
     }
@@ -315,63 +300,65 @@ public class ConfigScreen {
         message(player, literal("Done validating predefined trims"));
     }
 
-    public static void validateFilters() {
+    public static void validateFilter() {
         LocalPlayer player = Minecraft.getInstance().player;
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level == null || player == null) return;
         RegistryAccess registryAccess = level.registryAccess();
 
-        message(player, literal("\nValidating material filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimMaterials(registryAccess).stream().toList(), INSTANCE.trimFiltering.materialFilter, player);
-        message(player, literal("\nDone validating material filter").withStyle(ChatFormatting.UNDERLINE));
+        message(player, literal("\nValidating trim filter...\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
 
-        message(player, literal("\nValidating pattern filter:\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
-        validateFilterList(TrimApplier.getTrimPatterns(registryAccess).stream().toList(), INSTANCE.trimFiltering.patternFilter, player);
-        message(player, literal("\nDone validating pattern filter").withStyle(ChatFormatting.UNDERLINE));
+        List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
+        List<Holder.Reference<TrimMaterial>> materials = TrimApplier.getTrimMaterials(registryAccess);
+        List<Holder.Reference<TrimPattern>> patterns = TrimApplier.getTrimPatterns(registryAccess);
+        List<ArmorTrim> trims = materials.stream().flatMap(material -> patterns.stream().map(pattern -> new ArmorTrim(material, pattern))).toList();
 
-        if (INSTANCE.trimFiltering.vanillaOnly) {
-            message(player, literal("\nNote that all non-vanilla trims are blacklisted through the vanillaOnly config entry"));
-        }
-    }
+        Map<ArmorTrim, Optional<FilterRule>> trimStates = new HashMap<>();
+        List<FilterRule> unusedRules = new ArrayList<>(filter);
 
-    private static <T> void validateFilterList(List<Holder.Reference<T>> trimParts, List<FilterRule<T>> filter, LocalPlayer player) {
-        // Trim Part, Filter that applies the trim part
-        Map<Holder.Reference<T>, Optional<FilterRule<T>>> trimStates = new HashMap<>();
-        List<FilterRule<T>> unnecessaryRules = new ArrayList<>(filter);
+        for (ArmorTrim trim : trims) {
+            Optional<FilterRule> relevantRule = Optional.empty();
 
-        for (Holder.Reference<T> trimPart : trimParts) {
-            Optional<FilterRule<T>> relevantRule = Optional.empty();
-            for (FilterRule<T> rule : filter) {
-                if (rule.matches(trimPart) != FilterRule.FilterResult.Irrelevant) {
-                    unnecessaryRules.remove(rule);
+            for (FilterRule rule : filter) {
+                if (rule.matches(trim) != FilterRule.Result.Irrelevant) {
+                    unusedRules.remove(rule);
                     relevantRule = Optional.of(rule);
                     break;
                 }
             }
 
-            trimStates.put(trimPart, relevantRule);
+            trimStates.put(trim, relevantRule);
         }
 
-        message(player, literal("Trim Part -> State -> Rule").withStyle(ChatFormatting.UNDERLINE));
-        for (Map.Entry<Holder.Reference<T>, Optional<FilterRule<T>>> state : trimStates.entrySet()) {
+        message(player, literal("Trim -> State -> Rule (formatted without direction)").withStyle(ChatFormatting.UNDERLINE));
+        for (Map.Entry<ArmorTrim, Optional<FilterRule>> state : trimStates.entrySet()) {
             String filteredState = "Whitelisted";
             String ruleString = "whitelisted by default";
 
             if (state.getValue().isPresent()) {
-                FilterRule<T> rule = state.getValue().get();
-                filteredState = rule.filterDirection.toString() + "ed";
-                ruleString = rule.toString();
+                FilterRule rule = state.getValue().get();
+                filteredState = rule.direction().toString() + "ed";
+                ruleString = FilterRule.sourceToString(rule.materialSource()) + " / " + FilterRule.sourceToString(rule.patternSource());
             }
 
-            message(player, literal(state.getKey().key().identifier() + " -> " + filteredState + " -> " + ruleString));
+            message(player, literal(
+                    state.getKey().material().unwrapKey().get().identifier()
+                            + " / "
+                            + state.getKey().pattern().unwrapKey().get().identifier()
+                            + " -> " + filteredState + " -> " + ruleString
+            ));
         }
 
         message(player, literal("\nChecking for unused rules...").withStyle(ChatFormatting.UNDERLINE));
-        for (FilterRule<T> rule : unnecessaryRules) {
+        for (FilterRule rule : unusedRules) {
             message(player, literal(rule.toString()));
         }
         message(player, literal("Done checking for unused rules").withStyle(ChatFormatting.UNDERLINE));
+
+        message(player, literal("\nNote that due to minecrafts chat history length limitation, the log of the validation will likely not be fully visible. See the log file for the full validation log"));
+
+        message(player, literal("\nDone validating trim filter...\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
     }
 
     public static class Formatters {

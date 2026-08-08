@@ -40,10 +40,8 @@
   "naturally_trimmed.config.filtering.textureValidationFiltering.desc": "Enables filtering trims by checking for the corresponding textures of the trim.\n\nHowever, this only works on the client, it will be not be applied on dedicated servers, due to textures not being available on dedicated servers.\n\nSee 'https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-%E2%80%90-3.5.0#texture-validation-filtering'\n\nWhen this setting *is* applied (on client + enabled), it will override some built-in filtering (none of the other trim filtering config entries!).",
   "naturally_trimmed.config.filtering.vanillaOnly": "Vanilla Only",
   "naturally_trimmed.config.filtering.vanillaOnly.desc": "Use only vanilla trim materials and patterns",
-  "naturally_trimmed.config.filtering.materialFilter": "Trim Material Filter",
-  "naturally_trimmed.config.filtering.materialFilter.desc": "Filter trim materials.\n\nSee 'https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-‐-3.5.0#trim-material-filter--material_filter' for documentation on this.\n\nExample configuration, blacklisting everything but biomes_o_plenty's trim materials and all trim materials that have the c:gold tag:\nmaterial_filter: [\"+biomes_o_plenty:.*\", \"+#c:gold\", \"-.*\"]",
-  "naturally_trimmed.config.filtering.patternFilter": "Trim Pattern Filter",
-  "naturally_trimmed.config.filtering.patternFilter.desc": "Filter trim patterns.\n\nSee 'https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-‐-3.5.0#trim-pattern-filter--pattern_filter' for documentation on this.\n\nExample configuration, blacklisting everything but the silence trim pattern\npattern_filter: [\"+minecraft:silence\", \"-.*\"]",
+  "naturally_trimmed.config.filtering.trimFilter": "Trim Filter",
+  "naturally_trimmed.config.filtering.trimFilter.desc": "Opens the config file inside the standard text editor. This option is not viewable via the config screen.",
 
   "naturally_trimmed.config.utils": "Utils",
   "naturally_trimmed.config.utils.desc": "Utility buttons to make configuring the mod easier",
@@ -54,10 +52,8 @@
   "naturally_trimmed.config.utils.reloadConfig.desc": "Reload the config from the config file.\nUseful for configuring the Predefined Trims System, since it is only configurable through the config file",
   "naturally_trimmed.config.utils.validatePredefinedTrims": "Validate Predefined Trims",
   "naturally_trimmed.config.utils.validatePredefinedTrims.desc": "Validates all predefined trims and logs relevant information in chat.\nOnly works while inside a world",
-  "naturally_trimmed.config.utils.validateBlacklists": "Validate Backlists",
-  "naturally_trimmed.config.utils.validateBlacklists.desc": "Validates both blacklists and logs relevant information in chat.\nOnly works while inside a world",
-  "naturally_trimmed.config.utils.validateTagWhitelists": "Validate Tag-Whitelists",
-  "naturally_trimmed.config.utils.validateTagWhitelists.desc": "Validates both tag whitelists and logs relevant information in chat.\nOnly works while inside a world",
+  "naturally_trimmed.config.utils.validateTrimFilter": "Validate Trim Filter",
+  "naturally_trimmed.config.utils.validateTrimFilter.desc": "Validates the trim filter and logs relevant information in chat.\nOnly works while inside a world. Log messages may be cut off in the minecraft chat due to length limits, check the log file",
 
   "naturally_trimmed.config.backup_screen.installYACL": "Install Yet Another Config Lib to access the config screen",
   "naturally_trimmed.config.backup_screen.viewOnModrinth": "View on Modrinth"

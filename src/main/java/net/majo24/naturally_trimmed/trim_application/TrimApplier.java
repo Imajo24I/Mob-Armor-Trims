@@ -88,14 +88,15 @@ public class TrimApplier {
             Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().orElseThrow(() -> noViableTrim)).collect(Collectors.toSet());
             //?}
 
+            List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
+
             for (ArmorTrim trim : trims) {
-                if (isValidTrim(atlas, missingSprite, trim, material)) {
+                if (!FilterRule.isTrimBlacklistedByFilter(filter, trim) && isValidTrim(atlas, missingSprite, trim, material)) {
                     return trim;
                 }
             }
 
             throw noViableTrim;
-
         } else {
             // === Precautionary Trim Filtering ===
             Holder.Reference<TrimMaterial> trimMaterial;
@@ -106,11 +107,15 @@ public class TrimApplier {
 
             if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
 
+            List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
+
             // Ensure at least one of the two trim parts is non-modded
             do {
                 trimMaterial = Util.getRandom(trimMaterials, random);
                 trimPattern = Util.getRandom(trimPatterns, random);
-            } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft") && !trimPattern.key().identifier().getNamespace().equals("minecraft"));
+            } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft")
+                    && !trimPattern.key().identifier().getNamespace().equals("minecraft")
+                    && !FilterRule.isTrimBlacklistedByFilter(filter, new ArmorTrim(trimMaterial, trimPattern)));
 
             return new ArmorTrim(trimMaterial, trimPattern);
         }
@@ -168,10 +173,6 @@ public class TrimApplier {
     public static List<Holder.Reference<TrimPattern>> getFilteredTrimPatterns(RegistryAccess registryAccess) {
         List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
 
-        // === Pattern Filters ===
-        List<FilterRule<TrimPattern>> filter = INSTANCE.trimFiltering.patternFilter;
-        trimPatterns.removeIf(pattern -> FilterRule.resolveFilterForBlacklisted(filter, pattern));
-
         // === Vanilla Only ===
         if (INSTANCE.trimFiltering.vanillaOnly) {
             trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
@@ -182,10 +183,6 @@ public class TrimApplier {
 
     public static List<Holder.Reference<TrimMaterial>> getFilteredTrimMaterials(RegistryAccess registryAccess) {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
-
-        // === Material Filters ===
-        List<FilterRule<TrimMaterial>> filter = INSTANCE.trimFiltering.materialFilter;
-        trimMaterials.removeIf(material -> FilterRule.resolveFilterForBlacklisted(filter, material));
 
         // === Vanilla Only ===
         if (INSTANCE.trimFiltering.vanillaOnly) {
