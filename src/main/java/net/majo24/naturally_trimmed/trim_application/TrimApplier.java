@@ -99,9 +99,6 @@ public class TrimApplier {
             throw noViableTrim;
         } else {
             // === Precautionary Trim Filtering ===
-            Holder.Reference<TrimMaterial> trimMaterial;
-            Holder.Reference<TrimPattern> trimPattern;
-
             // Ensure no trim patterns added by elytra trims are used
             trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
@@ -109,15 +106,18 @@ public class TrimApplier {
 
             List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
 
-            // Ensure at least one of the two trim parts is non-modded
-            do {
-                trimMaterial = Util.getRandom(trimMaterials, random);
-                trimPattern = Util.getRandom(trimPatterns, random);
-            } while (!trimMaterial.key().identifier().getNamespace().equals("minecraft")
-                    && !trimPattern.key().identifier().getNamespace().equals("minecraft")
-                    && !FilterRule.isTrimBlacklistedByFilter(filter, new ArmorTrim(trimMaterial, trimPattern)));
+            // Ensure at least one of the two trim parts is non-modded and the trim is not blacklisted
+            for (Holder.Reference<TrimMaterial> trimMaterial : trimMaterials) {
+                for (Holder.Reference<TrimPattern> trimPattern : trimPatterns) {
+                    if ((trimMaterial.key().identifier().getNamespace().equals("minecraft")
+                            || trimPattern.key().identifier().getNamespace().equals("minecraft"))
+                            && !FilterRule.isTrimBlacklistedByFilter(filter, new ArmorTrim(trimMaterial, trimPattern))) {
+                        return new ArmorTrim(trimMaterial, trimPattern);
+                    }
+                }
+            }
 
-            return new ArmorTrim(trimMaterial, trimPattern);
+            throw noViableTrim;
         }
     }
 
