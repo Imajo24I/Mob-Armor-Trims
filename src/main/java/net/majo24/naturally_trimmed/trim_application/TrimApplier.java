@@ -73,6 +73,7 @@ public class TrimApplier {
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armorPieces) throws NoSuchElementException {
         List<Holder.Reference<TrimMaterial>> trimMaterials = getFilteredTrimMaterials(registryAccess);
         List<Holder.Reference<TrimPattern>> trimPatterns = getFilteredTrimPatterns(registryAccess);
+        List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
 
         if (NaturallyTrimmed.isClientAvailable && INSTANCE.trimFiltering.textureValidationFiltering) {
             // === Texture Validation Filtering ===
@@ -88,23 +89,17 @@ public class TrimApplier {
             Set<ResourceKey<EquipmentAsset>> material = armorPieces.stream().map(piece -> (piece.get(DataComponents.EQUIPPABLE)).assetId().orElseThrow(() -> noViableTrim)).collect(Collectors.toSet());
             //?}
 
-            List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
-
             for (ArmorTrim trim : trims) {
                 if (!FilterRule.isTrimBlacklistedByFilter(filter, trim) && isValidTrim(atlas, missingSprite, trim, material)) {
                     return trim;
                 }
             }
-
-            throw noViableTrim;
         } else {
             // === Precautionary Trim Filtering ===
             // Ensure no trim patterns added by elytra trims are used
             trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
 
             if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
-
-            List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
 
             // Ensure at least one of the two trim parts is non-modded and the trim is not blacklisted
             for (Holder.Reference<TrimMaterial> trimMaterial : trimMaterials) {
@@ -116,9 +111,9 @@ public class TrimApplier {
                     }
                 }
             }
-
-            throw noViableTrim;
         }
+
+        throw noViableTrim;
     }
 
     /**
