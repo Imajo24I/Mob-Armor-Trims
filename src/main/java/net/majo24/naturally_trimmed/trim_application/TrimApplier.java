@@ -95,7 +95,9 @@ public class TrimApplier {
         } else {
             // === Precautionary Trim Filtering ===
             // Ensure no trim patterns added by elytra trims are used
-            trimPatterns.removeIf(pattern -> (isModLoaded("elytratrims") && (!isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"))));
+            if (isModLoaded("elytratrims")) {
+                trimPatterns.removeIf(pattern -> !isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"));
+            }
 
             if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
 
