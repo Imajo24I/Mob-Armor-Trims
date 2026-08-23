@@ -7,7 +7,6 @@ import net.majo24.naturally_trimmed.config.core.Entry;
 import net.majo24.naturally_trimmed.config.core.ManagedConfig;
 import net.majo24.naturally_trimmed.config.core.Schema;
 import net.majo24.naturally_trimmed.config.core.SubConfig;
-import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.world.item.equipment.trim.*;
 
 import java.lang.reflect.ParameterizedType;
@@ -114,6 +113,7 @@ public class Config extends ManagedConfig<Config> {
     }
 
     public static class TrimMobsSubConfig {
+        @Deprecated
         @Entry(comment = """
                 Select the trim system. Trim systems define how the mod chooses what trims to use.
                 - RANDOM_TRIMS: Randomly chooses the trim to apply to the mob. Filtering from 'trimFiltering' applies to this.
@@ -126,6 +126,7 @@ public class Config extends ManagedConfig<Config> {
         @Entry(comment = "Chance of each equipment piece having a trim applied. Applies individually to each armor piece.")
         public int trimChance = 75;
 
+        @Deprecated
         @Entry(comment = """
                 List of predefined trims.
                 
@@ -169,18 +170,28 @@ public class Config extends ManagedConfig<Config> {
 
         if (this._version == 1) {
             this._version = 2;
-            this.trimFiltering.materialFilter.forEach(
-                    filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
-                            FilterRule.Direction.valueOf(filter.filterDirection().name()),
-                            filter.toString().substring(1), ".*"
-                    ))
-            );
-            this.trimFiltering.patternFilter.forEach(
-                    filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
-                            FilterRule.Direction.valueOf(filter.filterDirection().name()),
-                            ".*", filter.toString().substring(1)
-                    ))
-            );
+
+            // The filters and predefined trims were previously mutually exclusive,
+            // but are combined in 3.6.0. As to preserve previous behavior, only migrate the currently active one
+            if (this.trimMobs.trimSystem.equals(TrimMobsSubConfig.TrimSystem.RANDOM_TRIMS)) {
+                this.trimFiltering.materialFilter.forEach(
+                        filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
+                                FilterRule.Direction.valueOf(filter.filterDirection().name()),
+                                filter.toString().substring(1), ".*"
+                        ))
+                );
+                this.trimFiltering.patternFilter.forEach(
+                        filter -> this.trimFiltering.trimFilter.addFirst(new FilterRule(
+                                FilterRule.Direction.valueOf(filter.filterDirection().name()),
+                                ".*", filter.toString().substring(1)
+                        ))
+                );
+            } else {
+                this.trimFiltering.trimFilter.addFirst(new FilterRule(FilterRule.Direction.Blacklist, ".*", ".*"));
+                this.trimMobs.predefinedTrims.forEach(trimData -> this.trimFiltering.trimFilter.addFirst(
+                        new FilterRule(FilterRule.Direction.Whitelist, trimData.fullMaterial(), trimData.fullPattern())
+                ));
+            }
         }
 
         if (saveAfter) {

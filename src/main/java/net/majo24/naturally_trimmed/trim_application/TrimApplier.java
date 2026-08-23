@@ -1,7 +1,6 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.Config.TrimMobsSubConfig.TrimSystem;
 import net.majo24.naturally_trimmed.config.FilterRule;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
@@ -21,7 +20,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 *///?}
 
-import net.minecraft.IdentifierException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -139,13 +137,9 @@ public class TrimApplier {
         RandomSource random = entity.getRandom();
         RegistryAccess registryAccess = entity.level().registryAccess();
 
-        TrimSystem enabledSystem = INSTANCE.trimMobs.trimSystem;
-
         ArmorTrim trim;
         try {
-            trim = (enabledSystem == TrimSystem.RANDOM_TRIMS)
-                    ? getRandomTrim(registryAccess, random, armor)
-                    : getPredefinedTrim(registryAccess, random);
+            trim = getRandomTrim(registryAccess, random, armor);
         } catch (NoSuchElementException err) {
             LOGGER.warn(err.getMessage());
             return;
@@ -234,19 +228,4 @@ public class TrimApplier {
         return true;
     }
     //?}
-
-    public static ArmorTrim getPredefinedTrim(RegistryAccess registryAccess, RandomSource random) throws NoSuchElementException {
-        List<TrimData> predefinedTrims = INSTANCE.trimMobs.predefinedTrims;
-        Util.shuffle(predefinedTrims, random);
-
-        for (TrimData predefinedTrim : predefinedTrims) {
-            try {
-                return predefinedTrim.getTrim(registryAccess);
-            } catch (NoSuchElementException | IdentifierException e) {
-                NaturallyTrimmed.LOGGER.error("Failed to load predefined trim '{}' - '{}'. Please ensure this is a valid trim.", predefinedTrim.material(), predefinedTrim.pattern(), e);
-            }
-        }
-
-        throw noViableTrim;
-    }
 }

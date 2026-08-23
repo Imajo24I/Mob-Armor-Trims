@@ -13,10 +13,6 @@
 
   "naturally_trimmed.config.trimMobs": "Trim Mobs",
   "naturally_trimmed.config.trimMobs.desc": "Settings for trimming a mobs equipment",
-  "naturally_trimmed.config.trimMobs.trimSystem": "Trim System",
-  "naturally_trimmed.config.trimMobs.trimSystem.desc": "Select the trim system.\nTrim systems define how the mod chooses what trims to use.\n\n- RANDOM_TRIMS: Randomly chooses the trim to apply to the mob. Filtering from 'trim_filtering' applies to this.\n- PREDEFINED_TRIMS: Chooses the trim from a list of predefined trims. See 'predefined_trims'. Filtering from 'trim_filtering' doesn't apply to this",
-  "naturally_trimmed.config.trimMobs.trimSystem.randomTrims": "Random Trims",
-  "naturally_trimmed.config.trimMobs.trimSystem.predefinedTrims": "Predefined Trims",
   "naturally_trimmed.config.trimMobs.noTrimsChance": "No Trims Chance",
   "naturally_trimmed.config.trimMobs.noTrimsChance.desc": "Chance of the mob having no trims at all",
   "naturally_trimmed.config.trimMobs.trimChance": "Trim Chance",
@@ -49,9 +45,7 @@
   "naturally_trimmed.config.utils.openFile": "Open Config File",
   "naturally_trimmed.config.utils.openFile.desc": "Opens the config file inside the standard text editor",
   "naturally_trimmed.config.utils.reloadConfig": "Reload Config",
-  "naturally_trimmed.config.utils.reloadConfig.desc": "Reload the config from the config file.\nUseful for configuring the Predefined Trims System, since it is only configurable through the config file",
-  "naturally_trimmed.config.utils.validatePredefinedTrims": "Validate Predefined Trims",
-  "naturally_trimmed.config.utils.validatePredefinedTrims.desc": "Validates all predefined trims and logs relevant information in chat.\nOnly works while inside a world",
+  "naturally_trimmed.config.utils.reloadConfig.desc": "Reload the config from the config file.\nUseful for exampel for configuring the trimFilter config entry, since it is only configurable through the config file",
   "naturally_trimmed.config.utils.validateTrimFilter": "Validate Trim Filter",
   "naturally_trimmed.config.utils.validateTrimFilter.desc": "Validates the trim filter and logs relevant information in chat.\nOnly works while inside a world. Log messages may be cut off in the minecraft chat due to length limits, check the log file",
 

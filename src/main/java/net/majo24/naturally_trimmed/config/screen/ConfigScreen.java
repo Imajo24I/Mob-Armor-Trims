@@ -3,12 +3,9 @@ package net.majo24.naturally_trimmed.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
-import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.config.FilterRule;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
-import net.majo24.naturally_trimmed.trim_application.TrimData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.IdentifierException;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Util;
@@ -38,9 +35,7 @@ public class ConfigScreen {
     private ConfigScreen() {
     }
 
-    private static final Formatters.Percentage percentageFormatter = new Formatters.Percentage();
-    private static final Formatters.TrimSystem trimSystemFormatter = new Formatters.TrimSystem();
-
+    private static final PercentageFormatter percentageFormatter = new PercentageFormatter();
     private static final String TRANSLATION_KEY_PREFIX = "naturally_trimmed.config.";
     private static final String TRANSLATION_KEY_DESCRIPTION = ".desc";
 
@@ -151,17 +146,6 @@ public class ConfigScreen {
                 .description(optionDesc("trimMobs"))
                 .collapsed(true)
 
-                .option(Option.<Config.TrimMobsSubConfig.TrimSystem>createBuilder()
-                        .name(prefixed("trimMobs.trimSystem"))
-                        .description(optionDesc("trimMobs.trimSystem"))
-                        .binding(DEFAULT.trimMobs.trimSystem,
-                                () -> INSTANCE.trimMobs.trimSystem,
-                                enabledSystem -> INSTANCE.trimMobs.trimSystem = enabledSystem)
-                        .controller(opt -> EnumControllerBuilder.create(opt)
-                                .enumClass(Config.TrimMobsSubConfig.TrimSystem.class)
-                                .formatValue(trimSystemFormatter))
-                        .build())
-
                 .option(Option.<Integer>createBuilder()
                         .name(prefixed("trimMobs.noTrimsChance"))
                         .description(optionDesc("trimMobs.noTrimsChance"))
@@ -245,13 +229,6 @@ public class ConfigScreen {
                         .build())
 
                 .option(ButtonOption.createBuilder()
-                        .name(prefixed("utils.validatePredefinedTrims"))
-                        .description(optionDesc("utils.validatePredefinedTrims"))
-                        .text(isInWorld ? prefixed("utils.run") : prefixed("utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
-                        .action((screen, option) -> validatePredefinedTrims())
-                        .build())
-
-                .option(ButtonOption.createBuilder()
                         .name(prefixed("utils.validateTrimFilter"))
                         .description(optionDesc("utils.validateTrimFilter"))
                         .text(isInWorld ? prefixed("utils.run") : prefixed("utils.run").withStyle(ChatFormatting.STRIKETHROUGH))
@@ -270,34 +247,6 @@ public class ConfigScreen {
 
     private static OptionDescription optionDesc(String path) {
         return OptionDescription.of(desc(path));
-    }
-
-    public static void validatePredefinedTrims() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        ClientLevel level = Minecraft.getInstance().level;
-
-        if (level == null || player == null) return;
-        RegistryAccess registryAccess = level.registryAccess();
-
-        message(player, literal("\nValidating predefined trims...\n"));
-
-        int total = INSTANCE.trimMobs.predefinedTrims.size();
-        int valid = 0;
-        int index = 0;
-
-        for (TrimData trimData : INSTANCE.trimMobs.predefinedTrims) {
-            try {
-                trimData.getTrim(registryAccess);
-                valid += 1;
-            } catch (NoSuchElementException | IdentifierException ignored) {
-                message(player, literal("Found invalid trim: \"" + trimData + "\" with index " + index));
-            } finally {
-                index++;
-            }
-        }
-
-        message(player, literal("\n" + valid + " out of " + total + " trims are valid."));
-        message(player, literal("Done validating predefined trims"));
     }
 
     public static void validateFilter() {
@@ -361,25 +310,10 @@ public class ConfigScreen {
         message(player, literal("\nDone validating trim filter...\n").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD));
     }
 
-    public static class Formatters {
-        private Formatters() {
-        }
-
-        public static class Percentage implements ValueFormatter<Integer> {
-            @Override
-            public Component format(Integer value) {
-                return literal(value + "%");
-            }
-        }
-
-        public static class TrimSystem implements ValueFormatter<Config.TrimMobsSubConfig.TrimSystem> {
-            @Override
-            public Component format(Config.TrimMobsSubConfig.TrimSystem selectedSystem) {
-                return switch (selectedSystem) {
-                    case RANDOM_TRIMS -> prefixed("trimMobs.trimSystem.randomTrims");
-                    case PREDEFINED_TRIMS -> prefixed("trimMobs.trimSystem.predefinedTrims");
-                };
-            }
+    public static class PercentageFormatter implements ValueFormatter<Integer> {
+        @Override
+        public Component format(Integer value) {
+            return literal(value + "%");
         }
     }
 
