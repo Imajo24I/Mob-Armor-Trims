@@ -108,8 +108,10 @@ public class TrimApplier {
 
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
             for (ArmorTrim trim : trims) {
-                if ((((Holder.Reference<?>) trim.material()).key().identifier().getNamespace().equals("minecraft")
-                        || ((Holder.Reference<?>) trim.pattern()).key().identifier().getNamespace().equals("minecraft"))
+                String materialNamespace = ((Holder.Reference<?>) trim.material()).key().identifier().getNamespace();
+                String patternNamespace = ((Holder.Reference<?>) trim.pattern()).key().identifier().getNamespace();
+
+                if ((materialNamespace.equals("minecraft") || patternNamespace.equals("minecraft") || materialNamespace.equals(patternNamespace))
                         && !FilterRule.isTrimBlacklistedByFilter(filter, trim)) {
                     return trim;
                 }
