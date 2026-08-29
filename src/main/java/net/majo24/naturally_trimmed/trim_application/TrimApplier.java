@@ -134,7 +134,7 @@ public class TrimApplier {
      */
     public static void trimEquipment(LivingEntity entity) {
         if (!INSTANCE.enableTrimMobs) return;
-        if (INSTANCE.trimMobs.noTrimsChance >= entity.getRandom().nextInt(100)) return;
+        if (!(INSTANCE.trimMobs.trimChance >= entity.getRandom().nextInt(100))) return;
 
         //? if >=1.21.11 {
         List<ItemStack> armor = EquipmentSlotGroup.ARMOR.slots().stream()
@@ -162,14 +162,14 @@ public class TrimApplier {
 
         // Apply trim to the armor
         for (ItemStack armorPiece : armor) {
-            if (INSTANCE.trimMobs.trimChance >= random.nextInt(100)) {
+            if (INSTANCE.trimMobs.pieceTrimChance >= random.nextInt(100)) {
                 applyTrim(armorPiece, trim);
             }
         }
 
         // Apply trim to the equipment, if possible
         if ((NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TOOL_TRIMS_ID) || NaturallyTrimmed.isModLoaded(ToolTrimsCompat.TRIMMABLE_TOOLS_ID))
-                && INSTANCE.trimMobs.trimChance >= random.nextInt(100)) {
+                && INSTANCE.trimMobs.pieceTrimChance >= random.nextInt(100)) {
             ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), entity.level().registryAccess(), random);
         }
     }

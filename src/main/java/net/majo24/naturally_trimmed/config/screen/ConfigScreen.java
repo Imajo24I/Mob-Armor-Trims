@@ -149,11 +149,11 @@ public class ConfigScreen {
                 .collapsed(true)
 
                 .option(Option.<Integer>createBuilder()
-                        .name(prefixed("trimMobs.noTrimsChance"))
-                        .description(optionDesc("trimMobs.noTrimsChance"))
-                        .binding(DEFAULT.trimMobs.noTrimsChance,
-                                () -> INSTANCE.trimMobs.noTrimsChance,
-                                noTrimsChance -> INSTANCE.trimMobs.noTrimsChance = noTrimsChance)
+                        .name(prefixed("trimMobs.trimChance"))
+                        .description(optionDesc("trimMobs.trimChance"))
+                        .binding(DEFAULT.trimMobs.trimChance,
+                                () -> INSTANCE.trimMobs.trimChance,
+                                val -> INSTANCE.trimMobs.trimChance = val)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)
@@ -161,11 +161,11 @@ public class ConfigScreen {
                         .build())
 
                 .option(Option.<Integer>createBuilder()
-                        .name(prefixed("trimMobs.trimChance"))
-                        .description(optionDesc("trimMobs.trimChance"))
-                        .binding(DEFAULT.trimMobs.trimChance,
-                                () -> INSTANCE.trimMobs.trimChance,
-                                trimsChance -> INSTANCE.trimMobs.trimChance = trimsChance)
+                        .name(prefixed("trimMobs.pieceTrimChance"))
+                        .description(optionDesc("trimMobs.pieceTrimChance"))
+                        .binding(DEFAULT.trimMobs.pieceTrimChance,
+                                () -> INSTANCE.trimMobs.pieceTrimChance,
+                                val -> INSTANCE.trimMobs.pieceTrimChance = val)
                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
                                 .range(0, 100)
                                 .step(1)

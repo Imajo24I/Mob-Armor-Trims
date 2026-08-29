@@ -128,11 +128,15 @@ public class Config extends ManagedConfig<Config> {
                 - PREDEFINED_TRIMS: Chooses the trim from a list of predefined trims. See 'predefinedTrims'. Filtering from 'trimFiltering' doesn't apply to this.""")
         public TrimSystem trimSystem = TrimSystem.RANDOM_TRIMS;
 
+        @Entry(comment = "Chance of the mob having any trims applied")
+        public int trimChance = 75;
+
+        @Entry(comment = "Chance of each equipment piece having a trim applied. Applies individually to each armor piece after 'trimChance' was positive for the mob")
+        public int pieceTrimChance = 75;
+
+        @Deprecated
         @Entry(comment = "Chance of the mob having no trims at all")
         public int noTrimsChance = 25;
-
-        @Entry(comment = "Chance of each equipment piece having a trim applied. Applies individually to each armor piece.")
-        public int trimChance = 75;
 
         @Deprecated
         @Entry(comment = """
@@ -185,6 +189,9 @@ public class Config extends ManagedConfig<Config> {
 
         if (this._version == 1) {
             this._version = 2;
+
+            this.trimMobs.pieceTrimChance = this.trimMobs.trimChance;
+            this.trimMobs.trimChance = 100 - this.trimMobs.noTrimsChance;
 
             if (!this.trimFiltering.textureValidationFiltering) {
                 this.trimFiltering.missingTextureFiltering = MissingTextureFiltering.PRECAUTIONARY;
