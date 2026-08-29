@@ -1,6 +1,7 @@
 package net.majo24.naturally_trimmed.trim_application;
 
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
+import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.config.FilterRule;
 
 import static net.majo24.naturally_trimmed.NaturallyTrimmed.LOGGER;
@@ -69,12 +70,18 @@ public class TrimApplier {
      * </ul>
      */
     public static ArmorTrim getRandomTrim(RegistryAccess registryAccess, RandomSource random, List<ItemStack> armorPieces) throws NoSuchElementException {
-        List<Holder.Reference<TrimMaterial>> trimMaterials = getFilteredTrimMaterials(registryAccess);
-        List<Holder.Reference<TrimPattern>> trimPatterns = getFilteredTrimPatterns(registryAccess);
+        List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
+        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
+        if (INSTANCE.trimFiltering.vanillaOnly) {
+            trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
+            trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
+        }
+
         List<FilterRule> filter = INSTANCE.trimFiltering.trimFilter;
 
-        if (NaturallyTrimmed.isClientAvailable && INSTANCE.trimFiltering.textureValidationFiltering) {
-            // === Texture Validation Filtering ===
+        // Falls back to PRECAUTIONARY, if TEXTURE_VALIDATION is not possible in the current environment
+        if (INSTANCE.trimFiltering.missingTextureFiltering.equals(Config.MissingTextureFiltering.TEXTURE_VALIDATION) && NaturallyTrimmed.isClientAvailable) {
+            // === Texture Validation filtering ===
             List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
 
             //? if 1.21.1 {
@@ -92,23 +99,27 @@ public class TrimApplier {
                     return trim;
                 }
             }
-        } else {
-            // === Precautionary Trim Filtering ===
+        } else if (!INSTANCE.trimFiltering.missingTextureFiltering.equals(Config.MissingTextureFiltering.NONE)) {
+            // === Precautionary trim filtering ===
             // Ensure no trim patterns added by elytra trims are used
             if (isModLoaded("elytratrims")) {
                 trimPatterns.removeIf(pattern -> !isModLoaded(pattern.key().identifier().getNamespace()) || pattern.key().identifier().getNamespace().equals("elytratrims"));
             }
 
-            if (trimMaterials.isEmpty() || trimPatterns.isEmpty()) throw noViableTrim;
-
-            // Ensure at least one of the two trim parts is non-modded and the trim is not blacklisted
-            for (Holder.Reference<TrimMaterial> trimMaterial : trimMaterials) {
-                for (Holder.Reference<TrimPattern> trimPattern : trimPatterns) {
-                    if ((trimMaterial.key().identifier().getNamespace().equals("minecraft")
-                            || trimPattern.key().identifier().getNamespace().equals("minecraft"))
-                            && !FilterRule.isTrimBlacklistedByFilter(filter, new ArmorTrim(trimMaterial, trimPattern))) {
-                        return new ArmorTrim(trimMaterial, trimPattern);
-                    }
+            List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
+            for (ArmorTrim trim : trims) {
+                if ((((Holder.Reference<?>) trim.material()).key().identifier().getNamespace().equals("minecraft")
+                        || ((Holder.Reference<?>) trim.pattern()).key().identifier().getNamespace().equals("minecraft"))
+                        && !FilterRule.isTrimBlacklistedByFilter(filter, trim)) {
+                    return trim;
+                }
+            }
+        } else {
+            // === No additional filtering for missing trims ===
+            List<ArmorTrim> trims = Util.toShuffledList(trimMaterials.stream().flatMap(material -> trimPatterns.stream().map(pattern -> new ArmorTrim(material, pattern))), random);
+            for (ArmorTrim trim : trims) {
+                if (!FilterRule.isTrimBlacklistedByFilter(filter, trim)) {
+                    return trim;
                 }
             }
         }
@@ -159,28 +170,6 @@ public class TrimApplier {
                 && INSTANCE.trimMobs.trimChance >= random.nextInt(100)) {
             ToolTrimsCompat.applyTrimToTool(entity.getMainHandItem(), entity.level().registryAccess(), random);
         }
-    }
-
-    public static List<Holder.Reference<TrimPattern>> getFilteredTrimPatterns(RegistryAccess registryAccess) {
-        List<Holder.Reference<TrimPattern>> trimPatterns = getTrimPatterns(registryAccess);
-
-        // === Vanilla Only ===
-        if (INSTANCE.trimFiltering.vanillaOnly) {
-            trimPatterns.removeIf(pattern -> !pattern.key().identifier().getNamespace().equals("minecraft"));
-        }
-
-        return trimPatterns;
-    }
-
-    public static List<Holder.Reference<TrimMaterial>> getFilteredTrimMaterials(RegistryAccess registryAccess) {
-        List<Holder.Reference<TrimMaterial>> trimMaterials = getTrimMaterials(registryAccess);
-
-        // === Vanilla Only ===
-        if (INSTANCE.trimFiltering.vanillaOnly) {
-            trimMaterials.removeIf(material -> !material.key().identifier().getNamespace().equals("minecraft"));
-        }
-
-        return trimMaterials;
     }
 
     public static List<Holder.Reference<TrimPattern>> getTrimPatterns(RegistryAccess registryAccess) {

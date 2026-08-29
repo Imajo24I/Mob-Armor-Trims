@@ -3,6 +3,7 @@ package net.majo24.naturally_trimmed.config.screen;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import net.majo24.naturally_trimmed.NaturallyTrimmed;
+import net.majo24.naturally_trimmed.config.Config;
 import net.majo24.naturally_trimmed.config.FilterRule;
 import net.majo24.naturally_trimmed.trim_application.TrimApplier;
 import net.minecraft.ChatFormatting;
@@ -36,6 +37,7 @@ public class ConfigScreen {
     }
 
     private static final PercentageFormatter percentageFormatter = new PercentageFormatter();
+    private static final MissingTextureFilteringFormatter missingTextureFilteringFormatter = new MissingTextureFilteringFormatter();
     private static final String TRANSLATION_KEY_PREFIX = "naturally_trimmed.config.";
     private static final String TRANSLATION_KEY_DESCRIPTION = ".desc";
 
@@ -177,14 +179,17 @@ public class ConfigScreen {
                 .name(prefixed("filtering"))
                 .tooltip(desc("filtering"))
 
-                .option(Option.<Boolean>createBuilder()
-                        .name(prefixed("filtering.textureValidationFiltering"))
-                        .description(optionDesc("filtering.textureValidationFiltering"))
-                        .binding(DEFAULT.trimFiltering.textureValidationFiltering,
-                                () -> INSTANCE.trimFiltering.textureValidationFiltering,
-                                textureValidationFiltering -> INSTANCE.trimFiltering.textureValidationFiltering = textureValidationFiltering)
-                        .controller(BooleanControllerBuilder::create)
-                        .build())
+                .option(Option.<Config.MissingTextureFiltering>createBuilder()
+                        .name(prefixed("filtering.missingTextureFiltering"))
+                        .description(optionDesc("filtering.missingTextureFiltering"))
+                        .binding(DEFAULT.trimFiltering.missingTextureFiltering,
+                                () -> INSTANCE.trimFiltering.missingTextureFiltering,
+                                val -> INSTANCE.trimFiltering.missingTextureFiltering = val)
+                        .controller(opt -> EnumControllerBuilder.create(opt)
+                                .enumClass(Config.MissingTextureFiltering.class)
+                                .formatValue(missingTextureFilteringFormatter))
+                        .build()
+                )
 
                 .option(Option.<Boolean>createBuilder()
                         .name(prefixed("filtering.vanillaOnly"))
@@ -314,6 +319,17 @@ public class ConfigScreen {
         @Override
         public Component format(Integer value) {
             return literal(value + "%");
+        }
+    }
+
+    public static class MissingTextureFilteringFormatter implements ValueFormatter<Config.MissingTextureFiltering> {
+        @Override
+        public Component format(Config.MissingTextureFiltering value) {
+            return switch (value) {
+                case TEXTURE_VALIDATION -> prefixed("filtering.missingTextureFiltering.textureValidation");
+                case PRECAUTIONARY -> prefixed("filtering.missingTextureFiltering.precautionary");
+                case NONE -> prefixed("filtering.missingTextureFiltering.none");
+            };
         }
     }
 

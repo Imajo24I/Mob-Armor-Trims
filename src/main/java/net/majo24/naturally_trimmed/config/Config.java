@@ -70,6 +70,14 @@ public class Config extends ManagedConfig<Config> {
 
     public static class TrimFilteringSubConfig {
         @Entry(comment = """
+                Strategy to filter out trims with a missing texture
+                See ... Wiki Page TODO!
+                Valid values: "TEXTURE_VALIDATION", "PRECAUTIONARY", "NONE"
+                """)
+        public MissingTextureFiltering missingTextureFiltering = MissingTextureFiltering.TEXTURE_VALIDATION;
+
+        @Deprecated
+        @Entry(comment = """
                 Enables filtering trims by checking for the corresponding textures of the trim.
                 However, this only works on the client, it will be not be applied on dedicated servers, due to textures not being available on dedicated servers.
                 
@@ -139,6 +147,7 @@ public class Config extends ManagedConfig<Config> {
                 """)
         public List<TrimData> predefinedTrims = new ArrayList<>();
 
+        /// Deprecated, still needed for migration code
         public enum TrimSystem {
             RANDOM_TRIMS,
             PREDEFINED_TRIMS,
@@ -158,6 +167,12 @@ public class Config extends ManagedConfig<Config> {
         public int minLevel = 3;
     }
 
+    public enum MissingTextureFiltering {
+        TEXTURE_VALIDATION,
+        PRECAUTIONARY,
+        NONE
+    }
+
     // === Misc Stuff ===
 
     /// Will be triggered for schema version migration after any successful load from file
@@ -170,6 +185,10 @@ public class Config extends ManagedConfig<Config> {
 
         if (this._version == 1) {
             this._version = 2;
+
+            if (!this.trimFiltering.textureValidationFiltering) {
+                this.trimFiltering.missingTextureFiltering = MissingTextureFiltering.PRECAUTIONARY;
+            }
 
             // The filters and predefined trims were previously mutually exclusive,
             // but are combined in 3.6.0. As to preserve previous behavior, only migrate the currently active one

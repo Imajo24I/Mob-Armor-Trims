@@ -32,8 +32,11 @@
 
   "naturally_trimmed.config.filtering": "Trim Filtering",
   "naturally_trimmed.config.filtering.desc": "Settings for filtering which trims can be used by the mod",
-  "naturally_trimmed.config.filtering.textureValidationFiltering": "Texture-Validation Trim Filtering",
-  "naturally_trimmed.config.filtering.textureValidationFiltering.desc": "Enables filtering trims by checking for the corresponding textures of the trim.\n\nHowever, this only works on the client, it will be not be applied on dedicated servers, due to textures not being available on dedicated servers.\n\nSee 'https://github.com/Imajo24I/Naturally-Trimmed/wiki/Config-%E2%80%90-3.5.0#texture-validation-filtering'\n\nWhen this setting *is* applied (on client + enabled), it will override some built-in filtering (none of the other trim filtering config entries!).",
+  "naturally_trimmed.config.filtering.missingTextureFiltering": "Missing Texture Filtering",
+  "naturally_trimmed.config.filtering.missingTextureFiltering.desc": "Strategy to filter out trims with a missing texture\nSee... WIKI PAGE TODO!",
+  "naturally_trimmed.config.filtering.missingTextureFiltering.textureValidation": "Texture Validation",
+  "naturally_trimmed.config.filtering.missingTextureFiltering.precautionary": "Precautionary",
+  "naturally_trimmed.config.filtering.missingTextureFiltering.none": "None",
   "naturally_trimmed.config.filtering.vanillaOnly": "Vanilla Only",
   "naturally_trimmed.config.filtering.vanillaOnly.desc": "Use only vanilla trim materials and patterns",
   "naturally_trimmed.config.filtering.trimFilter": "Trim Filter",
